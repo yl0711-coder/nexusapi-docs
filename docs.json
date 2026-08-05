@@ -33,10 +33,6 @@
       {
         "label": "控制台",
         "href": "https://nexusapi.link"
-      },
-      {
-        "type": "github",
-        "href": "https://github.com/yl0711-coder/nexusapi-docs"
       }
     ],
     "primary": {
@@ -47,8 +43,7 @@
   },
   "footer": {
     "socials": {
-      "website": "https://nexusapi.link",
-      "github": "https://github.com/yl0711-coder/nexusapi-docs"
+      "website": "https://nexusapi.link"
     },
     "links": [
       {
@@ -146,4 +141,3 @@
     ]
   }
 }
-
