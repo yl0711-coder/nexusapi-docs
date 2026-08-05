@@ -1,0 +1,82 @@
+---
+title: "代码接入示例"
+description: "NexusAPI：代码接入示例"
+---
+
+NexusAPI 支持主流 OpenAI SDK 的兼容调用方式。以下示例使用 Chat Completions；具体接口和参数支持情况请以[接口参考](/developer/openai-compatible)与模型广场为准。
+
+### 核心接入参数
+
+在使用任何模型之前，您需要准备好以下两个核心参数：
+
+- **接口地址 (Base URL):** `https://nexusapi.link/v1`
+- **身份凭证 (API Key):** 需在我们的 [控制台](https://nexusapi.link) 生成，通常以 `sk-` 开头。
+
+> **注意：** 请求时，请将 API Key 放在 HTTP 请求头的 `Authorization` 字段中，格式为 `Bearer sk-xxxxxx`。
+
+### Python
+只需将原本实例化客户端时的 `api_key` 和 `base_url` 替换为我们的即可。
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-您在 NexusAPI 生成的令牌",
+    base_url="https://nexusapi.link/v1"
+)
+
+response = client.chat.completions.create(
+    model="YOUR_MODEL_ID",
+    messages=[
+        {"role": "user", "content": "你好，请自我介绍。"}
+    ],
+    stream=True # 支持流式输出
+)
+
+for chunk in response:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+### JavaScript
+
+```js
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: "sk-您在 NexusAPI 生成的令牌",
+    baseURL: "https://nexusapi.link/v1"
+});
+
+async function main() {
+    const stream = await openai.chat.completions.create({
+        model: "YOUR_MODEL_ID",
+        messages: [{ role: "user", content: "你好！" }],
+        stream: true,
+    });
+    for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || "");
+    }
+}
+main();
+```
+
+### cURL
+
+```bash
+curl "https://nexusapi.link/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
+  -d '{
+    "model": "YOUR_MODEL_ID",
+    "messages": [
+      {
+        "role": "user",
+        "content": "测试一下 API 是否连通"
+      }
+    ]
+  }'
+```
+
+将 `YOUR_MODEL_ID` 替换为模型广场中、当前 API Key 分组可见的准确模型 ID。若使用当前平台的 Anthropic 类型 Claude 渠道，不要将 `/v1/responses` 当作通用替代接口；请先阅读[接入方式总览](/guide/integration-overview)。
+
+图片生成不使用本页的 Chat Completions 格式，请阅读[图片模型使用说明](/guide/image-generation)。

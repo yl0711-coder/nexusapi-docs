@@ -1,0 +1,112 @@
+---
+title: "用量日志查询 API"
+description: "NexusAPI：用量日志查询 API"
+---
+
+`api.nexusapi.link` 是独立于控制台和模型转发服务的**只读用量查询网关**。它读取当前账号在 NexusAPI 中的消费日志，适合日结、对账和内部审计；它不提供模型调用、充值或任何管理操作。
+
+## 基础信息
+
+| 项目 | 内容 |
+| --- | --- |
+| 服务地址 | `https://api.nexusapi.link` |
+| 请求方法 | `GET /v1/logs` |
+| 推荐凭证 | 系统访问令牌 |
+| 数据范围 | 仅返回该凭证所属账号的消费日志，按最新在前排序 |
+
+### 获取系统访问令牌
+
+登录 NexusAPI 控制台后，进入**个人设置**，点击“生成令牌”。调用时仅将该令牌放在请求头中：
+
+```http
+Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN
+```
+
+系统访问令牌是账号级凭证：它**不能用于调用模型**，但可读取该账号的用量明细。请将它视为敏感凭证；不要放进 URL、前端代码、截图或工单。
+
+<Warning>
+**不要混淆两类凭证**
+
+模型调用使用在“令牌管理”创建的 `sk-...` API Key；用量查询新接入应使用本页的系统访问令牌。网关当前保留了对有效 API Key 的兼容识别，但不应把这一兼容行为作为新的对接方案。
+</Warning>
+
+## 请求参数
+
+所有参数均为可选。未传时间时会查询该账号可访问的历史消费日志；日常对账建议主动按天或按周传入时间范围，避免深翻页。
+
+| 参数 | 说明 |
+| --- | --- |
+| `start_time` | 起始时间。支持 Unix 秒，例如 `1717200000`，或 RFC3339，例如 `2026-06-01T00:00:00Z`。 |
+| `end_time` | 结束时间，格式同上；同时传入时不得早于 `start_time`。 |
+| `page` | 页码，从 `1` 开始，默认 `1`。 |
+| `page_size` | 每页条数，默认 `10`，最大 `50`；超过上限会按 `50` 处理。 |
+
+当前接口不支持按模型、分组或令牌名在服务端筛选；如需这类维度，请在已返回的本账号数据中自行筛选。
+
+为保护只读网关，`page × page_size` 不能超过 `100000`。部署侧可能对一次查询的时间跨度设置额外上限；收到“时间跨度超限”时，请按更小时间窗拆分查询。
+
+## 调用示例
+
+```bash
+curl -G 'https://api.nexusapi.link/v1/logs' \
+  -H 'Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN' \
+  --data-urlencode 'start_time=2026-06-01T00:00:00Z' \
+  --data-urlencode 'end_time=2026-06-02T00:00:00Z' \
+  --data-urlencode 'page=1' \
+  --data-urlencode 'page_size=50'
+```
+
+当某页的 `data` 条数小于 `page_size`（或为空）时，表示已经到最后一页。该接口默认不返回 `total`，避免每次查询额外执行全量计数。
+
+## 返回字段
+
+```json
+{
+  "data": [
+    {
+      "time": "2026-06-20T14:03:11Z",
+      "token_name": "my-service-key",
+      "group": "default",
+      "model": "YOUR_MODEL_ID",
+      "use_time": 3,
+      "first_byte": 0.8,
+      "prompt_tokens": 1200,
+      "completion_tokens": 800,
+      "cost": 0.012,
+      "ip": "203.0.113.10",
+      "request_id": "request-id-example",
+      "request_path": "/v1/chat/completions"
+    }
+  ],
+  "page": 1,
+  "page_size": 50
+}
+```
+
+| 字段 | 说明 |
+| --- | --- |
+| `time` | 请求时间，UTC / RFC3339。 |
+| `token_name` | 本次请求所用 API Key 的名称。 |
+| `group` | 本次请求实际使用的分组。 |
+| `model` | 实际记录的模型名称。 |
+| `use_time` | 请求总耗时，单位为秒。 |
+| `first_byte` | 首字耗时，单位为秒；非流式或未记录时为 `null`。 |
+| `prompt_tokens` / `completion_tokens` | 输入 / 输出 Token 数。 |
+| `cost` | 本次消费金额，美元。 |
+| `ip` | 调用来源 IP；未记录时为空字符串。 |
+| `request_id` | 该次调用的 Request ID。 |
+| `request_path` | 实际调用路径，例如 `/v1/chat/completions`。 |
+
+接口不会返回渠道 ID、渠道名称、内部日志 ID、原始 `quota` 或完整计费过程等平台内部字段。
+
+## 错误处理与查询频率
+
+| HTTP 状态 | 含义 | 建议 |
+| --- | --- | --- |
+| `400` | 时间格式、时间顺序或翻页深度不合法 | 检查参数并缩小时间范围。 |
+| `401` | 系统访问令牌缺失、无效，或账号不可用 | 在个人设置重新生成令牌；不要发送完整令牌给客服。 |
+| `429` | 请求过于频繁 | 按响应头 `Retry-After` 等待后再试。 |
+| `503` | 只读网关或其数据源暂时不可用 | 按 `Retry-After` 等待后重试。 |
+| `500` | 内部异常 | 保存响应头 `X-Request-Id`、发生时间和错误原文后联系支持。 |
+
+建议每天或按固定时间窗增量拉取，不要把该接口作为秒级轮询接口。出现疑似重复扣费或日志异常时，请同时提供查询时间范围和模型调用的 Request ID。

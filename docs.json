@@ -1,0 +1,149 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "NexusAPI 文档中心",
+  "description": "NexusAPI 的使用指南、接口接入、客户端配置和故障排查。",
+  "colors": {
+    "primary": "#0F766E",
+    "light": "#14B8A6",
+    "dark": "#115E59"
+  },
+  "favicon": "/images/nexusapi-logo.png",
+  "logo": {
+    "light": "/images/nexusapi-logo.png",
+    "dark": "/images/nexusapi-logo.png",
+    "href": "https://nexusapi.link"
+  },
+  "appearance": {
+    "default": "system"
+  },
+  "icons": {
+    "library": "lucide"
+  },
+  "styling": {
+    "eyebrows": "breadcrumbs",
+    "codeblocks": "system"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "模型广场",
+        "href": "https://nexusapi.link/pricing"
+      },
+      {
+        "label": "控制台",
+        "href": "https://nexusapi.link"
+      },
+      {
+        "type": "github",
+        "href": "https://github.com/yl0711-coder/nexusapi-docs"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "开始接入",
+      "href": "/guide/quick-start"
+    }
+  },
+  "footer": {
+    "socials": {
+      "website": "https://nexusapi.link",
+      "github": "https://github.com/yl0711-coder/nexusapi-docs"
+    },
+    "links": [
+      {
+        "header": "开始使用",
+        "items": [
+          {
+            "label": "快速开始",
+            "href": "/guide/quick-start"
+          },
+          {
+            "label": "模型与计费",
+            "href": "/billing/models-pricing"
+          }
+        ]
+      },
+      {
+        "header": "开发者",
+        "items": [
+          {
+            "label": "接口说明",
+            "href": "/developer/openai-compatible"
+          },
+          {
+            "label": "代码示例",
+            "href": "/developer/code-examples"
+          }
+        ]
+      }
+    ]
+  },
+  "navigation": {
+    "anchors": [
+      {
+        "anchor": "使用文档",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "开始接入",
+            "icon": "rocket",
+            "pages": [
+              "index",
+              "guide/quick-start",
+              "guide/integration-overview",
+              "guide/image-generation",
+              "guide/api-key",
+              "guide/recharge"
+            ]
+          },
+          {
+            "group": "模型与账单",
+            "icon": "wallet-cards",
+            "pages": [
+              "billing/models-pricing",
+              "billing/usage-and-billing"
+            ]
+          },
+          {
+            "group": "客户端工具",
+            "icon": "wrench",
+            "pages": [
+              "tools/index",
+              "tools/claude-code",
+              "tools/codex-cli",
+              "tools/cc-switch",
+              "tools/cursor-vscode"
+            ]
+          },
+          {
+            "group": "故障排查",
+            "icon": "circle-help",
+            "pages": [
+              "faq/index",
+              "faq/self-check",
+              "faq/common-errors",
+              "faq/content-block-not-found"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "开发者接入",
+        "icon": "code-2",
+        "groups": [
+          {
+            "group": "接口说明",
+            "icon": "braces",
+            "pages": [
+              "developer/openai-compatible",
+              "developer/code-examples",
+              "developer/usage-logs"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+

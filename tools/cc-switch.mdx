@@ -1,0 +1,269 @@
+---
+title: "CC Switch 安装使用教程"
+description: "NexusAPI：CC Switch 安装使用教程"
+---
+
+CC Switch 是一个 AI CLI 配置管理工具，可以统一管理 Claude Code、Codex 等 AI CLI 工具的 API 配置。配置完成后，您可以在 CC Switch 中切换不同 Provider，再启动对应的 CLI 工具使用 NexusAPI。
+
+本文说明在 CC Switch 工具内手动配置 NexusAPI 的方法。
+
+## 1. 使用前准备
+
+配置前请先准备以下信息：
+
+| 项目 | 填写内容 |
+| --- | --- |
+| NexusAPI 地址 | `https://nexusapi.link` |
+| API Key | NexusAPI 控制台创建的令牌，格式通常为 `sk-xxx` |
+| 模型 ID | 当前 API Key 所属分组下可用的模型 ID |
+
+API Key 获取路径：
+
+```text
+NexusAPI 控制台
+-> 令牌管理
+-> 创建或复制 API Key
+```
+
+注意：
+
+1. API Key 必须使用 NexusAPI 控制台创建的令牌。
+2. 请原样复制控制台显示的完整 Key，不要手动添加、删除或猜测前缀。
+3. 模型 ID 必须选择当前令牌分组可用的模型，不要只看页面全站模型列表。
+
+## 2. 安装 CC Switch
+
+### 2.1 macOS
+
+推荐使用 Homebrew 安装：
+
+```bash
+brew install --cask cc-switch
+```
+
+安装完成后，在应用程序中打开 CC Switch。
+
+### 2.2 Windows
+
+访问 CC Switch 的 GitHub Releases 页面：
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+下载 `.msi` 安装包，按安装程序提示完成安装。
+
+如果您使用便携版，也可以下载 `.zip` 压缩包，解压后直接运行。
+
+### 2.3 Linux
+
+访问 CC Switch 的 GitHub Releases 页面：
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+根据系统下载 `.deb` 安装包或 `.AppImage` 文件。
+
+<Warning>
+**只从官方渠道下载**
+
+CC Switch 的官方源码和下载地址是
+[farion1231/cc-switch](https://github.com/farion1231/cc-switch)。
+不要从要求付费、充值或提供账号凭据的第三方页面下载。
+</Warning>
+
+Arch Linux 用户可通过 AUR 安装（社区维护，不是 CC Switch 官方发布包）：
+
+```bash
+paru -S cc-switch-bin
+```
+
+## 3. 新增 NexusAPI Provider
+
+打开 CC Switch 后，进入 Provider 管理页面，选择新增 Provider。
+
+整体流程如下：
+
+```text
+打开 CC Switch
+-> 新增 Provider
+-> 选择要配置的应用
+-> 填写 NexusAPI Endpoint、API Key、模型 ID
+-> 保存 Provider
+-> 切换到该 Provider
+-> 启动对应 CLI 工具验证
+```
+
+![CC Switch 官方添加供应商界面；接入 NexusAPI 时请选择左上角的自定义配置](/images/nexusapi/cc-switch-add-provider-official.png)
+
+> 图片来自
+> [CC Switch 官方仓库](https://github.com/farion1231/cc-switch)，
+> 按 MIT License 使用（© 2025 Jason Young）。图片中的其他供应商仅为官方界面示例；
+> 接入 NexusAPI 时请选择「自定义配置」，并按下文填写。
+
+下面是 CC Switch 官方仓库中较完整的 Provider 表单示例。它展示了 API Key、请求地址、默认模型和
+高级协议选项的位置；图内的 `example.com`、模型名和网关名称都只是示例，**不要照抄**。
+
+![CC Switch 官方 Provider 表单示例，Key 已遮掩](/images/nexusapi/cc-switch-provider-form-official.png)
+
+> 图片来源：[CC Switch 官方仓库](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png)，
+> MIT License。NexusAPI 的实际参数以本页下方 Claude / Codex 配置表为准。
+
+## 4. 配置 Claude Code
+
+如果要通过 CC Switch 管理 Claude Code，新增 Provider 时按下面填写。
+
+| 字段 | 建议填写 |
+| --- | --- |
+| App / 应用 | `Claude` |
+| Name / 名称 | `NexusAPI Claude` |
+| Endpoint / Base URL | `https://nexusapi.link` |
+| API Key | `sk-您的 NexusAPI 令牌` |
+| Primary Model / 主模型 | 当前令牌可用的 Claude 模型 ID |
+| Haiku Model | 可不填，或填轻量 Claude 模型 |
+| Sonnet Model | 可不填，或填 Sonnet 模型 |
+| Opus Model | 可不填，或填 Opus 模型 |
+
+示例：
+
+```text
+App: Claude
+Name: NexusAPI Claude
+Endpoint: https://nexusapi.link
+API Key: sk-xxxxxxxx
+Primary Model: YOUR_CLAUDE_MODEL_ID
+Sonnet Model: YOUR_CLAUDE_MODEL_ID
+```
+
+注意：
+
+1. Claude Code 的 NexusAPI Endpoint 不要加 `/v1`。
+2. 配置完成后，在 CC Switch 中切换到该 Provider。
+3. 重新打开终端，再运行 `claude`。
+
+验证方式：
+
+```bash
+claude
+```
+
+进入 Claude Code 后发送一条简单消息：
+
+```text
+请用一句话自我介绍
+```
+
+## 5. 配置 Codex
+
+如果要通过 CC Switch 管理 Codex，新增 Provider 时按下面填写。
+
+| 字段 | 建议填写 |
+| --- | --- |
+| App / 应用 | `Codex` |
+| Name / 名称 | `NexusAPI Codex` |
+| Endpoint / Base URL | `https://nexusapi.link/v1` |
+| API Key | `sk-您的 NexusAPI 令牌` |
+| Primary Model / 主模型 | 当前令牌可用的 OpenAI 兼容模型 ID |
+
+示例：
+
+```text
+App: Codex
+Name: NexusAPI Codex
+Endpoint: https://nexusapi.link/v1
+API Key: sk-xxxxxxxx
+Primary Model: YOUR_CODEX_MODEL_ID
+```
+
+注意：
+
+1. Codex 使用 OpenAI 兼容接口，Endpoint 需要带 `/v1`。
+2. 模型必须是该 API Key 分组下可用的模型。
+3. 如果当前站点设置了 Codex 专用分组，建议使用该分组创建 API Key 后再配置。
+
+验证方式：
+
+```bash
+codex
+```
+
+进入 Codex 后发起一个简单任务，确认能正常返回。
+
+## 6. 查询当前 Key 可用模型
+
+最稳妥的方式是用当前 API Key 查询 `/v1/models`。
+
+示例：
+
+```bash
+curl https://nexusapi.link/v1/models \
+  -H "Authorization: Bearer sk-您的 NexusAPI 令牌"
+```
+
+返回结果中的 `data[].id` 就是当前 API Key 可用的模型 ID。
+
+选择模型时遵循：
+
+1. Claude Code 选择 Claude 类模型。
+2. Codex 选择 OpenAI 兼容、适合编程的模型。
+3. 不要选择当前 API Key 不可用的模型。
+
+## 7. 不同工具的 Endpoint 区别
+
+| 工具 | Endpoint |
+| --- | --- |
+| Claude Code | `https://nexusapi.link` |
+| Codex | `https://nexusapi.link/v1` |
+
+如果不确定，优先按上表填写。
+
+## 8. 常见问题
+
+### 8.1 切换后还是请求官方地址
+
+可能原因：
+
+1. CC Switch 没有切换到 NexusAPI Provider。
+2. 终端在切换前已经打开，仍使用旧环境变量。
+3. 目标 CLI 工具有自己的本地配置覆盖了 CC Switch 设置。
+
+处理：
+
+1. 在 CC Switch 中重新切换 Provider。
+2. 关闭终端并重新打开。
+3. 检查对应 CLI 的本地配置文件。
+
+### 8.2 API Key 无效
+
+检查：
+
+1. API Key 是否来自 NexusAPI 控制台。
+2. 是否以 `sk-` 开头。
+3. 令牌是否启用。
+4. 账户余额是否充足。
+5. 当前令牌是否限制了模型。
+
+### 8.3 模型不可用
+
+检查：
+
+1. 当前 API Key 分组是否支持该模型。
+2. 当前 API Key 是否配置了模型限制。
+3. 使用 `/v1/models` 查询当前 Key 的实际可用模型。
+
+如果模型在 `/v1/models` 中不存在，请不要反复修改 CC Switch 配置；请改用当前 Key 可见的模型，或提交模型名和 Request ID 联系支持。
+
+### 8.4 Claude Code 提示 `/login`
+
+使用 NexusAPI 时不要通过 Claude Code `/login` 登录官方账号。应通过 CC Switch 写入 NexusAPI Provider 配置。
+
+如果已经运行过 `/login`，建议切回 CC Switch 的 NexusAPI Provider 后重启终端。
+
+## 9. 建议使用方式
+
+当前阶段建议：
+
+1. 使用 CC Switch 手动新增 Provider。
+2. 通过 `/v1/models` 查询当前 API Key 可用模型。
+3. 配置完成后先用简单请求验证，再执行复杂任务。

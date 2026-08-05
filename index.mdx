@@ -1,0 +1,60 @@
+---
+title: NexusAPI 文档中心
+description: 从创建 API Key 到完成首次调用，快速接入 NexusAPI。
+mode: wide
+---
+
+<Info>
+NexusAPI 提供统一的模型调用入口。模型可用性、价格和你的令牌分组，以控制台中的**模型广场**为准。
+</Info>
+
+<Columns cols={3}>
+  <Card title="5 分钟完成首次调用" icon="rocket" href="/guide/quick-start" arrow>
+    创建 Key、选择模型并发出第一条请求。
+  </Card>
+  <Card title="配置 Claude Code / Codex" icon="terminal" href="/tools" arrow>
+    根据所用客户端选择对应的配置教程。
+  </Card>
+  <Card title="查看接口说明" icon="braces" href="/developer/openai-compatible" arrow>
+    了解兼容协议、请求地址和调用边界。
+  </Card>
+</Columns>
+
+## 接入时需要的三项信息
+
+| 信息 | 从哪里获得 | 作用 |
+| --- | --- | --- |
+| Base URL | 本文档 | 指定请求发送到 NexusAPI 的地址 |
+| API Key | 控制台 → 令牌管理 | 识别调用身份与可用分组 |
+| 模型 ID | 控制台 → 模型广场 | 指定要调用的模型 |
+
+<Warning>
+请勿在聊天记录、截图、前端代码仓库或公开配置中泄露 API Key。怀疑泄露时，请立即在控制台删除或重置该 Key。
+</Warning>
+
+## 按你的目标开始
+
+<Columns cols={2}>
+  <Card title="我在写程序或脚本" icon="code-2" href="/guide/quick-start" arrow>
+    使用 OpenAI 兼容接口完成接入。
+  </Card>
+  <Card title="我在用 Claude Code" icon="bot" href="/tools/claude-code" arrow>
+    按原生 Messages 协议完成配置。
+  </Card>
+  <Card title="我在用 Codex CLI" icon="terminal-square" href="/tools/codex-cli" arrow>
+    配置自定义 Provider 与模型。
+  </Card>
+  <Card title="调用遇到错误" icon="circle-help" href="/faq/self-check" arrow>
+    先按自查流程收集必要信息。
+  </Card>
+</Columns>
+
+## 需要支持时，请一并提供
+
+- 发生时间和时区
+- 模型 ID、请求接口和是否使用流式响应
+- 完整错误原文与 Request ID
+- 已完成的最小复现步骤
+
+这些信息足以避免反复追问，也能更快定位问题。
+

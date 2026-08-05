@@ -1,0 +1,57 @@
+---
+title: "OpenAI 兼容接口"
+description: "NexusAPI：OpenAI 兼容接口"
+---
+
+NexusAPI 兼容 OpenAI 风格的接口调用方式。以下内容仅说明 Chat Completions；模型是否支持 Responses、Anthropic Messages 或图片接口，请先看[接入方式总览](/guide/integration-overview)。
+
+<Tip>
+**字段参考与可用性以不同来源判断**
+
+请求字段和响应结构可查看 [Apifox 接口参考](https://nexusapi.apifox.cn/)；但模型是否当前上架、当前 Key 是否可用、以及应使用哪种协议，应以本帮助中心和控制台模型广场为准。
+</Tip>
+
+## Chat Completions
+
+请求地址：
+
+```text
+POST https://nexusapi.link/v1/chat/completions
+```
+
+请求示例：
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_MODEL_ID",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好"
+      }
+    ]
+  }'
+```
+
+## 请求头
+
+| 请求头 | 必填 | 说明 |
+| --- | --- | --- |
+| `Content-Type` | 是 | 固定为 `application/json` |
+| `Authorization` | 是 | 格式为 `Bearer YOUR_API_KEY` |
+
+## 常见错误
+
+| 错误 | 可能原因 |
+| --- | --- |
+| 401 | API Key 错误、未传 Key 或 Key 已失效 |
+| 429 | 请求过快、触发限流或服务暂时繁忙 |
+| 500/502/503 | 请求处理暂时失败或服务不可用 |
+| 524 | 请求等待时间过长 |
+
+遇到 `status_code=500, not implemented` 时，不要按普通 500 重试；当请求的是当前平台 Anthropic 类型 Claude 渠道时，这通常是误用了不兼容的 `/v1/responses` 接口，详见[常见错误说明](/faq/common-errors)。
+
+遇到其他错误时请保存 Request ID，并参考[问题自查](/faq/self-check)。不要在短时间内连续高频重试。

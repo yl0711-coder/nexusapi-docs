@@ -1,0 +1,66 @@
+---
+title: "图片模型使用说明"
+description: "NexusAPI：图片模型使用说明"
+---
+
+图片模型与文本模型的调用方式不同。请先在[模型广场](https://nexusapi.link/pricing)确认模型名称、当前 API Key 所属分组，以及该模型是否标明支持图片生成。
+
+<Warning>
+**先确认模型能力**
+
+不要把图片生成参数发送到文本聊天接口，也不要把文本模型名称用于图片接口。模型、接口或参数不匹配时，重复请求不会解决问题。
+</Warning>
+
+## 调用方式
+
+图片生成使用 OpenAI 风格 Images 接口：
+
+```text
+POST https://nexusapi.link/v1/images/generations
+```
+
+最小请求只需要模型 ID 和提示词：
+
+```bash
+curl 'https://nexusapi.link/v1/images/generations' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_IMAGE_MODEL_ID",
+    "prompt": "一枚简洁的蓝色几何风格科技公司图标，纯白背景"
+  }'
+```
+
+将 `YOUR_IMAGE_MODEL_ID` 替换为模型广场中当前分组可见、并且支持图片生成的准确模型 ID。
+
+## 参数与结果
+
+不同图片模型支持的尺寸、质量、数量和返回格式不完全相同。只有在模型广场或[接口参考](/developer/openai-compatible)标明支持时，才传入 `size`、`quality`、`n`、`response_format` 等可选参数。
+
+响应通常在 `data` 数组中返回图片结果。具体是 URL 还是 Base64 数据、每次可生成几张图，以所选模型的接口说明和实际响应为准。
+
+## 等待时间与超时
+
+当前对外的 `/v1/images/generations` 是**同步 HTTP 请求路径**：客户端应等待本次请求返回结果。new-api rc4 没有为通用图片生成提供统一的任务 ID 与轮询接口；不同上游的实际返回格式仍可能不同。
+
+- 图片生成可能需要数十秒或更长时间；客户端、公司代理和浏览器插件的等待时间过短时，可能先出现超时。
+- 不要在未确认结果前连续重复提交同一图片任务，否则可能产生重复生成和重复消费。
+- 收到 `504`、`524` 或客户端超时时，请先保存 Request ID 和发生时间，再联系支持核查；不要假定任务一定已成功或一定未执行。
+
+## 常见问题
+
+| 现象 | 优先检查 |
+| --- | --- |
+| `Image generation is not enabled` | 模型是否支持图片、是否使用图片接口、当前分组是否可用 |
+| `model not supported` | 模型 ID 是否准确，是否误把文本模型用于图片接口 |
+| `400` / 参数错误 | 删除未确认支持的可选参数，先用最小请求验证 |
+| `504` / `524` / 客户端超时 | 保留 Request ID；避免立即重复生成 |
+| 没有收到图片结果 | 检查客户端是否正确读取响应中的 `data` 字段和返回格式 |
+
+需要协助时，请提供模型名、Request ID、发生时间、脱敏后的请求参数和完整错误原文；不要提供完整 API Key。
+
+## 下一步
+
+- [查看模型、分组与计费](/billing/models-pricing)
+- [了解不同接入协议](/guide/integration-overview)
+- [查看 API 调用常见问题](/faq/common-errors)

@@ -1,0 +1,128 @@
+---
+title: "Codex CLI 安装与配置"
+description: "NexusAPI：Codex CLI 安装与配置"
+---
+
+Codex CLI 是 OpenAI 的本地代码智能体。本文的安装命令与 `config.toml` 字段均以
+[OpenAI Codex 官方仓库](https://github.com/openai/codex)和
+[官方配置参考](https://learn.chatgpt.com/docs/config-file/config-advanced)为准；NexusAPI
+仅提供其中的 API 地址、Key 和模型 ID。
+
+## 1. 安装 Codex CLI
+
+选择一种 OpenAI 官方安装方式即可，不要混装多种方式。
+
+### Windows PowerShell
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+### macOS、Linux 或 WSL
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+### 已安装 Node.js 的用户
+
+```bash
+npm install -g @openai/codex
+```
+
+验证安装：
+
+```bash
+codex --version
+```
+
+## 2. 创建 NexusAPI Key
+
+在 [NexusAPI 控制台](https://nexusapi.link)进入 **令牌管理 → 添加令牌**，并：
+
+1. 选择包含目标模型的 Codex 相关分组。
+2. 使用便于识别的名称，例如 `codex-work`。
+3. 按项目预算设置合理额度。
+
+## 3. 配置自定义 Provider
+
+Codex 的个人配置文件为：Windows 的 `%USERPROFILE%\\.codex\\config.toml`，或 macOS / Linux 的
+`~/.codex/config.toml`。使用任意文本编辑器创建或打开这个文件，然后写入：
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+name = "NexusAPI"
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+将 `YOUR_MODEL_ID` 替换为[模型广场](https://nexusapi.link/pricing)中、当前 Key 分组可见的准确模型 ID。
+`wire_api = "responses"`、`model_provider`、`base_url` 和 `env_key` 都是 Codex 正式支持的自定义
+Provider 字段。
+
+<Warning>
+**不要手工写入 auth.json**
+
+`~/.codex/auth.json` 用于 Codex 的 OpenAI 登录缓存。NexusAPI 使用上面的 `env_key` 方式读取环境变量，
+不要把 NexusAPI Key 写入、提交或截图到 `auth.json`。
+</Warning>
+
+## 4. 设置 API Key 环境变量
+
+把 `sk-你的实际Key` 替换为刚创建的 Key。不要将真实 Key 放进 `config.toml`。
+
+### Windows PowerShell
+
+```powershell
+setx NEXUSAPI_API_KEY "sk-你的实际Key"
+```
+
+执行后关闭并重新打开终端，新的环境变量才会生效。
+
+### macOS、Linux 或 WSL
+
+在当前终端执行：
+
+```bash
+export NEXUSAPI_API_KEY='sk-你的实际Key'
+```
+
+该命令仅对当前终端有效。若需长期保存，请使用自己系统的凭据管理或 Shell 环境变量管理方式；不要把 Key 写入项目仓库。
+
+## 5. 启动与验证
+
+进入项目目录后启动：
+
+```bash
+cd your-project-folder
+codex
+```
+
+首次验证建议只发起一个不修改文件的任务，例如：
+
+```text
+请说明当前仓库的目录结构，不要修改文件。
+```
+
+## VS Code / Cursor
+
+可从扩展商店安装由 **OpenAI** 发布的
+[Codex 扩展](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。扩展与 CLI 共用
+`~/.codex/config.toml`，无需把 NexusAPI 地址写入 VS Code 的旧版 `chatgpt.apiBase` 或
+`chatgpt.config` 字段。
+
+## 问题排查
+
+1. 确认 `NEXUSAPI_API_KEY` 已在**新打开的终端**中生效。
+2. 确认 Key 启用且余额充足，所属分组包含所选模型。
+3. 确认 `model` 与模型广场显示的 ID 完全一致。
+4. 保存错误原文和 Request ID，再参考[问题自查](/faq/self-check)。
+
+## 官方来源
+
+- [OpenAI Codex CLI 安装说明](https://github.com/openai/codex)
+- [OpenAI Codex 自定义 Provider 配置](https://learn.chatgpt.com/docs/config-file/config-advanced)
