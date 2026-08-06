@@ -130,8 +130,7 @@
               "developer/openai-compatible",
               "developer/anthropic-messages",
               "developer/responses",
-              "developer/code-examples",
-              "developer/usage-logs"
+              "developer/code-examples"
             ]
           }
         ]
@@ -239,8 +238,7 @@
               "zh-TW/developer/openai-compatible",
               "zh-TW/developer/anthropic-messages",
               "zh-TW/developer/responses",
-              "zh-TW/developer/code-examples",
-              "zh-TW/developer/usage-logs"
+              "zh-TW/developer/code-examples"
             ]
           }
         ]
@@ -348,8 +346,7 @@
               "en/developer/openai-compatible",
               "en/developer/anthropic-messages",
               "en/developer/responses",
-              "en/developer/code-examples",
-              "en/developer/usage-logs"
+              "en/developer/code-examples"
             ]
           }
         ]
@@ -457,8 +454,7 @@
               "fr/developer/openai-compatible",
               "fr/developer/anthropic-messages",
               "fr/developer/responses",
-              "fr/developer/code-examples",
-              "fr/developer/usage-logs"
+              "fr/developer/code-examples"
             ]
           }
         ]
@@ -566,8 +562,7 @@
               "ja/developer/openai-compatible",
               "ja/developer/anthropic-messages",
               "ja/developer/responses",
-              "ja/developer/code-examples",
-              "ja/developer/usage-logs"
+              "ja/developer/code-examples"
             ]
           }
         ]
@@ -675,8 +670,7 @@
               "ru/developer/openai-compatible",
               "ru/developer/anthropic-messages",
               "ru/developer/responses",
-              "ru/developer/code-examples",
-              "ru/developer/usage-logs"
+              "ru/developer/code-examples"
             ]
           }
         ]
@@ -784,8 +778,7 @@
               "vi/developer/openai-compatible",
               "vi/developer/anthropic-messages",
               "vi/developer/responses",
-              "vi/developer/code-examples",
-              "vi/developer/usage-logs"
+              "vi/developer/code-examples"
             ]
           }
         ]

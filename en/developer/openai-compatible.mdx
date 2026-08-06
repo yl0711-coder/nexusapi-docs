@@ -8,7 +8,7 @@ This page covers **OpenAI Chat Completions** only. Before calling, read the [API
 <Tip>
 **Use different sources for different questions**
 
-Use the [Apifox API reference](https://nexusapi.apifox.cn/) for full field and response schemas. Use the Model Marketplace and the capability matrix for current model availability, token-group access, and protocol selection.
+Use the Model Marketplace and the capability matrix for current model availability, token-group access, and protocol selection.
 </Tip>
 
 ## Endpoint
@@ -48,7 +48,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 For a normal response, text is usually read from `choices[0].message.content`; for a streamed response, read each `choices[0].delta.content`. Verify the model and key with the non-streaming minimum request before enabling `stream` or adding optional fields.
 
-Optional fields such as `temperature`, tool calls, vision input, and structured output are not guaranteed for every model merely because an API is “OpenAI-compatible.” Use the [Apifox API reference](https://nexusapi.apifox.cn/) for field schemas, and the [API and model capability matrix](/en/developer/capability-matrix) plus Model Marketplace for model and channel availability.
+Optional fields such as `temperature`, tool calls, vision input, and structured output are not guaranteed for every model merely because an API is “OpenAI-compatible.” Use the [API and model capability matrix](/en/developer/capability-matrix) plus Model Marketplace for model and channel availability.
 
 ## Common failures
 

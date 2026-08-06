@@ -6,7 +6,7 @@ description: "Gọi mô hình văn bản NexusAPI theo định dạng OpenAI Cha
 Trang này chỉ nói về **OpenAI Chat Completions**. Trước khi gọi, hãy xác nhận mô hình, nhóm token và giao thức khớp nhau trong [ma trận khả năng](/vi/developer/capability-matrix).
 
 <Tip>
-Chợ mô hình và ma trận cho biết khả năng hiện tại. Để xem đầy đủ trường yêu cầu và schema phản hồi, dùng [tài liệu API Apifox](https://nexusapi.apifox.cn/).
+Chợ mô hình và ma trận cho biết khả năng hiện tại.
 </Tip>
 
 ## Endpoint
@@ -42,7 +42,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 Với phản hồi thường, văn bản thường đọc từ `choices[0].message.content`; với streaming, đọc từng `choices[0].delta.content`. Hãy xác nhận model và key bằng yêu cầu tối thiểu không stream trước khi bật `stream` hoặc thêm trường tùy chọn.
 
-`temperature`, tool calls, đầu vào ảnh và đầu ra có cấu trúc không được đảm bảo cho mọi model chỉ vì API “tương thích OpenAI”. Xem [tài liệu API Apifox](https://nexusapi.apifox.cn/) để biết schema trường; xem [ma trận khả năng](/vi/developer/capability-matrix) và Chợ mô hình để biết khả năng model/kênh.
+`temperature`, tool calls, đầu vào ảnh và đầu ra có cấu trúc không được đảm bảo cho mọi model chỉ vì API “tương thích OpenAI”. Xem [ma trận khả năng](/vi/developer/capability-matrix) và Chợ mô hình để biết khả năng model/kênh.
 
 ## Kiểm tra đầu tiên khi lỗi
 

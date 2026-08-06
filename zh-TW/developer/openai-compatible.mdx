@@ -6,7 +6,7 @@ description: "使用 OpenAI Chat Completions 格式呼叫 NexusAPI 的文字模�
 本頁只說明 **OpenAI Chat Completions**。在呼叫前，請先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)，確認模型、令牌群組與協定相符。
 
 <Tip>
-模型可用性與欄位定義來源不同：模型廣場和能力矩陣用於確認目前的模型、群組與協定；[Apifox API 文件](https://nexusapi.apifox.cn/)用於查詢完整欄位與回應結構。
+模型廣場和能力矩陣用於確認目前的模型、群組與協定。
 </Tip>
 
 ## 端點
@@ -42,7 +42,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 一般回應通常從 `choices[0].message.content` 讀取文字；串流回應則逐段讀取 `choices[0].delta.content`。先用非串流最小請求驗證模型與 Key，再開啟 `stream` 或加入選填欄位。
 
-`temperature`、工具呼叫、視覺輸入、結構化輸出等選填欄位，不會因為「OpenAI 相容」而自動適用所有模型。欄位 Schema 請看 [Apifox API 文件](https://nexusapi.apifox.cn/)；模型與渠道能力以[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)及模型廣場為準。
+`temperature`、工具呼叫、視覺輸入、結構化輸出等選填欄位，不會因為「OpenAI 相容」而自動適用所有模型；模型與渠道能力以[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)及模型廣場為準。
 
 ## 常見結果
 

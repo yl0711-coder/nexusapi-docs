@@ -6,7 +6,7 @@ description: "Appelez les modèles texte NexusAPI avec le format OpenAI Chat Com
 Cette page couvre uniquement **OpenAI Chat Completions**. Avant l'appel, vérifiez le modèle, le groupe et le protocole dans la [matrice des capacités](/fr/developer/capability-matrix).
 
 <Tip>
-Le catalogue et la matrice indiquent la disponibilité actuelle des modèles. La [référence API Apifox](https://nexusapi.apifox.cn/) décrit les champs et les schémas de réponse.
+Le catalogue et la matrice indiquent la disponibilité actuelle des modèles.
 </Tip>
 
 ## Endpoint
@@ -42,7 +42,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 Pour une réponse normale, le texte est généralement dans `choices[0].message.content`; pour une réponse en flux, lisez chaque `choices[0].delta.content`. Vérifiez d'abord le modèle et la clé avec la requête minimale sans streaming, puis activez `stream` ou ajoutez des champs facultatifs.
 
-`temperature`, les appels d'outils, les entrées visuelles et les sorties structurées ne sont pas garantis pour tous les modèles parce qu'une API est « compatible OpenAI ». Consultez la [référence API Apifox](https://nexusapi.apifox.cn/) pour les Schema et la [matrice des capacités](/fr/developer/capability-matrix) ainsi que le Catalogue pour la disponibilité.
+`temperature`, les appels d'outils, les entrées visuelles et les sorties structurées ne sont pas garantis pour tous les modèles parce qu'une API est « compatible OpenAI ». Consultez la [matrice des capacités](/fr/developer/capability-matrix) ainsi que le Catalogue pour la disponibilité.
 
 ## Premiers contrôles en cas d'erreur
 

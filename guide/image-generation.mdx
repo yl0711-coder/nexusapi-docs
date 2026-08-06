@@ -35,7 +35,7 @@ curl 'https://nexusapi.link/v1/images/generations' \
 
 ## 参数与结果
 
-不同图片模型支持的尺寸、质量、数量和返回格式不完全相同。只有在模型广场或 [Apifox 接口参考](https://nexusapi.apifox.cn/)标明支持时，才传入 `size`、`quality`、`n`、`response_format` 等可选参数。通用鉴权、模型查询和协议选择见[API 基础](/developer/api-basics)。
+不同图片模型支持的尺寸、质量、数量和返回格式不完全相同。只有在控制台模型广场标明支持时，才传入 `size`、`quality`、`n`、`response_format` 等可选参数。通用鉴权、模型查询和协议选择见[API 基础](/developer/api-basics)。
 
 响应通常在 `data` 数组中返回图片结果。具体是 URL 还是 Base64 数据、每次可生成几张图，以所选模型的接口说明和实际响应为准。
 

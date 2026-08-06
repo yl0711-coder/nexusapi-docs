@@ -8,7 +8,7 @@ description: "使用 OpenAI Chat Completions 格式调用 NexusAPI 文本模型�
 <Tip>
 **字段参考与可用性以不同来源判断**
 
-完整请求字段和响应结构可查看 [Apifox 接口参考](https://nexusapi.apifox.cn/)；但模型是否当前上架、当前 Key 是否可用、以及应使用哪种协议，应以能力矩阵和控制台模型广场为准。
+模型是否当前上架、当前 Key 是否可用、以及应使用哪种协议，应以能力矩阵和控制台模型广场为准。
 </Tip>
 
 ## Chat Completions
@@ -53,7 +53,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 普通响应通常从 `choices[0].message.content` 读取文本；流式响应则逐段读取 `choices[0].delta.content`。先用本页的非流式最小请求验证模型和 Key，再开启 `stream` 或添加可选参数。
 
-`temperature`、工具调用、视觉输入、结构化输出等可选字段并不因“OpenAI 兼容”而对所有模型自动可用。字段 Schema 看 [Apifox 接口参考](https://nexusapi.apifox.cn/)，模型和渠道能力仍以[接口与模型能力矩阵](/developer/capability-matrix)及模型广场为准。
+`temperature`、工具调用、视觉输入、结构化输出等可选字段并不因“OpenAI 兼容”而对所有模型自动可用；模型和渠道能力仍以[接口与模型能力矩阵](/developer/capability-matrix)及模型广场为准。
 
 ## 常见错误
 

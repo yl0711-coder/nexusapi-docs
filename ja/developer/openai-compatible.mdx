@@ -6,7 +6,7 @@ description: "OpenAI Chat Completions 形式で NexusAPI のテキストモデ�
 このページは **OpenAI Chat Completions** のみを扱います。呼び出す前に、[API とモデル対応マトリクス](/ja/developer/capability-matrix)でモデル、トークングループ、プロトコルが合うことを確認してください。
 
 <Tip>
-現在のモデル可用性はモデルマーケットプレイスと対応マトリクスで確認します。詳細なフィールドやレスポンス形式は [Apifox API リファレンス](https://nexusapi.apifox.cn/)を参照してください。
+現在のモデル可用性はモデルマーケットプレイスと対応マトリクスで確認します。
 </Tip>
 
 ## Endpoint
@@ -42,7 +42,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 通常の応答では `choices[0].message.content` から、ストリーミングでは各 `choices[0].delta.content` からテキストを読みます。`stream` やオプションを追加する前に、非ストリーミングの最小リクエストでモデルと Key を確認してください。
 
-`temperature`、ツール呼び出し、画像入力、構造化出力などのオプションは、「OpenAI 互換」だけで全モデルに保証されるものではありません。フィールド Schema は [Apifox API リファレンス](https://nexusapi.apifox.cn/)で、モデル/チャネルの可用性は[API とモデル対応マトリクス](/ja/developer/capability-matrix)とモデルマーケットプレイスで確認してください。
+`temperature`、ツール呼び出し、画像入力、構造化出力などのオプションは、「OpenAI 互換」だけで全モデルに保証されるものではありません。モデル/チャネルの可用性は[API とモデル対応マトリクス](/ja/developer/capability-matrix)とモデルマーケットプレイスで確認してください。
 
 ## よくある結果
 

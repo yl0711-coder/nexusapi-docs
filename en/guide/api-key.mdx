@@ -48,7 +48,6 @@ Authorization: Bearer YOUR_API_KEY
 | Credential | Purpose |
 | --- | --- |
 | API key | Calls model APIs such as Chat Completions, Responses, Messages, Images, and `/v1/models`. |
-| System access token | Reads your account's [usage-log API](/en/developer/usage-logs). It cannot call models. |
 | Console session / cookie | Signs you in through a browser. It cannot be used as a model API credential. |
 
-Treat the system access token as a secret too. Do not put either credential in a URL query string or send it in full to support.
+Do not put a credential in a URL query string or send it in full to support.
