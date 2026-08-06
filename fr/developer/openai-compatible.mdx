@@ -1,0 +1,48 @@
+---
+title: "Interface compatible OpenAI"
+---
+
+NexusAPI est compatible avec les appels d’interface de type OpenAI.
+
+## Complétions de chat
+
+Adresse de demande :
+
+```text
+POST https://nexusapi.link/v1/chat/completions
+```
+
+Exemple de demande :
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好"
+      }
+    ]
+  }'
+```
+
+## Tête de demande
+
+| Tête de demande | Obligatoire | Explication |
+| --- | --- | --- |
+| `Content-Type` | Oui | Fixé à `application/json` |
+| `Authorization` | Oui | Le format est `Bearer YOUR_API_KEY` |
+
+## Erreurs courantes
+
+| Faux | Raisons possibles |
+| --- | --- |
+| 401 | Erreur de clé API, clé non livrée, ou clé invalide |
+| 429 | Les requêtes sont trop rapides, la limitation de la vitesse est déclenchée, ou le service est temporairement occupé |
+| 500/502/503 | Le traitement des requêtes échoue temporairement ou le service devient indisponible |
+| 524 | Demande que le délai d’attente soit trop long |
+
+Veuillez enregistrer l’ID de la requête en cas d’erreur et les référer[Vérifiez vous-même le problème](/fr/faq/self-check)。 Ne réessayez pas à haute fréquence sur une courte période.

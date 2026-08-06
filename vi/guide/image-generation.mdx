@@ -1,0 +1,66 @@
+---
+title: Hướng dẫn mô hình hình ảnh
+description: Cách gọi mô hình tạo ảnh qua NexusAPI.
+---
+
+Cách gọi mô hình hình ảnh khác với mô hình văn bản. Trước khi gửi yêu cầu, hãy kiểm tra trong [Chợ mô hình](https://nexusapi.link/pricing) tên mô hình chính xác, nhóm của API Key hiện tại và việc mô hình có được đánh dấu hỗ trợ tạo ảnh hay không.
+
+<Warning>
+**Hãy xác nhận khả năng của mô hình trước**
+
+Không gửi tham số tạo ảnh vào endpoint trò chuyện văn bản và không dùng ID mô hình văn bản tại endpoint hình ảnh. Gửi lại một tổ hợp mô hình, endpoint hoặc tham số không tương thích sẽ không giải quyết được vấn đề.
+</Warning>
+
+## Gọi API
+
+Tạo ảnh dùng endpoint Images theo kiểu OpenAI:
+
+```text
+POST https://nexusapi.link/v1/images/generations
+```
+
+Yêu cầu tối thiểu chỉ cần model ID và prompt:
+
+```bash
+curl 'https://nexusapi.link/v1/images/generations' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_IMAGE_MODEL_ID",
+    "prompt": "Biểu tượng công ty công nghệ hình học màu xanh, tối giản, trên nền trắng tinh"
+  }'
+```
+
+Thay `YOUR_IMAGE_MODEL_ID` bằng model ID tạo ảnh chính xác mà nhóm hiện tại của bạn nhìn thấy trong Chợ mô hình.
+
+## Tham số và kết quả
+
+Kích thước, chất lượng, số lượng ảnh và định dạng trả về được hỗ trợ có thể khác nhau giữa các mô hình. Chỉ truyền các tham số tùy chọn như `size`, `quality`, `n` hoặc `response_format` khi Chợ mô hình hoặc [hướng dẫn API](/vi/developer/openai-compatible) ghi rõ là được hỗ trợ.
+
+Kết quả ảnh thường được trả về trong mảng `data`. Kết quả là URL hay Base64, cũng như số ảnh có thể tạo trong một lần gọi, phụ thuộc vào mô hình đã chọn và phản hồi thực tế.
+
+## Thời gian chờ và hết thời gian
+
+`/v1/images/generations` là **đường dẫn HTTP đồng bộ**: client cần chờ kết quả của yêu cầu này. new-api rc4 không cung cấp task ID và API polling thống nhất cho tạo ảnh chung; định dạng phản hồi thực tế vẫn có thể khác nhau theo nhà cung cấp phía trên.
+
+- Tạo ảnh có thể mất vài chục giây hoặc lâu hơn. Timeout quá ngắn ở client, proxy công ty hoặc tiện ích trình duyệt có thể hết hạn trước khi có phản hồi.
+- Không gửi liên tiếp cùng một tác vụ ảnh khi chưa xác nhận kết quả; điều này có thể tạo ảnh và phát sinh chi phí trùng lặp.
+- Với `504`, `524` hoặc timeout ở client, hãy lưu Request ID và thời điểm xảy ra rồi liên hệ hỗ trợ. Không nên tự kết luận tác vụ chắc chắn đã chạy hoặc chưa chạy.
+
+## Sự cố thường gặp
+
+| Hiện tượng | Kiểm tra trước |
+| --- | --- |
+| `Image generation is not enabled` | Mô hình có hỗ trợ ảnh, đã dùng image endpoint và nhóm hiện tại có quyền truy cập hay chưa |
+| `model not supported` | Model ID có chính xác và có dùng nhầm mô hình văn bản tại image endpoint hay không |
+| `400` / lỗi tham số | Bỏ các tham số tùy chọn chưa được xác nhận, sau đó thử yêu cầu tối thiểu |
+| `504` / `524` / timeout ở client | Giữ lại Request ID; tránh gửi lại ngay lập tức |
+| Không nhận được kết quả ảnh | Client có đọc đúng trường `data` và định dạng trả về hay không |
+
+Khi cần hỗ trợ, hãy cung cấp tên mô hình, Request ID, thời điểm xảy ra, tham số yêu cầu đã che thông tin nhạy cảm và toàn bộ lỗi. Không cung cấp API Key đầy đủ.
+
+## Bước tiếp theo
+
+- [Mô hình, nhóm và giá](/vi/billing/models-pricing)
+- [Chọn giao thức tích hợp](/vi/guide/integration-overview)
+- [Lỗi API thường gặp](/vi/faq/common-errors)

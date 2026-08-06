@@ -1,0 +1,126 @@
+---
+title: "Установка и настройка Codex CLI"
+---
+
+Codex CLI — это родной агент кода OpenAI. Команды установки в этой статье следующими `config.toml` Все поля отмечены
+[Официальный склад OpenAI Codex](https://github.com/openai/codex)И
+[Официальная конфигурационная ссылка](https://learn.chatgpt.com/docs/config-file/config-advanced)в качестве стандарта; NexusAPI
+Указаны только адрес API, ключ и идентификатор модели.
+
+## 1. Установите Codex CLI
+
+Просто выберите один официальный способ установки OpenAI; не смешивайте несколько методов.
+
+### Windows PowerShell
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+### macOS, Linux или WSL
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+### Пользователи с установленным Node.js
+
+```bash
+npm install -g @openai/codex
+```
+
+Установка верификации:
+
+```bash
+codex --version
+```
+
+## 2. Создать ключ NexusAPI
+
+Существуют [NexusAPI консоль](https://nexusapi.link)Входите **Управление токенами → добавление токенов**, и:
+
+1. Выберите группы, связанные с Codex, содержащие целевой модель.
+2. Используйте имена, которые легко узнать, например, `codex-work`。
+3. Устанавливайте разумные квоты в соответствии с бюджетом проекта.
+
+## 3. Настройте пользовательского провайдера
+
+Личный конфигурационный файл Codex: Windows `%USERPROFILE%\\.codex\\config.toml`, или macOS/Linux
+`~/.codex/config.toml`。 Создайте или откройте этот файл с помощью любого текстового редактора, затем напишите:
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+name = "NexusAPI"
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Общие заведения `YOUR_MODEL_ID` Заменить на[Model Square](https://nexusapi.link/pricing)Точный идентификатор модели, видимый в текущей группе ключей.
+`wire_api = "responses"`、`model_provider`、`base_url` И `env_key` Все они являются настраиваемыми элементами, официально поддерживаемыми Codex
+Поле провайдера.
+
+<Warning>
+**Не записывайте auth.json вручную**
+
+`~/.codex/auth.json` Кэш входа в OpenAI для Codex. NexusAPI использует приведённую выше версию `env_key` для чтения переменных окружающей среды,
+Не записывайте, не коммитируйте и не делайте скриншоты ключа NexusAPI на сайт `auth.json`。
+</Warning>
+## 4. Установите переменную окружения API Key
+
+Ручка `sk-你的实际Key` Замените на недавно созданный Ключ. Не клади настоящий Ключ внутрь `config.toml`。
+
+### Windows PowerShell
+
+```powershell
+setx NEXUSAPI_API_KEY "sk-你的实际Key"
+```
+
+После выполнения закройте и снова откройте терминал, чтобы новая переменная среды вступила в силу.
+
+### macOS, Linux или WSL
+
+Работайте на текущем терминале:
+
+```bash
+export NEXUSAPI_API_KEY='sk-你的实际Key'
+```
+
+Эта команда действует только для текущего терминала. Если требуется долгосрочное удержание, пожалуйста, используйте методы управления учетными данными вашей системы или методы управления переменными в окружении Shell; Не записывайте ключи в репозиторий проекта.
+
+## 5. Запуск и валидация
+
+После входа в каталог проекта запустите:
+
+```bash
+cd your-project-folder
+codex
+```
+
+Для первой проверки рекомендуется инициировать только одну задачу, которая не изменяет файл, например:
+
+```text
+请说明当前仓库的目录结构，不要修改文件。
+```
+
+## VS Код / Курсор
+
+Установка доступна в магазине расширения **OpenAI** Опубликовано
+[Расширение кодекса](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。 Расширения распространяются совместно с CLI
+`~/.codex/config.toml`, нет необходимости записывать адрес NexusAPI в старую версию VS Code `chatgpt.apiBase` Или
+`chatgpt.config` Поле.
+
+## Устранение неполадок
+
+1. Подтвердите `NEXUSAPI_API_KEY` Уже там**Недавно открытый терминал**Эффективно в центре.
+2. Убедитесь, что ключ включён и баланс достаточен; в группу входит выбранная модель.
+3. Подтвердите `model` Идентификация, отображаемая на площади моделей, идеально совпадает.
+4. Сохраните исходный текст ошибки и Request ID для дальнейшей информации[Проверьте проблему самостоятельно](/ru/faq/self-check)。
+
+## Официальный источник
+
+- [Инструкции по установке CLI OpenAI Codex](https://github.com/openai/codex)
+- [Настройка пользовательского провайдера OpenAI Codex](https://learn.chatgpt.com/docs/config-file/config-advanced)

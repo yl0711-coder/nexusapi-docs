@@ -1,0 +1,47 @@
+---
+title: "Choose the tool that suits you"
+---
+
+Different tools serve different ways of working. Choose based on your intended use, then proceed to the corresponding tutorial to avoid mixing addresses and configuration files.
+
+## Quick selection
+
+| Your needs | Recommended entry | Whoever it suits you |
+| --- | --- | --- |
+| Let AI handle code and project tasks in the terminal | [Claude Code](/en/tools/claude-code) | Developers using the Claude workflow |
+| Use Codex terminal agents | [Codex CLI](/en/tools/codex-cli) | Developers using the Responses / Codex workflow |
+| Switch between multiple Provider configurations | [CC Switch](/en/tools/cc-switch) | Manage users with multiple CLI configurations simultaneously |
+| Use Claude Code in VS Code or Cursor | [VS Code / Cursor](/en/tools/cursor-vscode) | Users who prefer the editor interface |
+| Write your own program to call the API | [Overview of access methods](/en/guide/integration-overview) | Application developers and automated scripts |
+
+## Confirm before configuration
+
+1. An API Key has been created, and a reasonable limit has been set.
+2. The API Key group includes the target model.
+3. Copy the exact model ID from the model square.
+4. The backup tool already has configurations; do not delete the entire configuration directory directly.
+5. After completion, send a brief test request and check the usage logs.
+
+<Warning>
+**Do not run one-click scripts of unknown origin directly**
+
+Automatic installation or configuration scripts may modify local configurations, write API keys, or install third-party components. Before running, verify the source, read the script content, and back up the existing configuration.
+</Warning>
+## Why is the address different for each tool?
+
+Some tools need to be included `/v1` API addresses, some tools will automatically concatenate paths, while others use native Messages or Responses protocols.
+
+Please use the address provided in the corresponding tutorial; do not copy the configurations of Claude Code, Codex CLI, or the generic OpenAI SDK. See detailed explanation[Overview of access methods](/en/guide/integration-overview)。
+
+## Your tools are not included in the tutorial
+
+If a client supports custom OpenAI-compatible addresses, you can refer to that first[Start quickly in 5 minutes](/en/guide/quick-start)and the client's official documentation.
+
+Please confirm before configuration:
+
+- Does the client support custom Base URLs?
+- Does the client use Chat Completions or Responses?
+- Whether the client will automatically complete the data `/v1`。
+- Whether the model ID can be entered manually.
+
+Unverified clients will not be included in official tutorials just to increase the number of pages.

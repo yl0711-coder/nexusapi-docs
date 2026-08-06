@@ -1,0 +1,59 @@
+---
+title: Tài liệu NexusAPI
+description: Nhanh chóng đi từ việc tạo API Key đến yêu cầu NexusAPI đầu tiên.
+mode: wide
+---
+
+<Info>
+NexusAPI cung cấp một cổng gọi mô hình thống nhất. Tình trạng sẵn có, giá và nhóm của token được xác định theo **Chợ mô hình** trong bảng điều khiển.
+</Info>
+
+<Columns cols={3}>
+  <Card title="Gửi yêu cầu đầu tiên trong 5 phút" icon="rocket" href="/vi/guide/quick-start" arrow>
+    Tạo Key, chọn mô hình và gửi một yêu cầu kiểm thử.
+  </Card>
+  <Card title="Cấu hình Claude Code / Codex" icon="terminal" href="/vi/tools" arrow>
+    Chọn hướng dẫn cấu hình cho client bạn sử dụng.
+  </Card>
+  <Card title="Xem hướng dẫn API" icon="braces" href="/vi/developer/openai-compatible" arrow>
+    Tìm hiểu giao thức tương thích, địa chỉ yêu cầu và giới hạn gọi.
+  </Card>
+</Columns>
+
+## Ba thông tin cần để kết nối
+
+| Thông tin | Lấy ở đâu | Mục đích |
+| --- | --- | --- |
+| Base URL | Tài liệu này | Gửi yêu cầu đến NexusAPI |
+| API Key | Bảng điều khiển → Quản lý token | Xác định bên gọi và các nhóm khả dụng |
+| Model ID | Bảng điều khiển → Chợ mô hình | Chỉ định mô hình cần gọi |
+
+<Warning>
+Không để lộ API Key trong hội thoại, ảnh chụp màn hình, kho mã frontend hoặc cấu hình công khai. Nếu nghi ngờ bị lộ, hãy xóa hoặc đặt lại Key ngay trong bảng điều khiển.
+</Warning>
+
+## Bắt đầu theo mục tiêu của bạn
+
+<Columns cols={2}>
+  <Card title="Tôi đang viết ứng dụng hoặc script" icon="code-2" href="/vi/guide/quick-start" arrow>
+    Bắt đầu với API tương thích OpenAI.
+  </Card>
+  <Card title="Tôi dùng Claude Code" icon="bot" href="/vi/tools/claude-code" arrow>
+    Cấu hình giao thức Messages gốc.
+  </Card>
+  <Card title="Tôi dùng Codex CLI" icon="terminal-square" href="/vi/tools/codex-cli" arrow>
+    Cấu hình Provider và mô hình tùy chỉnh.
+  </Card>
+  <Card title="Yêu cầu gặp lỗi" icon="circle-help" href="/vi/faq/self-check" arrow>
+    Trước tiên hãy làm theo quy trình tự kiểm tra và thu thập thông tin cần thiết.
+  </Card>
+</Columns>
+
+## Khi cần hỗ trợ, hãy gửi kèm
+
+- Thời điểm xảy ra lỗi và múi giờ
+- Model ID, endpoint và có sử dụng streaming hay không
+- Toàn bộ thông báo lỗi và Request ID
+- Bước tái hiện tối thiểu đã thử
+
+Các thông tin này giúp tránh trao đổi qua lại và tìm nguyên nhân nhanh hơn.

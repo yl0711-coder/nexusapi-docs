@@ -1,0 +1,52 @@
+---
+title: "Créer et sécuriser les clés API"
+---
+
+La clé API est l’identifiant permettant d’appeler l’interface NexusAPI.
+
+## Processus de création
+
+1. Connectez-vous à la console NexusAPI.
+2. Allez sur la page Gestion des jetons ou gestion des clés API.
+3. Cliquez pour ajouter un jeton.
+4. Entrez le nom du jeton.
+5. Sélectionnez les groupes disponibles.
+6. Fixez des quotas ou des limites en fonction du budget du projet.
+7. Après soumission, copiez la clé API générée.
+
+## Réglages recommandés
+
+| Posez l’objet | Suggestion |
+| --- | --- |
+| Nom | Utilisez par exemple le nom du projet ou du client. `codex-work` |
+| Regroupement | Sélectionnez le groupe contenant le modèle cible |
+| Quota | Une limite supérieure raisonnable est fixée selon l’usage, qui pourra être ajustée ultérieurement |
+| Limitations du modèle | Activez-vous uniquement lorsque c’est clairement nécessaire |
+| Liste blanche IP | Activez uniquement lorsque le serveur a une IP de sortie fixe |
+| Période de validité | Il est recommandé de définir une date d’expiration pour les clés de test temporaires |
+
+## Comment l’utiliser
+
+Insérer la clé API pendant la requête `Authorization` En-tête de la demande :
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Conseils de sécurité
+
+- N’écrivez pas de clés API dans les dépôts de code publics.
+- N’envoyez pas la clé API complète dans les captures d’écran, tickets ou journaux de discussion.
+- Il est recommandé que différents projets, membres et environnements utilisent différentes clés d’API.
+- L’environnement de production est lu via des variables d’environnement ou des services de gestion de clés, et non directement écrit dans le code.
+- Vérifiez régulièrement les journaux d’utilisation ; Si vous découvrez une source inconnue ou une dépense inhabituelle, désactivez immédiatement votre ancienne Clé.
+- Si une fuite est suspectée, il faut d’abord désactiver ou supprimer l’ancienne clé, puis créer une nouvelle clé et mettre à jour le programme qui l’utilise.
+
+## La différence entre une clé API et un jeton d’accès système
+
+| Certificat | Objectif |
+| --- | --- |
+| Clé API | Appel de l’interface du modèle, généralement par `sk-` Les débuts |
+| Jeton d’accès système | Vérifiez l’utilisation de votre compte et d’autres interfaces au niveau du compte |
+
+Les deux ne doivent pas être mélangés, et aucun type de bon ne doit être inclus dans le paramètre de requête URL.

@@ -1,0 +1,74 @@
+---
+title: "5 分鐘快速開始"
+description: "使用 NexusAPI 完成第一次模型呼叫。"
+---
+
+本頁帶你完成第一次呼叫。開始前只需要一個 NexusAPI 帳號與可用額度。
+
+<Info>
+**最短流程**
+
+購買額度 → 建立 API Key → 從模型廣場複製模型 ID → 發出測試請求
+</Info>
+
+## 1. 購買額度
+
+登入帳號後進入控制台，從「錢包管理」頁面即可線上儲值。
+
+![NexusAPI 錢包管理與線上儲值頁面](/images/nexusapi/console-wallet-topup.png)
+
+## 2. 建立 API Key
+
+1. 進入控制台的「令牌管理」。
+2. 點擊「新增令牌」。
+3. 填寫方便辨識的名稱，例如 `codex-work`。
+4. 選擇包含目標模型的分組。
+5. 依用途設定合理額度後提交。
+
+![NexusAPI 令牌管理頁面，金鑰與帳號資料均已遮罩](/images/nexusapi/console-token-management.png)
+
+![NexusAPI 建立令牌頁面](/images/nexusapi/console-create-token.png)
+
+<Warning>
+**請保護 API Key**
+
+API Key 僅用於介面驗證。請勿將其提交至公開程式碼庫、截圖或聊天記錄；不同專案建議使用不同的 Key。
+</Warning>
+
+## 3. 設定 API
+
+準備下列三個參數：
+
+| 參數 | 填寫內容 |
+| --- | --- |
+| Base URL | `https://nexusapi.link/v1` |
+| API Key | 在控制台產生，通常以 `sk-` 開頭 |
+| 模型 ID | 在[模型廣場](https://nexusapi.link/pricing)複製準確名稱 |
+
+## 4. 測試驗證
+
+以下範例使用 OpenAI Chat Completions 格式。請替換 `YOUR_API_KEY` 與 `YOUR_MODEL_ID`：
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "請回覆：連線成功"}]
+  }'
+```
+
+收到包含 `choices` 與回覆內容的 JSON，即表示基礎串接成功。
+
+<Tip>
+**客戶端中的位址可能不同**
+
+部分客戶端會自動補上 `/v1` 或具體請求路徑。設定 Claude Code、Codex CLI 等工具時，請直接依照對應的[工具教學](/zh-TW/tools/claude-code)，不要機械套用本頁位址。
+</Tip>
+
+## 下一步
+
+- [了解不同的串接方式](/zh-TW/guide/integration-overview)
+- [查看模型、分組與計費](/zh-TW/billing/models-pricing)
+- [遇到問題時開始自我檢查](/zh-TW/faq/self-check)

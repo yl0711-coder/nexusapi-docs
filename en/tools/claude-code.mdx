@@ -1,0 +1,130 @@
+---
+title: "Claude Code Setup Guide"
+---
+
+Claude Code is an AI coding assistant for the terminal. This guide explains how to install it and connect it to NexusAPI.
+
+## System Requirements
+
+- macOS 13+, Ubuntu 20.04+, Debian 10+, or Windows 10 1809+
+- 4 GB or more memory; x64 or ARM64 processor
+- A network connection that can reach NexusAPI
+
+## 1. Install Claude Code
+
+Use an official native installer when possible. A native installation does not require Node.js.
+
+### macOS, Linux, or WSL
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+### Windows PowerShell
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+You can also install it with WinGet:
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### macOS Homebrew
+
+```bash
+brew install --cask claude-code
+```
+
+Verify the installation:
+
+```bash
+claude --version
+claude doctor
+```
+
+## 2. Configure a NexusAPI Token
+
+### Create a Token
+
+Sign in to NexusAPI, open **Token Management**, click **Add Token**, and:
+
+- Use a recognizable name.
+- Select a Claude-compatible group.
+- Set a reasonable credit limit for the project.
+- Keep other options at their defaults unless you need a specific restriction.
+
+### Open the Configuration File
+
+Claude Code stores user settings in:
+
+- Windows: `C:\Users\YourUserName\.claude\settings.json`
+- macOS / Linux / WSL: `~/.claude/settings.json`
+
+Create the directory and file on macOS, Linux, WSL, or Git Bash:
+
+```bash
+mkdir -p ~/.claude
+touch ~/.claude/settings.json
+```
+
+On Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+notepad "$env:USERPROFILE\.claude\settings.json"
+```
+
+If the file already exists, merge the `env` object below into it. Do not overwrite existing MCP, permission, or other settings.
+
+### Edit `settings.json`
+
+Replace the example token with your own:
+
+```json
+{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "sk-your-api-token",
+    "ANTHROPIC_BASE_URL": "https://nexusapi.link",
+    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1"
+  }
+}
+```
+
+## 3. Start Claude Code
+
+Restart the terminal, open your project directory, and run:
+
+```bash
+cd your-project-folder
+claude
+```
+
+Follow the theme, safety, terminal, and workspace-trust prompts shown on first launch.
+
+## Troubleshooting
+
+If Claude Code cannot connect:
+
+1. Run `claude doctor`.
+2. Confirm that `ANTHROPIC_AUTH_TOKEN` and `ANTHROPIC_BASE_URL` are saved in valid JSON.
+3. Restart the terminal.
+4. Keep the original error, Request ID, `claude --version`, and `claude doctor` output when contacting support.
+
+Do not use scripts that force internal onboarding fields in `.claude.json`. Those fields may change between releases, and overwriting the file can remove existing settings.
+
+If PowerShell blocks the installer, prefer WinGet. If you must change the policy, limit it to the current user:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+## Related Links
+
+- [Official Claude Code installation guide](https://code.claude.com/docs/en/installation)
+- [Official environment-variable reference](https://code.claude.com/docs/en/env-vars)
+- [Official LLM gateway configuration](https://code.claude.com/docs/en/llm-gateway)
+- [Use Claude Code in VS Code or Cursor](/en/tools/cursor-vscode)
+- [Troubleshooting checklist](/en/faq/self-check)

@@ -1,0 +1,77 @@
+---
+title: "Exemple d’intégration de code"
+---
+
+NexusAPI prend en charge les appels compatibles pour les SDK OpenAI grand public. Voici un exemple rapide d’intégration des langages de développement couramment utilisés. Pour un support spécifique d’interface et de paramètres, veuillez consulter [Documentation de référence API](https://nexusapi.apifox.cn/) comme standard.
+
+### Paramètres d’accès au cœur
+
+Avant d’utiliser un modèle, vous devez préparer les deux paramètres clés suivants :
+
+- **Adresse de l’interface (URL de base) :** `https://nexusapi.link/v1`
+- **Identifiants d’identité (clé API) :** Il doit être dans le nôtre [Console de contrôle](https://nexusapi.link) La génération se fait généralement par `sk-` Le début.
+
+> **Note :** Lors de la demande, veuillez placer la clé API dans l’en-tête HTTP de requête `Authorization` Champ, formaté comme `Bearer sk-xxxxxx`。
+
+### Python
+Instantiez simplement le client comme avant `api_key` Et `base_url` Remplacez-le simplement par le nôtre.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-您在 NexusAPI 生成的令牌",
+    base_url="https://nexusapi.link/v1"
+)
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6", # 或其他模型
+    messages=[
+        {"role": "user", "content": "你好，请自我介绍。"}
+    ],
+    stream=True # 支持流式输出
+)
+
+for chunk in response:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+### JavaScript
+
+```js
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: "sk-您在 NexusAPI 生成的令牌",
+    baseURL: "https://nexusapi.link/v1"
+});
+
+async function main() {
+    const stream = await openai.chat.completions.create({
+        model: "claude-sonnet-4-6",
+        messages: [{ role: "user", content: "你好！" }],
+        stream: true,
+    });
+    for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || "");
+    }
+}
+main();
+```
+
+### cURL
+
+```bash
+curl "https://nexusapi.link/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
+  -d '{
+    "model": "gpt-5.5",
+    "messages": [
+      {
+        "role": "user",
+        "content": "测试一下 API 是否连通"
+      }
+    ]
+  }'
+```

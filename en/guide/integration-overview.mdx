@@ -1,0 +1,75 @@
+---
+title: "Overview of access methods"
+---
+
+NexusAPI supports mainstream AI clients and OpenAI-style interface calls. Different tools may automatically stitch paths, so you should fill in the address according to how you use it.
+
+## Preparation before you start
+
+Regardless of the method used, the following are required:
+
+1. Create an API Key in the console.
+2. Confirm that the API Key group includes the target model.
+3. Copy the exact model ID from the model plaza.
+4. Request is made using an HTTPS address.
+
+## Common usage
+
+| How to use it | Recommended reading |
+| --- | --- |
+| Build your own programs or scripts | [Start quickly in 5 minutes](/en/guide/quick-start) |
+| Claude Code | [Claude Code configuration tutorial](/en/tools/claude-code) |
+| Codex CLI | [Codex CLI configuration tutorial](/en/tools/codex-cli) |
+| CC Switch | [CC Switch setup tutorial](/en/tools/cc-switch) |
+| VS Code / Cursor | [Editor plugin tutorial](/en/tools/cursor-vscode) |
+
+## Address and protocol comparison
+
+| Scene | Fill in the address | Main agreements | Notes |
+| --- | --- | --- | --- |
+| OpenAI SDK / General-purpose program | `https://nexusapi.link/v1` | Chat Complications, etc | The request path is concatenated by the SDK or program |
+| Codex CLI | `https://nexusapi.link/v1` | Responses | Use the Provider configuration in the Codex tutorial |
+| Claude Code | `https://nexusapi.link` | Anthropic Messages | Do not add multiple addresses after configuration `/v1` |
+| CC Switch | Fill in according to the Provider type | It depends on the target tool | Claude has different address rules from Codex |
+
+The table above is used to help select access methods. The complete interface path, parameters, and response structure remain as [API reference documentation](https://nexusapi.apifox.cn/) as the standard.
+
+## Why the addresses might differ
+
+Generic OpenAI-style requests typically use:
+
+```text
+https://nexusapi.link/v1
+```
+
+Some clients require this to be omitted `/v1` The site address may be automatically completed `/chat/completions`、`/responses`、`/messages` and other paths. Please refer to the corresponding tool tutorial for accuracy.
+
+<Warning>
+**Avoid repeating the same path**
+
+If the client will complete it automatically, `/v1`, which may be formed after manual filling `/v1/v1/...` And this led to 404. When encountering 404, first check the client's actual request address.
+</Warning>
+## Do not mix client configuration with general APIs
+
+CLI tools, editor plugins, and custom programs may use different protocols and configuration files. Even if the model names are the same, you cannot directly copy the entire configuration of one tool into another tool.
+
+Method to judge:
+
+- Configure Codex CLI: Read the Codex tutorial and use the relevant Responses configuration.
+- Configure Claude Code: Read the Claude Code tutorial using the Anthropic environment variables.
+- Write your own code: Choose the request path and parameters based on the API reference.
+- When unsure: first confirm the client's name and the actual request path it sent.
+
+## API reference documentation
+
+The complete interface path, parameters, request structure, and response structure are present [NexusAPI API reference](https://nexusapi.apifox.cn/) Maintain the middle.
+
+Help centers explain "how to choose and use"; API references are responsible for explaining "what fields and structures are."
+
+## How to confirm successful configuration
+
+- The client can return the full content normally.
+- The corresponding request appears in the console usage log.
+- The models, groupings, and consumption in the logs met expectations.
+
+If the call fails, save the error text and Request ID, then enter[Self-check the issue](/en/faq/self-check)。

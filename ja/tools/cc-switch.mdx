@@ -1,0 +1,266 @@
+---
+title: "CCスイッチのインストールと使用チュートリアル"
+---
+
+CC Switchは、Claude CodeやCodexなどのAIのCLIツールのAPI構成を集中管理できるAI設定管理ツールです。 設定後、CC Switchで異なるプロバイダー間を切り替え、NexusAPIを使って対応するCLIツールを起動できます。
+
+この記事では、CC Switchツール内でNexusAPIを手動で設定する方法を説明します。
+
+## 1. 使用前の準備
+
+構成前に以下の情報を準備してください:
+
+| プロジェクト | 内容を埋めてください |
+| --- | --- |
+| NexusAPIアドレス | `https://nexusapi.link` |
+| APIキー | NexusAPIコンソールで作成されるトークンは通常以下の形式です: `sk-xxx` |
+| モデルID | 現在のAPIキーグループで利用可能なモデルIDは |
+
+APIキー取得経路:
+
+```text
+NexusAPI 控制台
+-> 令牌管理
+-> 创建或复制 API Key
+```
+
+注:
+
+1. APIキーはNexusAPIコンソールで作成する必要があります。
+2. コピーされた鍵が欠けている場合 `sk-` 設定時に追加する必要があるプレフィックス `sk-xxx`。
+3. モデルIDは現在のトークングループで利用可能なモデルを選択しなければなりません。ページ上のサイト全体のモデルリストだけを見るのではなく、
+
+## 2. CCスイッチのインストール
+
+### 2.1 macOS
+
+Homebrewでの推奨インストール:
+
+```bash
+brew install --cask cc-switch
+```
+
+インストール後、アプリケーション内でCC Switchを開いてください。
+
+### 2.2 ウィンドウズ
+
+CC SwitchのGitHubリリースページをご覧ください:
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+ダウンロード `.msi` パッケージをインストールし、インストーラーの指示に従ってインストールを完了してください。
+
+ポータブル版を使っていれば、ダウンロードも可能です `.zip` 圧縮ファイルを抽出して直接実行します。
+
+### 2.3 Linux
+
+CC SwitchのGitHubリリースページをご覧ください:
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+システムに従ってダウンロード `.deb` インストールパッケージまたは `.AppImage` 書類。
+
+<Warning>
+**公式チャネルからのみダウンロード可能です**
+
+CC Switchの公式ソースコードおよびダウンロードリンクは以下の通りです
+[farion1231/cc-switch(カロリオン1231/CCスイッチ)](https://github.com/farion1231/cc-switch)。
+支払い、追加、アカウント証明が必要な第三者のページからダウンロードしないでください。
+</Warning>
+Arch LinuxユーザーはAUR経由でインストールできます(コミュニティメンテナンスによるもので、公式のCC Switchリリースパックではありません):
+
+```bash
+paru -S cc-switch-bin
+```
+
+## 3. NexusAPIプロバイダーの追加
+
+CCスイッチを開いた後、プロバイダー管理ページに行き、「プロバイダーを追加」を選択します。
+
+全体のプロセスは以下の通りです。
+
+```text
+打开 CC Switch
+-> 新增 Provider
+-> 选择要配置的应用
+-> 填写 NexusAPI Endpoint、API Key、模型 ID
+-> 保存 Provider
+-> 切换到该 Provider
+-> 启动对应 CLI 工具验证
+```
+
+![CC Switchは正式にベンダーインターフェースを追加しました。 NexusAPIを統合する際は、左上のカスタム設定アイコンを選択してください](/images/nexusapi/cc-switch-add-provider-official.png)
+
+> 画像出典
+> [CC Switch公式倉庫](https://github.com/farion1231/cc-switch)，
+> MITライセンス©(2025年ジェイソン・ヤング)での使用。 画像に示されている他のベンダーは公式インターフェースの一例に過ぎません。
+> NexusAPIを統合する際は、「カスタム設定」を選択し、下のリンクをクリックして入力してください。
+
+以下は公式CCスイッチリポジトリからのプロバイダーフォームの比較的完全な例です。 APIキー、リクエストアドレス、デフォルトモデル、
+高度なプロトコルオプションの位置; 写真の中 `example.com`モデル名、ゲートウェイ名はあくまで一例です。**盲目的に真似しないでください**。
+
+![公式のCCスイッチプロバイダーフォームの例、キーはマスクされました](/images/nexusapi/cc-switch-provider-form-official.png)
+
+> 画像出典:[CC Switch公式倉庫](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png)，
+> MITライセンス。 NexusAPIの実際のパラメータは、このページ下部にあるClaude / Codexの設定表に基づいています。
+
+## 4. Claudeコードの設定
+
+CC SwitchでClaudeコードを管理したい場合は、下のページをクリックして新しいプロバイダーを入力してください。
+
+| フィールド | 記入を推奨します |
+| --- | --- |
+| アプリ / アプリケーション | `Claude` |
+| 名称 | `NexusAPI Claude` |
+| エンドポイント/ベースURL | `https://nexusapi.link` |
+| APIキー | `sk-您的 NexusAPI 令牌` |
+| プライマリーモデル | 現在のトークンで利用可能なClaudeモデルID |
+| 俳句モデル | 空欄を省略するか、軽量なClaudeモデルを埋めることもできます |
+| ソネットモデル | 空欄のままにしてもいいし、ソネットモデルに記入してもいい |
+| Opus モデル | 空欄のままにするか、Opusモデルを入力できます |
+
+例:
+
+```text
+App: Claude
+Name: NexusAPI Claude
+Endpoint: https://nexusapi.link
+API Key: sk-xxxxxxxx
+Primary Model: YOUR_CLAUDE_MODEL_ID
+Sonnet Model: YOUR_CLAUDE_MODEL_ID
+```
+
+注:
+
+1. Claude CodeのNexusAPIエンドポイントを追加しないでください `/v1`。
+2. 設定後、CCスイッチでプロバイダーに切り替えます。
+3. 端末を再起動して再度実行してください `claude`。
+
+検証方法:
+
+```bash
+claude
+```
+
+Claude Codeを入力した後、簡単なメッセージを送信します:
+
+```text
+请用一句话自我介绍
+```
+
+## 5. コデックスの設定
+
+CC SwitchでCodexを管理したい場合は、プロバイダーを追加する際に下の「新しいプロバイダー」を入力してください。
+
+| フィールド | 記入を推奨します |
+| --- | --- |
+| アプリ / アプリケーション | `Codex` |
+| 名称 | `NexusAPI Codex` |
+| エンドポイント/ベースURL | `https://nexusapi.link/v1` |
+| APIキー | `sk-您的 NexusAPI 令牌` |
+| プライマリーモデル | 現在のトークンはOpenAI互換モデルIDに対応しています |
+
+例:
+
+```text
+App: Codex
+Name: NexusAPI Codex
+Endpoint: https://nexusapi.link/v1
+API Key: sk-xxxxxxxx
+Primary Model: YOUR_CODEX_MODEL_ID
+```
+
+注:
+
+1. CodexはOpenAI互換インターフェースを使用しており、Endpointにもそれが必要です `/v1`。
+2. モデルはAPIキーグループで利用可能でなければなりません。
+3. 現在のサイトでCodex専用グループを設定している場合は、設定前にAPIキーを作成するためにこのグループを使うことをお勧めします。
+
+検証方法:
+
+```bash
+codex
+```
+
+Codexを入力した後、通常の返還を確認する簡単なタスクを開始します。
+
+## 6. 現在利用可能なキーモデルを検索する
+
+最も安全な方法は、現在のAPIキーを使ってクエリすることです `/v1/models`。
+
+例:
+
+```bash
+curl https://nexusapi.link/v1/models \
+  -H "Authorization: Bearer sk-您的 NexusAPI 令牌"
+```
+
+結果からの結果 `data[].id` これは現在のAPIキーで利用可能なモデルIDです。
+
+モデルを選ぶ際は、以下の通りにしてください。
+
+1. Claude Code は Claude クラスモデルを選択します。
+2. Codexはプログラミングに適したOpenAI互換モデルを選定しています。
+3. 現在のAPIキーが利用できないモデルを選択しないでください。
+
+## 7. 異なるツール間のエンドポイントの違い
+
+| ツール | 終着点 |
+| --- | --- |
+| クロード符号 | `https://nexusapi.link` |
+| コデックス | `https://nexusapi.link/v1` |
+
+迷ったら、上記の表を優先的に埋めてください。
+
+## 8. よくある質問
+
+### 8.1 切り替え後も公式住所が求められます
+
+考えられる理由:
+
+1. CC SwitchはNexusAPIプロバイダーに切り替えませんでした。
+2. 端末はスイッチの前からすでに開いていて、古い環境変数を使い続けています。
+3. ターゲットCLIツールは独自のローカル設定を持ち、CCスイッチの設定を上書きします。
+
+治療:
+
+1. CC Switchでプロバイダーを再度切り替えてください。
+2. 端末を閉じてから再起動してください。
+3. 対応するCLIのローカル設定ファイルを確認してください。
+
+### 8.2 API キー無効
+
+検査:
+
+1. APIキーはNexusAPIコンソールからのものですか?
+2. それは `sk-` 始まり。
+3. トークンが有効かどうか。
+4. 口座残高が十分かどうかも確認しましょう。
+5. 現在のトークンはモデルに制限を与えますか?
+
+### 8.3 モデル非利用
+
+検査:
+
+1. 現在のAPI Keyグループはこのモデルをサポートしていますか?
+2. 現在のAPIキーにはモデル上の制限がありますか?
+3. NexusAPIバックエンドチャネルが有効になっているかどうか。
+4. 使用例 `/v1/models` 現在のキーの実際の利用可能なモデルをクエリしてください。
+
+### 8.4 クロードコードプロンプト `/login`
+
+NexusAPI使用時にはClaude Codeを使用しないでください `/login` 公式アカウントにログインしてください。 NexusAPI Providerの設定はCCスイッチ経由で書くべきです。
+
+すでに実行されている場合 `/login`、CC Switch NexusAPIプロバイダーに戻して端末を再起動することをお勧めします。
+
+## 9. 推奨される使用方法
+
+この段階での推奨事項:
+
+1. CC Switchを使って手動でプロバイダーを追加してください。
+2. パス `/v1/models` 現在利用可能なAPIキーモデルを検索してください。
+3. 設定後、まず単純なリクエスト検証が行われ、その後複雑なタスクが実行されます。

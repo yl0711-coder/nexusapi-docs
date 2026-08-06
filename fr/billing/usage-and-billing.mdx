@@ -1,0 +1,53 @@
+---
+title: "Dosage et description du journal"
+---
+
+La console utilise des journaux pour visualiser l’heure, le modèle, les jetons, la durée, le statut et la consommation de chaque requête. Veuillez confirmer l’heure et le fuseau horaire de la projection avant le rapprochement.
+
+## Champs communs
+
+| Terrain | Signification |
+| --- | --- |
+| Temps | Demandez l’heure d’entrée sur la plateforme |
+| Regroupement | Le regroupement de jetons utilisé dans cette requête est utilisé |
+| Modèle | Le nom réel du modèle enregistré |
+| Entrée | Entrez le nombre de jetons ; Les lectures de cache peuvent être affichées séparément |
+| Production | Sortie du nombre de jetons |
+| Temps | Le temps total du début à la fin de la demande |
+| Le premier personnage | Le temps d’attente avant que la demande de streaming ne reçoive le premier extrait de contenu |
+| Type | Résultats de requête tels que la consommation et les erreurs |
+| Dépenses | La quantité de consommation enregistrée dans cette demande |
+| Demande d’ID | Utilisé pour localiser l’identifiant unique pour la même requête |
+
+## Entrée, sortie et cache
+
+- **Entrée du jeton**: Prompts, contexte et informations sur les outils soumis au modèle.
+- **Jeton de sortie**: Contenu généré par modèles.
+- **Lecture du cache**: Jetons lus après avoir accédé au cache contextuel ; La méthode de facturation peut différer de l’entrée habituelle.
+
+Différents modèles peuvent prendre en charge différentes méthodes et prix de mise en cache, il vous plaît référez à[Modèle Carré](https://nexusapi.link/pricing)L’information en temps réel prévaut.
+
+## Pourquoi le journal est-il retardé ?
+
+Il peut y avoir de courts délais entre la fin de la requête, l’agrégation statistique et les requêtes de page. Si une requête nouvellement remplie n’apparaît pas immédiatement, veuillez la rafraîchir plus tard. Ne relancez pas les requêtes métier juste pour consulter les journaux.
+
+## Mauvais enregistrements et consommation
+
+Les erreurs qui ne génèrent pas de contenu valide sont généralement indiquées comme 0 consommation. Si le contenu a été généré mais que le client interrompt la réception, ou si le système effectue des tentatives ultérieures, il doit vérifier l’enregistrement avec le même ID de requête.
+
+Si vous suspectez des accusations en double ou échouées, veuillez fournir :
+
+- Demande d’ID
+- Heure et fuseau horaire d’occurrence
+- Nom du modèle
+- Est-ce que le client reçoit finalement l’intégralité du contenu
+
+Ne fournissez pas la clé API complète.
+
+## Visualiser et exporter
+
+- Vue quotidienne : Aperçu des usages et des journaux d’utilisation de la console.
+- Filtrage détaillé : requête par temps, modèle, regroupement et autres critères.
+- Réconciliation programmatique : utilisation[API de requête d’utilisation](/fr/developer/usage-logs)Lisez vos propres données de compte.
+
+Après exportation ou résumé, l’ID de la requête doit toujours être conservé pour faciliter une vérification supplémentaire des enregistrements d’exception.

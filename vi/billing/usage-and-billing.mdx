@@ -1,0 +1,53 @@
+---
+title: "Mô tả liều lượng và nhật ký"
+---
+
+Bảng điều khiển sử dụng nhật ký để xem thời gian, mẫu mã, token, thời lượng, trạng thái và mức tiêu thụ của từng yêu cầu. Vui lòng xác nhận thời gian chiếu và múi giờ trước khi đối chiếu.
+
+## Các trường phổ biến
+
+| Lĩnh vực | Ý nghĩa |
+| --- | --- |
+| Thời gian | Yêu cầu thời gian để vào nền tảng |
+| Nhóm | Nhóm token được sử dụng trong yêu cầu này đã được sử dụng |
+| Mô hình | Tên mẫu thực tế được ghi nhận |
+| Đầu vào | Nhập số lượng token; Đọc bộ nhớ đệm có thể được hiển thị riêng biệt |
+| Sản lượng | Xuất số lượng token |
+| Thời gian | Tổng thời gian từ lúc bắt đầu đến khi kết thúc yêu cầu |
+| Nhân vật đầu tiên | Thời gian chờ trước khi yêu cầu phát trực tuyến nhận được đoạn nội dung đầu tiên |
+| Loại | Yêu cầu kết quả như tiêu thụ và lỗi |
+| Chi phí | Lượng tiêu thụ ghi nhận trong yêu cầu này |
+| Mã yêu cầu | Được sử dụng để xác định định danh duy nhất cho cùng một yêu cầu |
+
+## Đầu vào, đầu ra và bộ nhớ đệm
+
+- **Enter Token**: Các đề bài, ngữ cảnh và thông tin công cụ được gửi đến mô hình.
+- **Token đầu ra**: Nội dung do mô hình tạo ra.
+- **Đọc bộ nhớ đệm**: Các token được đọc sau khi vào bộ nhớ đệm ngữ cảnh; Phương pháp thanh toán có thể khác với đầu vào thông thường.
+
+Các mẫu khác nhau có thể hỗ trợ các phương pháp và giá cả khác nhau, vì vậy vui lòng tham khảo[Mô hình vuông](https://nexusapi.link/pricing)Thông tin thời gian thực chiếm ưu thế.
+
+## Tại sao nhật ký lại bị trễ?
+
+Có thể có những khoảng thời gian ngắn giữa việc kết thúc yêu cầu, tổng hợp thống kê và truy vấn trang. Nếu một yêu cầu mới hoàn thành không xuất hiện ngay lập tức, vui lòng làm mới sau. Không khởi động lại các yêu cầu kinh doanh chỉ để xem nhật ký.
+
+## Ghi sai và tiêu thụ
+
+Các lỗi không tạo ra nội dung hợp lệ thường được hiển thị là 0 tiêu thụ. Nếu nội dung đã được tạo ra nhưng máy khách làm gián đoạn việc tiếp nhận, hoặc nếu hệ thống hoàn thành các lần thử tiếp theo, nó cần xác minh bản ghi với cùng ID Yêu cầu.
+
+Nếu bạn nghi ngờ các khoản phí trùng lặp hoặc thất bại, vui lòng cung cấp:
+
+- Mã yêu cầu
+- Thời gian và múi giờ xảy ra
+- Tên mẫu
+- Liệu khách hàng cuối cùng có nhận được toàn bộ nội dung hay không
+
+Không cung cấp đầy đủ khóa API.
+
+## Xem và xuất
+
+- Chế độ xem hàng ngày: Tổng quan về việc sử dụng và nhật ký sử dụng của bảng điều khiển.
+- Lọc chi tiết: truy vấn theo thời gian, mô hình, nhóm và các tiêu chí khác.
+- Đối chiếu chương trình: sử dụng[API truy vấn sử dụng](/vi/developer/usage-logs)Đọc dữ liệu tài khoản của chính bạn.
+
+Sau khi xuất hoặc tóm tắt, ID Yêu cầu vẫn nên được giữ lại để thuận tiện cho việc xác minh thêm các bản ghi ngoại lệ.

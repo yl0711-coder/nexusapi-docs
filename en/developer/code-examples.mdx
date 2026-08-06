@@ -1,0 +1,74 @@
+---
+title: "Code Examples"
+---
+
+NexusAPI is compatible with the official OpenAI SDK and other OpenAI-compatible clients. In most integrations, the only required changes are the API Key and Base URL.
+
+### Core Parameters
+
+- **Base URL:** `https://nexusapi.link/v1`
+- **API Key:** created in the [NexusAPI console](https://nexusapi.link), usually starting with `sk-`.
+
+> **Note:** Send the API Key in the HTTP `Authorization` header as `Bearer sk-xxxxxx`.
+
+### Python
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-your-nexusapi-token",
+    base_url="https://nexusapi.link/v1"
+)
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {"role": "user", "content": "Hello, please introduce yourself."}
+    ],
+    stream=True
+)
+
+for chunk in response:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+### JavaScript
+
+```js
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: "sk-your-nexusapi-token",
+    baseURL: "https://nexusapi.link/v1"
+});
+
+async function main() {
+    const stream = await openai.chat.completions.create({
+        model: "claude-sonnet-4-6",
+        messages: [{ role: "user", content: "Hello!" }],
+        stream: true,
+    });
+    for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || "");
+    }
+}
+main();
+```
+
+### cURL
+
+```bash
+curl "https://nexusapi.link/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-your-nexusapi-token" \
+  -d '{
+    "model": "gpt-5.5",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Test whether the API is reachable"
+      }
+    ]
+  }'
+```

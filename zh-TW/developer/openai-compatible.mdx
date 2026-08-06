@@ -1,0 +1,48 @@
+---
+title: "OpenAI 相容介面"
+---
+
+NexusAPI 相容於 OpenAI 風格的介面呼叫。
+
+## 聊天完成
+
+申請地址：
+
+```text
+POST https://nexusapi.link/v1/chat/completions
+```
+
+範例請求：
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好"
+      }
+    ]
+  }'
+```
+
+## 請求頭
+
+| 請求頭 | 必修 | 說明 |
+| --- | --- | --- |
+| `Content-Type` | 是的 | 固定於 `application/json` |
+| `Authorization` | 是的 | 節目形式為 `Bearer YOUR_API_KEY` |
+
+## 常見錯誤
+
+| 錯了 | 可能原因 |
+| --- | --- |
+| 401 | API 金鑰錯誤、金鑰未交付，或金鑰無效 |
+| 429 | 請求速度過快、降頻觸發，或服務暫時忙碌 |
+| 500/502/503 | 請求處理暫時失敗或服務無法使用時 |
+| 524 | 請求等待時間太長 |
+
+遇到錯誤時請儲存請求 ID，並參考[自我檢查問題](/zh-TW/faq/self-check)。 不要在短時間內頻繁重試。

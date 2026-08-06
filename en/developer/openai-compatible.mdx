@@ -1,0 +1,46 @@
+---
+title: "OpenAI-Compatible API"
+---
+
+NexusAPI supports OpenAI-compatible API calls.
+
+## Chat Completions
+
+Endpoint:
+
+```text
+POST https://nexusapi.link/v1/chat/completions
+```
+
+Example request:
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello"
+      }
+    ]
+  }'
+```
+
+## Request Headers
+
+| Header | Required | Description |
+| --- | --- | --- |
+| `Content-Type` | Yes | Must be `application/json` |
+| `Authorization` | Yes | Use the format `Bearer YOUR_API_KEY` |
+
+## Common Errors
+
+| Error | Possible Cause |
+| --- | --- |
+| 401 | Incorrect API Key, missing API Key, or expired API Key |
+| 429 | Too many requests, rate limiting, or upstream model congestion |
+| 500 / 502 / 503 | NexusAPI or upstream model service error |
+| 524 | Upstream response timeout |

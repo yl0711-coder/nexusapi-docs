@@ -1,0 +1,126 @@
+---
+title: "Cài đặt và cấu hình Codex CLI"
+---
+
+Codex CLI là agent mã gốc của OpenAI. Các lệnh cài đặt trong bài viết này như sau `config.toml` Tất cả các trường đều được đánh dấu bởi
+[Kho Codex chính thức của OpenAI](https://github.com/openai/codex)Và
+[Tham khảo cấu hình chính thức](https://learn.chatgpt.com/docs/config-file/config-advanced)làm tiêu chuẩn; NexusAPI
+Chỉ cung cấp địa chỉ API, Khóa và ID mô hình.
+
+## 1. Cài đặt Codex CLI
+
+Chỉ cần chọn một phương pháp cài đặt OpenAI chính thức; đừng trộn nhiều phương pháp.
+
+### Windows PowerShell
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+### macOS, Linux hoặc WSL
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+### Người dùng đã cài đặt Node.js
+
+```bash
+npm install -g @openai/codex
+```
+
+Xác minh cài đặt:
+
+```bash
+codex --version
+```
+
+## 2. Tạo khóa NexusAPI
+
+Tồn tại [Bảng điều khiển NexusAPI](https://nexusapi.link)Vào **Quản lý Token → Thêm token**, và:
+
+1. Chọn các nhóm liên quan đến Codex chứa mô hình mục tiêu.
+2. Sử dụng tên dễ nhận biết, ví dụ `codex-work`。
+3. Đặt ra hạn ngạch hợp lý theo ngân sách dự án.
+
+## 3. Cấu hình Nhà cung cấp tùy chỉnh
+
+Tệp cấu hình cá nhân Codex là: Windows `%USERPROFILE%\\.codex\\config.toml`, hoặc macOS/Linux
+`~/.codex/config.toml`。 Tạo hoặc mở tệp này bằng bất kỳ trình soạn thảo văn bản nào, sau đó ghi:
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+name = "NexusAPI"
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Tổng quan `YOUR_MODEL_ID` Thay thế bằng[Mô hình vuông](https://nexusapi.link/pricing)ID mô hình chính xác hiển thị trong nhóm Khóa hiện tại.
+`wire_api = "responses"`、`model_provider`、`base_url` Và `env_key` Tất cả đều là các mục có thể tùy chỉnh được Codex chính thức hỗ trợ
+Trường nhà cung cấp.
+
+<Warning>
+**Không ghi thủ công auth.json**
+
+`~/.codex/auth.json` Bộ nhớ đệm đăng nhập OpenAI cho Codex. NexusAPI sử dụng phiên bản trên `env_key` để đọc các biến môi trường,
+Không ghi, cam kết hoặc chụp màn hình khóa NexusAPI lên trang web `auth.json`。
+</Warning>
+## 4. Đặt biến môi trường API Key
+
+Tay cầm `sk-你的实际Key` Thay thế bằng Key mới tạo. Đừng đặt chìa khóa thật vào bên trong `config.toml`。
+
+### Windows PowerShell
+
+```powershell
+setx NEXUSAPI_API_KEY "sk-你的实际Key"
+```
+
+Sau khi thực thi, đóng và mở lại terminal để biến môi trường mới có hiệu lực.
+
+### macOS, Linux hoặc WSL
+
+Chạy trên thiết bị đầu cuối hiện tại:
+
+```bash
+export NEXUSAPI_API_KEY='sk-你的实际Key'
+```
+
+Lệnh này chỉ áp dụng cho terminal hiện tại. Nếu cần lưu trữ lâu dài, vui lòng sử dụng các phương pháp quản lý thông tin đăng nhập hoặc biến môi trường Shell của hệ thống của bạn; Không ghi khóa vào kho dự án.
+
+## 5. Khởi động và xác thực
+
+Sau khi vào thư mục dự án, khởi chạy:
+
+```bash
+cd your-project-folder
+codex
+```
+
+Đối với lần kiểm tra đầu tiên, khuyến nghị chỉ khởi tạo một tác vụ không thay đổi tệp, ví dụ:
+
+```text
+请说明当前仓库的目录结构，不要修改文件。
+```
+
+## VS Mã / Con trỏ
+
+Có thể cài đặt tại cửa hàng mở rộng **OpenAI** Đã xuất bản
+[Phần mở rộng codex](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。 Các phần mở rộng được chia sẻ với CLI
+`~/.codex/config.toml`, không cần ghi địa chỉ NexusAPI vào phiên bản VS Code cũ hơn `chatgpt.apiBase` Hoặc
+`chatgpt.config` Trường.
+
+## Khắc phục sự cố
+
+1. Xác nhận `NEXUSAPI_API_KEY` Đã có sẵn rồi**Nhà ga mới khai trương**Hiệu quả ở giữa.
+2. Đảm bảo Khóa đã được bật và số dư đủ; nhóm bao gồm mẫu đã chọn.
+3. Xác nhận `model` ID hiển thị trên quảng trường mô hình khớp hoàn toàn.
+4. Lưu văn bản lỗi gốc và Mã Yêu Cầu để tham khảo thêm[Tự kiểm tra vấn đề](/vi/faq/self-check)。
+
+## Nguồn chính thức
+
+- [Hướng dẫn cài đặt OpenAI Codex CLI](https://github.com/openai/codex)
+- [Cấu hình nhà cung cấp tùy chỉnh OpenAI Codex](https://learn.chatgpt.com/docs/config-file/config-advanced)

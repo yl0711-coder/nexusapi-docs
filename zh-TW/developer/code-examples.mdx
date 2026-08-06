@@ -1,0 +1,77 @@
+---
+title: "程式碼整合範例"
+---
+
+NexusAPI 支援主流 OpenAI SDK 的相容呼叫。 以下是一個常用開發語言的快速整合範例。關於特定的介面與參數支援，請參考 [API 參考文件](https://nexusapi.apifox.cn/) 作為標準。
+
+### 核心存取參數
+
+在使用任何模型之前，你需要準備以下兩個核心參數：
+
+- **介面位址（基礎網址）：** `https://nexusapi.link/v1`
+- **身份憑證（API 金鑰）：** 必須在我們的世界裡 [控制台](https://nexusapi.link) 生成通常由 `sk-` 開始。
+
+> **註：** 請求時，請將 API 金鑰置於 HTTP 請求標頭中 `Authorization` 欄位，格式為 `Bearer sk-xxxxxx`。
+
+### Python
+只要像之前一樣實例化客戶端 `api_key` 且 `base_url` 換成我們的吧。
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-您在 NexusAPI 生成的令牌",
+    base_url="https://nexusapi.link/v1"
+)
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6", # 或其他模型
+    messages=[
+        {"role": "user", "content": "你好，请自我介绍。"}
+    ],
+    stream=True # 支持流式输出
+)
+
+for chunk in response:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+### JavaScript
+
+```js
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: "sk-您在 NexusAPI 生成的令牌",
+    baseURL: "https://nexusapi.link/v1"
+});
+
+async function main() {
+    const stream = await openai.chat.completions.create({
+        model: "claude-sonnet-4-6",
+        messages: [{ role: "user", content: "你好！" }],
+        stream: true,
+    });
+    for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || "");
+    }
+}
+main();
+```
+
+### cURL
+
+```bash
+curl "https://nexusapi.link/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
+  -d '{
+    "model": "gpt-5.5",
+    "messages": [
+      {
+        "role": "user",
+        "content": "测试一下 API 是否连通"
+      }
+    ]
+  }'
+```

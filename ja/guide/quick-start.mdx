@@ -1,0 +1,74 @@
+---
+title: "5 分で始めるクイックスタート"
+description: "NexusAPI で最初のモデル呼び出しを行います。"
+---
+
+このページでは、最初のリクエストを送るまでを案内します。必要なのは NexusAPI アカウントと利用可能な残高だけです。
+
+<Info>
+**最短の流れ**
+
+残高を購入 → API キーを作成 → モデルマーケットプレイスからモデル ID をコピー → テストリクエストを送信
+</Info>
+
+## 1. 残高を購入する
+
+コンソールにログインし、**ウォレット管理**からオンラインでチャージします。
+
+![NexusAPI のウォレット管理とオンラインチャージ画面](/images/nexusapi/console-wallet-topup.png)
+
+## 2. API キーを作成する
+
+1. コンソールで **トークン管理** を開きます。
+2. **トークンを追加** をクリックします。
+3. `codex-work` など、識別しやすい名前を入力します。
+4. 使用するモデルを含むグループを選びます。
+5. 用途に応じた上限を設定して送信します。
+
+![キーとアカウント情報をマスクした NexusAPI のトークン管理画面](/images/nexusapi/console-token-management.png)
+
+![NexusAPI のトークン作成画面](/images/nexusapi/console-create-token.png)
+
+<Warning>
+**API キーを安全に保管してください**
+
+API キーは認証専用です。公開リポジトリ、スクリーンショット、チャット履歴に含めないでください。プロジェクトごとに別のキーを使うことを推奨します。
+</Warning>
+
+## 3. API を設定する
+
+以下の 3 つを準備します。
+
+| 項目 | 内容 |
+| --- | --- |
+| Base URL | `https://nexusapi.link/v1` |
+| API キー | コンソールで生成します。通常は `sk-` で始まります |
+| モデル ID | [モデルマーケットプレイス](https://nexusapi.link/pricing)から正確な名称をコピーします |
+
+## 4. テストリクエストを送る
+
+次の例は OpenAI Chat Completions 形式です。`YOUR_API_KEY` と `YOUR_MODEL_ID` を置き換えてください。
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "返信してください：接続に成功しました"}]
+  }'
+```
+
+JSON の応答に `choices` とモデルの返答が含まれれば、基本的な接続は成功です。
+
+<Tip>
+**クライアントによって URL が異なる場合があります**
+
+一部のクライアントは `/v1` やリクエストパスを自動で補完します。Claude Code、Codex CLI などを設定する際は、この URL をそのまま使うのではなく、対応する[ツールガイド](/ja/tools/claude-code)に従ってください。
+</Tip>
+
+## 次に読むもの
+
+- [接続方法の違いを確認する](/ja/guide/integration-overview)
+- [モデル、グループ、請求を確認する](/ja/billing/models-pricing)
+- [問題が起きた場合に自己診断を始める](/ja/faq/self-check)

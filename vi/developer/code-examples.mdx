@@ -1,0 +1,77 @@
+---
+title: "Ví dụ tích hợp mã nguồn"
+---
+
+NexusAPI hỗ trợ các cuộc gọi tương thích cho các SDK OpenAI phổ biến. Dưới đây là ví dụ tích hợp nhanh về các ngôn ngữ phát triển phổ biến. Để biết hỗ trợ giao diện và tham số cụ thể, vui lòng tham khảo [Tài liệu tham khảo API](https://nexusapi.apifox.cn/) như một tiêu chuẩn.
+
+### Tham số truy cập cốt lõi
+
+Trước khi sử dụng bất kỳ mô hình nào, bạn cần chuẩn bị hai tham số cốt lõi sau:
+
+- **Địa chỉ giao diện (URL cơ sở):** `https://nexusapi.link/v1`
+- **Thông tin xác thực danh tính (khóa API):** Nó cần phải nằm trong khu vực của chúng ta [Bảng điều khiển](https://nexusapi.link) Việc tạo ra thường được thực hiện bởi `sk-` Khởi đầu.
+
+> **Lưu ý:** Khi yêu cầu, vui lòng đặt khóa API vào phần đầu yêu cầu HTTP `Authorization` trường, được định dạng thành `Bearer sk-xxxxxx`。
+
+### Python
+Chỉ cần khởi tạo client như trước `api_key` Và `base_url` Chỉ cần thay bằng của chúng tôi thôi.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-您在 NexusAPI 生成的令牌",
+    base_url="https://nexusapi.link/v1"
+)
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6", # 或其他模型
+    messages=[
+        {"role": "user", "content": "你好，请自我介绍。"}
+    ],
+    stream=True # 支持流式输出
+)
+
+for chunk in response:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+### JavaScript
+
+```js
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: "sk-您在 NexusAPI 生成的令牌",
+    baseURL: "https://nexusapi.link/v1"
+});
+
+async function main() {
+    const stream = await openai.chat.completions.create({
+        model: "claude-sonnet-4-6",
+        messages: [{ role: "user", content: "你好！" }],
+        stream: true,
+    });
+    for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || "");
+    }
+}
+main();
+```
+
+### cURL
+
+```bash
+curl "https://nexusapi.link/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
+  -d '{
+    "model": "gpt-5.5",
+    "messages": [
+      {
+        "role": "user",
+        "content": "测试一下 API 是否连通"
+      }
+    ]
+  }'
+```

@@ -1,0 +1,74 @@
+---
+title: "Bắt đầu nhanh trong 5 phút"
+description: "Thực hiện yêu cầu mô hình đầu tiên với NexusAPI."
+---
+
+Trang này hướng dẫn bạn gửi yêu cầu đầu tiên. Bạn chỉ cần có tài khoản NexusAPI và số dư khả dụng.
+
+<Info>
+**Quy trình ngắn nhất**
+
+Nạp tiền → Tạo API Key → Sao chép Model ID từ Chợ mô hình → Gửi yêu cầu kiểm thử
+</Info>
+
+## 1. Nạp tiền
+
+Đăng nhập vào bảng điều khiển, sau đó dùng **Quản lý ví** để nạp tiền trực tuyến.
+
+![Trang quản lý ví và nạp tiền trực tuyến của NexusAPI](/images/nexusapi/console-wallet-topup.png)
+
+## 2. Tạo API Key
+
+1. Mở **Quản lý token** trong bảng điều khiển.
+2. Chọn **Thêm token**.
+3. Nhập tên dễ nhận biết, ví dụ `codex-work`.
+4. Chọn nhóm có chứa mô hình bạn muốn sử dụng.
+5. Đặt hạn mức phù hợp với mục đích sử dụng rồi gửi.
+
+![Trang quản lý token NexusAPI với khóa và dữ liệu tài khoản đã được che](/images/nexusapi/console-token-management.png)
+
+![Bảng tạo token NexusAPI](/images/nexusapi/console-create-token.png)
+
+<Warning>
+**Bảo vệ API Key của bạn**
+
+API Key chỉ được dùng để xác thực. Không đưa nó vào kho mã công khai, ảnh chụp màn hình hoặc lịch sử trò chuyện. Nên dùng một key riêng cho mỗi dự án.
+</Warning>
+
+## 3. Cấu hình API
+
+Chuẩn bị ba thông tin sau:
+
+| Tham số | Giá trị |
+| --- | --- |
+| Base URL | `https://nexusapi.link/v1` |
+| API Key | Tạo trong bảng điều khiển, thường bắt đầu bằng `sk-` |
+| Model ID | Sao chép tên chính xác từ [Chợ mô hình](https://nexusapi.link/pricing) |
+
+## 4. Gửi yêu cầu kiểm thử
+
+Ví dụ dưới đây sử dụng định dạng OpenAI Chat Completions. Hãy thay `YOUR_API_KEY` và `YOUR_MODEL_ID`:
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "Hãy trả lời: kết nối thành công"}]
+  }'
+```
+
+Nếu phản hồi JSON có `choices` và nội dung trả lời của mô hình, kết nối cơ bản đã hoạt động.
+
+<Tip>
+**Địa chỉ URL có thể khác theo từng client**
+
+Một số client tự thêm `/v1` hoặc đường dẫn yêu cầu. Khi cấu hình Claude Code, Codex CLI hoặc công cụ khác, hãy làm theo [hướng dẫn công cụ](/vi/tools/claude-code) tương ứng thay vì sao chép máy móc URL trên trang này.
+</Tip>
+
+## Bước tiếp theo
+
+- [Tìm hiểu các cách tích hợp](/vi/guide/integration-overview)
+- [Xem mô hình, nhóm và thanh toán](/vi/billing/models-pricing)
+- [Bắt đầu tự kiểm tra khi gặp sự cố](/vi/faq/self-check)

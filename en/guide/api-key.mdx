@@ -1,0 +1,30 @@
+---
+title: "Create an API Key"
+---
+
+An API Key is the credential used to call NexusAPI endpoints.
+
+## Creation Flow
+
+1. Sign in to the NexusAPI console.
+2. Open Token Management or API Key Management.
+3. Click Add Token.
+4. Enter a token name.
+5. Select an available group.
+6. Configure quota or usage limits.
+7. Submit the form and copy the generated API Key.
+
+## How to Use
+
+Send the API Key in the `Authorization` request header:
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Security Recommendations
+
+- Do not commit API Keys to public code repositories.
+- Do not share API Keys with strangers.
+- Create separate API Keys for different use cases.
+- If you suspect a key has been leaked, delete it immediately and create a new one.

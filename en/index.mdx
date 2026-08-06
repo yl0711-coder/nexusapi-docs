@@ -1,0 +1,59 @@
+---
+title: NexusAPI Documentation
+description: Get from creating an API key to your first NexusAPI request quickly.
+mode: wide
+---
+
+<Info>
+NexusAPI provides a unified model gateway. Your token group, model availability, and pricing are determined by the **Model Marketplace** in the console.
+</Info>
+
+<Columns cols={3}>
+  <Card title="Make your first request in 5 minutes" icon="rocket" href="/en/guide/quick-start" arrow>
+    Create a key, choose a model, and send a test request.
+  </Card>
+  <Card title="Configure Claude Code / Codex" icon="terminal" href="/en/tools" arrow>
+    Choose the setup guide for the client you use.
+  </Card>
+  <Card title="Read the API guide" icon="braces" href="/en/developer/openai-compatible" arrow>
+    Understand supported protocols, endpoints, and integration boundaries.
+  </Card>
+</Columns>
+
+## The three things you need to connect
+
+| Item | Where to get it | Purpose |
+| --- | --- | --- |
+| Base URL | This documentation | Sends requests to NexusAPI |
+| API Key | Console → Token Management | Identifies the caller and available groups |
+| Model ID | Console → Model Marketplace | Selects the model to call |
+
+<Warning>
+Do not expose an API key in chats, screenshots, frontend repositories, or public configuration. If you suspect exposure, delete or reset the key in the console immediately.
+</Warning>
+
+## Start with your goal
+
+<Columns cols={2}>
+  <Card title="I am writing an application or script" icon="code-2" href="/en/guide/quick-start" arrow>
+    Start with the OpenAI-compatible API.
+  </Card>
+  <Card title="I use Claude Code" icon="bot" href="/en/tools/claude-code" arrow>
+    Configure the native Messages protocol.
+  </Card>
+  <Card title="I use Codex CLI" icon="terminal-square" href="/en/tools/codex-cli" arrow>
+    Configure a custom provider and model.
+  </Card>
+  <Card title="A request failed" icon="circle-help" href="/en/faq/self-check" arrow>
+    Follow the self-check flow and collect the required details.
+  </Card>
+</Columns>
+
+## Include these details when requesting support
+
+- Time of the issue and time zone
+- Model ID, endpoint, and whether streaming was enabled
+- Full error message and Request ID
+- The smallest reproduction you have already tried
+
+This prevents repeated follow-up questions and speeds up troubleshooting.

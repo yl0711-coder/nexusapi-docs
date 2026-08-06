@@ -1,0 +1,117 @@
+---
+title: "Codex CLI Setup"
+---
+
+The installation commands and `config.toml` fields below are based on the
+[official OpenAI Codex repository](https://github.com/openai/codex) and its
+[custom-provider reference](https://learn.chatgpt.com/docs/config-file/config-advanced).
+NexusAPI only supplies the endpoint, API key, and model ID.
+
+## 1. Install Codex CLI
+
+Choose one official installation method. Do not mix installation methods.
+
+### Windows PowerShell
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+### macOS, Linux, or WSL
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+### If Node.js is already installed
+
+```bash
+npm install -g @openai/codex
+```
+
+Verify the installation:
+
+```bash
+codex --version
+```
+
+## 2. Create a NexusAPI key
+
+In the [NexusAPI console](https://nexusapi.link), open **Token Management → Add Token**.
+Choose a Codex-compatible group that includes the model you need, give the key a recognizable name,
+and set an appropriate project limit.
+
+## 3. Configure a custom provider
+
+Create or open `config.toml` with any text editor:
+
+- Windows: `%USERPROFILE%\\.codex\\config.toml`
+- macOS / Linux: `~/.codex/config.toml`
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+name = "NexusAPI"
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Replace `YOUR_MODEL_ID` with the exact model ID visible to the key in the
+[model marketplace](https://nexusapi.link/pricing). These custom-provider fields are supported by Codex.
+
+<Warning>
+**Do not manually write auth.json**
+
+`~/.codex/auth.json` is Codex's OpenAI login cache. The configuration above reads the NexusAPI key from
+the environment through `env_key`; never put a NexusAPI key in `auth.json`, a repository, or a screenshot.
+</Warning>
+## 4. Set the API key environment variable
+
+Replace `sk-your-real-key` with the key you created. Do not put the real key in `config.toml`.
+
+### Windows PowerShell
+
+```powershell
+setx NEXUSAPI_API_KEY "sk-your-real-key"
+```
+
+Open a new terminal after running the command.
+
+### macOS, Linux, or WSL
+
+```bash
+export NEXUSAPI_API_KEY='sk-your-real-key'
+```
+
+This affects only the current terminal. Use your operating system's credential or shell-environment management
+for persistent setup, and never commit the key to a project.
+
+## 5. Start and verify
+
+```bash
+cd your-project-folder
+codex
+```
+
+For the first test, use a read-only request such as: `Describe this repository's directory structure without modifying files.`
+
+## VS Code or Cursor
+
+Install the [Codex extension published by OpenAI](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt).
+The extension and CLI share `~/.codex/config.toml`; do not add legacy `chatgpt.apiBase` or `chatgpt.config`
+fields to VS Code settings.
+
+## Troubleshooting
+
+1. Confirm `NEXUSAPI_API_KEY` is present in a newly opened terminal.
+2. Confirm the key is enabled, funded, and in a group that includes the selected model.
+3. Confirm the model ID exactly matches the model marketplace.
+4. Save the original error and Request ID, then use the [self-check guide](/en/faq/self-check).
+
+## Official sources
+
+- [OpenAI Codex CLI installation](https://github.com/openai/codex)
+- [OpenAI custom provider configuration](https://learn.chatgpt.com/docs/config-file/config-advanced)

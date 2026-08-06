@@ -1,0 +1,59 @@
+---
+title: "Self-check the issue"
+---
+
+If the call fails, first click this page to complete the basic check. Most configurations or occasional issues can be determined within minutes.
+
+## Step 1: Save the site
+
+Before closing the client or rerequesting, save:
+
+- Complete error in the original text
+- Request ID
+- Time and time zone of occurrence
+- The model used
+- The client and version used
+- Request interfaces, for example `/v1/responses`
+
+Do not submit full API Keys, passwords, private data, or full business content.
+
+## Step 2: Determine the type of problem
+
+| Phenomenon | Priority checks |
+| --- | --- |
+| 401 | API Key、`Bearer` Prefix, request address |
+| 404 | Check if the base URL is duplicated or missing `/v1` |
+| 400 | Models, interfaces, parameters, and session states |
+| 429 | Concurrency and request frequency |
+| 500 / 502 / 503 | Wait 10~30 seconds and try again |
+| 504 / 524 | Request content, wait time, and service status |
+| Insufficient balance | Console balance, Key amount, and grouping |
+
+For specific meanings, see below [API Call FAQ](/en/faq/common-errors)。
+
+## Step 3: Perform a minimum verification
+
+1. Confirm that the console balance and API Key are functioning properly.
+2. Re-copy the model ID from the model square.
+3. Create a new session and send a short text.
+4. Retry only once, and record a new Request ID.
+5. Check if the console usage log shows the corresponding request.
+
+If the new session succeeds, the issue is usually related to the original session state or the content of the request; If even the smallest request continues to fail, please submit a question.
+
+## Provided when contacting support
+
+Please provide the following at once:
+
+```text
+发生时间（含时区）：
+Request ID：
+客户端及版本：
+模型：
+请求接口：
+错误原文：
+偶发还是持续发生：
+是否已用新会话验证：
+```
+
+The more complete the information, the faster the location speed. API Key can provide up to the last 6 bits.

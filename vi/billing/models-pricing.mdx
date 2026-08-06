@@ -1,0 +1,37 @@
+---
+title: "Mô hình, nhóm và thanh toán"
+---
+
+NexusAPI sử dụng thanh toán trả theo mức sử dụng (dựa trên token), không có phí hàng tháng — bạn sẽ bị trừ dựa trên những gì bạn sử dụng.
+
+## Model Plaza (Mô hình đang bán / Giá cả / Phân nhóm)
+
+Các mẫu đang giảm giá, giá cả và các mẫu có sẵn trong từng nhóm đều có trên console**Mô hình vuông**, dựa trên thông tin thời gian thực:
+
+1. Đăng nhập [Bảng điều khiển NexusAPI](https://nexusapi.link), nhấp vào góc trên bên phải[Mô hình vuông](https://nexusapi.link/pricing)。
+2. Phía bên trái có thể được nhấn`模型供应商`Và`可用令牌分组`Sàng lọc.
+3. Bên phải là mã mẫu có sẵn, giá cả, hồ sơ, giao diện hỗ trợ và các thông tin khác cho từng nhóm.
+
+![NexusAPI Model Plaza, nhóm theo nhà cung cấp và token](/images/nexusapi/model-marketplace.png)
+
+## Cách chọn nhóm token
+
+Bạn cần chọn thời điểm tạo token**Nhóm token**。 Nhóm xác định mô hình mà khóa có thể gọi và giá tương ứng của chúng:
+
+- Cùng một mô hình có thể xuất hiện trong nhiều nhóm; chỉ cần chọn nhóm tương ứng với mô hình bạn muốn.
+- Đừng chỉ đoán dựa trên tên nhóm; Vui lòng lọc và nhóm trong Model Plaza và xác nhận mẫu mục tiêu.
+- Khi cùng một dự án yêu cầu nhiều loại mô hình, bạn có thể tạo API Keys riêng biệt để hỗ trợ kiểm soát hạn ngạch và xác minh sử dụng.
+
+![Khi tạo token với NexusAPI, chọn nhóm token](/images/nexusapi/console-create-token.png)
+
+## Phí bao gồm những gì?
+
+Các mô hình khác nhau có thể tính toán riêng các token đầu vào, token đầu ra và mức sử dụng liên quan đến bộ nhớ đệm. Số tiền cuối cùng dựa trên lần mua duy nhất và giá theo thời gian thực của mô hình plaza được hiển thị trong nhật ký sử dụng console.
+
+Vì các mẫu mã, giá cả và nhóm có sẵn đều được điều chỉnh, trang này không duy trì danh sách các mẫu cố định dễ hết hạn.
+
+## Điều tra tiêu thụ
+
+- Chi tiết giao dịch cho mỗi cuộc gọi có thể được xem theo mục trên trang "Nhật ký" của bảng điều khiển.
+- Để hiểu ý nghĩa của các bản ghi đầu vào, đầu ra, bộ nhớ đệm và lỗi lỗi, vui lòng đọc tiếp[Mô tả liều lượng và nhật ký](/vi/billing/usage-and-billing)。
+- Cần có sự hòa giải theo chương trình, nhưng nó đã có sẵn [API truy vấn sử dụng](/vi/developer/usage-logs)。

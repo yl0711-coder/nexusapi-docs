@@ -1,0 +1,47 @@
+---
+title: "Choisissez l’outil qui vous convient"
+---
+
+Différents outils servent à des façons différentes de travailler. Choisissez en fonction de votre usage prévu, puis passez au tutoriel correspondant pour éviter de mélanger adresses et fichiers de configuration.
+
+## Sélection rapide
+
+| Vos besoins | Entrée recommandée | À qui tu conviens |
+| --- | --- | --- |
+| Laissez l’IA gérer le code et les tâches de projet dans le terminal | [Claude Code](/fr/tools/claude-code) | Développeurs utilisant le flux de travail Claude |
+| Utiliser des agents terminaux Codex | [Codex CLI](/fr/tools/codex-cli) | Développeurs utilisant le flux de travail Réponses / Codex |
+| Basculation entre plusieurs configurations de fournisseurs | [Commutateur CC](/fr/tools/cc-switch) | Gérer les utilisateurs avec plusieurs configurations CLI simultanément |
+| Utiliser le code Claude dans VS Code ou curseur | [VS Code / Curseur](/fr/tools/cursor-vscode) | Utilisateurs qui préfèrent l’interface éditeur |
+| Écrivez votre propre programme pour appeler l’API | [Aperçu des méthodes d’accès](/fr/guide/integration-overview) | Développeurs d’applications et scripts automatisés |
+
+## Confirmez avant la configuration
+
+1. Une clé API a été créée, et une limite raisonnable a été fixée.
+2. Le groupe de clés API inclut le modèle cible.
+3. Copiez l’ID exact du modèle depuis le carré du modèle.
+4. L’outil de sauvegarde a déjà des configurations ; ne supprimez pas directement tout le répertoire de configuration.
+5. Après l’achèvement, envoyez une courte demande de test et vérifiez les journaux d’utilisation.
+
+<Warning>
+**Ne lancez pas directement de scripts à un clic d’origine inconnue**
+
+Les scripts d’installation ou de configuration automatiques peuvent modifier des configurations locales, écrire des clés API ou installer des composants tiers. Avant de l’exécuter, vérifiez la source, lisez le contenu du script et sauvegardez la configuration existante.
+</Warning>
+## Pourquoi l’adresse est-elle différente pour chaque outil ?
+
+Certains outils doivent être inclus `/v1` Adresses API, certains outils concaténent automatiquement les chemins, tandis que d’autres utilisent des protocoles natifs Messages ou Responses.
+
+Veuillez utiliser l’adresse fournie dans le tutoriel correspondant ; ne copiez pas les configurations de Claude Code, Codex CLI ou du SDK générique OpenAI. Voir explication détaillée[Aperçu des méthodes d’accès](/fr/guide/integration-overview)。
+
+## Vos outils ne sont pas inclus dans le tutoriel
+
+Si un client prend en charge des adresses personnalisées compatibles OpenAI, vous pouvez vous y référer en premier[Commence rapidement en 5 minutes](/fr/guide/quick-start)et la documentation officielle du client.
+
+Veuillez confirmer avant la configuration :
+
+- Le client prend-il en charge des URL de base personnalisées ?
+- Le client utilise-t-il les Réponses ou les Réponses de Chat ?
+- Si le client complétera automatiquement les données `/v1`。
+- Si l’ID du modèle peut être saisi manuellement.
+
+Les clients non vérifiés ne seront pas inclus dans les tutoriels officiels juste pour augmenter le nombre de pages.

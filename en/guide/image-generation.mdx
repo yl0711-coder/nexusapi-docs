@@ -1,0 +1,66 @@
+---
+title: Image model guide
+description: How to call image models through NexusAPI.
+---
+
+Image models are called differently from text models. Before sending a request, use the [Model Marketplace](https://nexusapi.link/pricing) to confirm the model name, your API Key's group, and that the model is marked as supporting image generation.
+
+<Warning>
+**Confirm the model capability first**
+
+Do not send image-generation parameters to a text chat endpoint, and do not use a text-model ID at an image endpoint. Retrying a mismatched model, endpoint, or parameter set will not solve the problem.
+</Warning>
+
+## Make a request
+
+Image generation uses the OpenAI-style Images endpoint:
+
+```text
+POST https://nexusapi.link/v1/images/generations
+```
+
+The minimum request needs only a model ID and prompt:
+
+```bash
+curl 'https://nexusapi.link/v1/images/generations' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_IMAGE_MODEL_ID",
+    "prompt": "A clean blue geometric technology company icon on a pure white background"
+  }'
+```
+
+Replace `YOUR_IMAGE_MODEL_ID` with the exact image-capable model ID visible to your current group in the Model Marketplace.
+
+## Parameters and results
+
+Supported size, quality, image count, and response format vary by model. Send optional parameters such as `size`, `quality`, `n`, or `response_format` only when the Model Marketplace or [API guide](/en/developer/openai-compatible) states they are supported.
+
+Image results are usually returned in the `data` array. Whether a result is a URL or Base64 data, and how many images can be generated per request, depends on the selected model and its actual response.
+
+## Waiting time and timeouts
+
+The public `/v1/images/generations` endpoint is a **synchronous HTTP request path**: the client should wait for the result of this request. new-api rc4 does not provide a unified task-ID and polling API for generic image generation, and response formats can still differ by upstream provider.
+
+- Image generation can take tens of seconds or longer. A short timeout in a client, corporate proxy, or browser extension can fail before the upstream responds.
+- Do not submit the same image task repeatedly before confirming the outcome; this can cause duplicate images and duplicate charges.
+- For `504`, `524`, or client timeouts, save the Request ID and time, then contact support for verification. Do not assume the task definitely succeeded or definitely did not run.
+
+## Common issues
+
+| Symptom | Check first |
+| --- | --- |
+| `Image generation is not enabled` | Whether the model supports images, the image endpoint is used, and the current group can access it |
+| `model not supported` | The exact model ID and whether a text model was used at an image endpoint |
+| `400` / invalid parameter | Remove unverified optional parameters and try the minimum request first |
+| `504` / `524` / client timeout | Keep the Request ID and avoid an immediate duplicate submission |
+| No image result | Whether the client reads the `data` field and the returned format correctly |
+
+When asking for help, provide the model name, Request ID, time, redacted request parameters, and full error text. Never provide your complete API Key.
+
+## Next steps
+
+- [Models, groups, and pricing](/en/billing/models-pricing)
+- [Choose an integration protocol](/en/guide/integration-overview)
+- [Common API errors](/en/faq/common-errors)

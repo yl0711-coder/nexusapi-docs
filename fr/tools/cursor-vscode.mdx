@@ -1,0 +1,99 @@
+---
+title: "Utiliser le code Claude dans VS Code et curseur"
+---
+
+L’extension officielle Claude Code offre des dialogues graphiques, des aperçus de variance de code, des références de fichiers et la vérification des permissions.
+VS Code est configuré de manière similaire à Cursor.
+
+## 1. Installer des extensions
+
+Veuillez confirmer avant de commencer :
+
+- La version de VS Code est 1.98 ou supérieure.
+- Pressé [Tutoriel de Code Claude](/fr/tools/claude-code) Configurez l’API Nexus.
+- `~/.claude/settings.json` La clé API et l’URL de base sont désormais actives.
+
+Ouvrez le magasin d’extension :
+
+- macOS :`Cmd + Shift + X`
+- Windows / Linux :`Ctrl + Shift + X`
+
+Recherche `Claude Code`, l’éditeur a été confirmé **Anthropique** Puis réinstaller. Cela peut aussi venir de
+[Guide officiel VS Code de Claude](https://code.claude.com/docs/en/vs-code)
+Entrez dans le portail d’installation pour VS Code ou Cursor.
+
+<Warning>
+**Vérifiez auprès de l’éditeur**
+
+Il peut y avoir des extensions tierces portant des noms similaires dans le store d’extension. Avant l’installation, veuillez vous assurer que le nom de l’extension est indiqué
+`Claude Code`, éditeur : `Anthropic`。
+</Warning>
+## 2. Faire en sorte que les extensions utilisent NexusAPI
+
+L’extension Claude Code est partagée avec la CLI `~/.claude/settings.json`。 Dans des circonstances normales, vous n’avez pas besoin d’être là
+VS Code ou Curseur `settings.json` Saisissez à plusieurs reprises la clé API au milieu.
+
+Si l’extension affiche toujours une invite de connexion :
+
+1. Ouvrir les paramètres de l’éditeur.
+2. Recherche `Claude Code login`。
+3. Activé **Désactiver l’invite de connexion**。
+4. Quittez complètement et rouvrez l’éditeur.
+
+Si l’éditeur ne lit pas l’environnement du terminal, vous pouvez saisir le répertoire du projet depuis le terminal configuré et l’exécuter :
+
+```bash
+code .
+```
+
+Les utilisateurs de Cursor peuvent redémarrer Cursor ou l’exécuter directement dans le terminal intégré de Cursor `claude`。
+
+## 3. Ouvrir le code Claude
+
+Après l’installation, vous pouvez l’ouvrir en utilisant l’une des méthodes suivantes :
+
+- Cliquez sur l’icône étoile Claude Code en haut à droite de l’éditeur.
+- Cliquez sur l’icône Claude Code dans la barre d’activité de gauche.
+- Ouvrez le panneau de commande et recherchez `Claude Code`。
+- Cliquez sur la barre de statut en bas à droite `Claude Code`。
+
+S’il n’y a pas d’icône en haut à droite, veuillez ouvrir d’abord un fichier de code ; Cette icône ne peut apparaître qu’après l’ouverture du fichier.
+
+![Un exemple de l’interface officielle d’extension Claude Code dans VS Code](/images/nexusapi/claude-code-vscode-official.jpg)
+
+> Exemple d’interface tiré de
+> [Documentation officielle de Claude Code VS Code](https://code.claude.com/docs/en/vs-code)。
+> Les positions spécifiques des boutons peuvent être mises à jour avec la version étendue.
+
+## 4. Vérifier la configuration
+
+Envoyez une requête simple dans l’extension, par exemple :
+
+```text
+请解释当前打开文件的作用，不要修改代码。
+```
+
+Si elle retourne normalement, cela signifie que l’extension a lu la configuration de NexusAPI. Si vous rencontrez des erreurs, merci de continuer à :
+
+- Éditeur et version étendue
+- Version du code Claude
+- Texte original incorrect
+- Demande d’ID
+
+Alors réfonce-y[Vérifiez vous-même le problème](/fr/faq/self-check)。
+
+## Questions fréquemment posées
+
+### Aucune apparition n’est apparue après l’installation prolongée
+
+Exécutez le panneau de commandes dans le menu Exécuter `Developer: Reload Window`, ou redémarrer complètement l’éditeur.
+
+### La CLI fonctionne, mais les extensions ne peuvent pas
+
+Expansion confirmée **Désactiver l’invite de connexion** Activé et vérifié
+`~/.claude/settings.json` Est-ce un JSON valide ? Les extensions et les interfaces de niveau doivent partager la même configuration.
+
+### Le magasin d’extension de curseur est introuvable
+
+Vous pouvez accéder à l’entrée d’installation de Cursor via le guide officiel Claude Code VS Code ; Si le curseur actuel est présent
+La version ne supporte pas cette extension et peut toujours fonctionner dans le terminal intégré de Cursor `claude`。

@@ -1,0 +1,261 @@
+---
+title: "CC Switch Setup Guide"
+---
+
+CC Switch is a configuration manager for AI command-line tools. It can manage provider settings for Claude Code, Codex, and similar AI CLI tools. After you add a NexusAPI provider, you can switch to it in CC Switch and then start the corresponding CLI tool.
+
+This guide shows how to configure NexusAPI manually in CC Switch.
+
+## 1. Preparation
+
+Prepare the following information before you start:
+
+| Item | Value |
+| --- | --- |
+| NexusAPI endpoint | `https://nexusapi.link` |
+| API Key | A token created in the NexusAPI console, usually starting with `sk-` |
+| Model ID | A model available to the token group assigned to your API Key |
+
+API Key path:
+
+```text
+NexusAPI Console
+-> Token Management
+-> Create or copy an API Key
+```
+
+Notes:
+
+1. Use an API Key created in the NexusAPI console.
+2. If the copied key does not include the `sk-` prefix, enter it in the `sk-xxx` format.
+3. The model ID must be available to the group assigned to the current API Key. Do not rely only on the full site-wide model list.
+
+## 2. Install CC Switch
+
+### 2.1 macOS
+
+Homebrew is recommended:
+
+```bash
+brew tap farion1231/ccswitch
+brew install --cask cc-switch
+```
+
+After installation, open CC Switch from Applications.
+
+### 2.2 Windows
+
+Open the CC Switch GitHub Releases page:
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+Download the `.msi` installer and follow the installation wizard.
+
+If you use the portable version, download the `.zip` package, extract it, and run the application directly.
+
+### 2.3 Linux
+
+Open the CC Switch GitHub Releases page:
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+Download the `.deb` package or the `.AppImage` file for your system.
+
+Arch Linux users can also use:
+
+```bash
+paru -S cc-switch-bin
+```
+
+## 3. Add a NexusAPI Provider
+
+Open CC Switch, go to provider management, and add a new provider.
+
+General flow:
+
+```text
+Open CC Switch
+-> Add provider
+-> Select the target application
+-> Enter NexusAPI endpoint, API Key, and model ID
+-> Save provider
+-> Switch to the provider
+-> Start the corresponding CLI tool and verify
+```
+
+![Official CC Switch add-provider screen; select Custom Configuration for NexusAPI](/images/nexusapi/cc-switch-add-provider-official.png)
+
+> Image from the
+> [official CC Switch repository](https://github.com/farion1231/cc-switch),
+> used under the MIT License (© 2025 Jason Young). Other providers shown in the
+> image are interface examples only. Select **Custom Configuration** for NexusAPI
+> and enter the values below.
+
+The following official Provider form shows where the API key, request URL, default model, and protocol options live.
+`example.com`, the gateway name, and the model in the image are examples only — **do not copy them**.
+
+![Official CC Switch Provider form example with a masked API key](/images/nexusapi/cc-switch-provider-form-official.png)
+
+> Image source: [CC Switch official repository](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png),
+> MIT License. Use the Claude or Codex table below for actual NexusAPI values.
+
+## 4. Configure Claude Code
+
+When using CC Switch to manage Claude Code, fill in the provider fields as follows.
+
+| Field | Recommended value |
+| --- | --- |
+| App | `Claude` |
+| Name | `NexusAPI Claude` |
+| Endpoint / Base URL | `https://nexusapi.link` |
+| API Key | `sk-your-nexusapi-token` |
+| Primary Model | A Claude model ID available to the current API Key |
+| Haiku Model | Optional, or a lightweight Claude model |
+| Sonnet Model | Optional, or a Sonnet model |
+| Opus Model | Optional, or an Opus model |
+
+Example:
+
+```text
+App: Claude
+Name: NexusAPI Claude
+Endpoint: https://nexusapi.link
+API Key: sk-xxxxxxxx
+Primary Model: YOUR_CLAUDE_MODEL_ID
+Sonnet Model: YOUR_CLAUDE_MODEL_ID
+```
+
+Notes:
+
+1. Do not add `/v1` to the NexusAPI endpoint for Claude Code.
+2. After saving the provider, switch to it in CC Switch.
+3. Reopen your terminal, then run `claude`.
+
+Verify:
+
+```bash
+claude
+```
+
+After entering Claude Code, send a simple message:
+
+```text
+Introduce yourself in one sentence.
+```
+
+## 5. Configure Codex
+
+When using CC Switch to manage Codex, fill in the provider fields as follows.
+
+| Field | Recommended value |
+| --- | --- |
+| App | `Codex` |
+| Name | `NexusAPI Codex` |
+| Endpoint / Base URL | `https://nexusapi.link/v1` |
+| API Key | `sk-your-nexusapi-token` |
+| Primary Model | An OpenAI-compatible model ID available to the current API Key |
+
+Example:
+
+```text
+App: Codex
+Name: NexusAPI Codex
+Endpoint: https://nexusapi.link/v1
+API Key: sk-xxxxxxxx
+Primary Model: YOUR_CODEX_MODEL_ID
+```
+
+Notes:
+
+1. Codex uses the OpenAI-compatible API, so the endpoint should include `/v1`.
+2. The model must be available to the group assigned to the current API Key.
+3. If NexusAPI provides a dedicated Codex group, create the API Key under that group before configuration.
+
+Verify:
+
+```bash
+codex
+```
+
+Start a simple task in Codex and confirm that it returns normally.
+
+## 6. Query Available Models
+
+The most reliable method is to query `/v1/models` with the current API Key.
+
+Example:
+
+```bash
+curl https://nexusapi.link/v1/models \
+  -H "Authorization: Bearer sk-your-nexusapi-token"
+```
+
+The `data[].id` values in the response are the model IDs available to the current API Key.
+
+Model selection rules:
+
+1. Use Claude models for Claude Code.
+2. Use OpenAI-compatible programming models for Codex.
+3. Do not choose a model unavailable to the current API Key.
+
+## 7. Endpoint Differences
+
+| Tool | Endpoint |
+| --- | --- |
+| Claude Code | `https://nexusapi.link` |
+| Codex | `https://nexusapi.link/v1` |
+
+If you are unsure, use the endpoint shown in the table above.
+
+## 8. FAQ
+
+### 8.1 Requests Still Go to the Official Endpoint
+
+Possible causes:
+
+1. CC Switch has not switched to the NexusAPI provider.
+2. The terminal was opened before switching and still uses old environment variables.
+3. The target CLI tool has a local configuration that overrides CC Switch.
+
+Actions:
+
+1. Switch to the NexusAPI provider again in CC Switch.
+2. Close and reopen the terminal.
+3. Check the local configuration file of the corresponding CLI tool.
+
+### 8.2 API Key Is Invalid
+
+Check:
+
+1. The API Key is created in the NexusAPI console.
+2. The key starts with `sk-`.
+3. The token is enabled.
+4. The account balance is sufficient.
+5. The token has not restricted the selected model.
+
+### 8.3 Model Is Unavailable
+
+Check:
+
+1. Whether the current API Key group supports the model.
+2. Whether the current API Key has model restrictions.
+3. Whether the NexusAPI backend channel is enabled.
+4. Use `/v1/models` to query the models actually available to the current API Key.
+
+### 8.4 Claude Code Prompts `/login`
+
+When using NexusAPI, do not use Claude Code `/login` to sign in to an official account. Use CC Switch to write the NexusAPI provider configuration.
+
+If you have already run `/login`, switch back to the NexusAPI provider in CC Switch and restart the terminal.
+
+## 9. Recommended Usage
+
+At this stage, the recommended workflow is:
+
+1. Manually add a NexusAPI provider in CC Switch.
+2. Query available models with `/v1/models`.
+3. After configuration, verify with a simple request before running complex tasks.

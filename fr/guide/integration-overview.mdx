@@ -1,0 +1,75 @@
+---
+title: "Aperçu des méthodes d’accès"
+---
+
+NexusAPI prend en charge les clients IA grand public et les appels d’interface de type OpenAI. Différents outils peuvent automatiquement broder les chemins, donc vous devez remplir l’adresse selon votre utilisation.
+
+## Préparation avant de commencer
+
+Quelle que soit la méthode utilisée, les éléments suivants sont requis :
+
+1. Créez une clé API dans la console.
+2. Confirmez que le groupe de clés API inclut le modèle cible.
+3. Copiez l’ID exact du modèle depuis la place du modèle central.
+4. La requête est effectuée à l’aide d’une adresse HTTPS.
+
+## Usage courant
+
+| Comment l’utiliser | Lectures recommandées |
+| --- | --- |
+| Créez vos propres programmes ou scripts | [Commence rapidement en 5 minutes](/fr/guide/quick-start) |
+| Claude Code | [Tutoriel de configuration du code Claude](/fr/tools/claude-code) |
+| Codex CLI | [Tutoriel de configuration de la ligne de commande Codex](/fr/tools/codex-cli) |
+| Commutateur CC | [Tutoriel de configuration du CC Switch](/fr/tools/cc-switch) |
+| VS Code / Curseur | [Tutoriel pour le plugin d’éditeur](/fr/tools/cursor-vscode) |
+
+## Comparaison d’adresses et de protocoles
+
+| Scène | Remplissez l’adresse | Principaux accords | Notes |
+| --- | --- | --- | --- |
+| SDK OpenAI / Programme à usage général | `https://nexusapi.link/v1` | Complications du chat, etc | Le chemin de requête est concaténé par le SDK ou le programme |
+| Codex CLI | `https://nexusapi.link/v1` | Réponses | Utilisez la configuration du fournisseur dans le tutoriel du Codex |
+| Claude Code | `https://nexusapi.link` | Messages anthropiques | N’ajoutez pas plusieurs adresses après la configuration `/v1` |
+| Commutateur CC | Remplir selon le type de fournisseur | Cela dépend de l’outil cible | Claude a des règles d’adresse différentes de celles du Codex |
+
+Le tableau ci-dessus sert à aider à sélectionner les méthodes d’accès. Le chemin d’interface complet, les paramètres et la structure de réponse restent les suivants [Documentation de référence API](https://nexusapi.apifox.cn/) comme standard.
+
+## Pourquoi les adresses peuvent différer
+
+Les requêtes génériques de type OpenAI utilisent généralement :
+
+```text
+https://nexusapi.link/v1
+```
+
+Certains clients exigent que cela soit omis `/v1` L’adresse du site peut être automatiquement complétée `/chat/completions`、`/responses`、`/messages` et d’autres chemins. Veuillez consulter le tutoriel correspondant pour plus de précision.
+
+<Warning>
+**Évitez de répéter le même chemin**
+
+Si le client le complète automatiquement, `/v1`, qui peut être formé après un remplissage manuel `/v1/v1/...` Et cela a mené à 404. Lorsque vous rencontrez un 404, vérifiez d’abord l’adresse réelle de la demande du client.
+</Warning>
+## Ne mélangez pas la configuration client avec les API générales
+
+Les outils CLI, les plugins d’éditeur et les programmes personnalisés peuvent utiliser différents protocoles et fichiers de configuration. Même si les noms des modèles sont les mêmes, vous ne pouvez pas copier directement toute la configuration d’un outil dans un autre.
+
+Méthode pour juger :
+
+- Configurez la clé de code du codex : lisez le tutoriel du codex et utilisez la configuration Réponses correspondante.
+- Configurez Claude Code : Lisez le tutoriel Claude Code en utilisant les variables d’environnement Anthropic.
+- Écrivez votre propre code : choisissez le chemin de requête et les paramètres en fonction de la référence de l’API.
+- En cas de doute : confirmez d’abord le nom du client et le chemin de la demande qu’il a envoyé.
+
+## Documentation de référence API
+
+Le chemin d’interface complet, les paramètres, la structure de requête et la structure de réponse sont présents [Référence de l’API NexusAPI](https://nexusapi.apifox.cn/) Maintenez le centre.
+
+Les centres d’aide expliquent « comment choisir et utiliser » ; Les références API sont responsables d’expliquer « quels sont les champs et structures ».
+
+## Comment confirmer la réussite de la configuration
+
+- Le client peut retourner le contenu complet normalement.
+- La requête correspondante apparaît dans le journal d’utilisation de la console.
+- Les modèles, les groupes et la consommation dans les journaux ont répondu aux attentes.
+
+Si l’appel échoue, enregistrez le texte d’erreur et l’ID de la demande, puis saisissez[Vérifiez vous-même le problème](/fr/faq/self-check)。

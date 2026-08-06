@@ -1,0 +1,196 @@
+---
+title: "Claudeコードのインストールと使用チュートリアル"
+---
+
+Claude Codeは、デバイス上でAIと直接コラボレーションできる強力なAIプログラミングアシスタントです。 このチュートリアルでは、インストールと設定のプロセスを案内します。
+
+## システム要件
+
+- 対応オペレーティングシステム:macOS 13+、Ubuntu 20.04+、Debian 10+、またはWindows 10 1809+
+- ハードウェア:4GB以上のメモリ、x64またはARM64プロセッサ
+- Windowsのインストールは任意です [Windows for Git(Windows 用)](https://git-scm.com/install/windows)なのでGit Bashを使えます
+- ネットワーク:通常NexusAPIサービスにアクセスするネットワーク接続
+
+## 1. Claude Codeをインストールする
+
+Claude Codeが提供するネイティブインストール方式を優先してください。 ネイティブインストールには事前インストールNode.jsは必要ありません。
+
+### macOS、Linux、またはWSL
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+### Windows PowerShell
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+PowerShellを管理者として実行する必要はありません。 WindowsはWinGet経由でもインストール可能です:
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### macOS ホームブリュー
+
+```bash
+brew install --cask claude-code
+```
+
+インストール後、以下のコマンドを実行して読み取り専用チェックを行います:
+
+```bash
+claude --version
+claude doctor
+```
+
+## 2. APIトークンの設定
+
+### ステップ1:APIトークンを取得する
+コンソールにログインし、左側から入力ボタンをクリックしてください`令牌管理`メニューを「」から選択してください。`添加令牌`以下のトークン提案オプションで新しいトークンを作成します:
+
+> - 名称:トークン名
+> - クオータ:プロジェクトの利用状況に基づいて合理的な上限を設定する
+> - グルーピング:Claude関連グループを選択してください
+> - その他のオプション:デフォルト設定を維持
+
+
+### ステップ2:設定ファイルディレクトリを開く
+
+システムに応じてClaude Code設定ファイルのストレージディレクトリを探してください `.claude` 、一般的には以下の場所に配置されています:
+
+- ウィンドウ: `C:\\Users\\用户名文件夹\\.claude`
+- macOS: `~/.claude` あるいは `.claude`
+- Linux: `~/.claude`
+
+macOSでは、Finderインターフェースで「Command+Shift+G」を押してパスを入力してください `~/.claude` Enterキーを押して設定ディレクトリを開きます
+もしそのディレクトリが存在しない場合は、以下のコマンドを実行して設定ファイルを作成できます(macOS / Linux / WSL / Git Bashに適用)
+```
+mkdir -p ~/.claude
+touch ~/.claude/settings.json
+```
+Windowsはまず設定ディレクトリを作成し、その後Notepadで設定ファイルを開きます。
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+notepad "$env:USERPROFILE\.claude\settings.json"
+```
+
+もしそのファイルがすでに存在している場合は、以下を追加してください `env` フィールドは元のMCPや権限、その他の設定を上書きせずにフィールドに統合されるべきです。
+
+
+### ステップ3:設定ファイルを修正する
+
+設定ディレクトリでsettings.json設定ファイルを作成または修正し、以下の構成情報を書き込みます。 `ANTHROPIC_AUTH_TOKEN` 自分のAPIトークンに置き換えてください
+
+```json
+{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "sk-您的 API 令牌",
+    "ANTHROPIC_BASE_URL": "https://nexusapi.link",
+    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1"
+  }
+}
+```
+UbuntuやmacOSはviやvimから直接作成・修正することも可能です `settings.json` 文書
+
+```bash
+vim  ~/.claude/settings.json
+```
+
+## 3. クロードコードの発射
+
+設定変更を完了したら、ターミナルを再起動し、プロジェクトディレクトリに入力します:
+
+```bash
+cd your-project-folder
+```
+
+プロジェクトディレクトリに入力してください `claude` これでClaude Codeが起動し実行されます:
+
+```bash
+claude
+```
+初回実行後、以下の構成ステップが表示されます。
+
+1. **テーマを選びましょう** → お気に入りのテーマを選択する + エンターキー
+2. **安全注意事項** → セキュリティ指示確認 + エンターキー
+3. **端末構成** → デフォルトの設定を使った + Enterキー
+4. **仕事ディレクトリを信頼してください** → 現在のディレクトリを信頼する + Enterキーを押す
+
+これでAIプログラミングアシスタントと一緒にコードを書き始められます!
+
+## Anthropicサービスに接続できません
+逃げろ `claude` 以下のエラーが発生した場合:
+
+```text
+Unable to connect to Anthropic services
+Failed to connect to api.anthropic.com: ERR BAD REQUEST
+Please check your internet connection and network settings.
+Note: Claude Code might not be available in your country.
+```
+先に走れ `claude doctor`、そして確認してください `~/.claude/settings.json` 中間
+`ANTHROPIC_AUTH_TOKEN` そして `ANTHROPIC_BASE_URL` 保存され、正しいJSON形式で保存されています。
+設定を変更した後、ターミナルを閉じて再度開き、再度実行してください `claude`。
+
+台本で無理やり書き直さないでください `.claude.json` 内部ステータスフィールド。 これらのフィールドはバージョンによって変化することがあります。
+ファイルを直接上書きすると、元のログイン状態や設定が失われる可能性があります。 問題がまだ存在する場合は、そのまま維持してください
+`claude --version`、`claude doctor` 出力後にサポートに連絡してください。元のテキストが誤りです。
+
+
+## よくある質問
+
+### Q: 「無効なAPIキー」に遭遇しました /login」エラーを実行しますか?
+
+**A:** これはClaudeコードが環境変数を検出していないことを示しています。 ご確認ください:
+- 正しく設定されているかどうか `ANTHROPIC_AUTH_TOKEN` そして `ANTHROPIC_BASE_URL`
+- 環境変数の値(トークン、 `sk-` 開店)
+- パーマネント設定が使われている場合、端末は再起動されましたか?
+
+### Q: PowerShellがスクリプトをインストールしられず、ポリシー実行エラーに遭遇しますか?
+
+**A:** まずはWindows CMDか公式のWinGetインストール方法に切り替えることができます。 確かに調整は必要です
+PowerShellポリシーを使用する場合、現在のユーザースコープのみが変更されます:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+実行前に、問題がローカルポリシーによって引き起こされているか確認してください。コンピュータ全体のグローバルポリシーを変更しないでください。
+
+### Q: なぜ「オフライン」ステータスが表示されているのですか?
+
+**A:** Claude CodeはGoogleに接続してネットワークの状態を確認します。 「オフライン」と表示しても通常の利用には影響せず、単にGoogleが接続できないことを示します。
+
+### Q: なぜFetchはウェブページを閲覧中に失敗するのですか?
+
+**A:** ウェブページにアクセスする前に、Claude CodeはセキュリティチェックのためにClaudeサービスに連絡する必要があります。 必要なものは以下の通りです:
+- 安定した国際インターネット接続を維持する
+- 必要に応じてグローバルプロキシを使います
+
+### Q: リクエストには常に「fetch failed」と表示されますか?
+
+**A:** ネットワーク環境が原因かもしれません。 解決策:
+1. プロキシツールを試してみてください
+
+
+### Q: APIエラーはどう対処すればいいですか?
+
+**A:** ネットワーク接続やサービスが一時的に利用できない場合もあります。提案:
+- Exit Claude Code (Ctrl+C)
+- 再放送 `claude` 秩序
+- 問題が続く場合は、リクエストIDを保存して参照してください[自己確認](/ja/faq/self-check)
+
+### Q: ウェブページのログインエラーですか?
+
+**A:** サイトのクッキーをクリアしてから再度ログインしてください。
+
+## 関連リンク
+
+- [公式のClaudeコードインストールドキュメント](https://code.claude.com/docs/en/installation)
+- [Claude Code 公式環境変数参照](https://code.claude.com/docs/en/env-vars)
+- [Claude Code 公式ゲートウェイ構成説明](https://code.claude.com/docs/en/llm-gateway)
+
+---

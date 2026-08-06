@@ -1,0 +1,62 @@
+---
+title: "Supported Models and Billing"
+---
+
+NexusAPI uses pay-as-you-go token billing. There is no monthly subscription fee.
+
+## Common Model Names
+
+When calling the API, make sure the `model` parameter matches a model available to your token group. Common model families include:
+
+### OpenAI
+
+- `gpt-5.4`
+- `gpt-4o`
+
+### Anthropic
+
+- `claude-opus-4-6`
+- `claude-sonnet-4-6`
+
+### Google
+
+- `gemini-3.1-pro-preview`
+- `gemini-3.1-flash-lite`
+
+For real-time model availability, group multipliers, and pricing, open the [NexusAPI model marketplace](https://nexusapi.link/pricing).
+
+## Token Groups
+
+When you create an API token, you can assign it to a token group. Groups can differ by upstream channel, model availability, price, and stability.
+
+### Upstream Channels
+
+- GPT, Claude, Gemini, and other models may route through different upstream channels depending on the group.
+- Channel differences may affect availability, latency, pricing, and stability.
+
+### Pricing
+
+- API pricing varies across upstream providers and token groups.
+- NexusAPI displays group pricing clearly so you can compare options before choosing a group.
+
+### Choosing a Group
+
+- Choose a group based on your requirements for cost, model support, response quality, and stability.
+- Use lower-cost groups for experimentation and higher-stability groups for production workloads.
+
+![NexusAPI Create Token panel for selecting a token group](/images/nexusapi/console-create-token.png)
+
+## Billing Multipliers
+
+Different token groups may apply different billing multipliers:
+
+- A multiplier below `1` means a discount: `0.8x` = 20% off, `0.5x` = 50% off.
+- A multiplier above `1` means a surcharge: `1.5x` = 50% extra.
+
+## Model Marketplace
+
+In the console, open [Model Marketplace](https://nexusapi.link/pricing) from the top-right menu to view models and group pricing.
+
+![NexusAPI model marketplace with provider and token-group filters](/images/nexusapi/model-marketplace.png)
+
+In the model marketplace, you can filter by provider and token group. The model list shows model IDs, prices, descriptions, supported API interfaces, and other related information.

@@ -1,0 +1,48 @@
+---
+title: "OpenAI互換インターフェース"
+---
+
+NexusAPIはOpenAIスタイルのインターフェースコールと互換性があります。
+
+## チャットコンピューション
+
+リクエストアドレス:
+
+```text
+POST https://nexusapi.link/v1/chat/completions
+```
+
+例示リクエスト:
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好"
+      }
+    ]
+  }'
+```
+
+## リクエストヘッド
+
+| リクエストヘッド | 必須 | 説明 |
+| --- | --- | --- |
+| `Content-Type` | はい | 固定 `application/json` |
+| `Authorization` | はい | フォーマットは `Bearer YOUR_API_KEY` |
+
+## よくある誤り
+
+| 違う | 考えられる理由 |
+| --- | --- |
+| 401 | APIキーエラー、キーが配信されない、またはキーが無効です |
+| 429 | リクエストが速すぎたり、スロットリングがトリガーされたり、サービスが一時的に忙しくなったりします |
+| 500/502/503 | リクエスト処理が一時的に失敗するか、サービスが利用不能になる場合 |
+| 524 | 待ち時間が長すぎるとお願いします |
+
+エラーが発生した場合はリクエストIDを保存し、参照してください[自己確認](/ja/faq/self-check)。 短期間で高頻度で再挑戦しないでください。

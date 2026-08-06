@@ -1,0 +1,66 @@
+---
+title: Guide des modèles d'image
+description: Utiliser les modèles de génération d'images avec NexusAPI.
+---
+
+L'appel d'un modèle d'image diffère de celui d'un modèle texte. Avant toute requête, vérifiez dans le [Catalogue de modèles](https://nexusapi.link/pricing) le nom exact du modèle, le groupe associé à votre clé API et la prise en charge de la génération d'images.
+
+<Warning>
+**Vérifiez d'abord la capacité du modèle**
+
+N'envoyez pas de paramètres de génération d'images à une interface de chat texte et n'utilisez pas un ID de modèle texte avec une interface d'image. Réessayer une combinaison modèle, endpoint ou paramètres incompatible ne résout pas le problème.
+</Warning>
+
+## Effectuer un appel
+
+La génération d'images utilise l'interface Images au format OpenAI :
+
+```text
+POST https://nexusapi.link/v1/images/generations
+```
+
+La requête minimale ne nécessite qu'un ID de modèle et un prompt :
+
+```bash
+curl 'https://nexusapi.link/v1/images/generations' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_IMAGE_MODEL_ID",
+    "prompt": "Icône géométrique bleue, sobre et technologique, sur fond blanc pur"
+  }'
+```
+
+Remplacez `YOUR_IMAGE_MODEL_ID` par l'ID exact d'un modèle d'image visible pour votre groupe actuel dans le Catalogue de modèles.
+
+## Paramètres et résultat
+
+La taille, la qualité, le nombre d'images et le format de retour varient selon le modèle. N'envoyez `size`, `quality`, `n` ou `response_format` que lorsqu'ils sont indiqués comme pris en charge dans le Catalogue de modèles ou le [guide API](/fr/developer/openai-compatible).
+
+Les résultats sont généralement renvoyés dans le tableau `data`. Le résultat peut être une URL ou des données Base64 et le nombre d'images par appel dépend du modèle choisi et de sa réponse réelle.
+
+## Temps d'attente et délais d'expiration
+
+`/v1/images/generations` est un **endpoint HTTP synchrone** : le client doit attendre le résultat de cette requête. new-api rc4 ne fournit pas un identifiant de tâche et une interface de sondage unifiés pour la génération d'images générique ; le format réel peut encore varier selon le fournisseur amont.
+
+- Une génération peut prendre plusieurs dizaines de secondes, voire davantage. Un délai trop court dans le client, le proxy d'entreprise ou l'extension de navigateur peut expirer avant la réponse.
+- Ne soumettez pas plusieurs fois la même tâche avant d'en connaître le résultat : cela peut générer des images et des frais en double.
+- En cas de `504`, `524` ou de délai côté client, conservez le Request ID et l'heure, puis contactez le support. Ne supposez pas que la tâche a forcément réussi ou échoué.
+
+## Problèmes fréquents
+
+| Symptôme | À vérifier en priorité |
+| --- | --- |
+| `Image generation is not enabled` | La prise en charge d'images, l'endpoint utilisé et l'accès du groupe actuel |
+| `model not supported` | L'ID exact du modèle et l'absence de modèle texte sur l'endpoint image |
+| `400` / paramètre invalide | Retirez les paramètres facultatifs non confirmés et testez la requête minimale |
+| `504` / `524` / délai client | Conservez le Request ID ; évitez de soumettre immédiatement la même demande |
+| Aucun résultat d'image | Vérifiez la lecture du champ `data` et du format de retour par le client |
+
+Pour obtenir de l'aide, fournissez le nom du modèle, le Request ID, l'heure, les paramètres de requête expurgés et le texte complet de l'erreur. Ne fournissez jamais votre clé API complète.
+
+## Étapes suivantes
+
+- [Modèles, groupes et tarifs](/fr/billing/models-pricing)
+- [Choisir un protocole d'intégration](/fr/guide/integration-overview)
+- [Erreurs API courantes](/fr/faq/common-errors)

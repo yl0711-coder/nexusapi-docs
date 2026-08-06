@@ -1,0 +1,196 @@
+---
+title: "Hướng dẫn cài đặt và sử dụng Claude Code"
+---
+
+Claude Code là một trợ lý lập trình AI mạnh mẽ cho phép bạn cộng tác trực tiếp với AI ngay trên thiết bị của mình. Hướng dẫn này sẽ hướng dẫn bạn qua quá trình cài đặt và cấu hình.
+
+## Yêu cầu hệ thống
+
+- Hệ điều hành được hỗ trợ: macOS 13+, Ubuntu 20.04+, Debian 10+, hoặc Windows 10 1809+
+- Phần cứng: Hơn 4 GB bộ nhớ, bộ xử lý x64 hoặc ARM64
+- Cài đặt Windows là tùy chọn [Git cho Windows](https://git-scm.com/install/windows), vì vậy bạn có thể sử dụng Git Bash
+- Mạng: Kết nối mạng thường truy cập các dịch vụ NexusAPI
+
+## 1. Cài đặt Claude Code
+
+Ưu tiên sử dụng phương pháp cài đặt gốc do Claude Code cung cấp. Cài đặt gốc không yêu cầu cài sẵn Node.js.
+
+### macOS, Linux hoặc WSL
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+### Windows PowerShell
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+Bạn không cần chạy PowerShell với tư cách quản trị viên. Windows cũng có thể được cài đặt qua WinGet:
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### macOS Homebrew
+
+```bash
+brew install --cask claude-code
+```
+
+Sau khi cài đặt, chạy lệnh sau để thực hiện kiểm tra chỉ đọc:
+
+```bash
+claude --version
+claude doctor
+```
+
+## 2. Cấu hình token API
+
+### Bước 1: Lấy token API
+Đăng nhập vào bảng điều khiển và nhấn vào bên trái`令牌管理`Chọn menu từ "`添加令牌`Tạo một token mới, với các tùy chọn gợi ý token sau:
+
+> - Tên: Tên token
+> - Hạn ngạch: Đặt giới hạn trên hợp lý dựa trên mức sử dụng dự án
+> - Nhóm: Chọn các nhóm liên quan đến Claude
+> - Các tùy chọn khác: Giữ nguyên cài đặt mặc định
+
+
+### Bước 2: Mở thư mục tệp cấu hình
+
+Tìm thư mục lưu trữ cho tệp cấu hình Claude Code theo hệ thống của bạn `.claude` , thường nằm tại:
+
+- Cửa sổ: `C:\\Users\\用户名文件夹\\.claude`
+- macOS: `~/.claude` Hoặc `.claude`
+- Linux: `~/.claude`
+
+Trên macOS, nhấn "Command+Shift+G" trên giao diện Finder và nhập đường dẫn `~/.claude` Nhấn Enter để mở thư mục cấu hình
+Nếu thư mục không tồn tại, bạn có thể chạy lệnh sau để tạo tệp cấu hình (áp dụng cho macOS / Linux / WSL / Git Bash)
+```
+mkdir -p ~/.claude
+touch ~/.claude/settings.json
+```
+Windows có thể tạo thư mục cấu hình trước, sau đó mở tệp cấu hình bằng Notepad:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+notepad "$env:USERPROFILE\.claude\settings.json"
+```
+
+Nếu tệp đã tồn tại, vui lòng thêm tệp sau `env` Các trường nên được hợp nhất vào trường mà không ghi đè MCP, quyền truy cập hoặc cấu hình gốc ban đầu.
+
+
+### Bước 3: Sửa đổi tệp cấu hình
+
+Trong thư mục cấu hình, tạo hoặc chỉnh sửa tệp cấu hình settings.json, ghi thông tin cấu hình sau, trong đó `ANTHROPIC_AUTH_TOKEN` Thay thế nó bằng token API riêng của bạn
+
+```json
+{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "sk-您的 API 令牌",
+    "ANTHROPIC_BASE_URL": "https://nexusapi.link",
+    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1"
+  }
+}
+```
+Ubuntu / macOS cũng có thể được tạo hoặc chỉnh sửa trực tiếp qua vi hoặc vim `settings.json` Tài liệu
+
+```bash
+vim  ~/.claude/settings.json
+```
+
+## 3. Ra mắt mã Claude
+
+Sau khi hoàn tất các sửa đổi cấu hình, khởi động lại terminal và sau đó nhập thư mục dự án:
+
+```bash
+cd your-project-folder
+```
+
+Nhập nó vào thư mục dự án của bạn `claude` Điều này sẽ khởi động và chạy Claude Code:
+
+```bash
+claude
+```
+Sau lần chạy ban đầu, bạn sẽ thấy các bước cấu hình sau:
+
+1. **Chọn chủ đề** → Chọn chủ đề yêu thích + nhấn Enter
+2. **Thông báo An toàn** → Xác nhận Hướng dẫn Bảo mật + Nhấn Enter
+3. **Cấu hình thiết bị đầu cuối** → Sử dụng cấu hình mặc định + nhấn Enter
+4. **Tin tưởng vào thư mục công việc** → Tin cậy thư mục hiện tại + nhấn Enter
+
+Giờ đây bạn có thể bắt đầu viết mã với trợ lý lập trình AI của mình!
+
+## Không thể kết nối với dịch vụ Anthropic
+Chạy `claude` Nếu xảy ra các lỗi sau:
+
+```text
+Unable to connect to Anthropic services
+Failed to connect to api.anthropic.com: ERR BAD REQUEST
+Please check your internet connection and network settings.
+Note: Claude Code might not be available in your country.
+```
+Chạy trước `claude doctor`, sau đó xác nhận `~/.claude/settings.json` Giữa
+`ANTHROPIC_AUTH_TOKEN` Và `ANTHROPIC_BASE_URL` Đã lưu và ở định dạng JSON chính xác.
+Sau khi chỉnh sửa cấu hình, đóng và mở lại terminal, sau đó chạy lại `claude`。
+
+Không được ép buộc viết lại qua các script `.claude.json` Trường trạng thái nội bộ. Các trường này có thể thay đổi tùy theo phiên bản,
+Việc ghi đè trực tiếp các tệp có thể dẫn đến mất trạng thái đăng nhập và cấu hình ban đầu. Nếu vấn đề vẫn còn, vui lòng giữ nguyên
+`claude --version`、`claude doctor` Liên hệ hỗ trợ sau khi xuất và lỗi văn bản gốc.
+
+
+## Câu hỏi thường gặp
+
+### Hỏi: Gặp phải "Khóa API không hợp lệ · Vui lòng chạy lỗi /login"?
+
+**A:** Điều này cho thấy Claude Code chưa phát hiện các biến môi trường. Vui lòng kiểm tra:
+- Liệu nó có được thiết lập đúng hay không `ANTHROPIC_AUTH_TOKEN` Và `ANTHROPIC_BASE_URL`
+- Giá trị biến môi trường có đúng hay không (token với `sk-` Mở đầu)
+- Nếu sử dụng cấu hình vĩnh viễn, thiết bị đầu cuối đã được khởi động lại chưa?
+
+### Hỏi: PowerShell không thể cài đặt script và gặp lỗi thực thi chính sách?
+
+**A:** Bạn có thể chuyển sang Windows CMD hoặc phương pháp cài đặt WinGet chính thức trước. Thực sự cần có những điều chỉnh
+Khi sử dụng các chính sách PowerShell, chỉ phạm vi người dùng hiện tại được sửa đổi:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+Trước khi chạy, vui lòng xác nhận rằng sự cố là do chính sách cục bộ gây ra; không thay đổi chính sách toàn cục của toàn bộ máy tính.
+
+### Hỏi: Tại sao nó lại hiển thị trạng thái "ngoại tuyến"?
+
+**A:** Claude Code kiểm tra trạng thái mạng bằng cách kết nối với Google. Hiển thị "offline" không ảnh hưởng đến việc sử dụng bình thường, nó chỉ cho thấy Google không thể kết nối.
+
+### Hỏi: Tại sao Fetch lại thất bại khi duyệt trang web?
+
+**A:** Trước khi truy cập một trang web, Claude Code cần gọi dịch vụ Claude để kiểm tra bảo mật. Bạn sẽ cần:
+- Duy trì kết nối internet quốc tế ổn định
+- Sử dụng proxy toàn cục khi cần thiết
+
+### Hỏi: Yêu cầu có luôn hiển thị "fetch thất bại" không?
+
+**A:** Có thể đây là vấn đề do môi trường mạng gây ra. Giải pháp:
+1. Hãy thử sử dụng các công cụ proxy
+
+
+### Hỏi: Làm thế nào để xử lý lỗi API?
+
+**A:** Có thể kết nối mạng hoặc dịch vụ tạm thời không khả dụng. Gợi ý:
+- Thoát mã Claude (Ctrl+C)
+- Phát lại `claude` Thứ tự
+- Nếu vấn đề vẫn tiếp diễn, hãy lưu ID Yêu cầu và tham khảo nó[Tự kiểm tra vấn đề](/vi/faq/self-check)
+
+### Hỏi: Lỗi đăng nhập trang web?
+
+**A:** Hãy thử xóa cookie của trang web, sau đó đăng nhập lại.
+
+## Liên kết liên quan
+
+- [Tài liệu lắp đặt chính thức của Claude Code](https://code.claude.com/docs/en/installation)
+- [Tham chiếu biến môi trường chính thức của Claude Code](https://code.claude.com/docs/en/env-vars)
+- [Mô tả cấu hình gateway chính thức của Claude Code](https://code.claude.com/docs/en/llm-gateway)
+
+---

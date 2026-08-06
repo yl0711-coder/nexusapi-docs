@@ -1,0 +1,59 @@
+---
+title: NexusAPI 文件中心
+description: 從建立 API Key 到完成首次呼叫，快速串接 NexusAPI。
+mode: wide
+---
+
+<Info>
+NexusAPI 提供統一的模型呼叫入口。模型可用性、價格及你的令牌群組，請以控制台中的**模型廣場**為準。
+</Info>
+
+<Columns cols={3}>
+  <Card title="5 分鐘完成首次呼叫" icon="rocket" href="/zh-TW/guide/quick-start" arrow>
+    建立 Key、選擇模型並送出第一個請求。
+  </Card>
+  <Card title="設定 Claude Code / Codex" icon="terminal" href="/zh-TW/tools" arrow>
+    依所使用的客戶端選擇對應設定教學。
+  </Card>
+  <Card title="查看介面說明" icon="braces" href="/zh-TW/developer/openai-compatible" arrow>
+    了解相容協定、請求位址及呼叫限制。
+  </Card>
+</Columns>
+
+## 串接時需要的三項資訊
+
+| 資訊 | 從哪裡取得 | 作用 |
+| --- | --- | --- |
+| Base URL | 本文件 | 指定請求傳送到 NexusAPI 的位址 |
+| API Key | 控制台 → 令牌管理 | 識別呼叫身分與可用群組 |
+| 模型 ID | 控制台 → 模型廣場 | 指定要呼叫的模型 |
+
+<Warning>
+請勿在聊天記錄、截圖、前端程式碼庫或公開設定中洩露 API Key。懷疑洩露時，請立即在控制台刪除或重設該 Key。
+</Warning>
+
+## 依你的目標開始
+
+<Columns cols={2}>
+  <Card title="我在寫程式或指令碼" icon="code-2" href="/zh-TW/guide/quick-start" arrow>
+    使用 OpenAI 相容介面完成串接。
+  </Card>
+  <Card title="我在使用 Claude Code" icon="bot" href="/zh-TW/tools/claude-code" arrow>
+    依原生 Messages 協定完成設定。
+  </Card>
+  <Card title="我在使用 Codex CLI" icon="terminal-square" href="/zh-TW/tools/codex-cli" arrow>
+    設定自訂 Provider 與模型。
+  </Card>
+  <Card title="呼叫時遇到錯誤" icon="circle-help" href="/zh-TW/faq/self-check" arrow>
+    先依自查流程蒐集必要資訊。
+  </Card>
+</Columns>
+
+## 需要支援時，請一併提供
+
+- 發生時間與時區
+- 模型 ID、請求介面，以及是否使用串流回應
+- 完整錯誤原文與 Request ID
+- 已完成的最小重現步驟
+
+這些資訊能避免反覆追問，也能更快定位問題。

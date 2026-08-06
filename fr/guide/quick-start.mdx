@@ -1,0 +1,74 @@
+---
+title: "Démarrage rapide en 5 minutes"
+description: "Effectuez votre premier appel de modèle avec NexusAPI."
+---
+
+Cette page vous guide pour votre premier appel. Il vous suffit d’avoir un compte NexusAPI et un solde disponible.
+
+<Info>
+**Le chemin le plus court**
+
+Acheter du crédit → Créer une clé API → Copier l’ID d’un modèle depuis le catalogue → Envoyer une requête de test
+</Info>
+
+## 1. Acheter du crédit
+
+Connectez-vous à la console, puis utilisez **Gestion du portefeuille** pour recharger votre compte en ligne.
+
+![Page NexusAPI de gestion du portefeuille et de recharge en ligne](/images/nexusapi/console-wallet-topup.png)
+
+## 2. Créer une clé API
+
+1. Ouvrez **Gestion des jetons** dans la console.
+2. Cliquez sur **Ajouter un jeton**.
+3. Saisissez un nom facile à reconnaître, par exemple `codex-work`.
+4. Sélectionnez un groupe contenant le modèle visé.
+5. Définissez une limite adaptée à votre usage, puis validez.
+
+![Page NexusAPI de gestion des jetons, avec les clés et les données de compte masquées](/images/nexusapi/console-token-management.png)
+
+![Panneau de création d’un jeton NexusAPI](/images/nexusapi/console-create-token.png)
+
+<Warning>
+**Protégez votre clé API**
+
+La clé API sert uniquement à l’authentification. Ne la publiez pas dans un dépôt public, une capture d’écran ou un historique de discussion. Utilisez une clé distincte par projet.
+</Warning>
+
+## 3. Configurer l’API
+
+Préparez les trois informations suivantes :
+
+| Paramètre | Valeur |
+| --- | --- |
+| URL de base | `https://nexusapi.link/v1` |
+| Clé API | Générée dans la console ; elle commence généralement par `sk-` |
+| ID du modèle | Copiez le nom exact depuis le [catalogue de modèles](https://nexusapi.link/pricing) |
+
+## 4. Envoyer une requête de test
+
+L’exemple suivant utilise le format OpenAI Chat Completions. Remplacez `YOUR_API_KEY` et `YOUR_MODEL_ID` :
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "Répondez : connexion réussie"}]
+  }'
+```
+
+Si la réponse JSON contient `choices` et une réponse du modèle, l’intégration de base fonctionne.
+
+<Tip>
+**L’URL peut différer selon le client**
+
+Certains clients ajoutent automatiquement `/v1` ou un chemin de requête. Pour Claude Code, Codex CLI ou un autre client, suivez le [guide de l’outil](/fr/tools/claude-code) concerné plutôt que de recopier mécaniquement cette adresse.
+</Tip>
+
+## Étapes suivantes
+
+- [Comprendre les modes d’intégration](/fr/guide/integration-overview)
+- [Consulter les modèles, groupes et la facturation](/fr/billing/models-pricing)
+- [Commencer le diagnostic en cas de problème](/fr/faq/self-check)

@@ -1,0 +1,59 @@
+---
+title: NexusAPI ドキュメント
+description: API Key の作成から最初の NexusAPI 呼び出しまでをすばやく完了できます。
+mode: wide
+---
+
+<Info>
+NexusAPI はモデル呼び出しの統合入口を提供します。利用可能なモデル、料金、トークンのグループは、コンソールの**モデルマーケットプレイス**を基準にしてください。
+</Info>
+
+<Columns cols={3}>
+  <Card title="5 分で最初のリクエストを送る" icon="rocket" href="/ja/guide/quick-start" arrow>
+    Key を作成し、モデルを選択してテストリクエストを送信します。
+  </Card>
+  <Card title="Claude Code / Codex を設定する" icon="terminal" href="/ja/tools" arrow>
+    利用するクライアントに対応する設定ガイドを選択します。
+  </Card>
+  <Card title="API ガイドを見る" icon="braces" href="/ja/developer/openai-compatible" arrow>
+    対応プロトコル、リクエスト先、利用上の制約を確認します。
+  </Card>
+</Columns>
+
+## 接続に必要な 3 つの情報
+
+| 情報 | 取得場所 | 用途 |
+| --- | --- | --- |
+| Base URL | このドキュメント | リクエストを NexusAPI に送信する |
+| API Key | コンソール → トークン管理 | 呼び出し元と利用可能なグループを識別する |
+| モデル ID | コンソール → モデルマーケットプレイス | 呼び出すモデルを指定する |
+
+<Warning>
+API Key をチャット、スクリーンショット、フロントエンドのリポジトリ、公開設定に含めないでください。漏えいの可能性がある場合は、ただちにコンソールで Key を削除または再発行してください。
+</Warning>
+
+## 目的から始める
+
+<Columns cols={2}>
+  <Card title="アプリケーションやスクリプトを書く" icon="code-2" href="/ja/guide/quick-start" arrow>
+    OpenAI 互換 API から始めます。
+  </Card>
+  <Card title="Claude Code を使う" icon="bot" href="/ja/tools/claude-code" arrow>
+    ネイティブ Messages プロトコルを設定します。
+  </Card>
+  <Card title="Codex CLI を使う" icon="terminal-square" href="/ja/tools/codex-cli" arrow>
+    カスタム Provider とモデルを設定します。
+  </Card>
+  <Card title="呼び出しでエラーが出た" icon="circle-help" href="/ja/faq/self-check" arrow>
+    セルフチェックの手順で必要な情報を集めます。
+  </Card>
+</Columns>
+
+## サポートへ連絡する際に必要な情報
+
+- 発生時刻とタイムゾーン
+- モデル ID、エンドポイント、ストリーミングの有無
+- 完全なエラー文と Request ID
+- 実施済みの最小再現手順
+
+これらの情報があれば、確認の往復を減らし、早く原因を特定できます。

@@ -1,0 +1,37 @@
+---
+title: "Common Errors"
+---
+
+## 401 Unauthorized
+
+Possible causes:
+
+- The API Key is incorrect.
+- The API Key was not provided.
+- The API Key has been deleted or expired.
+
+## 429 Too Many Requests
+
+Possible causes:
+
+- Requests are being sent too frequently.
+- Platform rate limits have been triggered.
+- The upstream model service is busy.
+
+## 500 / 502 / 503
+
+Possible causes:
+
+- NexusAPI service error.
+- Upstream model API error.
+- Channel configuration error.
+
+## 524 Timeout
+
+Possible causes:
+
+- The upstream model did not respond in time.
+- The request payload is too large.
+- The selected model or channel is temporarily unstable.
+
+Try again later, or switch to another available model.

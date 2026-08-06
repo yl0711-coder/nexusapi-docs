@@ -1,0 +1,126 @@
+---
+title: "Installation et configuration de la ligne de clic Codex"
+---
+
+La code code code est l’agent de code natif d’OpenAI. Les commandes d’installation de cet article sont les suivantes `config.toml` Tous les champs sont marqués par
+[Entrepôt officiel du Codex OpenAI](https://github.com/openai/codex)Et
+[Référence officielle de configuration](https://learn.chatgpt.com/docs/config-file/config-advanced)comme standard ; NexusAPI
+Seules l’adresse API, la clé et l’identifiant du modèle sont fournies.
+
+## 1. Installer la ligne de commande Codex
+
+Choisissez simplement une méthode d’installation officielle OpenAI ; ne mélangez pas plusieurs méthodes.
+
+### Windows PowerShell
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+### macOS, Linux ou WSL
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+### Utilisateurs avec Node.js installé
+
+```bash
+npm install -g @openai/codex
+```
+
+Installation de vérification :
+
+```bash
+codex --version
+```
+
+## 2. Créer la clé NexusAPI
+
+Exister [Console NexusAPI](https://nexusapi.link)Alors **Gestion des jetons → Ajouter des jetons**, et :
+
+1. Sélectionnez les groupes liés au Codex contenant le modèle cible.
+2. Utilisez des noms faciles à identifier, par exemple `codex-work`。
+3. Fixez des quotas raisonnables en fonction du budget du projet.
+
+## 3. Configurer un fournisseur personnalisé
+
+Le fichier de configuration personnel du Codex est : Windows `%USERPROFILE%\\.codex\\config.toml`, ou macOS/Linux
+`~/.codex/config.toml`。 Créez ou ouvrez ce fichier avec n’importe quel éditeur de texte, puis écrivez :
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+name = "NexusAPI"
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Généralités `YOUR_MODEL_ID` Remplacez par[Modèle Carré](https://nexusapi.link/pricing)Identifiant précis du modèle visible dans le groupe actuel de clés.
+`wire_api = "responses"`、`model_provider`、`base_url` Et `env_key` Tous sont des éléments personnalisables officiellement pris en charge par Codex
+Domaine des prestataires.
+
+<Warning>
+**N’écrivez pas manuellement auth.json**
+
+`~/.codex/auth.json` Cache de connexion OpenAI pour Codex. NexusAPI utilise la version ci-dessus `env_key` pour lire les variables d’environnement,
+N’écrivez pas, ne commet pas et ne faites pas de capture d’écran de la clé NexusAPI sur le site `auth.json`。
+</Warning>
+## 4. Définir la variable d’environnement de clé API
+
+Poignée `sk-你的实际Key` Remplacez-la par la nouvelle Clé créée. Ne mets pas la vraie Clé à l’intérieur `config.toml`。
+
+### Windows PowerShell
+
+```powershell
+setx NEXUSAPI_API_KEY "sk-你的实际Key"
+```
+
+Après exécution, fermez et rouvrez le terminal pour que la nouvelle variable d’environnement entre en action.
+
+### macOS, Linux ou WSL
+
+À exécuter sur le terminal actuel :
+
+```bash
+export NEXUSAPI_API_KEY='sk-你的实际Key'
+```
+
+Cette commande n’est valable que pour le terminal actuel. Si une rétention à long terme est nécessaire, veuillez utiliser les méthodes de gestion des identifiants ou de gestion des variables de l’environnement Shell de votre propre système ; N’écrivez pas les clés dans le dépôt du projet.
+
+## 5. Démarrage et validation
+
+Après avoir saisi le répertoire du projet, lancez :
+
+```bash
+cd your-project-folder
+codex
+```
+
+Pour la première validation, il est recommandé d’initier une seule tâche qui ne modifie pas le fichier, par exemple :
+
+```text
+请说明当前仓库的目录结构，不要修改文件。
+```
+
+## VS Code / Curseur
+
+Installation disponible sur le magasin d’extension **OpenAI** Publié
+[Extension du codex](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。 Les extensions sont partagées avec CLI
+`~/.codex/config.toml`, il n’est pas nécessaire d’écrire l’adresse NexusAPI dans l’ancienne version de VS Code `chatgpt.apiBase` Ou
+`chatgpt.config` Field.
+
+## Dépannage
+
+1. Confirmez `NEXUSAPI_API_KEY` Déjà là**Terminal nouvellement ouvert**Efficace au milieu.
+2. Assurez-vous que la clé est activée et que l’équilibre est suffisant ; le groupe inclut le modèle sélectionné.
+3. Confirmez `model` L’ID affiché sur la place du modèle correspond parfaitement.
+4. Enregistrez le texte d’erreur original et l’ID de la requête pour référence complémentaire[Vérifiez vous-même le problème](/fr/faq/self-check)。
+
+## Source officielle
+
+- [Instructions d’installation de la ligne de commande OpenAI Codex](https://github.com/openai/codex)
+- [Configuration personnalisée du fournisseur du Codex OpenAI](https://learn.chatgpt.com/docs/config-file/config-advanced)

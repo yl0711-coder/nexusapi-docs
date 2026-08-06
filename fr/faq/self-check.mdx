@@ -1,0 +1,59 @@
+---
+title: "Vérifiez vous-même le problème"
+---
+
+Si l’appel échoue, cliquez d’abord sur cette page pour effectuer la vérification de base. La plupart des configurations ou des problèmes occasionnels peuvent être déterminés en quelques minutes.
+
+## Étape 1 : Sauvegarder le site
+
+Avant de clôturer le client ou de refaire la demande, enregistrez :
+
+- Erreur complète dans le texte original
+- Demande d’ID
+- Heure et fuseau horaire d’occurrence
+- Le modèle utilisé
+- Le client et la version utilisée
+- Les interfaces de requêtes, par exemple `/v1/responses`
+
+Ne soumettez pas toutes les clés API, mots de passe, données privées ou contenu professionnel complet.
+
+## Étape 2 : Déterminer le type de problème
+
+| Phénomène | Contrôles de priorité |
+| --- | --- |
+| 401 | API Key、`Bearer` Préfixe, demande d’adresse |
+| 404 | Vérifiez si l’URL de base est dupliquée ou manquante `/v1` |
+| 400 | Modèles, interfaces, paramètres et états de session |
+| 429 | Concurrence et fréquence des requêtes |
+| 500 / 502 / 503 | Attends 10~30 secondes et réessaie |
+| 504 / 524 | Demande de contenu, délai d’attente et statut du service |
+| Équilibre insuffisant | Équilibre console, quantité de clés et regroupement |
+
+Pour des significations spécifiques, voir ci-dessous [FAQ sur les appels API](/fr/faq/common-errors)。
+
+## Étape 3 : Effectuer une vérification minimale
+
+1. Vérifiez que l’équilibre de la console et la clé API fonctionnent correctement.
+2. Recopiez l’ID du modèle depuis le carré du modèle.
+3. Créez une nouvelle session et envoyez un court texto.
+4. Réessayez une seule fois, et enregistrez un nouvel ID de demande.
+5. Vérifiez si le journal d’utilisation de la console affiche la requête correspondante.
+
+Si la nouvelle session réussit, le problème est généralement lié à l’état original de la session ou au contenu de la requête ; Si même la plus petite demande continue d’échouer, merci de soumettre une question.
+
+## Fourni lors du contact avec le support
+
+Veuillez fournir immédiatement ce qui suit :
+
+```text
+发生时间（含时区）：
+Request ID：
+客户端及版本：
+模型：
+请求接口：
+错误原文：
+偶发还是持续发生：
+是否已用新会话验证：
+```
+
+Plus l’information est complète, plus la vitesse de localisation est rapide. La clé API peut fournir jusqu’aux 6 derniers bits.

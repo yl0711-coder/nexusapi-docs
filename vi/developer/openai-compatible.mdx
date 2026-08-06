@@ -1,0 +1,48 @@
+---
+title: "Giao diện tương thích OpenAI"
+---
+
+NexusAPI tương thích với các lệnh gọi giao diện kiểu OpenAI.
+
+## Hoàn thành trò chuyện
+
+Địa chỉ yêu cầu:
+
+```text
+POST https://nexusapi.link/v1/chat/completions
+```
+
+Ví dụ yêu cầu:
+
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好"
+      }
+    ]
+  }'
+```
+
+## Yêu cầu đầu
+
+| Yêu cầu đầu | Bắt buộc | Giải thích |
+| --- | --- | --- |
+| `Content-Type` | Đúng vậy | Cố định vào `application/json` |
+| `Authorization` | Đúng vậy | Định dạng là `Bearer YOUR_API_KEY` |
+
+## Những sai lầm phổ biến
+
+| Sai rồi | Những lý do có thể xảy ra |
+| --- | --- |
+| 401 | Lỗi khóa API, khóa không được giao hoặc khóa không hợp lệ |
+| 429 | Yêu cầu quá nhanh, bị giới hạn tốc độ hoặc dịch vụ tạm thời bận |
+| 500/502/503 | Xử lý yêu cầu tạm thời thất bại hoặc dịch vụ trở nên không khả dụng |
+| 524 | Yêu cầu thời gian chờ quá lâu |
+
+Vui lòng lưu Mã Yêu Cầu khi gặp lỗi và tham khảo chúng[Tự kiểm tra vấn đề](/vi/faq/self-check)。 Không thử lại với tần suất cao trong thời gian ngắn.

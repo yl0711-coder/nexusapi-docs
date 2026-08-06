@@ -1,0 +1,28 @@
+---
+title: "Content block not found"
+---
+
+`API Error: Content block not found` is usually related to model response format, protocol adaptation, or abnormal upstream responses.
+
+## Common Causes
+
+1. The tool expects one response format, but the model or channel returns another.
+2. The upstream model API returns incomplete content.
+3. The request is truncated or rewritten by an upstream gateway.
+4. The selected model is not suitable for the tool's calling pattern.
+
+## Troubleshooting Steps
+
+1. Check whether the same API Key works with a simple cURL request.
+2. Confirm that the model name is correct.
+3. Test with another model.
+4. Test with a simple prompt.
+5. If the error persists, contact the administrator and provide a full error screenshot.
+
+## Information to Provide
+
+- Tool name and version.
+- Model name.
+- Error time.
+- Error screenshot.
+- Whether all models fail, or only one specific model fails.

@@ -1,0 +1,66 @@
+---
+title: 圖片模型使用說明
+description: NexusAPI 圖片模型使用說明。
+---
+
+圖片模型和文字模型的呼叫方式不同。請先在[模型廣場](https://nexusapi.link/pricing)確認模型名稱、目前 API Key 所屬群組，以及該模型是否標明支援圖片生成。
+
+<Warning>
+**先確認模型能力**
+
+不要把圖片生成參數傳送到文字聊天介面，也不要把文字模型名稱用於圖片介面。模型、介面或參數不相符時，重複請求不會解決問題。
+</Warning>
+
+## 呼叫方式
+
+圖片生成使用 OpenAI 風格的 Images 介面：
+
+```text
+POST https://nexusapi.link/v1/images/generations
+```
+
+最小請求只需要模型 ID 和提示詞：
+
+```bash
+curl 'https://nexusapi.link/v1/images/generations' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_IMAGE_MODEL_ID",
+    "prompt": "簡潔的藍色幾何科技公司圖示，純白背景"
+  }'
+```
+
+請將 `YOUR_IMAGE_MODEL_ID` 替換為模型廣場中目前群組可見、且支援圖片生成的正確模型 ID。
+
+## 參數與結果
+
+不同圖片模型支援的尺寸、品質、數量和回傳格式不完全相同。只有在模型廣場或[介面參考](/zh-TW/developer/openai-compatible)標明支援時，才傳入 `size`、`quality`、`n`、`response_format` 等可選參數。
+
+回應通常會在 `data` 陣列中傳回圖片結果。回傳的是 URL 或 Base64 資料、每次能生成幾張圖片，請以所選模型的介面說明和實際回應為準。
+
+## 等待時間與逾時
+
+目前對外的 `/v1/images/generations` 是**同步 HTTP 請求路徑**：客戶端應等待本次請求回傳結果。new-api rc4 沒有為通用圖片生成提供統一的任務 ID 與輪詢介面；不同上游的實際回傳格式仍可能不同。
+
+- 圖片生成可能需要數十秒或更久；客戶端、公司代理或瀏覽器外掛等待時間過短時，可能先出現逾時。
+- 未確認結果前請勿連續重複提交同一圖片任務，否則可能造成重複生成和重複消費。
+- 收到 `504`、`524` 或客戶端逾時時，先保存 Request ID 與發生時間，再聯絡支援核查；不要假定任務一定已成功或一定未執行。
+
+## 常見問題
+
+| 現象 | 優先檢查 |
+| --- | --- |
+| `Image generation is not enabled` | 模型是否支援圖片、是否使用圖片介面、目前群組是否可用 |
+| `model not supported` | 模型 ID 是否正確，是否誤把文字模型用於圖片介面 |
+| `400` / 參數錯誤 | 移除未確認支援的可選參數，先以最小請求驗證 |
+| `504` / `524` / 客戶端逾時 | 保留 Request ID；避免立即重複生成 |
+| 沒有收到圖片結果 | 檢查客戶端是否正確讀取回應中的 `data` 欄位和回傳格式 |
+
+需要協助時，請提供模型名稱、Request ID、發生時間、脫敏後的請求參數與完整錯誤原文；不要提供完整 API Key。
+
+## 下一步
+
+- [查看模型、群組與計費](/zh-TW/billing/models-pricing)
+- [了解不同串接協定](/zh-TW/guide/integration-overview)
+- [查看 API 呼叫常見問題](/zh-TW/faq/common-errors)

@@ -1,0 +1,77 @@
+---
+title: "コード統合の例"
+---
+
+NexusAPIは主流のOpenAI SDKとの互換性のある呼び出しをサポートしています。 以下は、よく使われる開発言語の簡単な統合例です。特定のインターフェースおよびパラメータサポートについては、以下を参照してください。 [APIリファレンスドキュメント](https://nexusapi.apifox.cn/) 標準として。
+
+### コアアクセスパラメータ
+
+どのモデルを使う前に、以下の2つのコアパラメータを準備する必要があります。
+
+- **インターフェースアドレス(ベースURL):** `https://nexusapi.link/v1`
+- **アイデンティティ認証(APIキー):** 私たちのものに必要です [コントロールコンソール](https://nexusapi.link) 生成は通常、 `sk-` 始まり。
+
+> **注:** リクエスト時には、HTTPリクエストヘッダーにAPIキーを配置してください `Authorization` フィールドは次のようにフォーマットされます。 `Bearer sk-xxxxxx`。
+
+### パイソン
+クライアントを以前と同じようにインスタンス化するだけです `api_key` そして `base_url` ただ私たちのに替えればいい。
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-您在 NexusAPI 生成的令牌",
+    base_url="https://nexusapi.link/v1"
+)
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6", # 或其他模型
+    messages=[
+        {"role": "user", "content": "你好，请自我介绍。"}
+    ],
+    stream=True # 支持流式输出
+)
+
+for chunk in response:
+    print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+
+### JavaScript
+
+```js
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: "sk-您在 NexusAPI 生成的令牌",
+    baseURL: "https://nexusapi.link/v1"
+});
+
+async function main() {
+    const stream = await openai.chat.completions.create({
+        model: "claude-sonnet-4-6",
+        messages: [{ role: "user", content: "你好！" }],
+        stream: true,
+    });
+    for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || "");
+    }
+}
+main();
+```
+
+### cURL
+
+```bash
+curl "https://nexusapi.link/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
+  -d '{
+    "model": "gpt-5.5",
+    "messages": [
+      {
+        "role": "user",
+        "content": "测试一下 API 是否连通"
+      }
+    ]
+  }'
+```

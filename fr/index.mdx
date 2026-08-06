@@ -1,0 +1,59 @@
+---
+title: Documentation NexusAPI
+description: Passez rapidement de la création d'une clé API à votre premier appel NexusAPI.
+mode: wide
+---
+
+<Info>
+NexusAPI fournit une passerelle unifiée pour les modèles. La disponibilité des modèles, les tarifs et le groupe associé à votre jeton font foi dans le **Catalogue de modèles** de la console.
+</Info>
+
+<Columns cols={3}>
+  <Card title="Effectuer un premier appel en 5 minutes" icon="rocket" href="/fr/guide/quick-start" arrow>
+    Créez une clé, choisissez un modèle et envoyez une requête de test.
+  </Card>
+  <Card title="Configurer Claude Code / Codex" icon="terminal" href="/fr/tools" arrow>
+    Choisissez le guide correspondant à votre client.
+  </Card>
+  <Card title="Consulter le guide API" icon="braces" href="/fr/developer/openai-compatible" arrow>
+    Découvrez les protocoles compatibles, les adresses et les limites d'appel.
+  </Card>
+</Columns>
+
+## Les trois informations nécessaires
+
+| Information | Où l'obtenir | Rôle |
+| --- | --- | --- |
+| Base URL | Cette documentation | Envoie les requêtes à NexusAPI |
+| Clé API | Console → Gestion des jetons | Identifie l'appelant et les groupes disponibles |
+| ID de modèle | Console → Catalogue de modèles | Sélectionne le modèle à appeler |
+
+<Warning>
+Ne divulguez jamais une clé API dans une conversation, une capture d'écran, un dépôt frontend ou une configuration publique. En cas de doute, supprimez ou réinitialisez immédiatement la clé dans la console.
+</Warning>
+
+## Commencer selon votre objectif
+
+<Columns cols={2}>
+  <Card title="Je développe une application ou un script" icon="code-2" href="/fr/guide/quick-start" arrow>
+    Commencez avec l'API compatible OpenAI.
+  </Card>
+  <Card title="J'utilise Claude Code" icon="bot" href="/fr/tools/claude-code" arrow>
+    Configurez le protocole Messages natif.
+  </Card>
+  <Card title="J'utilise Codex CLI" icon="terminal-square" href="/fr/tools/codex-cli" arrow>
+    Configurez un fournisseur et un modèle personnalisés.
+  </Card>
+  <Card title="Un appel échoue" icon="circle-help" href="/fr/faq/self-check" arrow>
+    Suivez l'auto-diagnostic et relevez les informations utiles.
+  </Card>
+</Columns>
+
+## Pour demander de l'aide, joignez aussi
+
+- L'heure de l'incident et le fuseau horaire
+- L'ID du modèle, l'endpoint et l'utilisation ou non du streaming
+- Le message d'erreur complet et le Request ID
+- La plus petite reproduction déjà tentée
+
+Ces éléments évitent les allers-retours et accélèrent le diagnostic.

@@ -1,0 +1,53 @@
+---
+title: "Dosage and log description"
+---
+
+The console uses logs to view the time, model, tokens, duration, status, and consumption of each request. Please confirm the screening time and time zone before reconciliation.
+
+## Common fields
+
+| Field | Meaning |
+| --- | --- |
+| Time | Request the time to enter the platform |
+| Grouping | The token grouping used in this request is used |
+| Model | The actual recorded model name |
+| Input | Enter the number of tokens; Cache reads may be displayed separately |
+| Output | Output the number of tokens |
+| Time | The total time from the start to the end of the request |
+| The first character | The waiting time before the streaming request receives the first content clip |
+| Type | Request results such as consumption and errors |
+| Expenses | The amount of consumption recorded in this request |
+| Request ID | Used to locate the unique identifier for the same request |
+
+## Input, output, and cache
+
+- **Enter Token**: Prompts, context, and tool information submitted to the model.
+- **Output token**: Model-generated content.
+- **Cache read**: Tokens read after hitting the context cache; The billing method may differ from regular input.
+
+Different models may support different caching methods and prices, so please refer to[Model Square](https://nexusapi.link/pricing)Real-time information prevails.
+
+## Why is the log delayed?
+
+There may be brief delays between request ending, statistical aggregation, and page queries. If a newly completed request does not appear immediately, please refresh later. Do not re-initiate business requests just to view the logs.
+
+## Misrecording and consumption
+
+Errors that do not generate valid content are usually shown as 0 consumption. If the content has been generated but the client interrupts reception, or if the system completes subsequent attempts, it needs to verify the record with the same Request ID.
+
+If you suspect duplicate or failed charges, please provide:
+
+- Request ID
+- Time and time zone of occurrence
+- Model name
+- Whether the client ultimately receives the full content
+
+Do not provide the full API Key.
+
+## View and export
+
+- Daily View: Overview of usage and usage logs of the console.
+- Detailed filtering: query by time, model, grouping, and other criteria.
+- Programmatic reconciliation: use[Usage query API](/en/developer/usage-logs)Read your own account data.
+
+After exporting or summarizing, the Request ID should still be retained to facilitate further verification of exception records.

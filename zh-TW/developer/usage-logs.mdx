@@ -1,0 +1,104 @@
+---
+title: "使用查詢 API"
+---
+
+用你的**系統存取權杖**程式化查詢**他自己的敘述**可整合進您的帳單、稽核或監控系統的使用紀錄。
+
+- 基本網址：`https://api.nexusapi.link`
+- 此介面為**僅讀**，僅回傳對應該代幣帳戶的資料。
+
+## 建權
+
+1. 在 NexusAPI 主控台中，**個人設定→產生代幣**「已取得。」**系統存取權杖**（註：這不是用來呼叫模型的。） `sk-` API 金鑰是帳戶層級的代幣; 如果被洩漏，請重新生成為過時）。
+2. 呼叫時插入請求標頭：
+
+```http
+Authorization: Bearer <你的系统访问令牌>
+```
+
+- 代幣**只有請求標頭被放置**請勿在網址中拼寫。
+- 此代幣為帳戶屬性;新增、刪除或輪換 API 金鑰不會影響其特性，因此適合長期整合。
+
+## 查詢使用紀錄
+
+```http
+GET /v1/logs?page=1&page_size=50[&start_time=..&end_time=..]
+```
+
+### 請求參數（皆為可選）
+
+| 參數 | 類型 | 說明 |
+| --- | --- | --- |
+| `page` | 整數 | 頁碼從 1 開始，預設為 1 |
+| `page_size` | 整數 | 每頁條目數量：預設10條，最多50條 |
+| `start_time` | 字串/整數 | 開始時間，Unix 秒（例如， `1717200000`）或RFC3339（例如， `2026-06-01T00:00:00Z`） |
+| `end_time` | 字串/整數 | 末日，格式如上 |
+
+限制條件：`page × page_size ≤ 100000`（翻頁深度限制）; 時間窗口沒有限制。
+
+### 回傳範例（200）
+
+```json
+{
+  "data": [
+    {
+      "time": "2026-06-20T14:03:11Z", "token_name": "我的密钥", "group": "default",
+      "model": "gpt-5.5", "use_time": 3, "first_byte": 0.8,
+      "prompt_tokens": 1200, "completion_tokens": 800, "cost": 0.012,
+      "ip": "1.2.3.4", "request_id": "2026xyzreq",
+      "request_path": "/v1/chat/completions"
+    }
+  ],
+  "page": 1, "page_size": 10
+}
+```
+
+| 場地 | 說明 |
+| --- | --- |
+| `time` | 請求時間（UTC，RFC3339） |
+| `token_name` | 這次使用的 API 金鑰名稱 |
+| `group` | 標記分組 |
+| `model` | 型號名稱 |
+| `use_time` | 總花費時間（秒數） |
+| `first_byte` | 第一個字元時間（秒）; 當非流式形式中沒有初始字元時，會使用此方法。 `null` |
+| `prompt_tokens` / `completion_tokens` | 輸入/輸出的標記數量 |
+| `cost` | 這段時間花費的金額（美元） |
+| `ip` | 資料來源：IP |
+| `request_id` | 請求識別碼 |
+| `request_path` | 通話路徑 |
+
+**頁面回傳的數值少於「page_size」（或為空），即最後一頁。**
+
+## 呼叫範例
+
+```bash
+curl -H "Authorization: Bearer <你的系统访问令牌>" \
+  "https://api.nexusapi.link/v1/logs?page=1&page_size=50&start_time=1717200000&end_time=1717804800"
+```
+
+翻頁全卷（偽代碼）：
+
+```text
+page = 1
+while True:
+    resp = GET /v1/logs?page=page&page_size=50
+    处理 resp.data
+    if len(resp.data) < 50: break   # 某页不满即最后一页
+    page += 1
+```
+
+## 錯誤代碼
+
+| HTTP | 錯誤 | 意義 |
+| --- | --- | --- |
+| 400 | `invalid_request` | 參數無效（翻頁太深/時間格式錯誤/時間順序不正確） |
+| 401 | `unauthorized` | 令牌遺失/無效/帳號停用 |
+| 429 | `rate_limited` | 請求頻率過高（響應頻段）。 `Retry-After`請依照提示退後） |
+| 503 | `unavailable` | 該服務暫時無法使用（有錢帶）。 `Retry-After`） |
+| 500 | `internal_error` | 內部錯誤 |
+
+## 使用建議
+
+- 時間是 **UTC**；`cost` 用美元。
+- 使用分頁（`page_size` 最大 50） + 時間窗分段拉取，**不要經常投票**； 對於稽核情境，建議每天點擊一次「昨天」。
+- 目前只支援 HTTPS。

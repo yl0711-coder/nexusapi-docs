@@ -24,61 +24,61 @@
     "eyebrows": "breadcrumbs",
     "codeblocks": "system"
   },
-  "navbar": {
-    "links": [
-      {
-        "label": "模型广场",
-        "href": "https://nexusapi.link/pricing"
-      },
-      {
-        "label": "控制台",
-        "href": "https://nexusapi.link"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "开始接入",
-      "href": "/guide/quick-start"
-    }
-  },
-  "footer": {
-    "socials": {
-      "website": "https://nexusapi.link"
-    },
-    "links": [
-      {
-        "header": "开始使用",
-        "items": [
-          {
-            "label": "快速开始",
-            "href": "/guide/quick-start"
-          },
-          {
-            "label": "模型与计费",
-            "href": "/billing/models-pricing"
-          }
-        ]
-      },
-      {
-        "header": "开发者",
-        "items": [
-          {
-            "label": "接口说明",
-            "href": "/developer/openai-compatible"
-          },
-          {
-            "label": "代码示例",
-            "href": "/developer/code-examples"
-          }
-        ]
-      }
-    ]
-  },
   "navigation": {
-    "anchors": [
+    "languages": [
       {
-        "anchor": "使用文档",
-        "icon": "book-open",
+        "language": "zh-Hans",
+        "default": true,
+        "navbar": {
+          "links": [
+            {
+              "label": "模型广场",
+              "href": "https://nexusapi.link/pricing"
+            },
+            {
+              "label": "控制台",
+              "href": "https://nexusapi.link"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "开始接入",
+            "href": "/guide/quick-start"
+          }
+        },
+        "footer": {
+          "socials": {
+            "website": "https://nexusapi.link"
+          },
+          "links": [
+            {
+              "header": "开始使用",
+              "items": [
+                {
+                  "label": "快速开始",
+                  "href": "/guide/quick-start"
+                },
+                {
+                  "label": "模型与计费",
+                  "href": "/billing/models-pricing"
+                }
+              ]
+            },
+            {
+              "header": "开发者",
+              "items": [
+                {
+                  "label": "接口说明",
+                  "href": "/developer/openai-compatible"
+                },
+                {
+                  "label": "代码示例",
+                  "href": "/developer/code-examples"
+                }
+              ]
+            }
+          ]
+        },
         "groups": [
           {
             "group": "开始接入",
@@ -87,9 +87,9 @@
               "index",
               "guide/quick-start",
               "guide/integration-overview",
-              "guide/image-generation",
               "guide/api-key",
-              "guide/recharge"
+              "guide/recharge",
+              "guide/image-generation"
             ]
           },
           {
@@ -120,20 +120,644 @@
               "faq/common-errors",
               "faq/content-block-not-found"
             ]
-          }
-        ]
-      },
-      {
-        "anchor": "开发者接入",
-        "icon": "code-2",
-        "groups": [
+          },
           {
-            "group": "接口说明",
+            "group": "开发者接入",
             "icon": "braces",
             "pages": [
               "developer/openai-compatible",
               "developer/code-examples",
               "developer/usage-logs"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "zh-Hant",
+        "navbar": {
+          "links": [
+            {
+              "label": "模型廣場",
+              "href": "https://nexusapi.link/pricing"
+            },
+            {
+              "label": "控制台",
+              "href": "https://nexusapi.link"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "開始串接",
+            "href": "/zh-TW/guide/quick-start"
+          }
+        },
+        "footer": {
+          "socials": {
+            "website": "https://nexusapi.link"
+          },
+          "links": [
+            {
+              "header": "開始使用",
+              "items": [
+                {
+                  "label": "快速開始",
+                  "href": "/zh-TW/guide/quick-start"
+                },
+                {
+                  "label": "模型與計費",
+                  "href": "/zh-TW/billing/models-pricing"
+                }
+              ]
+            },
+            {
+              "header": "開發者",
+              "items": [
+                {
+                  "label": "介面說明",
+                  "href": "/zh-TW/developer/openai-compatible"
+                },
+                {
+                  "label": "程式碼範例",
+                  "href": "/zh-TW/developer/code-examples"
+                }
+              ]
+            }
+          ]
+        },
+        "groups": [
+          {
+            "group": "開始串接",
+            "icon": "rocket",
+            "pages": [
+              "zh-TW/index",
+              "zh-TW/guide/quick-start",
+              "zh-TW/guide/integration-overview",
+              "zh-TW/guide/api-key"
+            ]
+          },
+          {
+            "group": "模型與帳單",
+            "icon": "wallet-cards",
+            "pages": [
+              "zh-TW/guide/recharge",
+              "zh-TW/guide/image-generation",
+              "zh-TW/billing/models-pricing",
+              "zh-TW/billing/usage-and-billing"
+            ]
+          },
+          {
+            "group": "客戶端工具",
+            "icon": "wrench",
+            "pages": [
+              "zh-TW/tools/index",
+              "zh-TW/tools/claude-code",
+              "zh-TW/tools/codex-cli",
+              "zh-TW/tools/cc-switch",
+              "zh-TW/tools/cursor-vscode"
+            ]
+          },
+          {
+            "group": "故障排查",
+            "icon": "circle-help",
+            "pages": [
+              "zh-TW/faq/index",
+              "zh-TW/faq/self-check",
+              "zh-TW/faq/common-errors",
+              "zh-TW/faq/content-block-not-found"
+            ]
+          },
+          {
+            "group": "開發者串接",
+            "icon": "braces",
+            "pages": [
+              "zh-TW/developer/openai-compatible",
+              "zh-TW/developer/code-examples",
+              "zh-TW/developer/usage-logs"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "en",
+        "navbar": {
+          "links": [
+            {
+              "label": "Model Marketplace",
+              "href": "https://nexusapi.link/pricing"
+            },
+            {
+              "label": "Console",
+              "href": "https://nexusapi.link"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Get started",
+            "href": "/en/guide/quick-start"
+          }
+        },
+        "footer": {
+          "socials": {
+            "website": "https://nexusapi.link"
+          },
+          "links": [
+            {
+              "header": "Get started",
+              "items": [
+                {
+                  "label": "Quick start",
+                  "href": "/en/guide/quick-start"
+                },
+                {
+                  "label": "Models and pricing",
+                  "href": "/en/billing/models-pricing"
+                }
+              ]
+            },
+            {
+              "header": "Developers",
+              "items": [
+                {
+                  "label": "API guide",
+                  "href": "/en/developer/openai-compatible"
+                },
+                {
+                  "label": "Code examples",
+                  "href": "/en/developer/code-examples"
+                }
+              ]
+            }
+          ]
+        },
+        "groups": [
+          {
+            "group": "Get started",
+            "icon": "rocket",
+            "pages": [
+              "en/index",
+              "en/guide/quick-start",
+              "en/guide/integration-overview",
+              "en/guide/api-key"
+            ]
+          },
+          {
+            "group": "Models and billing",
+            "icon": "wallet-cards",
+            "pages": [
+              "en/guide/recharge",
+              "en/guide/image-generation",
+              "en/billing/models-pricing",
+              "en/billing/usage-and-billing"
+            ]
+          },
+          {
+            "group": "Client tools",
+            "icon": "wrench",
+            "pages": [
+              "en/tools/index",
+              "en/tools/claude-code",
+              "en/tools/codex-cli",
+              "en/tools/cc-switch",
+              "en/tools/cursor-vscode"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "icon": "circle-help",
+            "pages": [
+              "en/faq/index",
+              "en/faq/self-check",
+              "en/faq/common-errors",
+              "en/faq/content-block-not-found"
+            ]
+          },
+          {
+            "group": "Developer API",
+            "icon": "braces",
+            "pages": [
+              "en/developer/openai-compatible",
+              "en/developer/code-examples",
+              "en/developer/usage-logs"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "fr",
+        "navbar": {
+          "links": [
+            {
+              "label": "Catalogue de modèles",
+              "href": "https://nexusapi.link/pricing"
+            },
+            {
+              "label": "Console",
+              "href": "https://nexusapi.link"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Commencer",
+            "href": "/fr/guide/quick-start"
+          }
+        },
+        "footer": {
+          "socials": {
+            "website": "https://nexusapi.link"
+          },
+          "links": [
+            {
+              "header": "Prise en main",
+              "items": [
+                {
+                  "label": "Démarrage rapide",
+                  "href": "/fr/guide/quick-start"
+                },
+                {
+                  "label": "Modèles et tarifs",
+                  "href": "/fr/billing/models-pricing"
+                }
+              ]
+            },
+            {
+              "header": "Développeurs",
+              "items": [
+                {
+                  "label": "Guide API",
+                  "href": "/fr/developer/openai-compatible"
+                },
+                {
+                  "label": "Exemples de code",
+                  "href": "/fr/developer/code-examples"
+                }
+              ]
+            }
+          ]
+        },
+        "groups": [
+          {
+            "group": "Premiers pas",
+            "icon": "rocket",
+            "pages": [
+              "fr/index",
+              "fr/guide/quick-start",
+              "fr/guide/integration-overview",
+              "fr/guide/api-key"
+            ]
+          },
+          {
+            "group": "Modèles et facturation",
+            "icon": "wallet-cards",
+            "pages": [
+              "fr/guide/recharge",
+              "fr/guide/image-generation",
+              "fr/billing/models-pricing",
+              "fr/billing/usage-and-billing"
+            ]
+          },
+          {
+            "group": "Outils clients",
+            "icon": "wrench",
+            "pages": [
+              "fr/tools/index",
+              "fr/tools/claude-code",
+              "fr/tools/codex-cli",
+              "fr/tools/cc-switch",
+              "fr/tools/cursor-vscode"
+            ]
+          },
+          {
+            "group": "Dépannage",
+            "icon": "circle-help",
+            "pages": [
+              "fr/faq/index",
+              "fr/faq/self-check",
+              "fr/faq/common-errors",
+              "fr/faq/content-block-not-found"
+            ]
+          },
+          {
+            "group": "API développeur",
+            "icon": "braces",
+            "pages": [
+              "fr/developer/openai-compatible",
+              "fr/developer/code-examples",
+              "fr/developer/usage-logs"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "ja",
+        "navbar": {
+          "links": [
+            {
+              "label": "モデルマーケットプレイス",
+              "href": "https://nexusapi.link/pricing"
+            },
+            {
+              "label": "コンソール",
+              "href": "https://nexusapi.link"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "始める",
+            "href": "/ja/guide/quick-start"
+          }
+        },
+        "footer": {
+          "socials": {
+            "website": "https://nexusapi.link"
+          },
+          "links": [
+            {
+              "header": "はじめに",
+              "items": [
+                {
+                  "label": "クイックスタート",
+                  "href": "/ja/guide/quick-start"
+                },
+                {
+                  "label": "モデルと料金",
+                  "href": "/ja/billing/models-pricing"
+                }
+              ]
+            },
+            {
+              "header": "開発者",
+              "items": [
+                {
+                  "label": "API ガイド",
+                  "href": "/ja/developer/openai-compatible"
+                },
+                {
+                  "label": "コード例",
+                  "href": "/ja/developer/code-examples"
+                }
+              ]
+            }
+          ]
+        },
+        "groups": [
+          {
+            "group": "はじめに",
+            "icon": "rocket",
+            "pages": [
+              "ja/index",
+              "ja/guide/quick-start",
+              "ja/guide/integration-overview",
+              "ja/guide/api-key"
+            ]
+          },
+          {
+            "group": "モデルと請求",
+            "icon": "wallet-cards",
+            "pages": [
+              "ja/guide/recharge",
+              "ja/guide/image-generation",
+              "ja/billing/models-pricing",
+              "ja/billing/usage-and-billing"
+            ]
+          },
+          {
+            "group": "クライアントツール",
+            "icon": "wrench",
+            "pages": [
+              "ja/tools/index",
+              "ja/tools/claude-code",
+              "ja/tools/codex-cli",
+              "ja/tools/cc-switch",
+              "ja/tools/cursor-vscode"
+            ]
+          },
+          {
+            "group": "トラブルシューティング",
+            "icon": "circle-help",
+            "pages": [
+              "ja/faq/index",
+              "ja/faq/self-check",
+              "ja/faq/common-errors",
+              "ja/faq/content-block-not-found"
+            ]
+          },
+          {
+            "group": "開発者向け API",
+            "icon": "braces",
+            "pages": [
+              "ja/developer/openai-compatible",
+              "ja/developer/code-examples",
+              "ja/developer/usage-logs"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "ru",
+        "navbar": {
+          "links": [
+            {
+              "label": "Каталог моделей",
+              "href": "https://nexusapi.link/pricing"
+            },
+            {
+              "label": "Консоль",
+              "href": "https://nexusapi.link"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Начать",
+            "href": "/ru/guide/quick-start"
+          }
+        },
+        "footer": {
+          "socials": {
+            "website": "https://nexusapi.link"
+          },
+          "links": [
+            {
+              "header": "Начало работы",
+              "items": [
+                {
+                  "label": "Быстрый старт",
+                  "href": "/ru/guide/quick-start"
+                },
+                {
+                  "label": "Модели и цены",
+                  "href": "/ru/billing/models-pricing"
+                }
+              ]
+            },
+            {
+              "header": "Разработчикам",
+              "items": [
+                {
+                  "label": "Руководство API",
+                  "href": "/ru/developer/openai-compatible"
+                },
+                {
+                  "label": "Примеры кода",
+                  "href": "/ru/developer/code-examples"
+                }
+              ]
+            }
+          ]
+        },
+        "groups": [
+          {
+            "group": "Начало работы",
+            "icon": "rocket",
+            "pages": [
+              "ru/index",
+              "ru/guide/quick-start",
+              "ru/guide/integration-overview",
+              "ru/guide/api-key"
+            ]
+          },
+          {
+            "group": "Модели и оплата",
+            "icon": "wallet-cards",
+            "pages": [
+              "ru/guide/recharge",
+              "ru/guide/image-generation",
+              "ru/billing/models-pricing",
+              "ru/billing/usage-and-billing"
+            ]
+          },
+          {
+            "group": "Клиентские инструменты",
+            "icon": "wrench",
+            "pages": [
+              "ru/tools/index",
+              "ru/tools/claude-code",
+              "ru/tools/codex-cli",
+              "ru/tools/cc-switch",
+              "ru/tools/cursor-vscode"
+            ]
+          },
+          {
+            "group": "Устранение неполадок",
+            "icon": "circle-help",
+            "pages": [
+              "ru/faq/index",
+              "ru/faq/self-check",
+              "ru/faq/common-errors",
+              "ru/faq/content-block-not-found"
+            ]
+          },
+          {
+            "group": "API для разработчиков",
+            "icon": "braces",
+            "pages": [
+              "ru/developer/openai-compatible",
+              "ru/developer/code-examples",
+              "ru/developer/usage-logs"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "vi",
+        "navbar": {
+          "links": [
+            {
+              "label": "Chợ mô hình",
+              "href": "https://nexusapi.link/pricing"
+            },
+            {
+              "label": "Bảng điều khiển",
+              "href": "https://nexusapi.link"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Bắt đầu",
+            "href": "/vi/guide/quick-start"
+          }
+        },
+        "footer": {
+          "socials": {
+            "website": "https://nexusapi.link"
+          },
+          "links": [
+            {
+              "header": "Bắt đầu",
+              "items": [
+                {
+                  "label": "Bắt đầu nhanh",
+                  "href": "/vi/guide/quick-start"
+                },
+                {
+                  "label": "Mô hình và giá",
+                  "href": "/vi/billing/models-pricing"
+                }
+              ]
+            },
+            {
+              "header": "Nhà phát triển",
+              "items": [
+                {
+                  "label": "Hướng dẫn API",
+                  "href": "/vi/developer/openai-compatible"
+                },
+                {
+                  "label": "Ví dụ mã",
+                  "href": "/vi/developer/code-examples"
+                }
+              ]
+            }
+          ]
+        },
+        "groups": [
+          {
+            "group": "Bắt đầu",
+            "icon": "rocket",
+            "pages": [
+              "vi/index",
+              "vi/guide/quick-start",
+              "vi/guide/integration-overview",
+              "vi/guide/api-key"
+            ]
+          },
+          {
+            "group": "Mô hình và thanh toán",
+            "icon": "wallet-cards",
+            "pages": [
+              "vi/guide/recharge",
+              "vi/guide/image-generation",
+              "vi/billing/models-pricing",
+              "vi/billing/usage-and-billing"
+            ]
+          },
+          {
+            "group": "Công cụ khách hàng",
+            "icon": "wrench",
+            "pages": [
+              "vi/tools/index",
+              "vi/tools/claude-code",
+              "vi/tools/codex-cli",
+              "vi/tools/cc-switch",
+              "vi/tools/cursor-vscode"
+            ]
+          },
+          {
+            "group": "Khắc phục sự cố",
+            "icon": "circle-help",
+            "pages": [
+              "vi/faq/index",
+              "vi/faq/self-check",
+              "vi/faq/common-errors",
+              "vi/faq/content-block-not-found"
+            ]
+          },
+          {
+            "group": "API cho nhà phát triển",
+            "icon": "braces",
+            "pages": [
+              "vi/developer/openai-compatible",
+              "vi/developer/code-examples",
+              "vi/developer/usage-logs"
             ]
           }
         ]

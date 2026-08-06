@@ -1,0 +1,59 @@
+---
+title: "Tự kiểm tra vấn đề"
+---
+
+Nếu cuộc gọi thất bại, trước tiên nhấp vào trang này để hoàn tất kiểm tra cơ bản. Hầu hết các cấu hình hoặc sự cố thỉnh thoảng có thể được xác định trong vài phút.
+
+## Bước 1: Lưu trang web
+
+Trước khi đóng client hoặc yêu cầu lại, hãy lưu:
+
+- Lỗi hoàn toàn trong văn bản gốc
+- Mã yêu cầu
+- Thời gian và múi giờ xảy ra
+- Mô hình sử dụng
+- Ứng dụng khách và phiên bản được sử dụng
+- Ví dụ giao diện yêu cầu `/v1/responses`
+
+Không nộp đầy đủ khóa API, mật khẩu, dữ liệu riêng tư hoặc toàn bộ nội dung kinh doanh.
+
+## Bước 2: Xác định loại vấn đề
+
+| Hiện tượng | Kiểm tra ưu tiên |
+| --- | --- |
+| 401 | API Key、`Bearer` Tiền tố, địa chỉ yêu cầu |
+| 404 | Kiểm tra xem URL cơ sở có bị trùng lặp hoặc thiếu không `/v1` |
+| 400 | Mô hình, giao diện, tham số và trạng thái phiên làm việc |
+| 429 | Đồng thời và tần suất yêu cầu |
+| 500 / 502 / 503 | Chờ 10~30 giây rồi thử lại |
+| 504 / 524 | Nội dung yêu cầu, thời gian chờ và trạng thái dịch vụ |
+| Cân bằng không đủ | Số dư bảng điều khiển, số tiền khóa và nhóm |
+
+Để biết ý nghĩa cụ thể, xem bên dưới [Câu hỏi thường gặp về cuộc gọi API](/vi/faq/common-errors)。
+
+## Bước 3: Thực hiện xác minh tối thiểu
+
+1. Xác nhận rằng cân bằng bảng điều khiển và Khóa API đang hoạt động đúng.
+2. Sao chép lại ID mô hình từ ô mô hình.
+3. Tạo một phiên làm việc mới và gửi một tin nhắn ngắn.
+4. Chỉ thử lại một lần và ghi lại ID Yêu cầu mới.
+5. Kiểm tra xem nhật ký sử dụng bảng điều khiển có hiển thị yêu cầu tương ứng không.
+
+Nếu phiên mới thành công, vấn đề thường liên quan đến trạng thái phiên ban đầu hoặc nội dung của yêu cầu; Nếu ngay cả yêu cầu nhỏ nhất vẫn tiếp tục thất bại, vui lòng gửi câu hỏi.
+
+## Được cung cấp khi liên hệ với bộ phận hỗ trợ
+
+Vui lòng cung cấp ngay các thông tin sau:
+
+```text
+发生时间（含时区）：
+Request ID：
+客户端及版本：
+模型：
+请求接口：
+错误原文：
+偶发还是持续发生：
+是否已用新会话验证：
+```
+
+Thông tin càng đầy đủ, tốc độ định vị càng nhanh. API Key có thể cung cấp tối đa 6 bit cuối.
