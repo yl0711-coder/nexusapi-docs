@@ -1,0 +1,1198 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NexusAPI Public Gateway",
+    "version": "2026-08-06",
+    "description": "NexusAPI 对外公开的模型调用与只读用量查询接口。此定义只覆盖文档中心已承诺的能力；模型可用性、价格、分组和协议以当前 API Key 的模型列表与控制台模型广场为准。请勿把底层 New API 支持但未在本定义列出的路由视为 NexusAPI 的公开承诺。"
+  },
+  "servers": [
+    {
+      "url": "https://nexusapi.link",
+      "description": "模型调用网关"
+    },
+    {
+      "url": "https://api.nexusapi.link",
+      "description": "只读用量日志网关，仅用于 GET /v1/logs"
+    }
+  ],
+  "tags": [
+    {
+      "name": "模型与鉴权",
+      "description": "用当前 API Key 查询实际可见的模型。"
+    },
+    {
+      "name": "OpenAI Chat Completions",
+      "description": "OpenAI 兼容的文本、聊天和流式响应。"
+    },
+    {
+      "name": "Anthropic Messages",
+      "description": "原生 Anthropic Messages 协议。"
+    },
+    {
+      "name": "OpenAI Responses",
+      "description": "适用于明确支持 Responses 的模型与 Codex Provider。"
+    },
+    {
+      "name": "图片生成",
+      "description": "OpenAI 风格的同步图片生成路径。"
+    },
+    {
+      "name": "用量与对账",
+      "description": "独立只读网关，按账号查询消费日志。"
+    }
+  ],
+  "paths": {
+    "/v1/models": {
+      "get": {
+        "tags": [
+          "模型与鉴权"
+        ],
+        "summary": "列出当前 API Key 可见模型",
+        "description": "返回当前凭证、令牌分组和实时状态下可用的模型。该结果不是全站模型清单；创建或切换 Key 后，应先调用本接口，再从 data[].id 复制模型 ID。",
+        "operationId": "listModels",
+        "x-apifox-folder": "01 模型与鉴权",
+        "security": [
+          {
+            "ModelApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "当前 Key 可见的模型列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelsResponse"
+                },
+                "example": {
+                  "object": "list",
+                  "data": [
+                    {
+                      "id": "YOUR_MODEL_ID",
+                      "object": "model",
+                      "owned_by": "nexusapi",
+                      "supported_endpoint_types": [
+                        "openai"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/chat/completions": {
+      "post": {
+        "tags": [
+          "OpenAI Chat Completions"
+        ],
+        "summary": "创建聊天补全",
+        "description": "使用 OpenAI Chat Completions 格式调用文本模型。stream 为 true 时，请按 text/event-stream 逐段读取 choices[].delta；先用非流式最小请求验证模型、分组和 Key。",
+        "operationId": "createChatCompletion",
+        "x-apifox-folder": "02 OpenAI 兼容 / Chat Completions",
+        "security": [
+          {
+            "ModelApiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatCompletionRequest"
+              },
+              "examples": {
+                "minimal": {
+                  "summary": "非流式最小请求",
+                  "value": {
+                    "model": "YOUR_MODEL_ID",
+                    "messages": [
+                      {
+                        "role": "user",
+                        "content": "请只回复：连接成功"
+                      }
+                    ]
+                  }
+                },
+                "stream": {
+                  "summary": "流式请求",
+                  "value": {
+                    "model": "YOUR_MODEL_ID",
+                    "messages": [
+                      {
+                        "role": "user",
+                        "content": "请简短介绍自己"
+                      }
+                    ],
+                    "stream": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功创建响应；响应格式取决于 stream。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatCompletionResponse"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "Server-Sent Events。每个 data: 事件包含一个 ChatCompletionChunk；结束事件通常为 data: [DONE]。",
+                  "example": "data: {\"id\":\"chatcmpl-example\",\"object\":\"chat.completion.chunk\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"连接\"}}]}\n\ndata: [DONE]"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "502": {
+            "$ref": "#/components/responses/UpstreamUnavailable"
+          },
+          "503": {
+            "$ref": "#/components/responses/UpstreamUnavailable"
+          },
+          "524": {
+            "$ref": "#/components/responses/UpstreamUnavailable"
+          }
+        }
+      }
+    },
+    "/v1/messages": {
+      "post": {
+        "tags": [
+          "Anthropic Messages"
+        ],
+        "summary": "创建 Anthropic Messages 响应",
+        "description": "原生 Anthropic Messages 协议。仅适用于当前 Key 可见且支持 anthropic 协议的模型。SDK 的 Base URL 应填写 https://nexusapi.link，让 SDK 自行补全 /v1/messages。",
+        "operationId": "createAnthropicMessage",
+        "x-apifox-folder": "03 Anthropic / Messages",
+        "security": [
+          {
+            "ModelApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "anthropic-version",
+            "in": "header",
+            "required": true,
+            "description": "原生 Anthropic 协议版本。使用 SDK 时通常由 SDK 管理；手写 HTTP 请求时必填。",
+            "schema": {
+              "type": "string",
+              "example": "2023-06-01"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnthropicMessageRequest"
+              },
+              "example": {
+                "model": "YOUR_ANTHROPIC_MODEL_ID",
+                "max_tokens": 256,
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": "请只回复：连接成功"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功创建响应；stream 为 true 时返回 text/event-stream。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnthropicMessageResponse"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "Anthropic Messages 流式事件。"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/v1/responses": {
+      "post": {
+        "tags": [
+          "OpenAI Responses"
+        ],
+        "summary": "创建 OpenAI Responses 响应",
+        "description": "仅在模型、令牌分组和渠道明确支持 Responses 协议时使用。Codex CLI 的 Provider 配置使用该接口；不要把 Anthropic 类型 Claude 渠道改走此路径。",
+        "operationId": "createResponse",
+        "x-apifox-folder": "04 OpenAI 兼容 / Responses",
+        "security": [
+          {
+            "ModelApiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResponsesRequest"
+              },
+              "example": {
+                "model": "YOUR_RESPONSES_MODEL_ID",
+                "input": "请只回复：连接成功"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功创建响应；stream 为 true 时返回 text/event-stream。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsesResponse"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "OpenAI Responses 流式事件。"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/v1/images/generations": {
+      "post": {
+        "tags": [
+          "图片生成"
+        ],
+        "summary": "生成图片",
+        "description": "同步 HTTP 图片生成路径。仅使用当前 Key 可见且明确支持图片生成的模型。size、quality、n、response_format 等可选参数是否支持取决于具体模型；先用 model 和 prompt 的最小请求验证。不要在超时后立即重复提交相同任务。",
+        "operationId": "createImageGeneration",
+        "x-apifox-folder": "05 图片生成",
+        "security": [
+          {
+            "ModelApiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageGenerationRequest"
+              },
+              "example": {
+                "model": "YOUR_IMAGE_MODEL_ID",
+                "prompt": "一枚简洁的蓝色几何风格科技公司图标，纯白背景"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "图片生成结果。data[] 中实际返回 url 还是 b64_json，取决于所选模型与 response_format。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageGenerationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "504": {
+            "$ref": "#/components/responses/UpstreamUnavailable"
+          },
+          "524": {
+            "$ref": "#/components/responses/UpstreamUnavailable"
+          }
+        }
+      }
+    },
+    "/v1/logs": {
+      "get": {
+        "tags": [
+          "用量与对账"
+        ],
+        "summary": "查询当前账号的消费日志",
+        "description": "该接口位于独立的只读网关 https://api.nexusapi.link。只返回当前系统访问令牌所属账号的消费日志，按最新在前排序；不提供模型调用、充值或任何管理操作。日常对账应按天或按周增量查询，不要用作秒级轮询。",
+        "operationId": "listUsageLogs",
+        "x-apifox-folder": "06 用量与对账",
+        "servers": [
+          {
+            "url": "https://api.nexusapi.link",
+            "description": "只读用量日志网关"
+          }
+        ],
+        "security": [
+          {
+            "SystemAccessToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "start_time",
+            "in": "query",
+            "required": false,
+            "description": "起始时间。支持 Unix 秒或 RFC3339；同时传入 end_time 时不得晚于结束时间。",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Unix 秒",
+                  "example": 1780272000
+                },
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2026-06-01T00:00:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "name": "end_time",
+            "in": "query",
+            "required": false,
+            "description": "结束时间。格式同 start_time。",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Unix 秒"
+                },
+                {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "页码，从 1 开始，默认 1。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "description": "每页条数，默认 10，最大 50。page × page_size 不得超过 100000。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "当前账号的消费日志页",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageLogsPage"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "time": "2026-06-20T14:03:11Z",
+                      "token_name": "my-service-key",
+                      "group": "default",
+                      "model": "YOUR_MODEL_ID",
+                      "use_time": 3,
+                      "first_byte": 0.8,
+                      "prompt_tokens": 1200,
+                      "completion_tokens": 800,
+                      "cost": 0.012,
+                      "ip": "203.0.113.10",
+                      "request_id": "request-id-example",
+                      "request_path": "/v1/chat/completions"
+                    }
+                  ],
+                  "page": 1,
+                  "page_size": 50
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/UpstreamUnavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ModelApiKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API Key",
+        "description": "在 NexusAPI 控制台的令牌管理中创建。格式：Authorization: Bearer YOUR_API_KEY。不要写入前端、截图、聊天记录或仓库。"
+      },
+      "SystemAccessToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "System Access Token",
+        "description": "在 NexusAPI 控制台的个人设置中生成，仅用于 api.nexusapi.link 的只读用量查询；不能用于模型调用。"
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "请求格式、参数、模型或协议不匹配。",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "凭证缺失、无效、已失效或账号不可用。",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "请求过快、触发限流或服务暂时繁忙。应按 Retry-After 等待后重试。",
+        "headers": {
+          "Retry-After": {
+            "description": "建议等待的秒数；存在时请优先遵守。",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "服务内部错误。请保存 Request ID、发生时间和脱敏后的请求信息后联系支持。",
+        "headers": {
+          "X-Request-Id": {
+            "description": "请求追踪 ID；存在时请一并提供。",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "UpstreamUnavailable": {
+        "description": "上游、网关或等待时间暂时不可用。不要立即高频重放同一请求，先保留 Request ID。",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Model": {
+        "type": "object",
+        "required": [
+          "id",
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "实际调用时填写的模型 ID。"
+          },
+          "object": {
+            "type": "string",
+            "example": "model"
+          },
+          "owned_by": {
+            "type": "string",
+            "description": "模型归属标识；不保证等同于上游厂商。"
+          },
+          "supported_endpoint_types": {
+            "type": "array",
+            "description": "部分响应会返回的协议标注；未返回时，请以控制台模型广场为准。",
+            "items": {
+              "type": "string",
+              "enum": [
+                "openai",
+                "anthropic"
+              ]
+            }
+          }
+        }
+      },
+      "ModelsResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "example": "list"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Model"
+            }
+          }
+        }
+      },
+      "ChatCompletionRequest": {
+        "type": "object",
+        "required": [
+          "model",
+          "messages"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "当前 API Key 可见、且支持 OpenAI 协议的模型 ID。"
+          },
+          "messages": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Chat Completions 消息列表。",
+            "items": {
+              "type": "object",
+              "required": [
+                "role",
+                "content"
+              ],
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "system",
+                    "developer",
+                    "user",
+                    "assistant",
+                    "tool"
+                  ]
+                },
+                "content": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "description": "多模态内容；具体内容类型取决于模型。",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "stream": {
+            "type": "boolean",
+            "default": false
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2,
+            "description": "仅在所选模型和渠道支持时生效。"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "仅在所选模型和渠道支持时使用。"
+          },
+          "tools": {
+            "type": "array",
+            "description": "工具调用配置。请先确认模型与渠道支持。",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "response_format": {
+            "type": "object",
+            "description": "结构化输出配置。请先确认模型与渠道支持。",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "ChatCompletionResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "choices"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "chatcmpl-example"
+          },
+          "object": {
+            "type": "string",
+            "example": "chat.completion"
+          },
+          "created": {
+            "type": "integer",
+            "description": "Unix 秒。"
+          },
+          "model": {
+            "type": "string"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "finish_reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "prompt_tokens": {
+                "type": "integer"
+              },
+              "completion_tokens": {
+                "type": "integer"
+              },
+              "total_tokens": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "AnthropicMessageRequest": {
+        "type": "object",
+        "required": [
+          "model",
+          "max_tokens",
+          "messages"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "当前 API Key 可见、且支持 anthropic 协议的模型 ID。"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "messages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "role",
+                "content"
+              ],
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "user",
+                    "assistant"
+                  ]
+                },
+                "content": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "system": {
+            "description": "Anthropic Messages 不使用 system role；如需系统提示，使用此顶层字段。",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            ]
+          },
+          "stream": {
+            "type": "boolean",
+            "default": false
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "AnthropicMessageResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "role",
+          "content",
+          "model"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "msg-example"
+          },
+          "type": {
+            "type": "string",
+            "example": "message"
+          },
+          "role": {
+            "type": "string",
+            "example": "assistant"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "model": {
+            "type": "string"
+          },
+          "stop_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "usage": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "ResponsesRequest": {
+        "type": "object",
+        "required": [
+          "model",
+          "input"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "当前 API Key 可见、且明确支持 Responses 的模型 ID。"
+          },
+          "input": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            ]
+          },
+          "stream": {
+            "type": "boolean",
+            "default": false
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "ResponsesResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "status",
+          "model"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "resp-example"
+          },
+          "object": {
+            "type": "string",
+            "example": "response"
+          },
+          "status": {
+            "type": "string",
+            "example": "completed"
+          },
+          "model": {
+            "type": "string"
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "usage": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "ImageGenerationRequest": {
+        "type": "object",
+        "required": [
+          "model",
+          "prompt"
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "当前 API Key 可见、且支持图片生成的模型 ID。"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "size": {
+            "type": "string",
+            "description": "可选。仅在所选模型支持时填写，例如 1024x1024。"
+          },
+          "quality": {
+            "type": "string",
+            "description": "可选。仅在所选模型支持时填写。"
+          },
+          "n": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "可选。一次生成数量；上限取决于模型与平台限制。"
+          },
+          "response_format": {
+            "type": "string",
+            "enum": [
+              "url",
+              "b64_json"
+            ],
+            "description": "可选。仅在所选模型支持时填写。"
+          }
+        },
+        "additionalProperties": true
+      },
+      "ImageGenerationResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "created": {
+            "type": "integer",
+            "description": "Unix 秒。"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "b64_json": {
+                  "type": "string",
+                  "description": "Base64 编码的图片数据。"
+                },
+                "revised_prompt": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "UsageLog": {
+        "type": "object",
+        "required": [
+          "time",
+          "model",
+          "cost",
+          "request_id"
+        ],
+        "properties": {
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC / RFC3339 请求时间。"
+          },
+          "token_name": {
+            "type": "string",
+            "description": "本次请求所用 API Key 的名称。"
+          },
+          "group": {
+            "type": "string",
+            "description": "本次请求实际使用的分组。"
+          },
+          "model": {
+            "type": "string"
+          },
+          "use_time": {
+            "type": "number",
+            "description": "请求总耗时，单位：秒。"
+          },
+          "first_byte": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "首字耗时，单位：秒；非流式或未记录时为 null。"
+          },
+          "prompt_tokens": {
+            "type": "integer"
+          },
+          "completion_tokens": {
+            "type": "integer"
+          },
+          "cost": {
+            "type": "number",
+            "description": "本次消费金额，美元。"
+          },
+          "ip": {
+            "type": "string",
+            "description": "调用来源 IP；未记录时为空字符串。"
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "request_path": {
+            "type": "string",
+            "example": "/v1/chat/completions"
+          }
+        }
+      },
+      "UsageLogsPage": {
+        "type": "object",
+        "required": [
+          "data",
+          "page",
+          "page_size"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UsageLog"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  }
+                },
+                "additionalProperties": true
+              }
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

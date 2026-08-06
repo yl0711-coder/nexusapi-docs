@@ -87,15 +87,15 @@
               "index",
               "guide/quick-start",
               "guide/integration-overview",
-              "guide/api-key",
-              "guide/recharge",
-              "guide/image-generation"
+              "guide/api-key"
             ]
           },
           {
             "group": "模型与账单",
             "icon": "wallet-cards",
             "pages": [
+              "guide/recharge",
+              "guide/image-generation",
               "billing/models-pricing",
               "billing/usage-and-billing"
             ]

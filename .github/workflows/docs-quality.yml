@@ -4,16 +4,20 @@ on:
   pull_request:
     paths:
       - "**/*.mdx"
+      - "openapi/**/*.json"
       - "docs.json"
       - "scripts/check-docs.mjs"
+      - "scripts/check-openapi.mjs"
       - ".github/workflows/docs-quality.yml"
   push:
     branches:
       - main
     paths:
       - "**/*.mdx"
+      - "openapi/**/*.json"
       - "docs.json"
       - "scripts/check-docs.mjs"
+      - "scripts/check-openapi.mjs"
       - ".github/workflows/docs-quality.yml"
 
 permissions:
@@ -34,6 +38,9 @@ jobs:
 
       - name: Validate routes, locales, frontmatter, and internal links
         run: node scripts/check-docs.mjs
+
+      - name: Validate public OpenAPI definition
+        run: node scripts/check-openapi.mjs
 
       - name: Run Mintlify broken-link check
         run: npx --yes mint@latest broken-links
