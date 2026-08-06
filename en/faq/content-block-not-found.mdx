@@ -1,28 +1,20 @@
 ---
 title: "Content block not found"
+description: "Resolve incomplete-content errors in long, streamed, or tool-enabled sessions."
 ---
 
-`API Error: Content block not found` is usually related to model response format, protocol adaptation, or abnormal upstream responses.
+`API Error: Content block not found` means that the client could not find an expected content block. It commonly appears after a long-session resume, a tool call, or an interrupted stream.
 
-## Common Causes
+## Recommended steps
 
-1. The tool expects one response format, but the model or channel returns another.
-2. The upstream model API returns incomplete content.
-3. The request is truncated or rewritten by an upstream gateway.
-4. The selected model is not suitable for the tool's calling pattern.
+1. Start a new session and send only the necessary context.
+2. Update Claude Code, Codex, Cursor, or the relevant extension.
+3. Disable nonessential tool calls or experimental options temporarily.
+4. Shorten the one-shot input and avoid carrying excessive conversation history.
+5. Test the same model with one simple question.
 
-## Troubleshooting Steps
+## When to contact support
 
-1. Check whether the same API Key works with a simple cURL request.
-2. Confirm that the model name is correct.
-3. Test with another model.
-4. Test with a simple prompt.
-5. If the error persists, contact the administrator and provide a full error screenshot.
+Contact support when it still happens in a new session, with a simple request, across several models, or together with an unexpected charge. Provide the Request ID, time and time zone, client and version, model, original error or screenshot, and whether all sessions or only the original session fail.
 
-## Information to Provide
-
-- Tool name and version.
-- Model name.
-- Error time.
-- Error screenshot.
-- Whether all models fail, or only one specific model fails.
+Do not provide a full API key or a full conversation containing private content.

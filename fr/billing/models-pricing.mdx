@@ -1,37 +1,35 @@
 ---
-title: "Modèles, regroupement et facturation"
+title: "Modèles, groupes et tarification"
+description: "Comprenez le catalogue de modèles NexusAPI, les groupes de jetons et les prix en vigueur."
 ---
 
-NexusAPI utilise une facturation pay-as-you-go (basée sur des jetons), sans frais mensuels — vous êtes déduit en fonction de ce que vous utilisez.
+NexusAPI facture l'usage réel, sans abonnement mensuel fixe. Les modèles, prix, groupes disponibles et protocoles peuvent évoluer : le **catalogue de modèles** de la console et le résultat de votre clé sont toujours plus fiables qu'une ancienne liste de prix.
 
-## Model Plaza (Modèles à vendre / Prix / Groupement)
+## Les quatre informations à vérifier dans le catalogue
 
-Les modèles en promotion, les prix et les modèles disponibles dans chaque groupe sont tous disponibles sur la console**Modèle Carré**, basé sur des informations en temps réel :
+1. L'**ID exact** du modèle.
+2. Les **groupes de jetons** autorisés à l'utiliser.
+3. Son **prix** et son unité de facturation.
+4. Le **protocole / endpoint** approprié : `openai`, `anthropic` ou génération d'images.
 
-1. Connexion [Console NexusAPI](https://nexusapi.link), clique dans le coin supérieur droit[Modèle Carré](https://nexusapi.link/pricing)。
-2. Le côté gauche peut être pressé`模型供应商`Et`可用令牌分组`Screening.
-3. À droite figurent l’identifiant du modèle disponible, le prix, le profil, les interfaces prises en charge et d’autres informations pour chaque groupe.
+![Catalogue NexusAPI filtrable par fournisseur et groupe de jetons](/images/nexusapi/model-marketplace.png)
 
-![NexusAPI Model Plaza, regroupement par fournisseur et jeton](/images/nexusapi/model-marketplace.png)
+## Pourquoi un modèle peut apparaître dans plusieurs groupes
 
-## Comment choisir le regroupement de jetons
+Le groupe détermine les canaux, modèles et règles de prix accessibles à la clé. Un même modèle peut être proposé dans plusieurs groupes. Ne déduisez pas son accès du seul nom du groupe : filtrez le catalogue par groupe et vérifiez la fiche du modèle.
 
-Vous devez choisir lors de la création des jetons**Regroupement de jetons**。 Le regroupement détermine quels modèles la clé peut appeler et leurs prix correspondants :
+Bonnes pratiques : utilisez des clés distinctes pour la production et les tests, nommez-les clairement, et fixez des limites adaptées. Avant un déploiement, utilisez `/v1/models` pour voir les modèles réellement accessibles à la clé.
 
-- Le même modèle peut apparaître dans plusieurs groupes ; il suffit de sélectionner le groupe correspondant au modèle que vous souhaitez.
-- Ne devine pas seulement en te basant sur les noms des groupes ; Veuillez filtrer et regrouper dans la Plaza des Modèles et confirmer le modèle cible.
-- Lorsque le même projet nécessite plusieurs types de modèles, vous pouvez créer des clés API séparément pour faciliter le contrôle des quotas et la vérification de l’utilisation.
+## Composition d'un coût
 
-![Lors de la création d’un jeton avec NexusAPI, sélectionnez le regroupement de jetons](/images/nexusapi/console-create-token.png)
+Selon le modèle, le prix peut distinguer tokens d'entrée, tokens de sortie, lecture de cache ou d'autres unités clairement indiquées. Le montant final est celui du journal d'utilisation, appliqué selon les règles actuelles du catalogue.
 
-## En quoi consiste les frais ?
+| À ne pas utiliser seul | À privilégier |
+| --- | --- |
+| Ancienne capture ou liste partagée | Fiche actuelle du catalogue |
+| Liste complète visible sur le site | Réponse `/v1/models` de la clé concernée |
+| État « réussi » du client | Journal avec Request ID, tokens et coût |
 
-Différents modèles peuvent calculer séparément les jetons d’entrée, les jetons de sortie et l’utilisation liée au cache. Le montant final est basé sur l’achat unique et le prix en temps réel du modèle plaza affichés dans le journal d’utilisation de la console.
+La disponibilité dépend aussi du protocole. Les SDK généraux utilisent souvent Chat Completions, Claude Code utilise Messages et Codex CLI utilise Responses. Consultez d'abord la [matrice des capacités](/fr/developer/capability-matrix).
 
-Puisque les modèles, les prix et les groupes disponibles sont ajustés, cette page ne maintient pas de liste de modèles statiques susceptibles d’expirer.
-
-## Demande de consommation
-
-- Les détails de la transaction pour chaque appel peuvent être consultés par élément sur la page « Logs » de la console.
-- Pour comprendre la signification des enregistrements d’entrée, de sortie, de cache et de panne, veuillez continuer à lire[Dosage et description du journal](/fr/billing/usage-and-billing)。
-- Une réconciliation programmatique est nécessaire, mais elle est disponible [API de requête d’utilisation](/fr/developer/usage-logs)。
+Pour les champs de chaque appel, voir [usage et facturation](/fr/billing/usage-and-billing).

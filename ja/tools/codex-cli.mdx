@@ -1,52 +1,39 @@
 ---
-title: "Codex CLIのインストールと設定"
+title: "Codex CLI の設定"
+description: "Codex CLI をインストールし、NexusAPI をカスタム Responses Provider として設定します。"
 ---
 
-Codex CLIはOpenAIのネイティブコードエージェントです。 この記事のインストールコマンドは以下の通りです `config.toml` すべてのフィールドは次のように示されます。
-[公式OpenAIコデックス倉庫](https://github.com/openai/codex)そして
-[公式構成参照](https://learn.chatgpt.com/docs/config-file/config-advanced)標準として; NexusAPI
-APIアドレス、キー、モデルIDのみが提供されます。
+コマンドと `config.toml` の項目は [OpenAI Codex 公式リポジトリ](https://github.com/openai/codex)と[カスタム Provider リファレンス](https://learn.chatgpt.com/docs/config-file/config-advanced)に基づきます。NexusAPI は URL、API Key、モデル ID を提供します。
 
-## 1. Codex CLIをインストールする
+## 1. インストール
 
-公式のOpenAIインストール方法を一つ選び、複数の方法を混同しないでください。
-
-### Windows PowerShell
+公式の方法を一つ選びます。
 
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
 
-### macOS、Linux、またはWSL
-
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
-### インストールされたユーザー Node.js
+Node.js がある場合：
 
 ```bash
 npm install -g @openai/codex
-```
-
-設置の検証:
-
-```bash
 codex --version
 ```
 
-## 2. NexusAPIキーの作成
+## 2. 対応する Key を作成する
 
-存在する [NexusAPI コンソール](https://nexusapi.link)登場 **トークン管理→トークンの追加**、および:
+**トークン管理 → トークンを追加**で、Codex / Responses 用モデルを含むグループを選びます。[対応マトリクス](/ja/developer/capability-matrix)を確認し、Anthropic 型 Claude チャネルが Responses に対応すると仮定しないでください。
 
-1. 対象モデルを含むCodex関連グループを選択します。
-2. 例えば、識別しやすい名前を使う `codex-work`。
-3. プロジェクト予算に基づいて合理的なノルマを設定しましょう。
+## 3. カスタム Provider を設定する
 
-## 3. カスタムプロバイダーの設定
-
-Codexの個人設定ファイルは以下の通りです:Windows `%USERPROFILE%\\.codex\\config.toml`またはmacOS/Linux
-`~/.codex/config.toml`。 このファイルを作成または任意のテキストエディタで開き、次に以下と書きます。
+| OS | ファイル |
+| --- | --- |
+| Windows | `%USERPROFILE%\\.codex\\config.toml` |
+| macOS / Linux | `~/.codex/config.toml` |
 
 ```toml
 model_provider = "nexusapi"
@@ -59,68 +46,20 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-一般 `YOUR_MODEL_ID` と置き換える[モデルスクエア](https://nexusapi.link/pricing)正確なモデルIDは現在のキーグループで確認できます。
-`wire_api = "responses"`、`model_provider`、`base_url` そして `env_key` すべてCodexで公式にサポートされているカスタマイズ可能なアイテムです
-提供者分野。
+実際の Key をこのファイルや `~/.codex/auth.json` に保存しないでください。`auth.json` は Codex の OpenAI ログインキャッシュです。
 
-<Warning>
-**手動で書かないでくださいauth.json**
-
-`~/.codex/auth.json` Codex用のOpenAIログインキャッシュ。 NexusAPIは上記のバージョンを使用しています `env_key` 環境変数を読み取るために、
-NexusAPIキーをサイトに書き込んだり、コミットしたり、スクリーンショットを撮ったりしないでください `auth.json`。
-</Warning>
-## 4. API Key 環境変数を設定する
-
-ハンドル `sk-你的实际Key` 新たに作成されたキーに置き換えてください。 本物の鍵を入れるな `config.toml`。
-
-### Windows PowerShell
+## 4. 環境変数を設定する
 
 ```powershell
-setx NEXUSAPI_API_KEY "sk-你的实际Key"
+setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
 ```
-
-実行後、ターミナルを閉じて再度開き、新しい環境変数が有効に働きます。
-
-### macOS、Linux、またはWSL
-
-現在の端末で動作:
 
 ```bash
-export NEXUSAPI_API_KEY='sk-你的实际Key'
+export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
 ```
 
-このコマンドは現在の端末でのみ有効です。 長期保持が必要な場合は、ご自社システムの認証管理またはShell環境変数管理方法を使用してください。 プロジェクトリポジトリにキーを書き込まないでください。
+`setx` 後は新しいターミナルが必要です。`export` は現在の Shell だけに有効です。長期保管には OS の資格情報または管理された環境変数を使い、リポジトリに書かないでください。
 
-## 5. 立ち上げと検証
+## 5. 確認
 
-プロジェクトディレクトリに入った後、次のことを起動します:
-
-```bash
-cd your-project-folder
-codex
-```
-
-最初の検証では、ファイルを修正しないタスクを1つだけ開始することが推奨されます。例えば:
-
-```text
-请说明当前仓库的目录结构，不要修改文件。
-```
-
-## VS コード / カーソル
-
-インストールは拡張ストアから入手可能です **OpenAI** 公開
-[コデックス拡張](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。 拡張はCLIと共有されます
-`~/.codex/config.toml`古いバージョンのVS CodeにNexusAPIアドレスを書き込む必要はありません `chatgpt.apiBase` あるいは
-`chatgpt.config` フィールド。
-
-## トラブルシューティング
-
-1. 確認してください `NEXUSAPI_API_KEY` もうそこにいる**新たに開業したターミナル**中間で効果的です。
-2. キーが有効で残高が十分であることを確認してください。グループには選択したモデルが含まれます。
-3. 確認してください `model` モデルプラザに表示されているIDは完全に一致しています。
-4. 元のエラーテキストとリクエストIDを保存して、後で参照してください[自己確認](/ja/faq/self-check)。
-
-## 公式情報源
-
-- [OpenAI Codex CLI インストール手順](https://github.com/openai/codex)
-- [OpenAIコデックスのカスタムプロバイダー構成](https://learn.chatgpt.com/docs/config-file/config-advanced)
+プロジェクトで `codex` を起動し、まず「リポジトリ構成を説明し、ファイルは変更しないでください」のような読み取り専用タスクを送ります。失敗時は Key、グループ、モデル ID、新しいターミナルを確認し、Request ID を保存して[自己確認](/ja/faq/self-check)を行います。

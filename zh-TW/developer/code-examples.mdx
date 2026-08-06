@@ -1,77 +1,59 @@
 ---
-title: "程式碼整合範例"
+title: "程式碼範例"
+description: "使用 Python、JavaScript 或 cURL 透過 Chat Completions 呼叫 NexusAPI。"
 ---
 
-NexusAPI 支援主流 OpenAI SDK 的相容呼叫。 以下是一個常用開發語言的快速整合範例。關於特定的介面與參數支援，請參考 [API 參考文件](https://nexusapi.apifox.cn/) 作為標準。
+以下範例使用 OpenAI Chat Completions。先在[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)確認模型與協定，並從模型廣場複製目前 Key 可用的模型 ID。
 
-### 核心存取參數
+## 基本設定
 
-在使用任何模型之前，你需要準備以下兩個核心參數：
+- Base URL：`https://nexusapi.link/v1`
+- API Key：在 [NexusAPI 控制台](https://nexusapi.link)的令牌管理建立
+- Model ID：從模型廣場或 `/v1/models` 複製準確值
 
-- **介面位址（基礎網址）：** `https://nexusapi.link/v1`
-- **身份憑證（API 金鑰）：** 必須在我們的世界裡 [控制台](https://nexusapi.link) 生成通常由 `sk-` 開始。
-
-> **註：** 請求時，請將 API 金鑰置於 HTTP 請求標頭中 `Authorization` 欄位，格式為 `Bearer sk-xxxxxx`。
-
-### Python
-只要像之前一樣實例化客戶端 `api_key` 且 `base_url` 換成我們的吧。
+## Python
 
 ```python
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="sk-您在 NexusAPI 生成的令牌",
-    base_url="https://nexusapi.link/v1"
+    api_key="YOUR_API_KEY",
+    base_url="https://nexusapi.link/v1",
 )
 
 response = client.chat.completions.create(
-    model="claude-sonnet-4-6", # 或其他模型
-    messages=[
-        {"role": "user", "content": "你好，请自我介绍。"}
-    ],
-    stream=True # 支持流式输出
+    model="YOUR_MODEL_ID",
+    messages=[{"role": "user", "content": "請簡短自我介紹。"}],
 )
 
-for chunk in response:
-    print(chunk.choices[0].delta.content or "", end="", flush=True)
+print(response.choices[0].message.content)
 ```
 
-### JavaScript
+## JavaScript
 
 ```js
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-    apiKey: "sk-您在 NexusAPI 生成的令牌",
-    baseURL: "https://nexusapi.link/v1"
+const client = new OpenAI({
+  apiKey: process.env.NEXUSAPI_API_KEY,
+  baseURL: "https://nexusapi.link/v1",
 });
 
-async function main() {
-    const stream = await openai.chat.completions.create({
-        model: "claude-sonnet-4-6",
-        messages: [{ role: "user", content: "你好！" }],
-        stream: true,
-    });
-    for await (const chunk of stream) {
-        process.stdout.write(chunk.choices[0]?.delta?.content || "");
-    }
-}
-main();
+const response = await client.chat.completions.create({
+  model: "YOUR_MODEL_ID",
+  messages: [{ role: "user", content: "請簡短自我介紹。" }],
+});
+
+console.log(response.choices[0].message.content);
 ```
 
-### cURL
+## cURL
 
 ```bash
-curl "https://nexusapi.link/v1/chat/completions" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
-  -d '{
-    "model": "gpt-5.5",
-    "messages": [
-      {
-        "role": "user",
-        "content": "测试一下 API 是否连通"
-      }
-    ]
-  }'
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"測試連線"}]}'
 ```
+
+請不要把真實 Key 寫入程式碼或提交到儲存庫。圖片生成使用不同端點，請看[圖片模型說明](/zh-TW/guide/image-generation)；可選參數與完整 schema 請查閱 [Apifox API 文件](https://nexusapi.apifox.cn/)。

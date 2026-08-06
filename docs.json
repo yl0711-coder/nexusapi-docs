@@ -68,8 +68,8 @@
               "header": "开发者",
               "items": [
                 {
-                  "label": "接口说明",
-                  "href": "/developer/openai-compatible"
+                  "label": "接口与模型能力",
+                  "href": "/developer/capability-matrix"
                 },
                 {
                   "label": "代码示例",
@@ -125,6 +125,7 @@
             "group": "开发者接入",
             "icon": "braces",
             "pages": [
+              "developer/capability-matrix",
               "developer/openai-compatible",
               "developer/code-examples",
               "developer/usage-logs"
@@ -173,8 +174,8 @@
               "header": "開發者",
               "items": [
                 {
-                  "label": "介面說明",
-                  "href": "/zh-TW/developer/openai-compatible"
+                  "label": "介面與模型能力",
+                  "href": "/zh-TW/developer/capability-matrix"
                 },
                 {
                   "label": "程式碼範例",
@@ -230,6 +231,7 @@
             "group": "開發者串接",
             "icon": "braces",
             "pages": [
+              "zh-TW/developer/capability-matrix",
               "zh-TW/developer/openai-compatible",
               "zh-TW/developer/code-examples",
               "zh-TW/developer/usage-logs"
@@ -278,8 +280,8 @@
               "header": "Developers",
               "items": [
                 {
-                  "label": "API guide",
-                  "href": "/en/developer/openai-compatible"
+                  "label": "API and model capability",
+                  "href": "/en/developer/capability-matrix"
                 },
                 {
                   "label": "Code examples",
@@ -335,6 +337,7 @@
             "group": "Developer API",
             "icon": "braces",
             "pages": [
+              "en/developer/capability-matrix",
               "en/developer/openai-compatible",
               "en/developer/code-examples",
               "en/developer/usage-logs"
@@ -383,8 +386,8 @@
               "header": "Développeurs",
               "items": [
                 {
-                  "label": "Guide API",
-                  "href": "/fr/developer/openai-compatible"
+                  "label": "Capacités API et modèles",
+                  "href": "/fr/developer/capability-matrix"
                 },
                 {
                   "label": "Exemples de code",
@@ -440,6 +443,7 @@
             "group": "API développeur",
             "icon": "braces",
             "pages": [
+              "fr/developer/capability-matrix",
               "fr/developer/openai-compatible",
               "fr/developer/code-examples",
               "fr/developer/usage-logs"
@@ -488,8 +492,8 @@
               "header": "開発者",
               "items": [
                 {
-                  "label": "API ガイド",
-                  "href": "/ja/developer/openai-compatible"
+                  "label": "API とモデルの対応",
+                  "href": "/ja/developer/capability-matrix"
                 },
                 {
                   "label": "コード例",
@@ -545,6 +549,7 @@
             "group": "開発者向け API",
             "icon": "braces",
             "pages": [
+              "ja/developer/capability-matrix",
               "ja/developer/openai-compatible",
               "ja/developer/code-examples",
               "ja/developer/usage-logs"
@@ -593,8 +598,8 @@
               "header": "Разработчикам",
               "items": [
                 {
-                  "label": "Руководство API",
-                  "href": "/ru/developer/openai-compatible"
+                  "label": "API и возможности моделей",
+                  "href": "/ru/developer/capability-matrix"
                 },
                 {
                   "label": "Примеры кода",
@@ -650,6 +655,7 @@
             "group": "API для разработчиков",
             "icon": "braces",
             "pages": [
+              "ru/developer/capability-matrix",
               "ru/developer/openai-compatible",
               "ru/developer/code-examples",
               "ru/developer/usage-logs"
@@ -698,8 +704,8 @@
               "header": "Nhà phát triển",
               "items": [
                 {
-                  "label": "Hướng dẫn API",
-                  "href": "/vi/developer/openai-compatible"
+                  "label": "Khả năng API và mô hình",
+                  "href": "/vi/developer/capability-matrix"
                 },
                 {
                   "label": "Ví dụ mã",
@@ -755,6 +761,7 @@
             "group": "API cho nhà phát triển",
             "icon": "braces",
             "pages": [
+              "vi/developer/capability-matrix",
               "vi/developer/openai-compatible",
               "vi/developer/code-examples",
               "vi/developer/usage-logs"

@@ -1,33 +1,20 @@
 ---
-title: "Bloc de contenu non trouvé"
+title: "Content block not found"
+description: "Résolvez une erreur de bloc de contenu incomplet dans une longue session, un outil ou un flux."
 ---
 
-`API Error: Content block not found` Cela signifie que le client n’a pas trouvé le fragment de contenu attendu, que l’on voit couramment dans les longs CV de session, les appels d’outils ou les réponses qui ne s’arrêtent pas complètement.
+`API Error: Content block not found` signifie que le client n'a pas reçu le bloc de contenu attendu. Cette erreur apparaît souvent après la reprise d'une longue session, un appel d'outil ou un flux interrompu.
 
-## Étapes de traitement recommandées
+## Étapes recommandées
 
-1. Créez une nouvelle session et renvoyez le contenu nécessaire.
-2. Mettez à jour Claude Code, Codex, Cursor ou plugins associés.
-3. Désactivez temporairement les appels d’outils inutiles et les fonctionnalités expérimentales.
-4. Raccourcir le contenu d’une seule entrée et éviter de porter des archives historiques trop longues.
-5. Testez si le même modèle peut répondre correctement avec une question simple.
+1. Ouvrez une nouvelle session avec seulement le contexte nécessaire.
+2. Mettez à jour Claude Code, Codex, Cursor ou l'extension concernée.
+3. Désactivez temporairement les outils et options expérimentales non indispensables.
+4. Réduisez la longueur de l'entrée et l'historique transporté.
+5. Testez le même modèle avec une question très simple.
 
-## Quand devez-vous nous contacter ?
+## Quand contacter le support
 
-Veuillez soumettre votre question dans les situations suivantes :
+Contactez le support si l'erreur persiste dans une nouvelle session et avec une courte demande, apparaît sur plusieurs modèles ou s'accompagne d'un coût inattendu. Fournissez le Request ID, l'heure et le fuseau, le client et sa version, le modèle, l'erreur ou une capture, et indiquez si seul l'ancien fil ou toutes les sessions sont concernés.
 
-- Même après avoir créé une nouvelle session, cela réapparaît toujours.
-- Même les problèmes simples ne peuvent pas être résolus.
-- Plusieurs modèles présentent simultanément la même erreur.
-- Une consommation anormale survient après une erreur.
-
-Veuillez fournir :
-
-- Demande d’ID。
-- Erreur d’heure et fuseau horaire.
-- Outils et versions utilisés.
-- Nom du modèle.
-- Erreur de texte ou capture d’écran originale.
-- Toutes les sessions ont-elles échoué, ou seulement la session originale l’a été ?
-
-Merci de ne pas envoyer de clés API complètes ni de contenu de session complète contenant des informations privées.
+Ne fournissez ni clé API complète ni conversation privée intégrale.

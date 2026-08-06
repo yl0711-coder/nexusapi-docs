@@ -1,0 +1,60 @@
+---
+title: "API and model capability matrix"
+description: "Confirm the model, token group, and protocol before calling NexusAPI."
+---
+
+NexusAPI is a model gateway; it does not promise that every model works with every API. **The model, token group, and protocol must all match.** Use the Model Marketplace and the result returned by your current key as the live source of truth.
+
+<Info>
+**Confirm before you call**
+
+1. Confirm that the model is in your key's token group in the Model Marketplace.
+2. Confirm the protocol marked for that model.
+3. Use `/v1/models` to see what the key can actually access, then send a minimal request.
+</Info>
+
+## Publicly documented capabilities
+
+| Goal | Endpoint / protocol | When to use it | Important limit |
+| --- | --- | --- | --- |
+| List models visible to the current key | `GET /v1/models` | After creating a key and before selecting a model | It reflects the key's group and restrictions, not every model on the site. |
+| Text, chat, and streaming | `POST /v1/chat/completions` | OpenAI-compatible SDKs, scripts, and most text models | Use a model marked `openai` in the Model Marketplace. |
+| Claude Code or a native Anthropic client | `POST /v1/messages` | A model is marked `anthropic` | Do not append `/v1` again in the Claude Code base URL. |
+| Codex CLI | `POST /v1/responses` | The provider is configured as described in the [Codex guide](/en/tools/codex-cli) | It is not universal; do not use it for current Anthropic-type Claude channels. |
+| Image generation | `POST /v1/images/generations` | The Model Marketplace explicitly marks the model for image generation | Pass only options supported by the selected image model. |
+
+<Warning>
+**Do not treat every New API route as a NexusAPI promise**
+
+The underlying New API software can contain more compatible routes than this table. NexusAPI supports only the capabilities explicitly described here, in the Model Marketplace, or in an official guide. Image edits and variations, embeddings, audio, rerank, and native Gemini are not currently documented as general public NexusAPI capabilities; do not use a production workload to guess whether they work.
+</Warning>
+
+## Check models with the current key
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+Copy a model ID from `data[].id`. Some model-list responses also include `supported_endpoint_types`; when present, use it to see whether a model is marked `openai` or `anthropic`.
+
+`/v1/models` is a point-in-time view for one key. The Model Marketplace shows prices, groups, and descriptions. If they differ, follow the current key result and console state.
+
+## A simple protocol rule
+
+| You are using | Start with |
+| --- | --- |
+| Python, JavaScript, cURL, or an OpenAI-compatible SDK | `/v1/chat/completions` |
+| Claude Code | The Messages configuration in the [Claude Code guide](/en/tools/claude-code) |
+| Codex CLI | The Responses provider in the [Codex CLI guide](/en/tools/codex-cli) |
+| An image model | The [image model guide](/en/guide/image-generation) |
+
+If a model is visible but the call still fails, check its ID, your token group, and the request path first. Keep the Request ID and use the [self-check guide](/en/faq/self-check).
+
+## Where to find details
+
+- This page answers **which API to use for a current model**.
+- [Chat Completions](/en/developer/openai-compatible) provides a minimal text-call example.
+- [Apifox API reference](https://nexusapi.apifox.cn/) provides field-level request and response details.
+
+Model capabilities and channels change. Ask support before using a capability not listed here.

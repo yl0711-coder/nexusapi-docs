@@ -1,48 +1,44 @@
 ---
-title: "Interface compatible OpenAI"
+title: "API Chat Completions"
+description: "Appelez les modèles texte NexusAPI avec le format OpenAI Chat Completions."
 ---
 
-NexusAPI est compatible avec les appels d’interface de type OpenAI.
+Cette page couvre uniquement **OpenAI Chat Completions**. Avant l'appel, vérifiez le modèle, le groupe et le protocole dans la [matrice des capacités](/fr/developer/capability-matrix).
 
-## Complétions de chat
+<Tip>
+Le catalogue et la matrice indiquent la disponibilité actuelle des modèles. La [référence API Apifox](https://nexusapi.apifox.cn/) décrit les champs et les schémas de réponse.
+</Tip>
 
-Adresse de demande :
+## Endpoint
 
 ```text
 POST https://nexusapi.link/v1/chat/completions
 ```
 
-Exemple de demande :
+## Requête minimale
 
 ```bash
 curl 'https://nexusapi.link/v1/chat/completions' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer YOUR_API_KEY' \
   -d '{
-    "model": "claude-sonnet-4-6",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你好"
-      }
-    ]
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "Bonjour"}]
   }'
 ```
 
-## Tête de demande
-
-| Tête de demande | Obligatoire | Explication |
+| En-tête | Obligatoire | Valeur |
 | --- | --- | --- |
-| `Content-Type` | Oui | Fixé à `application/json` |
-| `Authorization` | Oui | Le format est `Bearer YOUR_API_KEY` |
+| `Content-Type` | Oui | `application/json` |
+| `Authorization` | Oui | `Bearer YOUR_API_KEY` |
 
-## Erreurs courantes
+## Premiers contrôles en cas d'erreur
 
-| Faux | Raisons possibles |
+| Résultat | Vérification |
 | --- | --- |
-| 401 | Erreur de clé API, clé non livrée, ou clé invalide |
-| 429 | Les requêtes sont trop rapides, la limitation de la vitesse est déclenchée, ou le service est temporairement occupé |
-| 500/502/503 | Le traitement des requêtes échoue temporairement ou le service devient indisponible |
-| 524 | Demande que le délai d’attente soit trop long |
+| 401 | Clé absente, invalide, expirée ou désactivée. |
+| 429 | Débit, concurrence ou limitation temporaire en amont. |
+| 500 / 502 / 503 | Incident de traitement temporaire ; attendez puis réessayez une seule fois. |
+| 524 | Dépassement du délai d'attente. |
 
-Veuillez enregistrer l’ID de la requête en cas d’erreur et les référer[Vérifiez vous-même le problème](/fr/faq/self-check)。 Ne réessayez pas à haute fréquence sur une courte période.
+`status_code=500, not implemented` avec `/v1/responses` et un canal Claude de type Anthropic est une incompatibilité de protocole, pas un 500 transitoire. Utilisez Chat Completions pour une application personnalisée ou la configuration Messages de Claude Code. Conservez le Request ID et consultez l'[auto-vérification](/fr/faq/self-check).

@@ -1,30 +1,54 @@
 ---
-title: "Create an API Key"
+title: "Create and protect an API key"
+description: "Create a NexusAPI key with the right group, limits, and safety settings."
 ---
 
-An API Key is the credential used to call NexusAPI endpoints.
+An API key identifies your model requests to NexusAPI.
 
-## Creation Flow
+## Create a key
 
 1. Sign in to the NexusAPI console.
-2. Open Token Management or API Key Management.
-3. Click Add Token.
-4. Enter a token name.
-5. Select an available group.
-6. Configure quota or usage limits.
-7. Submit the form and copy the generated API Key.
+2. Open **Token Management** or **API Key Management**.
+3. Select **Add token**.
+4. Give the token a recognizable name.
+5. Choose a token group.
+6. Set an appropriate limit or restriction for its purpose.
+7. Submit, then copy the generated API key.
 
-## How to Use
+## Recommended settings
 
-Send the API Key in the `Authorization` request header:
+| Setting | Recommendation |
+| --- | --- |
+| Name | Use a project or client name, such as `codex-work`. |
+| Token group | Choose the group that contains the target model. |
+| Limit | Set a sensible upper limit for the project. |
+| Model restriction | Enable it only when you need to restrict the key to specified models. |
+| IP allowlist | Use it only when your server has a stable outbound IP address. |
+| Expiry | Set an expiry date for temporary test keys. |
+
+## Use the key
+
+Send the key in the `Authorization` header:
 
 ```http
 Authorization: Bearer YOUR_API_KEY
 ```
 
-## Security Recommendations
+## Keep it safe
 
-- Do not commit API Keys to public code repositories.
-- Do not share API Keys with strangers.
-- Create separate API Keys for different use cases.
-- If you suspect a key has been leaked, delete it immediately and create a new one.
+- Never commit an API key to a public repository.
+- Do not share a full key in screenshots, support tickets, or chat logs.
+- Use a separate key for each project, person, and environment.
+- In production, load it from environment variables or a secret manager instead of source code.
+- Review usage logs regularly. Disable a key immediately if you see unexpected use.
+- If a key may be exposed, disable or delete it first, create a replacement, and update the affected applications.
+
+## API key and other credentials
+
+| Credential | Purpose |
+| --- | --- |
+| API key | Calls model APIs such as Chat Completions, Responses, Messages, Images, and `/v1/models`. |
+| System access token | Reads your account's [usage-log API](/en/developer/usage-logs). It cannot call models. |
+| Console session / cookie | Signs you in through a browser. It cannot be used as a model API credential. |
+
+Treat the system access token as a secret too. Do not put either credential in a URL query string or send it in full to support.

@@ -1,47 +1,36 @@
 ---
-title: "Choisissez l’outil qui vous convient"
+title: "Choisir un outil client"
+description: "Choisissez le bon client NexusAPI sans mélanger protocole, URL ni identifiants."
 ---
 
-Différents outils servent à des façons différentes de travailler. Choisissez en fonction de votre usage prévu, puis passez au tutoriel correspondant pour éviter de mélanger adresses et fichiers de configuration.
+Choisissez d'abord l'outil adapté à votre flux de travail, puis suivez son guide. Les clients utilisent Chat Completions, Messages natif ou Responses ; ne copiez pas une Base URL ou un fichier de configuration d'un outil vers un autre.
 
-## Sélection rapide
+## Choix rapide
 
-| Vos besoins | Entrée recommandée | À qui tu conviens |
+| Besoin | Guide | Usage |
 | --- | --- | --- |
-| Laissez l’IA gérer le code et les tâches de projet dans le terminal | [Claude Code](/fr/tools/claude-code) | Développeurs utilisant le flux de travail Claude |
-| Utiliser des agents terminaux Codex | [Codex CLI](/fr/tools/codex-cli) | Développeurs utilisant le flux de travail Réponses / Codex |
-| Basculation entre plusieurs configurations de fournisseurs | [Commutateur CC](/fr/tools/cc-switch) | Gérer les utilisateurs avec plusieurs configurations CLI simultanément |
-| Utiliser le code Claude dans VS Code ou curseur | [VS Code / Curseur](/fr/tools/cursor-vscode) | Utilisateurs qui préfèrent l’interface éditeur |
-| Écrivez votre propre programme pour appeler l’API | [Aperçu des méthodes d’accès](/fr/guide/integration-overview) | Développeurs d’applications et scripts automatisés |
+| Agent de code en terminal | [Claude Code](/fr/tools/claude-code) | Flux de travail Claude |
+| Agent Codex en terminal | [Codex CLI](/fr/tools/codex-cli) | Flux Responses / Codex |
+| Plusieurs fournisseurs locaux | [CC Switch](/fr/tools/cc-switch) | Changer de configuration CLI |
+| Claude Code dans un éditeur | [VS Code / Cursor](/fr/tools/cursor-vscode) | Travail dans l'éditeur |
+| Application ou script | [Aperçu d'intégration](/fr/guide/integration-overview) | SDK et automatisation |
 
-## Confirmez avant la configuration
+## Avant une modification locale
 
-1. Une clé API a été créée, et une limite raisonnable a été fixée.
-2. Le groupe de clés API inclut le modèle cible.
-3. Copiez l’ID exact du modèle depuis le carré du modèle.
-4. L’outil de sauvegarde a déjà des configurations ; ne supprimez pas directement tout le répertoire de configuration.
-5. Après l’achèvement, envoyez une courte demande de test et vérifiez les journaux d’utilisation.
+1. Créez une clé avec une limite adaptée.
+2. Vérifiez son groupe et le modèle cible.
+3. Copiez l'ID exact depuis le catalogue ou `/v1/models`.
+4. Sauvegardez le fichier de configuration existant.
+5. Testez une petite requête en lecture seule, puis consultez le journal.
 
 <Warning>
-**Ne lancez pas directement de scripts à un clic d’origine inconnue**
-
-Les scripts d’installation ou de configuration automatiques peuvent modifier des configurations locales, écrire des clés API ou installer des composants tiers. Avant de l’exécuter, vérifiez la source, lisez le contenu du script et sauvegardez la configuration existante.
+N'exécutez pas de script « en un clic » de source inconnue. Il peut modifier la configuration, enregistrer des identifiants ou installer du code tiers. Utilisez les sources officielles, lisez le script et ne collez jamais une clé dans un script non fiable.
 </Warning>
-## Pourquoi l’adresse est-elle différente pour chaque outil ?
 
-Certains outils doivent être inclus `/v1` Adresses API, certains outils concaténent automatiquement les chemins, tandis que d’autres utilisent des protocoles natifs Messages ou Responses.
+| Type de client | Base URL habituelle | Protocole |
+| --- | --- | --- |
+| SDK OpenAI compatible / application | `https://nexusapi.link/v1` | Chat Completions |
+| Claude Code | `https://nexusapi.link` | Messages |
+| Codex CLI | `https://nexusapi.link/v1` | Provider Responses |
 
-Veuillez utiliser l’adresse fournie dans le tutoriel correspondant ; ne copiez pas les configurations de Claude Code, Codex CLI ou du SDK générique OpenAI. Voir explication détaillée[Aperçu des méthodes d’accès](/fr/guide/integration-overview)。
-
-## Vos outils ne sont pas inclus dans le tutoriel
-
-Si un client prend en charge des adresses personnalisées compatibles OpenAI, vous pouvez vous y référer en premier[Commence rapidement en 5 minutes](/fr/guide/quick-start)et la documentation officielle du client.
-
-Veuillez confirmer avant la configuration :
-
-- Le client prend-il en charge des URL de base personnalisées ?
-- Le client utilise-t-il les Réponses ou les Réponses de Chat ?
-- Si le client complétera automatiquement les données `/v1`。
-- Si l’ID du modèle peut être saisi manuellement.
-
-Les clients non vérifiés ne seront pas inclus dans les tutoriels officiels juste pour augmenter le nombre de pages.
+La disponibilité dépend encore du modèle et du groupe : consultez la [matrice des capacités](/fr/developer/capability-matrix).

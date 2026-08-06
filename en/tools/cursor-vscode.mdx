@@ -1,57 +1,49 @@
 ---
-title: "Use Claude Code in VS Code or Cursor"
+title: "Claude Code in VS Code or Cursor"
+description: "Use the official Claude Code editor extension with your existing NexusAPI user configuration."
 ---
 
-The official Claude Code extension provides graphical chat, diff previews, file references, and permission prompts. VS Code and Cursor use essentially the same setup.
+The official Claude Code extension offers chat, diff previews, file references, and permission prompts. VS Code and Cursor use the same underlying Claude Code user configuration.
 
-## 1. Install the Extension
+## 1. Install the official extension
 
-Before starting:
-
-- Use VS Code 1.98 or later.
-- Complete the [Claude Code setup](/en/tools/claude-code).
-- Confirm that the NexusAPI token and Base URL work in `~/.claude/settings.json`.
-
-Open the Extensions view, search for `Claude Code`, and verify that the publisher is **Anthropic**. You can also use the install links in the [official Claude Code VS Code guide](https://code.claude.com/docs/en/vs-code).
+First complete the [Claude Code setup](/en/tools/claude-code). In the editor's Extensions view, search for **Claude Code** and confirm that the publisher is **Anthropic**. You can also use the [official VS Code guide](https://code.claude.com/docs/en/vs-code).
 
 <Warning>
-**Verify the publisher**
-
-Similar third-party extensions may exist. Install `Claude Code` published by `Anthropic`.
+Similar third-party extensions may appear in search. Install the extension published by Anthropic, and do not paste API keys into a third-party settings panel.
 </Warning>
-## 2. Use the NexusAPI Configuration
 
-The extension and CLI share `~/.claude/settings.json`. Do not duplicate the API key in VS Code or Cursor `settings.json`.
+## 2. Reuse the user-level NexusAPI configuration
 
-If the extension still shows a sign-in prompt:
+The extension reads the same `~/.claude/settings.json` (or Windows user-profile equivalent) as the CLI. Do not duplicate the NexusAPI key in VS Code or Cursor workspace settings.
 
-1. Open editor settings.
-2. Search for `Claude Code login`.
-3. Enable **Disable Login Prompt**.
-4. Fully restart the editor.
+If the editor still shows a sign-in prompt:
 
-If the editor does not inherit your terminal environment, start VS Code from a configured terminal with:
+1. Open editor settings and search for `Claude Code login`.
+2. Enable **Disable Login Prompt** when applicable.
+3. Fully restart the editor.
+
+If an editor launched from the desktop does not inherit your environment, start it from a configured terminal with:
 
 ```bash
 code .
 ```
 
-Cursor users can restart Cursor or run `claude` in Cursor's integrated terminal.
+## 3. Verify with a safe request
 
-## 3. Open and Verify Claude Code
-
-Open Claude Code from the editor icon, Activity Bar, Command Palette, or status bar. Then send a read-only test:
-
-![Official Claude Code extension interface in VS Code](/images/nexusapi/claude-code-vscode-official.jpg)
-
-> Interface example from the
-> [official Claude Code VS Code documentation](https://code.claude.com/docs/en/vs-code).
-> Button placement may change between extension versions.
+Open Claude Code from its editor icon, Activity Bar, Command Palette, or status bar. Send a read-only test such as:
 
 ```text
 Explain what the current file does without modifying it.
 ```
 
-If it responds normally, the extension is using the NexusAPI configuration.
+Then verify one matching entry in the NexusAPI usage log.
 
-When reporting a problem, keep the editor version, extension version, Claude Code version, original error, and Request ID.
+## Troubleshooting
+
+- Confirm the extension, editor, and Claude Code versions are current.
+- Use `/status` in the integrated terminal to confirm the Base URL is `https://nexusapi.link`.
+- Restart the entire editor after changing `settings.json`.
+- Preserve the original error and Request ID, then use [self-check](/en/faq/self-check).
+
+Never send a full API key, workspace secret, or private source file to support.

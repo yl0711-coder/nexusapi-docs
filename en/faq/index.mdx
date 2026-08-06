@@ -1,57 +1,33 @@
 ---
-title: "Frequently Asked Questions"
+title: "Frequently asked questions"
+description: "Find the right NexusAPI guide for setup, billing, and API errors."
 ---
 
-First, choose the phenomenon closest to you. When encountering a call error, please save the Request ID and the full error text first.
+When a call fails, save the Request ID and the complete error text before changing settings or retrying.
 
-## Access and configuration
+## Setup and configuration
 
-- **Where to start using it for the first time?**
-  Read on[Start quickly in 5 minutes](/en/guide/quick-start)。
+- **Where should I start?** Read the [quick start](/en/guide/quick-start).
+- **Which Base URL should I use?** It depends on the client; see the [integration overview](/en/guide/integration-overview).
+- **Why do I see 404?** Check for `/v1/v1/...` and whether the client appends a path automatically.
+- **Why does a new API key fail?** Check its status, credit, token group, model ID, and `Authorization: Bearer` format.
 
-- **Which base URL should be filled?**
-  Different clients may have different rates, please check[Overview of access methods](/en/guide/integration-overview)。
+## Models and charges
 
-- **Why did 404 appear?**
-  Check if the address is formed `/v1/v1/...`, and whether the client automatically concatenates the request path.
+- **How do I know whether a group can use a model?** Filter the [Model Marketplace](https://nexusapi.link/pricing) by the group and copy the exact ID.
+- **How much did one request cost?** Use the console log and read [usage and billing](/en/billing/usage-and-billing).
+- **Can an error be charged?** It can be, if an upstream request already ran or the client sent a new request. Reconcile by Request ID.
+- **Why is the balance normal but the key says insufficient credit?** Check account credit, key limit, expiry, and group.
 
-- **Can I not use the API Key after creation?**
-  Check Key status, amount, grouping, model ID, and `Authorization: Bearer` Format.
+## API errors
 
-## Models, groupings, and costs
+- **What do 400, 401, 429, 500, 502, 503, 504, or 524 mean?** See [API error guide](/en/faq/common-errors).
+- **Why can a long conversation no longer continue?** Save the error, start a new session, and avoid repeatedly submitting the same request.
+- **Why is image generation slow or timed out?** It is synchronous. Keep the Request ID and do not immediately submit the same job again.
+- **Why did an error later appear to succeed?** Do not assume the platform retried it; check client retries and matching Request IDs.
 
-- **How do you confirm whether a group can use the target model?**
-  Exist[Model Square](https://nexusapi.link/pricing)Filter and replicate accurate model IDs by group.
+## Get help efficiently
 
-- **How much does a single request consume?**
-  View input, output, cache, and spend in the console usage log. See field descriptions[Dosage and log description](/en/billing/usage-and-billing)。
+Use the [self-check guide](/en/faq/self-check), then provide the Request ID, time and time zone, client and version, model, endpoint, full error text, and whether the issue is intermittent or persistent.
 
-- **Will a failed request be charged?**
-  Errors without generating valid content are usually zero; if there is interruption or subsequent attempts, verification must be made using the Request ID.
-
-- **Why does the balance remain normal, but the quota is insufficient?**
-  Also check account balance, API Key limit, and grouping; Submit the Request ID when it persists.
-
-## Invocation error
-
-- **What are 400, 401, 429, 500, 502, 503, 504, 524?**
-  View[API Call FAQ](/en/faq/common-errors)。
-
-- **Suddenly unable to continue a long conversation?**
-  Save the original error text and create a new session for verification; Do not repeatedly submit the same request frequently.
-
-- **After the mistake, the mission succeeded again?**
-  Subsequent attempts may occur; please refer to the final record with the same Request ID and the client's final result.
-
-## Get help quickly
-
-If you cannot determine the type of problem, press [Self-check the issue](/en/faq/self-check)Complete minimum verification and submit it all at once:
-
-- Request ID
-- Time and time zone of occurrence
-- Client and Version
-- Model and request interface
-- Complete error in the original text
-- The question is whether it happens occasionally or continuously
-
-Do not submit complete API Keys, passwords, or private data.
+Never send a full API key, password, or private content.

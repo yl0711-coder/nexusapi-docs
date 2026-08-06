@@ -1,77 +1,59 @@
 ---
-title: "コード統合の例"
+title: "コード例"
+description: "Python、JavaScript、cURL から Chat Completions で NexusAPI を呼び出します。"
 ---
 
-NexusAPIは主流のOpenAI SDKとの互換性のある呼び出しをサポートしています。 以下は、よく使われる開発言語の簡単な統合例です。特定のインターフェースおよびパラメータサポートについては、以下を参照してください。 [APIリファレンスドキュメント](https://nexusapi.apifox.cn/) 標準として。
+以下は OpenAI Chat Completions の例です。先に[対応マトリクス](/ja/developer/capability-matrix)でプロトコルを確認し、モデルマーケットプレイスまたは `/v1/models` から現在の Key で使える ID をコピーしてください。
 
-### コアアクセスパラメータ
+## 基本設定
 
-どのモデルを使う前に、以下の2つのコアパラメータを準備する必要があります。
+- Base URL: `https://nexusapi.link/v1`
+- API Key: [NexusAPI コンソール](https://nexusapi.link)のトークン管理で作成
+- Model ID: 現在の Key で利用可能な正確な ID
 
-- **インターフェースアドレス(ベースURL):** `https://nexusapi.link/v1`
-- **アイデンティティ認証(APIキー):** 私たちのものに必要です [コントロールコンソール](https://nexusapi.link) 生成は通常、 `sk-` 始まり。
-
-> **注:** リクエスト時には、HTTPリクエストヘッダーにAPIキーを配置してください `Authorization` フィールドは次のようにフォーマットされます。 `Bearer sk-xxxxxx`。
-
-### パイソン
-クライアントを以前と同じようにインスタンス化するだけです `api_key` そして `base_url` ただ私たちのに替えればいい。
+## Python
 
 ```python
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="sk-您在 NexusAPI 生成的令牌",
-    base_url="https://nexusapi.link/v1"
+    api_key="YOUR_API_KEY",
+    base_url="https://nexusapi.link/v1",
 )
 
 response = client.chat.completions.create(
-    model="claude-sonnet-4-6", # 或其他模型
-    messages=[
-        {"role": "user", "content": "你好，请自我介绍。"}
-    ],
-    stream=True # 支持流式输出
+    model="YOUR_MODEL_ID",
+    messages=[{"role": "user", "content": "簡単に自己紹介してください。"}],
 )
 
-for chunk in response:
-    print(chunk.choices[0].delta.content or "", end="", flush=True)
+print(response.choices[0].message.content)
 ```
 
-### JavaScript
+## JavaScript
 
 ```js
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-    apiKey: "sk-您在 NexusAPI 生成的令牌",
-    baseURL: "https://nexusapi.link/v1"
+const client = new OpenAI({
+  apiKey: process.env.NEXUSAPI_API_KEY,
+  baseURL: "https://nexusapi.link/v1",
 });
 
-async function main() {
-    const stream = await openai.chat.completions.create({
-        model: "claude-sonnet-4-6",
-        messages: [{ role: "user", content: "你好！" }],
-        stream: true,
-    });
-    for await (const chunk of stream) {
-        process.stdout.write(chunk.choices[0]?.delta?.content || "");
-    }
-}
-main();
+const response = await client.chat.completions.create({
+  model: "YOUR_MODEL_ID",
+  messages: [{ role: "user", content: "簡単に自己紹介してください。" }],
+});
+
+console.log(response.choices[0].message.content);
 ```
 
-### cURL
+## cURL
 
 ```bash
-curl "https://nexusapi.link/v1/chat/completions" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
-  -d '{
-    "model": "gpt-5.5",
-    "messages": [
-      {
-        "role": "user",
-        "content": "测试一下 API 是否连通"
-      }
-    ]
-  }'
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"接続テスト"}]}'
 ```
+
+実際の Key をソースコードに書いたりリポジトリにコミットしたりしないでください。画像生成は別 endpoint です。[画像モデルガイド](/ja/guide/image-generation)を参照してください。

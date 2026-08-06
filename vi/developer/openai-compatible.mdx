@@ -1,48 +1,44 @@
 ---
-title: "Giao diện tương thích OpenAI"
+title: "API Chat Completions"
+description: "Gọi mô hình văn bản NexusAPI theo định dạng OpenAI Chat Completions."
 ---
 
-NexusAPI tương thích với các lệnh gọi giao diện kiểu OpenAI.
+Trang này chỉ nói về **OpenAI Chat Completions**. Trước khi gọi, hãy xác nhận mô hình, nhóm token và giao thức khớp nhau trong [ma trận khả năng](/vi/developer/capability-matrix).
 
-## Hoàn thành trò chuyện
+<Tip>
+Chợ mô hình và ma trận cho biết khả năng hiện tại. Để xem đầy đủ trường yêu cầu và schema phản hồi, dùng [tài liệu API Apifox](https://nexusapi.apifox.cn/).
+</Tip>
 
-Địa chỉ yêu cầu:
+## Endpoint
 
 ```text
 POST https://nexusapi.link/v1/chat/completions
 ```
 
-Ví dụ yêu cầu:
+## Yêu cầu tối thiểu
 
 ```bash
 curl 'https://nexusapi.link/v1/chat/completions' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer YOUR_API_KEY' \
   -d '{
-    "model": "claude-sonnet-4-6",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你好"
-      }
-    ]
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "Xin chào"}]
   }'
 ```
 
-## Yêu cầu đầu
-
-| Yêu cầu đầu | Bắt buộc | Giải thích |
+| Header | Bắt buộc | Giá trị |
 | --- | --- | --- |
-| `Content-Type` | Đúng vậy | Cố định vào `application/json` |
-| `Authorization` | Đúng vậy | Định dạng là `Bearer YOUR_API_KEY` |
+| `Content-Type` | Có | `application/json` |
+| `Authorization` | Có | `Bearer YOUR_API_KEY` |
 
-## Những sai lầm phổ biến
+## Kiểm tra đầu tiên khi lỗi
 
-| Sai rồi | Những lý do có thể xảy ra |
+| Kết quả | Hãy kiểm tra |
 | --- | --- |
-| 401 | Lỗi khóa API, khóa không được giao hoặc khóa không hợp lệ |
-| 429 | Yêu cầu quá nhanh, bị giới hạn tốc độ hoặc dịch vụ tạm thời bận |
-| 500/502/503 | Xử lý yêu cầu tạm thời thất bại hoặc dịch vụ trở nên không khả dụng |
-| 524 | Yêu cầu thời gian chờ quá lâu |
+| 401 | Key bị thiếu, sai, hết hạn hoặc bị vô hiệu. |
+| 429 | Tần suất, đồng thời hoặc giới hạn upstream tạm thời. |
+| 500 / 502 / 503 | Lỗi xử lý/upstream tạm thời; chờ rồi chỉ thử lại một lần. |
+| 524 | Vượt giới hạn chờ. |
 
-Vui lòng lưu Mã Yêu Cầu khi gặp lỗi và tham khảo chúng[Tự kiểm tra vấn đề](/vi/faq/self-check)。 Không thử lại với tần suất cao trong thời gian ngắn.
+`status_code=500, not implemented` khi gọi kênh Claude kiểu Anthropic qua `/v1/responses` là lỗi không tương thích giao thức, không phải 500 tạm thời. Ứng dụng tự viết nên dùng Chat Completions; Claude Code dùng cấu hình Messages gốc. Lưu Request ID và làm [tự kiểm tra](/vi/faq/self-check).

@@ -1,37 +1,33 @@
 ---
-title: "Mô hình, nhóm và thanh toán"
+title: "Mô hình, nhóm và giá"
+description: "Hiểu Chợ mô hình NexusAPI, nhóm token và giá hiện hành."
 ---
 
-NexusAPI sử dụng thanh toán trả theo mức sử dụng (dựa trên token), không có phí hàng tháng — bạn sẽ bị trừ dựa trên những gì bạn sử dụng.
+NexusAPI tính phí theo mức sử dụng thực tế, không có phí thuê bao cố định. Mô hình, giá, nhóm khả dụng và giao thức có thể thay đổi; hãy coi **Chợ mô hình** trong console và kết quả của khóa hiện tại là nguồn thông tin chuẩn, không dùng bảng giá cũ.
 
-## Model Plaza (Mô hình đang bán / Giá cả / Phân nhóm)
+## Bốn điều cần xác nhận trong Chợ mô hình
 
-Các mẫu đang giảm giá, giá cả và các mẫu có sẵn trong từng nhóm đều có trên console**Mô hình vuông**, dựa trên thông tin thời gian thực:
+1. **Model ID** chính xác.
+2. **Nhóm token** được phép dùng mô hình.
+3. **Giá** hiện tại và đơn vị tính.
+4. **Giao thức / endpoint**: `openai`, `anthropic` hoặc tạo ảnh.
 
-1. Đăng nhập [Bảng điều khiển NexusAPI](https://nexusapi.link), nhấp vào góc trên bên phải[Mô hình vuông](https://nexusapi.link/pricing)。
-2. Phía bên trái có thể được nhấn`模型供应商`Và`可用令牌分组`Sàng lọc.
-3. Bên phải là mã mẫu có sẵn, giá cả, hồ sơ, giao diện hỗ trợ và các thông tin khác cho từng nhóm.
+![Chợ mô hình NexusAPI có thể lọc theo nhà cung cấp và nhóm token](/images/nexusapi/model-marketplace.png)
 
-![NexusAPI Model Plaza, nhóm theo nhà cung cấp và token](/images/nexusapi/model-marketplace.png)
+## Vì sao một mô hình có thể có ở nhiều nhóm
 
-## Cách chọn nhóm token
+Nhóm xác định kênh, mô hình và quy tắc giá mà key có thể dùng. Cùng một mô hình có thể xuất hiện ở nhiều nhóm. Đừng suy ra chỉ từ tên nhóm; hãy lọc theo nhóm trong Chợ mô hình và kiểm tra thẻ mô hình.
 
-Bạn cần chọn thời điểm tạo token**Nhóm token**。 Nhóm xác định mô hình mà khóa có thể gọi và giá tương ứng của chúng:
+Nên dùng key riêng cho production, thử nghiệm và từng trung tâm chi phí, đặt tên rõ ràng và giới hạn phù hợp. Trước khi triển khai, gọi `/v1/models` để xem chính xác mô hình key đó truy cập được.
 
-- Cùng một mô hình có thể xuất hiện trong nhiều nhóm; chỉ cần chọn nhóm tương ứng với mô hình bạn muốn.
-- Đừng chỉ đoán dựa trên tên nhóm; Vui lòng lọc và nhóm trong Model Plaza và xác nhận mẫu mục tiêu.
-- Khi cùng một dự án yêu cầu nhiều loại mô hình, bạn có thể tạo API Keys riêng biệt để hỗ trợ kiểm soát hạn ngạch và xác minh sử dụng.
+## Chi phí được tạo thành như thế nào
 
-![Khi tạo token với NexusAPI, chọn nhóm token](/images/nexusapi/console-create-token.png)
+Tùy mô hình, token đầu vào, token đầu ra, đọc cache hoặc các đơn vị khác được nêu rõ có thể được tính riêng. Giá cuối cùng là giá trị trong nhật ký sử dụng áp dụng theo quy tắc hiện tại của Chợ mô hình.
 
-## Phí bao gồm những gì?
+| Không nên chỉ dựa vào | Nên dùng |
+| --- | --- |
+| Ảnh chụp hoặc bảng giá cũ | Thẻ mô hình hiện tại |
+| Danh sách toàn bộ mô hình trên website | Phản hồi `/v1/models` của key đó |
+| Trạng thái “thành công” trong client | Nhật ký có Request ID, token và chi phí |
 
-Các mô hình khác nhau có thể tính toán riêng các token đầu vào, token đầu ra và mức sử dụng liên quan đến bộ nhớ đệm. Số tiền cuối cùng dựa trên lần mua duy nhất và giá theo thời gian thực của mô hình plaza được hiển thị trong nhật ký sử dụng console.
-
-Vì các mẫu mã, giá cả và nhóm có sẵn đều được điều chỉnh, trang này không duy trì danh sách các mẫu cố định dễ hết hạn.
-
-## Điều tra tiêu thụ
-
-- Chi tiết giao dịch cho mỗi cuộc gọi có thể được xem theo mục trên trang "Nhật ký" của bảng điều khiển.
-- Để hiểu ý nghĩa của các bản ghi đầu vào, đầu ra, bộ nhớ đệm và lỗi lỗi, vui lòng đọc tiếp[Mô tả liều lượng và nhật ký](/vi/billing/usage-and-billing)。
-- Cần có sự hòa giải theo chương trình, nhưng nó đã có sẵn [API truy vấn sử dụng](/vi/developer/usage-logs)。
+Khả năng dùng còn phụ thuộc giao thức: SDK chung thường dùng Chat Completions, Claude Code dùng Messages, Codex CLI dùng Responses. Hãy xem [ma trận khả năng](/vi/developer/capability-matrix) trước.

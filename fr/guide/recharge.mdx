@@ -1,24 +1,30 @@
 ---
-title: "Limite d’achat"
+title: "Acheter du crédit"
+description: "Achetez du crédit NexusAPI, vérifiez son attribution et traitez un incident de paiement sans divulguer de secrets."
 ---
 
-Après vous être connecté à la console NexusAPI, vous pouvez acheter des limites de crédit dans votre portefeuille ou sur la page de recharge.
+NexusAPI déduit le crédit du compte selon l'usage réel. Avant un achat, définissez le budget et le modèle nécessaires. Une erreur isolée ne justifie pas de relancer plusieurs paiements.
 
-![Sur la page de gestion du portefeuille NexusAPI et de la limite d’achats, les données de compte sont déjà désensibilisées](/images/nexusapi/console-wallet-topup.png)
+## Achat en ligne
 
-## Processus d’achat
+1. Connectez-vous à la [console NexusAPI](https://nexusapi.link).
+2. Ouvrez **Gestion du portefeuille** ou la page de crédit.
+3. Choisissez le montant et un moyen de paiement disponible.
+4. Terminez le paiement sur la page prévue.
+5. Revenez à la console et vérifiez le solde et l'état de la commande.
 
-1. Connectez-vous à la console.
-2. Allez sur la gestion de portefeuille ou les pages de dépôt en ligne.
-3. Sélectionnez le montant du dépôt.
-4. Complétez le paiement.
-5. Retournez sur la console pour confirmer que la limite de crédits a été créditée.
+<Tip>
+Conservez le numéro de commande, l'heure, le fuseau horaire, le montant et le moyen de paiement. Ces informations permettent un rapprochement plus fiable qu'une simple capture d'écran.
+</Tip>
 
-## Notes sur le reçu
+## Le crédit est présent mais l'appel échoue
 
-En général, la limite de crédit sera créditée automatiquement après l’exécution du paiement en ligne. Si le paiement est accepté mais que la limite de crédit n’est pas arrivée depuis longtemps, veuillez contacter l’administrateur et fournir :
+Le crédit n'est qu'une condition parmi d'autres. Vérifiez aussi : le statut et la limite de la clé, sa date d'expiration, son groupe, l'ID du modèle et le protocole de la requête.
 
-- Compte
-- Délai de paiement
-- Montant du paiement
-- Capture d’écran de l’ordre de paiement
+Ne confondez pas le solde du compte, la limite d'une clé, l'accès du groupe et une erreur temporaire d'un fournisseur. Consultez les [erreurs API courantes](/fr/faq/common-errors) pour le diagnostic.
+
+## Paiement ou attribution en attente
+
+Attendez le délai indiqué par la page de paiement, puis actualisez la console. Si le crédit reste inchangé, envoyez au support le numéro de commande, l'heure et le fuseau, le montant, le moyen de paiement, l'identifiant du compte et une capture. Ne communiquez jamais un mot de passe, le numéro complet d'une carte ou une clé API.
+
+Pour suivre les dépenses, lisez [modèles, groupes et tarification](/fr/billing/models-pricing) et [usage et facturation](/fr/billing/usage-and-billing).

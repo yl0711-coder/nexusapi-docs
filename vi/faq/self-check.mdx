@@ -1,59 +1,56 @@
 ---
-title: "Tự kiểm tra vấn đề"
+title: "Tự kiểm tra"
+description: "Lưu thông tin cần thiết và khoanh vùng lỗi NexusAPI trước khi liên hệ hỗ trợ."
 ---
 
-Nếu cuộc gọi thất bại, trước tiên nhấp vào trang này để hoàn tất kiểm tra cơ bản. Hầu hết các cấu hình hoặc sự cố thỉnh thoảng có thể được xác định trong vài phút.
+Phần lớn lỗi cấu hình hoặc sự cố tạm thời có thể được khoanh vùng trong vài phút. Hãy lưu bằng chứng trước, sau đó chỉ thực hiện một kiểm tra tối thiểu với tần suất thấp.
 
-## Bước 1: Lưu trang web
+## 1. Lưu bằng chứng
 
-Trước khi đóng client hoặc yêu cầu lại, hãy lưu:
+Trước khi đóng client hoặc thử lại, lưu:
 
-- Lỗi hoàn toàn trong văn bản gốc
-- Mã yêu cầu
-- Thời gian và múi giờ xảy ra
-- Mô hình sử dụng
-- Ứng dụng khách và phiên bản được sử dụng
-- Ví dụ giao diện yêu cầu `/v1/responses`
+- toàn bộ lỗi và Request ID;
+- thời gian và múi giờ;
+- model ID, endpoint, có streaming hay không;
+- client / SDK và phiên bản.
 
-Không nộp đầy đủ khóa API, mật khẩu, dữ liệu riêng tư hoặc toàn bộ nội dung kinh doanh.
+Không gửi API Key đầy đủ, mật khẩu, dữ liệu riêng tư hoặc toàn bộ nội dung nghiệp vụ.
 
-## Bước 2: Xác định loại vấn đề
+## 2. Xác định loại lỗi
 
-| Hiện tượng | Kiểm tra ưu tiên |
+| Hiện tượng | Kiểm tra trước |
 | --- | --- |
-| 401 | API Key、`Bearer` Tiền tố, địa chỉ yêu cầu |
-| 404 | Kiểm tra xem URL cơ sở có bị trùng lặp hoặc thiếu không `/v1` |
-| 400 | Mô hình, giao diện, tham số và trạng thái phiên làm việc |
-| 429 | Đồng thời và tần suất yêu cầu |
-| 500 / 502 / 503 | Chờ 10~30 giây rồi thử lại |
-| 504 / 524 | Nội dung yêu cầu, thời gian chờ và trạng thái dịch vụ |
-| Cân bằng không đủ | Số dư bảng điều khiển, số tiền khóa và nhóm |
+| 401 | Key, tiền tố `Bearer`, URL. |
+| 403 | Nhóm, giới hạn mô hình, danh sách IP, tài khoản, từ chối upstream. |
+| 404 | Base URL, đường dẫn, `/v1` bị lặp hoặc thiếu. |
+| 400 | Mô hình, giao thức, tham số, trạng thái phiên. |
+| 429 | Đồng thời và tần suất; theo `Retry-After`. |
+| 500 / 502 / 503 | Chờ 10–30 giây rồi chỉ thử lại một lần. |
+| 504 / 524 | Kích thước yêu cầu, thời gian chờ, trạng thái dịch vụ. |
+| `500, not implemented` | Không thử lại; kiểm tra có gọi Claude qua Responses hay không. |
+| `no available channel` | Model ID, nhóm token, khả năng hiện tại. |
 
-Để biết ý nghĩa cụ thể, xem bên dưới [Câu hỏi thường gặp về cuộc gọi API](/vi/faq/common-errors)。
+Xem chi tiết tại [lỗi API thường gặp](/vi/faq/common-errors).
 
-## Bước 3: Thực hiện xác minh tối thiểu
+## 3. Làm kiểm tra tối thiểu
 
-1. Xác nhận rằng cân bằng bảng điều khiển và Khóa API đang hoạt động đúng.
-2. Sao chép lại ID mô hình từ ô mô hình.
-3. Tạo một phiên làm việc mới và gửi một tin nhắn ngắn.
-4. Chỉ thử lại một lần và ghi lại ID Yêu cầu mới.
-5. Kiểm tra xem nhật ký sử dụng bảng điều khiển có hiển thị yêu cầu tương ứng không.
+1. Xác nhận số dư và trạng thái key trong console.
+2. Sao chép lại model ID từ Chợ mô hình.
+3. Mở phiên mới và gửi văn bản ngắn.
+4. Chỉ thử lại tối đa một lần và lưu Request ID mới.
+5. Kiểm tra bản ghi tương ứng trong nhật ký.
 
-Nếu phiên mới thành công, vấn đề thường liên quan đến trạng thái phiên ban đầu hoặc nội dung của yêu cầu; Nếu ngay cả yêu cầu nhỏ nhất vẫn tiếp tục thất bại, vui lòng gửi câu hỏi.
-
-## Được cung cấp khi liên hệ với bộ phận hỗ trợ
-
-Vui lòng cung cấp ngay các thông tin sau:
+Nếu phiên mới thành công, lỗi có thể nằm ở lịch sử hoặc nội dung ban đầu. Nếu kiểm tra tối thiểu vẫn thất bại, gửi thông tin:
 
 ```text
-发生时间（含时区）：
-Request ID：
-客户端及版本：
-模型：
-请求接口：
-错误原文：
-偶发还是持续发生：
-是否已用新会话验证：
+Thời gian (kèm múi giờ):
+Request ID:
+Client và phiên bản:
+Mô hình:
+Endpoint:
+Toàn bộ lỗi:
+Ngắt quãng hay liên tục:
+Đã thử trong phiên mới:
 ```
 
-Thông tin càng đầy đủ, tốc độ định vị càng nhanh. API Key có thể cung cấp tối đa 6 bit cuối.
+Nếu cần nhận diện key, chỉ cung cấp tối đa sáu ký tự cuối.

@@ -1,47 +1,44 @@
 ---
-title: "Choose the tool that suits you"
+title: "Choose a client tool"
+description: "Select and configure the right NexusAPI client without mixing protocols or credentials."
 ---
 
-Different tools serve different ways of working. Choose based on your intended use, then proceed to the corresponding tutorial to avoid mixing addresses and configuration files.
+Choose the tool for the way you work, then use its dedicated guide. Do not copy Base URLs or configuration files blindly between clients: some clients use OpenAI Chat Completions, while others use native Messages or Responses protocols.
 
-## Quick selection
+## Quick choice
 
-| Your needs | Recommended entry | Whoever it suits you |
+| What you want to do | Recommended guide | Best for |
 | --- | --- | --- |
-| Let AI handle code and project tasks in the terminal | [Claude Code](/en/tools/claude-code) | Developers using the Claude workflow |
-| Use Codex terminal agents | [Codex CLI](/en/tools/codex-cli) | Developers using the Responses / Codex workflow |
-| Switch between multiple Provider configurations | [CC Switch](/en/tools/cc-switch) | Manage users with multiple CLI configurations simultaneously |
-| Use Claude Code in VS Code or Cursor | [VS Code / Cursor](/en/tools/cursor-vscode) | Users who prefer the editor interface |
-| Write your own program to call the API | [Overview of access methods](/en/guide/integration-overview) | Application developers and automated scripts |
+| Work with an AI coding agent in a terminal | [Claude Code](/en/tools/claude-code) | Claude-style coding workflows |
+| Use OpenAI Codex in a terminal | [Codex CLI](/en/tools/codex-cli) | Responses / Codex workflows |
+| Manage more than one local CLI provider | [CC Switch](/en/tools/cc-switch) | Switching between saved configurations |
+| Use Claude Code in VS Code or Cursor | [VS Code / Cursor](/en/tools/cursor-vscode) | Editor-first workflows |
+| Build your own script or application | [Integration overview](/en/guide/integration-overview) | SDKs and automation |
 
-## Confirm before configuration
+## Before changing a local configuration
 
-1. An API Key has been created, and a reasonable limit has been set.
-2. The API Key group includes the target model.
-3. Copy the exact model ID from the model square.
-4. The backup tool already has configurations; do not delete the entire configuration directory directly.
-5. After completion, send a brief test request and check the usage logs.
+1. Create an API key and set a suitable project limit.
+2. Confirm that its token group includes the target model.
+3. Copy the exact model ID from the Model Marketplace or `/v1/models`.
+4. Back up an existing configuration file before editing it.
+5. Test with one small, read-only request and check the usage log.
 
 <Warning>
-**Do not run one-click scripts of unknown origin directly**
+**Do not run unknown one-click scripts**
 
-Automatic installation or configuration scripts may modify local configurations, write API keys, or install third-party components. Before running, verify the source, read the script content, and back up the existing configuration.
+Installation or configuration scripts can modify local settings, write credentials, or install third-party code. Use official sources, read a script before running it, and never paste an API key into a script you do not trust.
 </Warning>
-## Why is the address different for each tool?
 
-Some tools need to be included `/v1` API addresses, some tools will automatically concatenate paths, while others use native Messages or Responses protocols.
+## Match the tool to the protocol
 
-Please use the address provided in the corresponding tutorial; do not copy the configurations of Claude Code, Codex CLI, or the generic OpenAI SDK. See detailed explanation[Overview of access methods](/en/guide/integration-overview)。
+| Client type | Typical Base URL | Start with |
+| --- | --- | --- |
+| OpenAI-compatible SDK or custom program | `https://nexusapi.link/v1` | `POST /v1/chat/completions` |
+| Claude Code | `https://nexusapi.link` | Native Messages configuration |
+| Codex CLI | `https://nexusapi.link/v1` | Custom Responses provider |
 
-## Your tools are not included in the tutorial
+The available protocol depends on the model and token group. Read the [API and model capability matrix](/en/developer/capability-matrix) before deciding that a visible model should work in a specific client.
 
-If a client supports custom OpenAI-compatible addresses, you can refer to that first[Start quickly in 5 minutes](/en/guide/quick-start)and the client's official documentation.
+## A tool is not listed here
 
-Please confirm before configuration:
-
-- Does the client support custom Base URLs?
-- Does the client use Chat Completions or Responses?
-- Whether the client will automatically complete the data `/v1`。
-- Whether the model ID can be entered manually.
-
-Unverified clients will not be included in official tutorials just to increase the number of pages.
+If the client supports a custom OpenAI-compatible Base URL, begin with the [quick start](/en/guide/quick-start) and that client's official documentation. Confirm whether it adds `/v1` automatically, which protocol it sends, and whether it permits a custom model ID. We do not publish unverified client instructions merely to expand the list.

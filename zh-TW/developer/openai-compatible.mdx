@@ -1,48 +1,46 @@
 ---
-title: "OpenAI 相容介面"
+title: "Chat Completions 介面"
+description: "使用 OpenAI Chat Completions 格式呼叫 NexusAPI 的文字模型。"
 ---
 
-NexusAPI 相容於 OpenAI 風格的介面呼叫。
+本頁只說明 **OpenAI Chat Completions**。在呼叫前，請先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)，確認模型、令牌群組與協定相符。
 
-## 聊天完成
+<Tip>
+模型可用性與欄位定義來源不同：模型廣場和能力矩陣用於確認目前的模型、群組與協定；[Apifox API 文件](https://nexusapi.apifox.cn/)用於查詢完整欄位與回應結構。
+</Tip>
 
-申請地址：
+## 端點
 
 ```text
 POST https://nexusapi.link/v1/chat/completions
 ```
 
-範例請求：
+## 最小請求
 
 ```bash
 curl 'https://nexusapi.link/v1/chat/completions' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer YOUR_API_KEY' \
   -d '{
-    "model": "claude-sonnet-4-6",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你好"
-      }
-    ]
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "Hello"}]
   }'
 ```
 
-## 請求頭
-
-| 請求頭 | 必修 | 說明 |
+| Header | 是否必要 | 值 |
 | --- | --- | --- |
-| `Content-Type` | 是的 | 固定於 `application/json` |
-| `Authorization` | 是的 | 節目形式為 `Bearer YOUR_API_KEY` |
+| `Content-Type` | 是 | `application/json` |
+| `Authorization` | 是 | `Bearer YOUR_API_KEY` |
 
-## 常見錯誤
+## 常見結果
 
-| 錯了 | 可能原因 |
+| 結果 | 先檢查什麼 |
 | --- | --- |
-| 401 | API 金鑰錯誤、金鑰未交付，或金鑰無效 |
-| 429 | 請求速度過快、降頻觸發，或服務暫時忙碌 |
-| 500/502/503 | 請求處理暫時失敗或服務無法使用時 |
-| 524 | 請求等待時間太長 |
+| 401 | Key 是否缺失、無效、到期或停用。 |
+| 429 | 請求頻率、併發或暫時性上游限流。 |
+| 500／502／503 | 暫時處理或上游錯誤；低頻等待後只重試一次。 |
+| 524 | 請求超過等待上限。 |
 
-遇到錯誤時請儲存請求 ID，並參考[自我檢查問題](/zh-TW/faq/self-check)。 不要在短時間內頻繁重試。
+若以 `/v1/responses` 呼叫當前 Anthropic 類 Claude 渠道出現 `status_code=500, not implemented`，這是協定不相容，不是一般 500。自建程式請改用本頁的 Chat Completions；Claude Code 請使用原生 Messages 設定。
+
+其他錯誤請保留 Request ID，依[問題自查](/zh-TW/faq/self-check)處理，避免快速重試。

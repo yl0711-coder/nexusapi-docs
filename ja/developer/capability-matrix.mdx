@@ -1,0 +1,60 @@
+---
+title: "API とモデル対応マトリクス"
+description: "NexusAPI を呼び出す前に、モデル、トークングループ、プロトコルの対応を確認します。"
+---
+
+NexusAPI はモデルゲートウェイです。すべてのモデルがすべての API で使えるわけではありません。**モデル、トークングループ、プロトコルの三つが一致している必要があります。**モデルマーケットプレイスと、現在のキーで取得した結果を最新の根拠にしてください。
+
+<Info>
+**呼び出し前の確認**
+
+1. 対象モデルが現在のトークングループに含まれていることを確認します。
+2. モデルマーケットプレイスで、そのモデルのプロトコルを確認します。
+3. `/v1/models` でキーが実際に参照できるモデルを確認してから、最小リクエストを送信します。
+</Info>
+
+## 現在公開されている対応範囲
+
+| 目的 | エンドポイント／プロトコル | 利用場面 | 重要な制約 |
+| --- | --- | --- | --- |
+| 現在のキーで見えるモデルの一覧 | `GET /v1/models` | キー作成後、モデル選択前 | このキーのグループと制限だけを反映します。 |
+| テキスト、チャット、ストリーミング | `POST /v1/chat/completions` | OpenAI 互換 SDK、スクリプト、多くのテキストモデル | モデルマーケットプレイスで `openai` と表示されたモデルを使います。 |
+| Claude Code／Anthropic ネイティブクライアント | `POST /v1/messages` | モデルが `anthropic` と表示されている場合 | Claude Code の Base URL に `/v1` を重ねて追加しないでください。 |
+| Codex CLI | `POST /v1/responses` | [Codex CLI ガイド](/ja/tools/codex-cli)どおりにプロバイダーを設定した場合 | 万能ではありません。現在の Anthropic 型 Claude チャネルには使えません。 |
+| 画像生成 | `POST /v1/images/generations` | モデルマーケットプレイスで画像生成対応が明示された場合 | 選択した画像モデルが対応するオプションだけを送信します。 |
+
+<Warning>
+**New API の全ルートを NexusAPI の提供保証と見なさないでください**
+
+基盤の New API には、さらに多くの互換ルートが含まれる場合があります。NexusAPI が公開対応するのは、このページ、モデルマーケットプレイス、または正式ガイドに明記された機能だけです。画像編集・バリエーション、embeddings、音声、rerank、ネイティブ Gemini は現在、一般公開機能として文書化されていません。本番で推測して試さないでください。
+</Warning>
+
+## 現在のキーでモデルを確認する
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+`data[].id` からモデル ID をコピーします。レスポンスに `supported_endpoint_types` がある場合は、`openai` または `anthropic` の表示も確認できます。
+
+`/v1/models` は一つのキーに対する時点情報です。モデルマーケットプレイスには価格、グループ、説明も表示されます。両者が異なる場合は、現在のキーの応答とコンソールの状態を優先してください。
+
+## プロトコルの選び方
+
+| 使用するもの | 最初に確認する場所 |
+| --- | --- |
+| Python、JavaScript、cURL、OpenAI 互換 SDK | `/v1/chat/completions` |
+| Claude Code | [Claude Code ガイド](/ja/tools/claude-code)の Messages 設定 |
+| Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の Responses プロバイダー |
+| 画像モデル | [画像モデルガイド](/ja/guide/image-generation) |
+
+モデルが見えても失敗する場合は、モデル ID、トークングループ、リクエストパスを先に確認してください。Request ID を保管し、[問題の自己確認](/ja/faq/self-check)に従ってください。
+
+## 詳細情報
+
+- このページは「現在のモデルにどの API を使うか」を判断するためのものです。
+- [Chat Completions API](/ja/developer/openai-compatible)には最小のテキスト呼び出しがあります。
+- [Apifox API リファレンス](https://nexusapi.apifox.cn/)ではリクエストとレスポンスの各フィールドを確認できます。
+
+モデル能力とチャネルは変わる場合があります。ここにない能力を使う前に、サポートへ確認してください。

@@ -1,57 +1,31 @@
 ---
 title: "Câu hỏi thường gặp"
+description: "Tìm nhanh hướng dẫn NexusAPI về tích hợp, mô hình, chi phí và lỗi."
 ---
 
-Đầu tiên, hãy chọn hiện tượng gần nhất với bạn. Khi gặp lỗi cuộc gọi, vui lòng lưu ID Yêu cầu và toàn văn lỗi trước.
+Hãy chọn hiện tượng gần nhất. Khi lỗi xảy ra, trước hết lưu toàn bộ nội dung lỗi và Request ID rồi mới thay đổi cấu hình hoặc thử lại.
 
-## Truy cập và cấu hình
+## Tích hợp và cấu hình
 
-- **Bắt đầu sử dụng nó lần đầu từ đâu?**
-  Hãy tiếp tục đọc[Bắt đầu nhanh chóng trong 5 phút](/vi/guide/quick-start)。
+- **Bắt đầu từ đâu?** Xem [bắt đầu nhanh](/vi/guide/quick-start).
+- **Dùng Base URL nào?** Tùy client; xem [tổng quan tích hợp](/vi/guide/integration-overview).
+- **Vì sao 404?** Kiểm tra URL có thành `/v1/v1/...` hay client tự nối đường dẫn hay không.
+- **Vì sao API Key mới không dùng được?** Kiểm tra trạng thái key, credit, nhóm, model ID và định dạng `Authorization: Bearer`.
 
-- **URL cơ sở nào nên được điền vào?**
-  Các khách hàng khác nhau có thể có mức giá khác nhau, vui lòng kiểm tra[Tổng quan về các phương thức truy cập](/vi/guide/integration-overview)。
+## Mô hình và chi phí
 
-- **Tại sao 404 lại xuất hiện?**
-  Kiểm tra xem địa chỉ đã được tạo chưa `/v1/v1/...`, và liệu máy khách có tự động nối đường dẫn yêu cầu hay không.
+- **Làm sao biết nhóm dùng được mô hình?** Lọc [Chợ mô hình](https://nexusapi.link/pricing) theo nhóm hoặc gọi `/v1/models` bằng key.
+- **Một yêu cầu tốn bao nhiêu?** Xem nhật ký console và [sử dụng và thanh toán](/vi/billing/usage-and-billing).
+- **Lỗi có thể bị tính phí không?** Có thể, tùy upstream đã xử lý hay client gửi lại. Hãy đối chiếu Request ID.
+- **Có số dư nhưng key bị từ chối?** Kiểm tra cả hạn mức key, ngày hết hạn và nhóm.
 
-- **Tôi có thể không sử dụng API Key sau khi tạo không?**
-  Kiểm tra trạng thái khóa, số lượng, nhóm, mã mẫu và `Authorization: Bearer` Định dạng.
+## Lỗi API và công cụ
 
-## Mô hình, nhóm và chi phí
+- **400, 401, 429, 500, 502, 503, 504, 524 nghĩa là gì?** Xem [lỗi API thường gặp](/vi/faq/common-errors).
+- **Hội thoại dài không tiếp tục được?** Lưu lỗi, mở phiên mới, không gửi lặp nhanh cùng nội dung.
+- **Tạo ảnh timeout?** Không gửi lại ngay tác vụ đó; lưu Request ID và xem [hướng dẫn ảnh](/vi/guide/image-generation).
+- **`fetch failed` trong Claude Code?** Trước hết thử một tin nhắn ngắn thông thường rồi làm theo [hướng dẫn Claude Code](/vi/tools/claude-code).
 
-- **Làm thế nào để xác nhận xem một nhóm có thể sử dụng mô hình mục tiêu hay không?**
-  Tồn tại[Mô hình vuông](https://nexusapi.link/pricing)Lọc và sao chép các ID mô hình chính xác theo nhóm.
+## Trước khi liên hệ hỗ trợ
 
-- **Một yêu cầu đơn lẻ tiêu tốn bao nhiêu?**
-  Xem đầu vào, đầu ra, bộ nhớ đệm và chi tiêu trong nhật ký sử dụng console. Xem mô tả trường[Mô tả liều lượng và nhật ký](/vi/billing/usage-and-billing)。
-
-- **Yêu cầu thất bại có bị tính phí không?**
-  Các lỗi không tạo nội dung hợp lệ thường bằng không; nếu có gián đoạn hoặc các lần cố gắng tiếp theo, việc xác minh phải được thực hiện bằng ID Yêu cầu.
-
-- **Tại sao số dư vẫn bình thường, nhưng hạn ngạch lại không đủ?**
-  Cũng kiểm tra số dư tài khoản, giới hạn API Key và nhóm tài khoản; Gửi Mã Yêu Cầu khi nó vẫn tồn tại.
-
-## Lỗi gọi
-
-- **400, 401, 429, 500, 502, 503, 504, 524 là gì?**
-  Xem[Câu hỏi thường gặp về cuộc gọi API](/vi/faq/common-errors)。
-
-- **Đột nhiên không thể tiếp tục một cuộc trò chuyện dài?**
-  Lưu văn bản lỗi gốc và tạo phiên làm việc mới để xác minh; Đừng thường xuyên gửi cùng một yêu cầu.
-
-- **Sau sai lầm, nhiệm vụ lại thành công?**
-  Các lần thử tiếp theo có thể xảy ra; vui lòng tham khảo bản ghi cuối cùng với cùng Mã Yêu Cầu và kết quả cuối cùng của khách hàng.
-
-## Nhận trợ giúp nhanh chóng
-
-Nếu bạn không xác định được loại vấn đề, nhấn[Tự kiểm tra vấn đề](/vi/faq/self-check)Hoàn thành xác minh tối thiểu và nộp tất cả một lần:
-
-- Mã yêu cầu
-- Thời gian và múi giờ xảy ra
-- Khách hàng và Phiên bản
-- Giao diện mô hình và yêu cầu
-- Lỗi hoàn toàn trong văn bản gốc
-- Câu hỏi là liệu điều đó xảy ra thỉnh thoảng hay liên tục
-
-Không nộp đầy đủ khóa API, mật khẩu hoặc dữ liệu riêng tư.
+Làm [tự kiểm tra](/vi/faq/self-check), sau đó gửi cùng lúc Request ID, thời gian/múi giờ, client và phiên bản, mô hình, endpoint, toàn bộ lỗi và tình trạng xảy ra ngắt quãng hay liên tục. Không gửi key đầy đủ, mật khẩu hoặc nội dung riêng tư.

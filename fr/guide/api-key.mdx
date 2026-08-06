@@ -1,52 +1,43 @@
 ---
-title: "Créer et sécuriser les clés API"
+title: "Créer et protéger une clé API"
+description: "Créez une clé NexusAPI limitée, stockez-la correctement et renouvelez-la en cas de risque."
 ---
 
-La clé API est l’identifiant permettant d’appeler l’interface NexusAPI.
+Une clé API identifie l'appelant et détermine les groupes de modèles accessibles. Créez une clé par projet ou environnement afin de limiter les dépenses, rapprocher l'usage et révoquer un accès sans interrompre tous les services.
 
-## Processus de création
+## Créer une clé
 
-1. Connectez-vous à la console NexusAPI.
-2. Allez sur la page Gestion des jetons ou gestion des clés API.
-3. Cliquez pour ajouter un jeton.
-4. Entrez le nom du jeton.
-5. Sélectionnez les groupes disponibles.
-6. Fixez des quotas ou des limites en fonction du budget du projet.
-7. Après soumission, copiez la clé API générée.
+1. Connectez-vous à la [console NexusAPI](https://nexusapi.link).
+2. Ouvrez **Gestion des jetons**, puis **Ajouter un jeton**.
+3. Donnez-lui un nom clair, par exemple `production-api` ou `codex-local`.
+4. Sélectionnez le groupe qui contient le modèle souhaité.
+5. Définissez une limite et, si nécessaire, une date d'expiration, puis enregistrez.
 
-## Réglages recommandés
+Copiez la clé immédiatement : sa valeur complète peut n'être affichée qu'une seule fois.
 
-| Posez l’objet | Suggestion |
+## À décider avant la création
+
+| Élément | Rôle |
 | --- | --- |
-| Nom | Utilisez par exemple le nom du projet ou du client. `codex-work` |
-| Regroupement | Sélectionnez le groupe contenant le modèle cible |
-| Quota | Une limite supérieure raisonnable est fixée selon l’usage, qui pourra être ajustée ultérieurement |
-| Limitations du modèle | Activez-vous uniquement lorsque c’est clairement nécessaire |
-| Liste blanche IP | Activez uniquement lorsque le serveur a une IP de sortie fixe |
-| Période de validité | Il est recommandé de définir une date d’expiration pour les clés de test temporaires |
+| Groupe de jetons | Détermine les modèles, canaux et règles accessibles. |
+| Limite de crédit | Réduit l'exposition d'un projet ou d'un test. |
+| Expiration | Utile pour un accès temporaire. |
+| Restriction de modèle / liste d'IP | À activer seulement si votre cas l'exige. |
 
-## Comment l’utiliser
+## Protéger la clé
 
-Insérer la clé API pendant la requête `Authorization` En-tête de la demande :
+- Utilisez une variable d'environnement, un gestionnaire de secrets ou le coffre du système.
+- Ne la mettez jamais dans le front-end, un dépôt public, une capture, un chat ou une URL.
+- Ne partagez pas une clé entre équipes ou services sans raison ; des clés séparées facilitent l'audit.
+- En cas de fuite présumée, désactivez ou supprimez l'ancienne clé, créez-en une autre et mettez à jour les déploiements.
 
-```http
-Authorization: Bearer YOUR_API_KEY
+## Tester avant d'intégrer
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-## Conseils de sécurité
+Ce test confirme que la clé est reconnue et montre les modèles visibles. Pour choisir l'API correcte, consultez la [matrice des capacités](/fr/developer/capability-matrix).
 
-- N’écrivez pas de clés API dans les dépôts de code publics.
-- N’envoyez pas la clé API complète dans les captures d’écran, tickets ou journaux de discussion.
-- Il est recommandé que différents projets, membres et environnements utilisent différentes clés d’API.
-- L’environnement de production est lu via des variables d’environnement ou des services de gestion de clés, et non directement écrit dans le code.
-- Vérifiez régulièrement les journaux d’utilisation ; Si vous découvrez une source inconnue ou une dépense inhabituelle, désactivez immédiatement votre ancienne Clé.
-- Si une fuite est suspectée, il faut d’abord désactiver ou supprimer l’ancienne clé, puis créer une nouvelle clé et mettre à jour le programme qui l’utilise.
-
-## La différence entre une clé API et un jeton d’accès système
-
-| Certificat | Objectif |
-| --- | --- |
-| Clé API | Appel de l’interface du modèle, généralement par `sk-` Les débuts |
-| Jeton d’accès système | Vérifiez l’utilisation de votre compte et d’autres interfaces au niveau du compte |
-
-Les deux ne doivent pas être mélangés, et aucun type de bon ne doit être inclus dans le paramètre de requête URL.
+Pour une erreur 401, 403 ou de modèle indisponible, vérifiez l'état de la clé, le groupe, le crédit, les restrictions IP et le préfixe `Bearer`, puis conservez le Request ID.

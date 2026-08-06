@@ -1,53 +1,36 @@
 ---
-title: "Dosage et description du journal"
+title: "Usage et facturation"
+description: "Lisez les journaux NexusAPI, les tokens, les Request ID et le coût des requêtes."
 ---
 
-La console utilise des journaux pour visualiser l’heure, le modèle, les jetons, la durée, le statut et la consommation de chaque requête. Veuillez confirmer l’heure et le fuseau horaire de la projection avant le rapprochement.
+La console affiche une synthèse et des journaux de consommation pour rapprocher les requêtes, les coûts et les incidents. Une écriture récente peut apparaître avec un court délai : ne relancez pas une tâche métier uniquement pour vérifier le journal.
 
-## Champs communs
+## Champs usuels
 
-| Terrain | Signification |
+| Champ | Signification |
 | --- | --- |
-| Temps | Demandez l’heure d’entrée sur la plateforme |
-| Regroupement | Le regroupement de jetons utilisé dans cette requête est utilisé |
-| Modèle | Le nom réel du modèle enregistré |
-| Entrée | Entrez le nombre de jetons ; Les lectures de cache peuvent être affichées séparément |
-| Production | Sortie du nombre de jetons |
-| Temps | Le temps total du début à la fin de la demande |
-| Le premier personnage | Le temps d’attente avant que la demande de streaming ne reçoive le premier extrait de contenu |
-| Type | Résultats de requête tels que la consommation et les erreurs |
-| Dépenses | La quantité de consommation enregistrée dans cette demande |
-| Demande d’ID | Utilisé pour localiser l’identifiant unique pour la même requête |
+| Heure | Heure de la requête ou de l'enregistrement ; gardez le fuseau horaire pour le rapprochement. |
+| Modèle / groupe / nom du jeton | Route réellement utilisée. |
+| Tokens d'entrée | Prompt, contexte et certaines informations d'outils. |
+| Tokens de sortie | Contenu généré par le modèle. |
+| Lecture du cache | Usage d'un cache de contexte, parfois facturé différemment. |
+| Premier octet / durée totale | Indicateurs de délai et d'expiration. |
+| Coût | Montant enregistré pour la requête. |
+| Request ID | Identifiant unique permettant de retrouver la même requête. |
 
-## Entrée, sortie et cache
+## Une requête en erreur est-elle toujours gratuite ?
 
-- **Entrée du jeton**: Prompts, contexte et informations sur les outils soumis au modèle.
-- **Jeton de sortie**: Contenu généré par modèles.
-- **Lecture du cache**: Jetons lus après avoir accédé au cache contextuel ; La méthode de facturation peut différer de l’entrée habituelle.
+Non. Une erreur sans résultat facturable est souvent à zéro, mais une requête déjà traitée en amont, un flux interrompu ou une nouvelle tentative envoyée par le client peuvent laisser une écriture de coût. Rapprochez toujours le **même Request ID**, l'heure et le journal final ; ne vous fiez pas seulement à l'interface du client.
 
-Différents modèles peuvent prendre en charge différentes méthodes et prix de mise en cache, il vous plaît référez à[Modèle Carré](https://nexusapi.link/pricing)L’information en temps réel prévaut.
+## Méthode de rapprochement
 
-## Pourquoi le journal est-il retardé ?
+1. Filtrez par jour ou semaine, avec le fuseau horaire.
+2. Faites correspondre le Request ID entre client, support et console.
+3. Comparez modèle, groupe, tokens d'entrée/sortie et coût.
+4. Conservez les données brutes et l'intervalle de requête avant une agrégation.
 
-Il peut y avoir de courts délais entre la fin de la requête, l’agrégation statistique et les requêtes de page. Si une requête nouvellement remplie n’apparaît pas immédiatement, veuillez la rafraîchir plus tard. Ne relancez pas les requêtes métier juste pour consulter les journaux.
+<Tip>
+Pour un rapprochement automatisé, utilisez l'[API de journaux d'usage](/fr/developer/usage-logs). Elle emploie un jeton d'accès système et lit uniquement les données du compte ; prévoyez des synchronisations incrémentales à faible fréquence.
+</Tip>
 
-## Mauvais enregistrements et consommation
-
-Les erreurs qui ne génèrent pas de contenu valide sont généralement indiquées comme 0 consommation. Si le contenu a été généré mais que le client interrompt la réception, ou si le système effectue des tentatives ultérieures, il doit vérifier l’enregistrement avec le même ID de requête.
-
-Si vous suspectez des accusations en double ou échouées, veuillez fournir :
-
-- Demande d’ID
-- Heure et fuseau horaire d’occurrence
-- Nom du modèle
-- Est-ce que le client reçoit finalement l’intégralité du contenu
-
-Ne fournissez pas la clé API complète.
-
-## Visualiser et exporter
-
-- Vue quotidienne : Aperçu des usages et des journaux d’utilisation de la console.
-- Filtrage détaillé : requête par temps, modèle, regroupement et autres critères.
-- Réconciliation programmatique : utilisation[API de requête d’utilisation](/fr/developer/usage-logs)Lisez vos propres données de compte.
-
-Après exportation ou résumé, l’ID de la requête doit toujours être conservé pour faciliter une vérification supplémentaire des enregistrements d’exception.
+En cas de coût inattendu, envoyez le Request ID, l'heure et le fuseau, le modèle, l'état final côté client et l'erreur éventuelle. Ne communiquez pas une clé complète ni une conversation confidentielle.

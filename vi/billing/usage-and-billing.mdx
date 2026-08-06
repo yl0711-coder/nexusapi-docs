@@ -1,53 +1,36 @@
 ---
-title: "Mô tả liều lượng và nhật ký"
+title: "Sử dụng và thanh toán"
+description: "Đọc nhật ký NexusAPI, token, Request ID và chi phí của từng yêu cầu."
 ---
 
-Bảng điều khiển sử dụng nhật ký để xem thời gian, mẫu mã, token, thời lượng, trạng thái và mức tiêu thụ của từng yêu cầu. Vui lòng xác nhận thời gian chiếu và múi giờ trước khi đối chiếu.
+Tổng quan và nhật ký trong console dùng để đối soát yêu cầu, chi phí và sự cố. Bản ghi mới có thể xuất hiện sau một khoảng trễ ngắn; không gửi lại tác vụ chỉ để kiểm tra nhật ký.
 
-## Các trường phổ biến
+## Các trường thường gặp
 
-| Lĩnh vực | Ý nghĩa |
+| Trường | Ý nghĩa |
 | --- | --- |
-| Thời gian | Yêu cầu thời gian để vào nền tảng |
-| Nhóm | Nhóm token được sử dụng trong yêu cầu này đã được sử dụng |
-| Mô hình | Tên mẫu thực tế được ghi nhận |
-| Đầu vào | Nhập số lượng token; Đọc bộ nhớ đệm có thể được hiển thị riêng biệt |
-| Sản lượng | Xuất số lượng token |
-| Thời gian | Tổng thời gian từ lúc bắt đầu đến khi kết thúc yêu cầu |
-| Nhân vật đầu tiên | Thời gian chờ trước khi yêu cầu phát trực tuyến nhận được đoạn nội dung đầu tiên |
-| Loại | Yêu cầu kết quả như tiêu thụ và lỗi |
-| Chi phí | Lượng tiêu thụ ghi nhận trong yêu cầu này |
-| Mã yêu cầu | Được sử dụng để xác định định danh duy nhất cho cùng một yêu cầu |
+| Thời gian | Thời điểm yêu cầu hoặc ghi nhận; khi đối soát cần lưu múi giờ. |
+| Mô hình / nhóm / tên token | Tuyến thực tế đã sử dụng. |
+| Token đầu vào | Prompt, lịch sử và một phần dữ liệu công cụ. |
+| Token đầu ra | Nội dung do mô hình tạo. |
+| Đọc cache | Mức dùng cache ngữ cảnh; có thể có giá khác. |
+| Byte đầu tiên / tổng thời gian | Chỉ số độ trễ và timeout. |
+| Chi phí | Số tiền được ghi cho yêu cầu. |
+| Request ID | Mã duy nhất để tìm đúng yêu cầu. |
 
-## Đầu vào, đầu ra và bộ nhớ đệm
+## Yêu cầu lỗi có luôn miễn phí không?
 
-- **Enter Token**: Các đề bài, ngữ cảnh và thông tin công cụ được gửi đến mô hình.
-- **Token đầu ra**: Nội dung do mô hình tạo ra.
-- **Đọc bộ nhớ đệm**: Các token được đọc sau khi vào bộ nhớ đệm ngữ cảnh; Phương pháp thanh toán có thể khác với đầu vào thông thường.
+Không. Lỗi không tạo kết quả tính phí thường là 0, nhưng upstream có thể đã xử lý, stream có thể bị ngắt, hoặc client có thể gửi một yêu cầu mới. Luôn đối chiếu **cùng Request ID, thời điểm và bản ghi cuối cùng**; không chỉ dựa vào màn hình client có nhận được nội dung hay không.
 
-Các mẫu khác nhau có thể hỗ trợ các phương pháp và giá cả khác nhau, vì vậy vui lòng tham khảo[Mô hình vuông](https://nexusapi.link/pricing)Thông tin thời gian thực chiếm ưu thế.
+## Cách đối soát
 
-## Tại sao nhật ký lại bị trễ?
+1. Giới hạn theo ngày hoặc tuần và lưu múi giờ.
+2. Ghép Request ID từ client, hỗ trợ và console.
+3. So sánh mô hình, nhóm, token vào/ra và chi phí.
+4. Giữ dữ liệu gốc và khoảng thời gian truy vấn trước khi tổng hợp.
 
-Có thể có những khoảng thời gian ngắn giữa việc kết thúc yêu cầu, tổng hợp thống kê và truy vấn trang. Nếu một yêu cầu mới hoàn thành không xuất hiện ngay lập tức, vui lòng làm mới sau. Không khởi động lại các yêu cầu kinh doanh chỉ để xem nhật ký.
+<Tip>
+Để đối soát tự động, dùng [API nhật ký sử dụng](/vi/developer/usage-logs). API dùng token truy cập hệ thống và chỉ đọc dữ liệu của chủ tài khoản; hãy chạy đồng bộ tăng dần với tần suất thấp.
+</Tip>
 
-## Ghi sai và tiêu thụ
-
-Các lỗi không tạo ra nội dung hợp lệ thường được hiển thị là 0 tiêu thụ. Nếu nội dung đã được tạo ra nhưng máy khách làm gián đoạn việc tiếp nhận, hoặc nếu hệ thống hoàn thành các lần thử tiếp theo, nó cần xác minh bản ghi với cùng ID Yêu cầu.
-
-Nếu bạn nghi ngờ các khoản phí trùng lặp hoặc thất bại, vui lòng cung cấp:
-
-- Mã yêu cầu
-- Thời gian và múi giờ xảy ra
-- Tên mẫu
-- Liệu khách hàng cuối cùng có nhận được toàn bộ nội dung hay không
-
-Không cung cấp đầy đủ khóa API.
-
-## Xem và xuất
-
-- Chế độ xem hàng ngày: Tổng quan về việc sử dụng và nhật ký sử dụng của bảng điều khiển.
-- Lọc chi tiết: truy vấn theo thời gian, mô hình, nhóm và các tiêu chí khác.
-- Đối chiếu chương trình: sử dụng[API truy vấn sử dụng](/vi/developer/usage-logs)Đọc dữ liệu tài khoản của chính bạn.
-
-Sau khi xuất hoặc tóm tắt, ID Yêu cầu vẫn nên được giữ lại để thuận tiện cho việc xác minh thêm các bản ghi ngoại lệ.
+Nếu nghi ngờ bị trừ phí bất thường, cung cấp Request ID, thời gian/múi giờ, mô hình, kết quả cuối cùng từ client và lỗi gốc. Không cung cấp key đầy đủ hoặc toàn bộ hội thoại riêng tư.

@@ -1,150 +1,35 @@
 ---
-title: "FAQ sur les appels API"
+title: "Erreurs API courantes"
+description: "Diagnostiquez les erreurs NexusAPI à partir du code, du protocole et du Request ID."
 ---
 
-Cette page présente des erreurs courantes rencontrées lors de l’appel d’API dans Claude Code, Codex CLI, Cursor, VS Code ou programmes personnalisés.
+Conservez d'abord l'erreur complète, le Request ID, l'heure, le modèle et l'endpoint. Les erreurs de paramètres, de protocole ou de session ne se corrigent pas par des tentatives répétées.
 
-## Que devriez-vous faire en premier lorsque vous rencontrez une erreur ?
+## `status_code=500, not implemented`
 
-Il est recommandé de les manipuler dans l’ordre suivant :
+Avec `/v1/responses` sur un canal Claude de type Anthropic, ce message indique une **incompatibilité de protocole**, pas une panne temporaire.
 
-1. Enregistrez le texte original d’erreur et l’ID de la requête.
-2. Attends 10~30 secondes et réessaie.
-3. Si la même session continue d’échouer, réessayez après avoir créé une nouvelle session.
-4. Confirmez que le nom du modèle, l’interface de requête et la version client sont corrects.
-5. Si vous échouez toujours, soumettez la question selon la checklist à la fin de cette page.
+1. Pour une application, utilisez `/v1/chat/completions`.
+2. Pour Claude Code, utilisez la configuration Messages du [guide Claude Code](/fr/tools/claude-code).
+3. Ne renvoyez pas la même demande sans la modifier.
 
-Merci de ne pas réessayer à haute fréquence sur une courte période, car cela pourrait entraîner des restrictions de fréquence et entraîner des tâches répétitives.
+## Codes HTTP
 
-## Quel est le problème avec 500, 502, 503, 504 ou 524 ?
-
-Ces états indiquent généralement que le service est temporairement occupé, que la connexion est interrompue ou que la réponse est en défaillance, et cela ne signifie pas nécessairement qu’il y a un problème avec votre clé API ou la requête elle-même.
-
-| Code de statut | Signification commune | Suggestion |
+| Code | Cause probable | Première action |
 | --- | --- | --- |
-| 500 | Échec du traitement des requêtes | Repasser le test plus tard ; Soumettez l’ID de la requête lorsqu’il persiste |
-| 502 | Recevoir des réponses invalides ou incomplètes | Attends 10~30 secondes et réessaie |
-| 503 | Le service est temporairement indisponible | Réessayez plus tard pour éviter les demandes répétées |
-| 504 / 524 | Demande que le délai d’attente soit trop long | Raccourcez votre entrée ou réessayez plus tard |
+| 400 | Modèle, endpoint, paramètre ou session invalide | Vérifiez le protocole et faites un test neuf minimal. |
+| 401 | Clé manquante, invalide, expirée ou désactivée | Recopiez la clé et le format Bearer. |
+| 403 | Groupe, restriction, liste d'IP, compte ou refus amont | Vérifiez les réglages de la clé. |
+| 404 | Mauvais chemin ou `/v1` en double | Contrôlez l'URL réellement appelée. |
+| 429 | Limite de fréquence ou concurrence | Réduisez la concurrence et suivez `Retry-After`. |
+| 500 / 502 / 503 | Incident temporaire de traitement ou d'amont | Attendez 10 à 30 secondes puis essayez une seule fois. |
+| 504 / 524 | Dépassement d'attente | Réduisez si possible le contexte ou la sortie, et gardez le Request ID. |
 
-S’il n’y a qu’une seule défaillance et que le processus est automatiquement achevé ensuite, aucune manipulation supplémentaire n’est généralement nécessaire. Si le même modèle tombe en panne plusieurs fois de suite, veuillez nous contacter.
+## Autres messages fréquents
 
-## 429 Trop de Demandes
+- **`no available channel`** : aucun canal activé pour ce modèle dans le groupe de la clé. Vérifiez l'ID exact, le groupe et le catalogue ; recréer des clés ou recharger du crédit ne résout pas ce point.
+- **`Concurrency limit exceeded for user`** : attendez la fin des requêtes en cours et réduisez la concurrence du client.
+- **`Content block not found`** : fréquent dans une longue session, un appel d'outil ou un flux interrompu. Lire [Content block not found](/fr/faq/content-block-not-found).
+- **Erreur ou délai d'image** : vérifiez le modèle, l'endpoint Images et les paramètres ; ne soumettez pas immédiatement la même image.
 
-Cela indique qu’il y a actuellement trop de requêtes ou que la capacité de traitement disponible a atteint une limite temporaire.
-
-Recommandations :
-
-- Réessayez en utilisant des méthodes de retraite exponentielle, par exemple, attendez 2, 5, 10 ou 20 secondes.
-- Réduisez la concurrence et la fréquence des demandes.
-- N’autorisez pas plusieurs programmes à utiliser simultanément la même clé API pour des requêtes à forte concurrence concurrente.
-- Si les appels basse fréquence affichent toujours le 429, veuillez fournir votre identifiant de demande pour nous contacter.
-
-## 400 Mauvaise Demande
-
-400 indique généralement que le format, les paramètres ou l’état de la session de la requête sont incompatibles avec l’interface actuelle.
-
-Il est recommandé de vérifier dans l’ordre :
-
-1. Vérifiez si le nom du modèle est correct.
-2. Si la requête est envoyée à l’interface prise en charge par le modèle.
-3. Vérifiez si le client est la dernière version.
-4. Qu’il s’agisse de paramètres expérimentaux, d’appels d’outils ou de fonctions de continuation de session utilisés.
-5. Savoir si une nouvelle session peut être restaurée après sa création.
-
-Ne soumettez pas la même demande sans modifications ; Les problèmes de mise en forme ne se régénèrent généralement pas automatiquement après une nouvelle tentative.
-
-## Signature invalide dans le bloc de pensée
-
-Cette erreur signifie que le contenu pensé sauvegardé dans la session en cours ne peut plus être vérifié, ce qui est souvent observé lors de la récupération longue des sessions, des changements d’état client ou du contenu de session incompatible.
-
-Recommandations :
-
-1. Créez une nouvelle session ; ne continuez pas à restaurer la session en cours.
-2. Mettez à jour le client vers la dernière version.
-3. Si la même session est utilisée sur plusieurs appareils, elle ne peut être poursuivie que sur un seul appareil.
-4. Si de nouvelles sessions apparaissent encore, veuillez soumettre l’erreur complète et demander l’ID.
-
-Ces erreurs ne se corrigent pas automatiquement en vidant le cache de sortie du modèle ; la gestion la plus efficace consiste généralement à créer une nouvelle session.
-
-## previous_response_id n’est pris en charge que sur Responses WebSocket v2
-
-Cela signifie que le client essaie de reprendre la réponse précédente, mais que la méthode de connexion actuelle ne supporte pas ce mode de reprise.
-
-Recommandations :
-
-- Créez une nouvelle session et réessayez.
-- Mettez à jour le client.
-- Désactivez l’option de reprise de session expérimentale ou de réutilisation de la réutilisation.
-- Les programmes personnalisés doivent éviter de réutiliser ceux non pris en charge dans les requêtes HTTP classiques `previous_response_id`。
-
-## Bloc de contenu non trouvé
-
-Cela signifie généralement que le fragment de contenu attendu du client n’a pas été entièrement reçu, peut-être en raison de longues sessions, d’appels d’outils ou de réponses interrompues.
-
-Il est recommandé de créer d’abord une nouvelle session et de raccourcir le contenu d’entrée. Voir méthodes de manipulation détaillées [Bloc de contenu non trouvé](/fr/faq/content-block-not-found)。
-
-## La génération d’images n’est pas activée ou le modèle n’est pas pris en charge
-
-Cela signifie que le modèle actuel, le type de compte ou l’interface de requête ne prend pas en charge les capacités demandées.
-
-Veuillez vérifier :
-
-- Les modèles de texte ne doivent pas appeler l’interface de génération d’images.
-- Les modèles d’image doivent utiliser l’interface d’image spécifiée dans le document.
-- Vérifiez si le nom du modèle est bien orthographié.
-- Le modèle actuel supporte-t-il les images, appels d’outils ou paramètres que vous utilisez ?
-
-Réessayer simplement ne peut généralement pas résoudre des problèmes que la capacité ne supporte pas.
-
-## Équilibre insuffisant, mais l’équilibre de la console est normal
-
-Si la console NexusAPI montre un équilibre suffisant, ne rechargez pas immédiatement. Cette invite peut également indiquer que les ressources de service demandées sont temporairement indisponibles.
-
-Veuillez enregistrer l’ID de la demande, attendre un instant, puis réessayer ; Contactez-nous pour une vérification si cela persiste.
-
-## Pourquoi l’erreur est-elle apparue en premier dans le journal, puis la tâche a-t-elle été terminée plus tard ?
-
-Le système réessaiera automatiquement après des erreurs partiellement récupérables, de sorte que le même ID de requête peut avoir à la fois un enregistrement d’erreur et un seul enregistrement de succès.
-
-Pour déterminer le résultat final, veuillez vous référer au dernier enregistrement du même ID de demande et à savoir si le client a reçu le contenu complet.
-
-## Une demande échouée sera-t-elle facturée ?
-
-Lorsqu’aucun contenu valide n’est généré, les enregistrements d’erreur affichent généralement une consommation nulle.
-
-Les situations suivantes doivent être vérifiées séparément :
-
-- Le service a généré du contenu, mais le client se déconnecte pendant la réception.
-- Le même ID de requête provoque d’abord une erreur, puis se complète automatiquement.
-- Le client lance une nouvelle requête de lui-même.
-
-Si des accusations en double ou échouées sont suspectées, veuillez fournir votre identifiant de demande et l’heure de la survenue, et nous vérifierons les dossiers de la demande. N’envoyez pas la clé API complète.
-
-## 401 Non autorisé
-
-Causes courantes :
-
-- Clé API saisie incorrectement ou manquante `Bearer ` Préfixe.
-- La clé API a été supprimée, désactivée ou invalide.
-- La requête utilisait une adresse d’accès incorrecte.
-
-Veuillez recopier la clé API et vérifier l’en-tête de la requête :
-
-```http
-Authorization: Bearer <你的 API Key>
-```
-
-## Que devez-vous fournir lorsque vous nous contactez ?
-
-Pour localiser plus rapidement, essayez de fournir :
-
-- Demande d’ID。
-- Erreur d’heure et fuseau horaire.
-- Erreur de texte ou capture d’écran originale.
-- Le modèle utilisé.
-- Outils et versions utilisés.
-- Les interfaces de requêtes, par exemple `/v1/messages`、`/v1/chat/completions` Ou `/v1/responses`。
-- La question est de savoir si cela se produit de façon sporadique, persistante, ou si cela n’affecte qu’une session spécifique.
-
-Ne soumettez pas les clés API complètes, les mots de passe, les données de confidentialité ou le contenu professionnel complet. La clé API peut fournir jusqu’aux 6 derniers bits.
+Pour un coût inattendu, rapprochez les Request ID et les journaux de la même période. Ne supposez pas qu'une requête ordinaire est automatiquement rejouée par la plateforme.

@@ -1,104 +1,47 @@
 ---
-title: "使用クエリAPI"
+title: "利用ログ API"
+description: "システムアクセストークンで NexusAPI アカウントの利用明細を低頻度に取得します。"
 ---
 
-自分の分を使え**システムアクセストークン**プログラムクエリ**彼自身の記述**請求、監査、監視システムに統合可能な使用記録。
+`api.nexusapi.link` はコンソールやモデルリレーとは別の**読み取り専用利用ログゲートウェイ**です。トークン所有アカウントの消費ログだけを取得でき、モデル呼び出し、クレジット追加、管理操作はできません。
 
-- 基本URL:`https://api.nexusapi.link`
-- このインターフェースは**リード・オンリー**はトークンに対応するアカウントのデータを返すだけです。
+## 基本情報
 
-## 建泉
-
-1. NexusAPIコンソールでは、**トークンを生成する個人設定→**「獲得」**システムアクセストークン**(注:これはモデルを呼び出すためのものではありません。) `sk-` APIキーはアカウントレベルのトークンです。 もしリークされた場合は、旧版として再生成してください。
-2. 呼び出し時にリクエストヘッダーを挿入します:
-
-```http
-Authorization: Bearer <你的系统访问令牌>
-```
-
-- トークン**リクエストヘッダーのみが配置されます**URL内にスペルを入れないでください。
-- このトークンはアカウント属性であり、APIキーの追加・削除・ローテーションは影響を与えないため、長期的な統合に適しています。
-
-## 使用履歴を検索してください
-
-```http
-GET /v1/logs?page=1&page_size=50[&start_time=..&end_time=..]
-```
-
-### リクエストパラメータ(すべてオプション)
-
-| パラメータ | 種類 | 説明 |
-| --- | --- | --- |
-| `page` | 整数 | ページ番号は1から始まり、デフォルトは1です |
-| `page_size` | 整数 | ページあたりのエントリー数:デフォルト10、最大50 |
-| `start_time` | 文字列/int | 開始時間、Unix秒(例: `1717200000`)またはRFC3339(例: `2026-06-01T00:00:00Z`） |
-| `end_time` | 文字列/int | 終了時、フォーマットは上記と同じです |
-
-制約:`page × page_size ≤ 100000`(ページめくり深度制限); 時間枠に制限はありません。
-
-### 返事例(200)
-
-```json
-{
-  "data": [
-    {
-      "time": "2026-06-20T14:03:11Z", "token_name": "我的密钥", "group": "default",
-      "model": "gpt-5.5", "use_time": 3, "first_byte": 0.8,
-      "prompt_tokens": 1200, "completion_tokens": 800, "cost": 0.012,
-      "ip": "1.2.3.4", "request_id": "2026xyzreq",
-      "request_path": "/v1/chat/completions"
-    }
-  ],
-  "page": 1, "page_size": 10
-}
-```
-
-| フィールド | 説明 |
+| 項目 | 値 |
 | --- | --- |
-| `time` | リクエスト時間(UTC、RFC3339) |
-| `token_name` | 今回使われたAPIキーの名前 |
-| `group` | トークンのグループ化 |
-| `model` | モデル名 |
-| `use_time` | 総消費時間(秒数) |
-| `first_byte` | 最初の文字時間(秒); これは非フロー形式で初期文字がない場合に使用されます `null` |
-| `prompt_tokens` / `completion_tokens` | 入力/出力トークン数 |
-| `cost` | この期間に費やした金額(USD) |
-| `ip` | 出典:IP |
-| `request_id` | リクエストID |
-| `request_path` | 通話経路 |
+| Base URL | `https://api.nexusapi.link` |
+| Endpoint | `GET /v1/logs` |
+| 推奨資格情報 | システムアクセストークン |
+| 並び順 | 新しい記録が先 |
 
-**ページは「page_size」(または空)、すなわち最後のページより少ない返送を返します。**
+コンソールの **個人設定 → トークンを生成** でトークンを作り、次の Header だけで送信します。
 
-## 呼び出しの例
+```http
+Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN
+```
+
+<Warning>
+モデル呼び出しにはトークン管理で作成した API Key を使います。利用ログ API にはシステムアクセストークンを使います。後者はモデルを呼べませんが、アカウント級の明細を読めるため、同じく秘密として扱ってください。
+</Warning>
+
+## パラメーター
+
+| パラメーター | 内容 |
+| --- | --- |
+| `start_time` | Unix 秒または RFC3339 の開始時刻。 |
+| `end_time` | Unix 秒または RFC3339 の終了時刻。開始より前にはできません。 |
+| `page` | `1` から始まるページ番号。 |
+| `page_size` | 1 ページの件数。既定 `10`、最大 `50`。 |
+
+日または週ごとに取得してください。モデル、グループ、Key 名によるサーバー側フィルターはありません。`page × page_size` は `100000` を超えられません。
 
 ```bash
-curl -H "Authorization: Bearer <你的系统访问令牌>" \
-  "https://api.nexusapi.link/v1/logs?page=1&page_size=50&start_time=1717200000&end_time=1717804800"
+curl -G 'https://api.nexusapi.link/v1/logs' \
+  -H 'Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN' \
+  --data-urlencode 'start_time=2026-06-01T00:00:00Z' \
+  --data-urlencode 'end_time=2026-06-02T00:00:00Z' \
+  --data-urlencode 'page=1' \
+  --data-urlencode 'page_size=50'
 ```
 
-ページフリップ全巻(擬似コード):
-
-```text
-page = 1
-while True:
-    resp = GET /v1/logs?page=page&page_size=50
-    处理 resp.data
-    if len(resp.data) < 50: break   # 某页不满即最后一页
-    page += 1
-```
-
-## エラーコード
-
-| HTTP | エラー | 意味 |
-| --- | --- | --- |
-| 400 | `invalid_request` | パラメータが無効です(ページが深すぎる/時間フォーマットが正しく/時間順序が不正確) |
-| 401 | `unauthorized` | トークンが欠落/無効/アカウント無効化 |
-| 429 | `rate_limited` | リクエストが頻繁すぎる(レスポンスバンド)です。 `Retry-After`、指示に従って後ろに下がってください) |
-| 503 | `unavailable` | サービスは一時的に利用できません(資金のバンド付き)。 `Retry-After`） |
-| 500 | `internal_error` | 内部誤差 |
-
-## 使用推奨事項
-
-- 時間は **UTC**；`cost` 米ドルで。
-- ページ化(`page_size` 最大50)+時間窓分割プル、**頻繁に投票しない**； 監査シナリオでは、1日に1回「昨日」をタップすることが推奨されます。
-- サポートされているのはHTTPSのみです。
+`data` が空、または `page_size` より少なければ最終ページです。主な項目は `time`、`token_name`、`group`、`model`、`prompt_tokens`、`completion_tokens`、`cost`、`request_id`、`request_path` です。429 / 503 は `Retry-After` を守り、秒単位のポーリングではなく差分同期として使ってください。

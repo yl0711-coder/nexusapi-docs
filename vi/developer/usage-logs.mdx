@@ -1,104 +1,47 @@
 ---
-title: "API truy vấn sử dụng"
+title: "API nhật ký sử dụng"
+description: "Đọc chi tiết sử dụng NexusAPI của tài khoản bằng mã truy cập hệ thống với tần suất thấp."
 ---
 
-Hãy dùng của bạn**Mã truy cập hệ thống**Truy vấn lập trình**Câu chuyện của chính ông**Nhật ký sử dụng có thể tích hợp vào hệ thống thanh toán, kiểm toán hoặc giám sát của bạn.
+`api.nexusapi.link` là cổng nhật ký **chỉ đọc**, tách biệt với console và relay mô hình. Nó chỉ đọc nhật ký tiêu thụ của tài khoản sở hữu token; không thể gọi mô hình, nạp credit hay thực hiện thao tác quản trị.
 
-- URL cơ sở:`https://api.nexusapi.link`
-- Giao diện này là**Chỉ đọc**, chỉ trả về dữ liệu của tài khoản tương ứng với token.
+## Thông tin cơ bản
 
-## Kiến Quyền
-
-1. Trong bảng điều khiển NexusAPI,**Cài đặt cá nhân → tạo token**"Đã tiếp nhận."**Mã truy cập hệ thống**(Lưu ý: Điều này không dùng để gọi mô hình.) `sk-` API Key là token cấp tài khoản; Nếu bị rò rỉ, vui lòng tái tạo nó như đã lỗi thời).
-2. Chèn tiêu đề yêu cầu khi được gọi:
-
-```http
-Authorization: Bearer <你的系统访问令牌>
-```
-
-- Token**Chỉ phần đầu yêu cầu được đặt**, không đánh vần vào URL.
-- Token này là thuộc tính tài khoản; việc thêm, xóa hoặc luân phiên khóa API không ảnh hưởng đến nó, khiến nó phù hợp để tích hợp lâu dài.
-
-## Truy vấn nhật ký sử dụng
-
-```http
-GET /v1/logs?page=1&page_size=50[&start_time=..&end_time=..]
-```
-
-### Tham số yêu cầu (tất cả đều tùy chọn)
-
-| Các thông số | Loại | Giải thích |
-| --- | --- | --- |
-| `page` | số nguyên | Số trang bắt đầu từ 1, mặc định là 1 |
-| `page_size` | số nguyên | Số lượng mục nhập mỗi trang: mặc định 10, tối đa 50 |
-| `start_time` | chuỗi/int | Thời gian khởi động, số giây Unix (ví dụ, `1717200000`) hoặc RFC3339 (ví dụ, `2026-06-01T00:00:00Z`） |
-| `end_time` | chuỗi/int | Thời gian kết thúc, định dạng như trên |
-
-Ràng buộc:`page × page_size ≤ 100000`(Giới hạn độ sâu lật trang); Không có giới hạn cho khoảng thời gian trong khoảng thời gian.
-
-### Ví dụ trả về (200)
-
-```json
-{
-  "data": [
-    {
-      "time": "2026-06-20T14:03:11Z", "token_name": "我的密钥", "group": "default",
-      "model": "gpt-5.5", "use_time": 3, "first_byte": 0.8,
-      "prompt_tokens": 1200, "completion_tokens": 800, "cost": 0.012,
-      "ip": "1.2.3.4", "request_id": "2026xyzreq",
-      "request_path": "/v1/chat/completions"
-    }
-  ],
-  "page": 1, "page_size": 10
-}
-```
-
-| Lĩnh vực | Giải thích |
+| Mục | Giá trị |
 | --- | --- |
-| `time` | Thời gian yêu cầu (UTC, RFC3339) |
-| `token_name` | Tên của khóa API được sử dụng lần này |
-| `group` | Nhóm token |
-| `model` | Tên mẫu |
-| `use_time` | Tổng thời gian sử dụng (giây) |
-| `first_byte` | Thời gian ký tự đầu tiên (giây); Điều này được sử dụng khi không có ký tự ban đầu trong các dạng không dòng chảy `null` |
-| `prompt_tokens` / `completion_tokens` | Số lượng token đầu vào/đầu ra |
-| `cost` | Số tiền đã chi trong lần này (USD) |
-| `ip` | Nguồn: IP |
-| `request_id` | Mã yêu cầu |
-| `request_path` | Đường dẫn cuộc gọi |
+| Base URL | `https://api.nexusapi.link` |
+| Endpoint | `GET /v1/logs` |
+| Thông tin xác thực khuyến nghị | Mã truy cập hệ thống |
+| Thứ tự | Bản ghi mới nhất trước |
 
-**Một trang trả về ít hơn 'page_size' (hoặc trống), tức là trang cuối cùng.**
+Tạo mã trong **Console → Cài đặt cá nhân → Tạo token**, rồi chỉ gửi qua Header:
 
-## Ví dụ về các cuộc gọi
+```http
+Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN
+```
+
+<Warning>
+Gọi mô hình dùng API Key tạo trong Quản lý token; API nhật ký nên dùng mã truy cập hệ thống. Mã này không gọi được mô hình nhưng có thể đọc dữ liệu cấp tài khoản, nên vẫn phải được giữ bí mật.
+</Warning>
+
+## Tham số
+
+| Tham số | Ý nghĩa |
+| --- | --- |
+| `start_time` | Thời gian bắt đầu dạng Unix giây hoặc RFC3339. |
+| `end_time` | Thời gian kết thúc dạng Unix giây hoặc RFC3339, không sớm hơn bắt đầu. |
+| `page` | Số trang từ `1`. |
+| `page_size` | Số bản ghi/trang, mặc định `10`, tối đa `50`. |
+
+Nên truy vấn từng ngày hoặc tuần. Không có bộ lọc server theo mô hình, nhóm hoặc tên key; hãy lọc dữ liệu tài khoản ở phía bạn. `page × page_size` không được vượt `100000`.
 
 ```bash
-curl -H "Authorization: Bearer <你的系统访问令牌>" \
-  "https://api.nexusapi.link/v1/logs?page=1&page_size=50&start_time=1717200000&end_time=1717804800"
+curl -G 'https://api.nexusapi.link/v1/logs' \
+  -H 'Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN' \
+  --data-urlencode 'start_time=2026-06-01T00:00:00Z' \
+  --data-urlencode 'end_time=2026-06-02T00:00:00Z' \
+  --data-urlencode 'page=1' \
+  --data-urlencode 'page_size=50'
 ```
 
-Lật trang toàn bộ volume (mã giả):
-
-```text
-page = 1
-while True:
-    resp = GET /v1/logs?page=page&page_size=50
-    处理 resp.data
-    if len(resp.data) < 50: break   # 某页不满即最后一页
-    page += 1
-```
-
-## Mã lỗi
-
-| HTTP | lỗi | Ý nghĩa |
-| --- | --- | --- |
-| 400 | `invalid_request` | Các tham số không hợp lệ (lật trang quá sâu / định dạng thời gian không chính xác / thứ tự thời gian không chính xác) |
-| 401 | `unauthorized` | Thiếu token / không hợp lệ / tài khoản bị vô hiệu hóa |
-| 429 | `rate_limited` | Yêu cầu quá thường xuyên (các dải phản hồi). `Retry-After`, vui lòng làm theo hướng dẫn để lùi lại) |
-| 503 | `unavailable` | Dịch vụ tạm thời không khả dụng (kèm theo một khoản tiền). `Retry-After`） |
-| 500 | `internal_error` | Lỗi nội bộ |
-
-## Khuyến nghị sử dụng
-
-- Thời gian là **UTC**；`cost` Bằng đô la Mỹ.
-- Sử dụng phân trang (`page_size` Tối đa 50) + kéo phân đoạn cửa sổ thời gian,**Không thường xuyên thăm dò**； Đối với các kịch bản kiểm toán, khuyến nghị nhấn 'hôm qua' một lần mỗi ngày.
-- Chỉ hỗ trợ HTTPS.
+`data` rỗng hoặc ít hơn `page_size` là trang cuối. Các trường hữu ích gồm `time`, `token_name`, `group`, `model`, `prompt_tokens`, `completion_tokens`, `cost`, `request_id`, `request_path`. Với 429/503, tuân theo `Retry-After`; dùng đồng bộ tăng dần có lịch, không polling từng giây.

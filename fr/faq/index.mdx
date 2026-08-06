@@ -1,57 +1,31 @@
 ---
-title: "Questions fréquemment posées"
+title: "Questions fréquentes"
+description: "Trouvez rapidement les explications NexusAPI pour l'intégration, les modèles, la facturation et les erreurs."
 ---
 
-D’abord, choisissez le phénomène le plus proche de vous. En cas d’erreur d’appel, veuillez enregistrer d’abord l’ID de la demande et le texte complet de l’erreur.
+Choisissez le symptôme le plus proche. Lors d'un échec, enregistrez d'abord le message complet et le Request ID avant de modifier une configuration ou de réessayer.
 
-## Accès et configuration
+## Intégration et configuration
 
-- **Par où commencer à l’utiliser pour la première fois ?**
-  Lire la suite[Commence rapidement en 5 minutes](/fr/guide/quick-start)。
+- **Par où commencer ?** Consultez le [démarrage rapide](/fr/guide/quick-start).
+- **Quelle Base URL utiliser ?** Elle dépend du client ; lisez l'[aperçu d'intégration](/fr/guide/integration-overview).
+- **Pourquoi une erreur 404 ?** Vérifiez une URL du type `/v1/v1/...` et si le client construit déjà le chemin.
+- **Pourquoi une nouvelle clé échoue-t-elle ?** Vérifiez son statut, le crédit, le groupe, l'ID du modèle et le format `Authorization: Bearer`.
 
-- **Quelle URL de base doit être remplie ?**
-  Différents clients peuvent avoir des tarifs différents, veuillez vérifier[Aperçu des méthodes d’accès](/fr/guide/integration-overview)。
+## Modèles et coûts
 
-- **Pourquoi le 404 est-il apparu ?**
-  Vérifiez si l’adresse est formée `/v1/v1/...`, et si le client concaténe automatiquement le chemin de requête.
+- **Comment confirmer qu'un groupe peut utiliser un modèle ?** Filtrez le [catalogue de modèles](https://nexusapi.link/pricing) par groupe ou appelez `/v1/models` avec la clé.
+- **Combien coûte une requête ?** Lisez l'entrée de console et le guide [usage et facturation](/fr/billing/usage-and-billing).
+- **Une erreur peut-elle être facturée ?** Oui, selon le traitement en amont ou une nouvelle tentative du client. Rapprochez les Request ID.
+- **Pourquoi le solde est-il suffisant mais la clé refuse-t-elle ?** Vérifiez aussi la limite de la clé, son expiration et son groupe.
 
-- **Puis-je ne pas utiliser la clé API après la création ?**
-  Vérifiez le statut de la clé, le montant, le groupement, l’identifiant du modèle, et `Authorization: Bearer` Format.
+## Erreurs d'API et d'outils
 
-## Modèles, regroupements et coûts
+- **Que signifient 400, 401, 429, 500, 502, 503, 504 ou 524 ?** Voir les [erreurs courantes](/fr/faq/common-errors).
+- **Une longue conversation ne continue plus ?** Conservez l'erreur, commencez une nouvelle session et évitez de renvoyer rapidement le même contenu.
+- **La génération d'image expire ?** Ne soumettez pas immédiatement la même tâche ; conservez le Request ID et lisez le [guide des images](/fr/guide/image-generation).
+- **`fetch failed` dans Claude Code ?** Testez d'abord un court message normal, puis suivez le [guide Claude Code](/fr/tools/claude-code).
 
-- **Comment confirmez-vous si un groupe peut utiliser le modèle cible ?**
-  Exister[Modèle Carré](https://nexusapi.link/pricing)Filtrez et répliquez les identifiants de modèles précis par groupe.
+## Contacter le support efficacement
 
-- **Combien consomme une seule demande ?**
-  Voir les entrées, sorties, caches et dépenses dans le journal d’utilisation de la console. Voir descriptions des champs[Dosage et description du journal](/fr/billing/usage-and-billing)。
-
-- **Une demande échouée sera-t-elle facturée ?**
-  Les erreurs sans générer de contenu valide sont généralement nulles ; en cas d’interruption ou de tentatives ultérieures, la vérification doit être effectuée à l’aide de l’ID de requête.
-
-- **Pourquoi le solde reste-t-il normal, mais le quota est-il insuffisant ?**
-  Vérifiez également le solde du compte, la limite de clés API et le regroupement ; Soumettez l’ID de la requête quand elle persiste.
-
-## Erreur d’invocation
-
-- **Que sont 400, 401, 429, 500, 502, 503, 504, 524 ?**
-  Vue[FAQ sur les appels API](/fr/faq/common-errors)。
-
-- **Soudainement incapable de continuer une longue conversation ?**
-  Sauvegarder le texte d’erreur original et créer une nouvelle session pour vérification ; Ne soumettez pas la même demande fréquemment.
-
-- **Après l’erreur, la mission a encore réussi ?**
-  Des tentatives ultérieures peuvent avoir lieu ; veuillez vous référer au dossier final avec le même ID de demande et au résultat final du client.
-
-## Demandez de l’aide rapidement
-
-Si vous ne pouvez pas déterminer le type de problème, appuyez[Vérifiez vous-même le problème](/fr/faq/self-check)Faites une vérification minimale et soumettez tout d’un coup :
-
-- Demande d’ID
-- Heure et fuseau horaire d’occurrence
-- Client et version
-- Interface modèle et requête
-- Erreur complète dans le texte original
-- La question est de savoir si cela arrive occasionnellement ou de façon continue
-
-Ne soumettez pas de clés API complètes, de mots de passe ou de données privées.
+Après l'[auto-vérification](/fr/faq/self-check), envoyez le Request ID, l'heure et le fuseau, le client et sa version, le modèle, l'endpoint, l'erreur complète et le caractère intermittent ou permanent du problème. N'envoyez jamais une clé complète, un mot de passe ou du contenu confidentiel.

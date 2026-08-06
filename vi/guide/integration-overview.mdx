@@ -1,75 +1,44 @@
 ---
-title: "Tổng quan về các phương thức truy cập"
+title: "Tổng quan cách tích hợp"
+description: "Chọn URL và giao thức NexusAPI phù hợp với client và mô hình của bạn."
 ---
 
-NexusAPI hỗ trợ các client AI phổ biến và các cuộc gọi giao diện kiểu OpenAI. Các công cụ khác nhau có thể tự động ghép đường dẫn, vì vậy bạn nên điền địa chỉ theo cách bạn sử dụng.
+NexusAPI có thể được dùng từ ứng dụng tự viết, client tương thích OpenAI hoặc công cụ lập trình. Mỗi client ghép URL và dùng giao thức khác nhau. Hãy chọn theo tình huống, không sao chép nguyên cấu hình từ công cụ này sang công cụ khác.
 
-## Chuẩn bị trước khi bắt đầu
+## Ba bước kiểm tra trước khi kết nối
 
-Bất kể phương pháp được sử dụng, các điều kiện sau đây đều bắt buộc:
+1. Tạo API Key trong console và đặt giới hạn phù hợp.
+2. Xác nhận nhóm token của khóa có mô hình cần dùng.
+3. Sao chép chính xác model ID từ Chợ mô hình hoặc `/v1/models`.
 
-1. Tạo một API Key trong bảng điều khiển.
-2. Xác nhận rằng nhóm API Key bao gồm mô hình mục tiêu.
-3. Sao chép chính xác mã mô hình từ model plaza.
-4. Yêu cầu được thực hiện bằng địa chỉ HTTPS.
+## Chọn theo mục đích
 
-## Cách sử dụng phổ biến
-
-| Cách sử dụng | Tài liệu tham khảo được khuyến nghị |
+| Bạn muốn làm gì | Tài liệu nên đọc |
 | --- | --- |
-| Tự xây dựng chương trình hoặc script của riêng bạn | [Bắt đầu nhanh chóng trong 5 phút](/vi/guide/quick-start) |
-| Mã Claude | [Hướng dẫn cấu hình Claude Code](/vi/tools/claude-code) |
-| Codex CLI | [Hướng dẫn cấu hình Codex CLI](/vi/tools/codex-cli) |
-| Công tắc CC | [Hướng dẫn thiết lập CC Switch](/vi/tools/cc-switch) |
-| VS Mã / Con trỏ | [Hướng dẫn plugin trình chỉnh sửa](/vi/tools/cursor-vscode) |
+| Ứng dụng, SDK, cURL hoặc script tự động | [Bắt đầu nhanh](/vi/guide/quick-start) |
+| Claude Code | [Thiết lập Claude Code](/vi/tools/claude-code) |
+| Codex CLI | [Thiết lập Codex CLI](/vi/tools/codex-cli) |
+| Quản lý nhiều provider CLI | [Thiết lập CC Switch](/vi/tools/cc-switch) |
+| Claude Code trong VS Code hoặc Cursor | [VS Code / Cursor](/vi/tools/cursor-vscode) |
 
-## So sánh địa chỉ và giao thức
+## URL và giao thức
 
-| Cảnh | Điền địa chỉ | Các thỏa thuận chính | Ghi chú |
+| Tình huống | Base URL | Điểm bắt đầu | Lưu ý |
 | --- | --- | --- | --- |
-| OpenAI SDK / Chương trình đa năng | `https://nexusapi.link/v1` | Rắc rối trong chat, v.v | Đường dẫn yêu cầu được nối với SDK hoặc chương trình |
-| Codex CLI | `https://nexusapi.link/v1` | Phản hồi | Sử dụng cấu hình Nhà cung cấp trong hướng dẫn Codex |
-| Mã Claude | `https://nexusapi.link` | Thông điệp nhân văn | Không thêm nhiều địa chỉ sau khi cấu hình `/v1` |
-| Công tắc CC | Điền theo loại Nhà cung cấp | Điều đó phụ thuộc vào công cụ mục tiêu | Claude có quy tắc địa chỉ khác với Codex |
-
-Bảng trên được sử dụng để giúp chọn phương thức truy cập. Đường dẫn giao diện đầy đủ, các tham số và cấu trúc phản hồi vẫn giữ nguyên như sau [Tài liệu tham khảo API](https://nexusapi.apifox.cn/) như một tiêu chuẩn.
-
-## Tại sao địa chỉ có thể khác nhau
-
-Các yêu cầu kiểu OpenAI chung thường sử dụng:
-
-```text
-https://nexusapi.link/v1
-```
-
-Một số máy khách yêu cầu bỏ qua điều này `/v1` Địa chỉ trang web có thể được hoàn thành tự động `/chat/completions`、`/responses`、`/messages` và những con đường khác. Vui lòng tham khảo hướng dẫn công cụ tương ứng để biết độ chính xác.
+| SDK tương thích OpenAI / ứng dụng chung | `https://nexusapi.link/v1` | Chat Completions | SDK thường tự nối `/chat/completions`. |
+| Claude Code | `https://nexusapi.link` | Anthropic Messages | Không thêm `/v1`. |
+| Codex CLI | `https://nexusapi.link/v1` | Responses | Dùng custom provider của Codex. |
+| Mô hình ảnh | `https://nexusapi.link/v1` | Images | Chỉ dùng với mô hình được ghi rõ là hỗ trợ ảnh. |
 
 <Warning>
-**Tránh lặp lại cùng một đường dẫn**
-
-Nếu khách hàng sẽ tự động hoàn thành, `/v1`, có thể được hình thành sau khi làm đầy thủ công `/v1/v1/...` Và điều này dẫn đến 404. Khi gặp 404, trước tiên hãy kiểm tra địa chỉ yêu cầu thực tế của khách hàng.
+Mô hình hiển thị không có nghĩa là nó dùng được với mọi giao thức. Hãy đọc [ma trận API và khả năng mô hình](/vi/developer/capability-matrix) trước: trang này nêu các endpoint mà NexusAPI công bố hỗ trợ.
 </Warning>
-## Không trộn cấu hình khách hàng với các API chung
 
-Các công cụ CLI, plugin trình chỉnh sửa và chương trình tùy chỉnh có thể sử dụng các giao thức và tệp cấu hình khác nhau. Ngay cả khi tên mô hình giống nhau, bạn không thể sao chép trực tiếp toàn bộ cấu hình của một công cụ sang công cụ khác.
+## Kiểm tra tối thiểu
 
-Phương pháp đánh giá:
+1. Gọi `GET /v1/models` bằng khóa hiện tại.
+2. Chọn ID được trả về và phù hợp giao thức.
+3. Gửi một yêu cầu văn bản ngắn.
+4. Kiểm tra bản ghi tương ứng trong console.
 
-- Cấu hình Codex CLI: Đọc hướng dẫn Codex và sử dụng cấu hình Phản hồi phù hợp.
-- Cấu hình Claude Code: Đọc hướng dẫn Claude Code bằng các biến môi trường Anthropic.
-- Tự viết mã của bạn: Chọn đường dẫn yêu cầu và tham số dựa trên tham chiếu API.
-- Khi không chắc chắn: trước tiên hãy xác nhận tên khách hàng và đường dẫn yêu cầu thực tế mà nó đã gửi.
-
-## Tài liệu tham khảo API
-
-Toàn bộ đường giao diện, tham số, cấu trúc yêu cầu và cấu trúc phản hồi đều có sẵn [Tham khảo API NexusAPI](https://nexusapi.apifox.cn/) Giữ phần giữa.
-
-Trung tâm trợ giúp giải thích "cách lựa chọn và sử dụng"; Tham chiếu API chịu trách nhiệm giải thích "trường và cấu trúc là gì."
-
-## Cách xác nhận cấu hình thành công
-
-- Khách hàng có thể trả về toàn bộ nội dung một cách bình thường.
-- Yêu cầu tương ứng sẽ xuất hiện trong nhật ký sử dụng bảng điều khiển.
-- Các mô hình, nhóm và mức tiêu thụ trong nhật ký đều đáp ứng kỳ vọng.
-
-Nếu cuộc gọi thất bại, hãy lưu văn bản lỗi và Mã Yêu Cầu, sau đó nhập[Tự kiểm tra vấn đề](/vi/faq/self-check)。
+Nếu lỗi, lưu toàn bộ lỗi và Request ID rồi làm [tự kiểm tra](/vi/faq/self-check). Không gửi lặp một tác vụ trong vòng lặp.

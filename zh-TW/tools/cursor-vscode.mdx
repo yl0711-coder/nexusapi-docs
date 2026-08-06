@@ -1,99 +1,32 @@
 ---
-title: "在 VS Code 和游標中使用 Claude 程式碼"
+title: "在 VS Code 或 Cursor 使用 Claude Code"
+description: "以既有的 NexusAPI 使用者設定，在官方 Claude Code 編輯器擴充套件中工作。"
 ---
 
-官方的 Claude Code 擴充功能提供圖形對話框、程式碼變異預覽、檔案參考及權限驗證。
-VS Code 的配置方式與游標相似。
+官方 Claude Code 擴充套件提供聊天、差異預覽、檔案參考和權限提示；VS Code 和 Cursor 共用 Claude Code 的使用者層級設定。
 
-## 1. 安裝擴充功能
+## 1. 安裝官方擴充套件
 
-請在開始前確認：
-
-- VS Code 版本是 1.98 或更高。
-- 壓制 [Claude Code 教學](/zh-TW/tools/claude-code) 設定 NexusAPI。
-- `~/.claude/settings.json` API 金鑰和基礎網址現在都已啟用。
-
-打開擴充商店：
-
-- macOS：`Cmd + Shift + X`
-- Windows / Linux：`Ctrl + Shift + X`
-
-搜尋 `Claude Code`，出版商已確認 **人為** 然後重新安裝。 也可以是來自
-[Claude Code 官方對決 Code 指南](https://code.claude.com/docs/en/vs-code)
-進入 VS Code 或游標的安裝入口。
+先完成 [Claude Code 設定](/zh-TW/tools/claude-code)。在編輯器擴充套件搜尋 **Claude Code**，並確認發佈者為 **Anthropic**；也可查看[官方 VS Code 教學](https://code.claude.com/docs/en/vs-code)。
 
 <Warning>
-**查查出版社**
-
-擴充商店裡可能有類似名稱的第三方擴充。 安裝前，請確認擴充功能名稱為
-`Claude Code`出版者： `Anthropic`。
+搜尋結果可能有第三方同名擴充套件。只安裝 Anthropic 發佈的版本，且不要把 API Key 貼入第三方設定面板。
 </Warning>
-## 2. 讓擴充功能使用 NexusAPI
 
-Claude Code 擴充功能與 CLI 共享 `~/.claude/settings.json`。 在正常情況下，你不需要親自到場
-VS 程式碼或游標 `settings.json` 反覆在中間輸入 API 金鑰。
+## 2. 共用 NexusAPI 設定
 
-如果擴充功能仍然顯示登入提示：
+擴充套件會讀取與 CLI 相同的 `~/.claude/settings.json`（Windows 為使用者目錄對應路徑）。不要在 VS Code 或 Cursor 的工作區設定中重複保存 Key。
 
-1. 打開編輯器設定。
-2. 搜尋 `Claude Code login`。
-3. 啟動 **停用登入提示**。
-4. 完全退出並重新開啟編輯器。
+若仍顯示登入提示：
 
-如果編輯器無法讀取終端機環境，你可以從已設定的終端機進入專案目錄並執行：
+1. 開啟編輯器設定並搜尋 `Claude Code login`。
+2. 視介面提供的選項啟用 **Disable Login Prompt**。
+3. 完全重啟編輯器。
 
-```bash
-code .
-```
+若從桌面啟動的編輯器沒有取得環境設定，可在已設定好的終端執行 `code .`。
 
-游標使用者可以重新啟動游標，或直接在游標的整合終端機中執行 `claude`。
+## 3. 安全驗證
 
-## 3. 開啟 Claude 程式碼
+從側欄、命令面板或狀態列開啟 Claude Code，送出「說明目前檔案做什麼，不要修改檔案」等唯讀測試。成功後在 NexusAPI 使用紀錄確認對應請求。
 
-安裝後，您可以使用以下任一方法開啟：
-
-- 點擊編輯器右上角的 Claude Code 星形圖示。
-- 點擊左側活動欄中的 Claude Code 圖示。
-- 打開指令面板搜尋 `Claude Code`。
-- 點擊右下角的狀態列 `Claude Code`。
-
-如果右上角沒有圖示，請先打開程式碼檔; 此圖示僅在開啟檔案後才會出現。
-
-![VS Code 中官方 Claude Code 擴充介面的範例](/images/nexusapi/claude-code-vscode-official.jpg)
-
-> 介面範例來自
-> [Claude Code 官方 VS Code 文件](https://code.claude.com/docs/en/vs-code)。
-> 具體按鍵位置可能會在擴充版中更新。
-
-## 4. 驗證配置
-
-在擴充功能中發送一個簡單的請求，例如：
-
-```text
-请解释当前打开文件的作用，不要修改代码。
-```
-
-如果回傳正常，代表擴充套件已經讀取了 NexusAPI 設定。 若遇到錯誤，請保持：
-
-- 編輯器與擴充版本
-- Claude Code 版本
-- 原文錯誤
-- 請求識別碼
-
-然後再參考它[自我檢查問題](/zh-TW/faq/self-check)。
-
-## 常見問題
-
-### 延長安裝後再無現身
-
-在執行選單中執行指令面板 `Developer: Reload Window`或是完全重啟編輯器。
-
-### CLI 能用，但擴充功能無法
-
-確認擴充 **停用登入提示** 已啟用並已勾選
-`~/.claude/settings.json` 這是有效的 JSON 嗎？ 擴充功能和 CLI 應該共用相同的設定。
-
-### 找不到游標擴充商店
-
-你可以從官方的 Claude Code VS Code 指南中取得游標安裝條目; 如果當前游標存在
-該版本不支援此擴充功能，仍可在游標的整合終端機中執行 `claude`。
+排查時請更新編輯器、擴充套件和 Claude Code，於整個編輯器重啟後再測試，並保存錯誤與 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。請勿傳送完整 Key、工作區密鑰或私密原始碼。

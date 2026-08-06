@@ -1,104 +1,81 @@
 ---
-title: "Usage query API"
+title: "Usage-log API"
+description: "Read account-level NexusAPI usage logs for reconciliation and audit."
 ---
 
-Use yours**System access token**Programmatic queries**His own account**usage logs that can be integrated into your billing, auditing, or monitoring systems.
+`api.nexusapi.link` is a **read-only usage-log gateway** separate from the console and model relay. It reads consumption logs for the account that owns the credential. It cannot call models, add credit, or perform management actions.
 
-- Base URL:`https://api.nexusapi.link`
-- This interface is**Read only**, only returns the data of the account corresponding to the token.
+## Basics
 
-## Jian Quan
-
-1. In the NexusAPI console,**Personal settings → generate tokens**"Acquired."**System access token**(Note: This is not for calling the model.) `sk-` API Key is an account-level token; If leaked, please regenerate it as obsolete).
-2. Insert the request header when called:
-
-```http
-Authorization: Bearer <你的系统访问令牌>
-```
-
-- Token**Only the request header is placed**, do not spell into the URL.
-- This token is an account attribute; adding, deleting, or rotating API keys does not affect it, making it suitable for long-term integration.
-
-## Query the usage log
-
-```http
-GET /v1/logs?page=1&page_size=50[&start_time=..&end_time=..]
-```
-
-### Request parameters (all optional)
-
-| Parameters | Type | Explanation |
-| --- | --- | --- |
-| `page` | integer | Page numbers start from 1, default is 1 |
-| `page_size` | integer | Number of entries per page: default 10, maximum 50 |
-| `start_time` | string/int | Start time, Unix seconds (e.g., `1717200000`) or RFC3339 (e.g., `2026-06-01T00:00:00Z`） |
-| `end_time` | string/int | End time, format as above |
-
-Constraints:`page × page_size ≤ 100000`(Page Turn Depth Limit); There is no limit to the time window span.
-
-### Return Example (200)
-
-```json
-{
-  "data": [
-    {
-      "time": "2026-06-20T14:03:11Z", "token_name": "我的密钥", "group": "default",
-      "model": "gpt-5.5", "use_time": 3, "first_byte": 0.8,
-      "prompt_tokens": 1200, "completion_tokens": 800, "cost": 0.012,
-      "ip": "1.2.3.4", "request_id": "2026xyzreq",
-      "request_path": "/v1/chat/completions"
-    }
-  ],
-  "page": 1, "page_size": 10
-}
-```
-
-| Field | Explanation |
+| Item | Value |
 | --- | --- |
-| `time` | Request time (UTC, RFC3339) |
-| `token_name` | The name of the API Key used this time |
-| `group` | Token grouping |
-| `model` | Model name |
-| `use_time` | Total time spent (seconds) |
-| `first_byte` | First character time (seconds); This is used when there is no initial character in non-flow forms `null` |
-| `prompt_tokens` / `completion_tokens` | Number of tokens input/output |
-| `cost` | Amount spent this time (USD) |
-| `ip` | Source: IP |
-| `request_id` | Request ID |
-| `request_path` | Call path |
+| Base URL | `https://api.nexusapi.link` |
+| Endpoint | `GET /v1/logs` |
+| Recommended credential | System access token |
+| Scope | The owning account's usage logs, newest first |
 
-**A page returns fewer than 'page_size' (or empty), i.e., the last page.**
+Create a system access token in **Console → Personal settings → Generate token**, then send it only in this header:
 
-## Examples of calls
+```http
+Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN
+```
+
+<Warning>
+**Do not confuse credentials**
+
+Model calls use the API key created in Token Management. The usage-log API should use the system access token. The latter cannot call models, but it exposes account-level usage and must be protected like a secret.
+</Warning>
+
+## Query parameters
+
+All parameters are optional. For routine reconciliation, query one day or week at a time.
+
+| Parameter | Meaning |
+| --- | --- |
+| `start_time` | Unix seconds or an RFC3339 start time. |
+| `end_time` | Unix seconds or an RFC3339 end time; it cannot be earlier than `start_time`. |
+| `page` | Page number, starting at `1`; default `1`. |
+| `page_size` | Records per page; default `10`, maximum `50`. |
+
+The API does not currently provide server-side filters for model, group, or token name. Filter the returned account data locally. `page × page_size` cannot exceed `100000`.
+
+## Example
 
 ```bash
-curl -H "Authorization: Bearer <你的系统访问令牌>" \
-  "https://api.nexusapi.link/v1/logs?page=1&page_size=50&start_time=1717200000&end_time=1717804800"
+curl -G 'https://api.nexusapi.link/v1/logs' \
+  -H 'Authorization: Bearer YOUR_SYSTEM_ACCESS_TOKEN' \
+  --data-urlencode 'start_time=2026-06-01T00:00:00Z' \
+  --data-urlencode 'end_time=2026-06-02T00:00:00Z' \
+  --data-urlencode 'page=1' \
+  --data-urlencode 'page_size=50'
 ```
 
-Page Flip Full Volume (Pseudocode):
+When `data` is empty or contains fewer records than `page_size`, you have reached the last page. The endpoint intentionally does not return a total count.
 
-```text
-page = 1
-while True:
-    resp = GET /v1/logs?page=page&page_size=50
-    处理 resp.data
-    if len(resp.data) < 50: break   # 某页不满即最后一页
-    page += 1
-```
+## Important response fields
 
-## Error code
+| Field | Meaning |
+| --- | --- |
+| `time` | Request time in UTC / RFC3339. |
+| `token_name` | Name of the API key used by the request. |
+| `group` / `model` | Actual token group and model recorded. |
+| `use_time` / `first_byte` | Total duration and time to first byte, in seconds. |
+| `prompt_tokens` / `completion_tokens` | Input and output tokens. |
+| `cost` | Recorded charge in USD. |
+| `ip` | Source IP when recorded. |
+| `request_id` | Request identifier for reconciliation. |
+| `request_path` | Actual API path, for example `/v1/chat/completions`. |
 
-| HTTP | error | Meaning |
-| --- | --- | --- |
-| 400 | `invalid_request` | Parameters are invalid (page turns too deep / time format is incorrect / time order is incorrect) |
-| 401 | `unauthorized` | Token missing / invalid / account disabled |
-| 429 | `rate_limited` | Requests are too frequent (response bands). `Retry-After`, please follow the prompts to step back) |
-| 503 | `unavailable` | The service is temporarily unavailable (with a band of money). `Retry-After`） |
-| 500 | `internal_error` | Internal errors |
+Internal channel data, raw quota, and full billing calculation are intentionally not returned.
 
-## Usage recommendations
+## Errors and frequency
 
-- The time is **UTC**；`cost` In US dollars.
-- Using pagination (`page_size` Maximum 50) + time window segmented pulling,**Do not frequently poll**； For audit scenarios, it's recommended to tap 'yesterday' once a day.
-- Only HTTPS is supported.
+| HTTP status | What to do |
+| --- | --- |
+| 400 | Check time format, order, and pagination depth. |
+| 401 | Regenerate the system access token; do not send it to support. |
+| 429 | Follow `Retry-After` before retrying. |
+| 503 | Wait for the value in `Retry-After`, then try again. |
+| 500 | Keep `X-Request-Id`, time, and the response text, then contact support. |
+
+Use scheduled incremental pulls, not second-by-second polling. For a suspected billing issue, retain both the query range and the model-call Request ID.

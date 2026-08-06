@@ -1,77 +1,59 @@
 ---
-title: "Пример интеграции кода"
+title: "Примеры кода"
+description: "Вызывайте NexusAPI из Python, JavaScript или cURL через Chat Completions."
 ---
 
-NexusAPI поддерживает совместимые вызовы для основных SDK OpenAI. Ниже приведён быстрый пример интеграции широко используемых языков разработки. Для поддержки конкретных интерфейсов и параметров, пожалуйста, обратитесь к [Документация по справкам API](https://nexusapi.apifox.cn/) как стандарт.
+Примеры используют OpenAI Chat Completions. Сначала проверьте протокол в [матрице возможностей](/ru/developer/capability-matrix) и скопируйте точный ID модели, доступный текущему ключу.
 
-### Параметры доступа к ядру
+## Базовые параметры
 
-Перед использованием любой модели необходимо подготовить следующие два основных параметра:
+- Base URL: `https://nexusapi.link/v1`
+- API-ключ: создаётся в [консоли NexusAPI](https://nexusapi.link)
+- Model ID: точное значение из каталога или `/v1/models`
 
-- **Адрес интерфейса (базовый URL):** `https://nexusapi.link/v1`
-- **Идентификационные учетные данные (API-ключ):** Это должно быть у нас [Пульт управления](https://nexusapi.link) Генерация обычно осуществляется `sk-` Начало.
-
-> **Примечание:** При запросе, пожалуйста, введите API-ключ в заголовок HTTP-запроса `Authorization` поле, форматировано как `Bearer sk-xxxxxx`。
-
-### Python
-Просто инстанцируйте клиента, как раньше `api_key` И `base_url` Просто замените его на нашу.
+## Python
 
 ```python
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="sk-您在 NexusAPI 生成的令牌",
-    base_url="https://nexusapi.link/v1"
+    api_key="YOUR_API_KEY",
+    base_url="https://nexusapi.link/v1",
 )
 
 response = client.chat.completions.create(
-    model="claude-sonnet-4-6", # 或其他模型
-    messages=[
-        {"role": "user", "content": "你好，请自我介绍。"}
-    ],
-    stream=True # 支持流式输出
+    model="YOUR_MODEL_ID",
+    messages=[{"role": "user", "content": "Кратко представься."}],
 )
 
-for chunk in response:
-    print(chunk.choices[0].delta.content or "", end="", flush=True)
+print(response.choices[0].message.content)
 ```
 
-### JavaScript
+## JavaScript
 
 ```js
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-    apiKey: "sk-您在 NexusAPI 生成的令牌",
-    baseURL: "https://nexusapi.link/v1"
+const client = new OpenAI({
+  apiKey: process.env.NEXUSAPI_API_KEY,
+  baseURL: "https://nexusapi.link/v1",
 });
 
-async function main() {
-    const stream = await openai.chat.completions.create({
-        model: "claude-sonnet-4-6",
-        messages: [{ role: "user", content: "你好！" }],
-        stream: true,
-    });
-    for await (const chunk of stream) {
-        process.stdout.write(chunk.choices[0]?.delta?.content || "");
-    }
-}
-main();
+const response = await client.chat.completions.create({
+  model: "YOUR_MODEL_ID",
+  messages: [{ role: "user", content: "Кратко представься." }],
+});
+
+console.log(response.choices[0].message.content);
 ```
 
-### cURL
+## cURL
 
 ```bash
-curl "https://nexusapi.link/v1/chat/completions" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk-您在 NexusAPI 生成的令牌" \
-  -d '{
-    "model": "gpt-5.5",
-    "messages": [
-      {
-        "role": "user",
-        "content": "测试一下 API 是否连通"
-      }
-    ]
-  }'
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"Проверка подключения"}]}'
 ```
+
+Не помещайте настоящий ключ в исходный код и репозиторий. Для изображений используется другой endpoint — см. [руководство по изображениям](/ru/guide/image-generation).

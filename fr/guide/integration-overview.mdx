@@ -1,75 +1,44 @@
 ---
-title: "Aperçu des méthodes d’accès"
+title: "Choisir un mode d'intégration"
+description: "Choisissez l'URL et le protocole NexusAPI correspondant à votre client et à votre modèle."
 ---
 
-NexusAPI prend en charge les clients IA grand public et les appels d’interface de type OpenAI. Différents outils peuvent automatiquement broder les chemins, donc vous devez remplir l’adresse selon votre utilisation.
+NexusAPI peut être utilisé depuis une application, un client compatible OpenAI ou un outil de développement. Les clients ne construisent pas tous l'URL de la même manière et n'utilisent pas tous le même protocole. Choisissez d'abord votre cas d'usage : ne copiez pas la configuration d'un outil dans un autre.
 
-## Préparation avant de commencer
+## Les trois vérifications préalables
 
-Quelle que soit la méthode utilisée, les éléments suivants sont requis :
+1. Créez une clé API dans la console et définissez une limite adaptée.
+2. Vérifiez que le groupe de cette clé contient le modèle visé.
+3. Copiez l'ID exact du modèle depuis le catalogue ou depuis `/v1/models`.
 
-1. Créez une clé API dans la console.
-2. Confirmez que le groupe de clés API inclut le modèle cible.
-3. Copiez l’ID exact du modèle depuis la place du modèle central.
-4. La requête est effectuée à l’aide d’une adresse HTTPS.
+## Choisir selon votre usage
 
-## Usage courant
-
-| Comment l’utiliser | Lectures recommandées |
+| Votre objectif | Guide recommandé |
 | --- | --- |
-| Créez vos propres programmes ou scripts | [Commence rapidement en 5 minutes](/fr/guide/quick-start) |
-| Claude Code | [Tutoriel de configuration du code Claude](/fr/tools/claude-code) |
-| Codex CLI | [Tutoriel de configuration de la ligne de commande Codex](/fr/tools/codex-cli) |
-| Commutateur CC | [Tutoriel de configuration du CC Switch](/fr/tools/cc-switch) |
-| VS Code / Curseur | [Tutoriel pour le plugin d’éditeur](/fr/tools/cursor-vscode) |
+| Application, SDK, cURL ou script d'automatisation | [Démarrage rapide](/fr/guide/quick-start) |
+| Claude Code | [Configurer Claude Code](/fr/tools/claude-code) |
+| Codex CLI | [Configurer Codex CLI](/fr/tools/codex-cli) |
+| Plusieurs fournisseurs CLI | [Configurer CC Switch](/fr/tools/cc-switch) |
+| Claude Code dans VS Code ou Cursor | [VS Code / Cursor](/fr/tools/cursor-vscode) |
 
-## Comparaison d’adresses et de protocoles
+## URL et protocole
 
-| Scène | Remplissez l’adresse | Principaux accords | Notes |
+| Cas | Base URL | Point de départ | Note |
 | --- | --- | --- | --- |
-| SDK OpenAI / Programme à usage général | `https://nexusapi.link/v1` | Complications du chat, etc | Le chemin de requête est concaténé par le SDK ou le programme |
-| Codex CLI | `https://nexusapi.link/v1` | Réponses | Utilisez la configuration du fournisseur dans le tutoriel du Codex |
-| Claude Code | `https://nexusapi.link` | Messages anthropiques | N’ajoutez pas plusieurs adresses après la configuration `/v1` |
-| Commutateur CC | Remplir selon le type de fournisseur | Cela dépend de l’outil cible | Claude a des règles d’adresse différentes de celles du Codex |
-
-Le tableau ci-dessus sert à aider à sélectionner les méthodes d’accès. Le chemin d’interface complet, les paramètres et la structure de réponse restent les suivants [Documentation de référence API](https://nexusapi.apifox.cn/) comme standard.
-
-## Pourquoi les adresses peuvent différer
-
-Les requêtes génériques de type OpenAI utilisent généralement :
-
-```text
-https://nexusapi.link/v1
-```
-
-Certains clients exigent que cela soit omis `/v1` L’adresse du site peut être automatiquement complétée `/chat/completions`、`/responses`、`/messages` et d’autres chemins. Veuillez consulter le tutoriel correspondant pour plus de précision.
+| SDK compatible OpenAI ou programme général | `https://nexusapi.link/v1` | Chat Completions | Le SDK ajoute généralement `/chat/completions`. |
+| Claude Code | `https://nexusapi.link` | Messages Anthropic | N'ajoutez pas `/v1`. |
+| Codex CLI | `https://nexusapi.link/v1` | Responses | Utilisez le fournisseur personnalisé Codex. |
+| Modèle d'image | `https://nexusapi.link/v1` | Images | Seulement pour un modèle explicitement compatible. |
 
 <Warning>
-**Évitez de répéter le même chemin**
-
-Si le client le complète automatiquement, `/v1`, qui peut être formé après un remplissage manuel `/v1/v1/...` Et cela a mené à 404. Lorsque vous rencontrez un 404, vérifiez d’abord l’adresse réelle de la demande du client.
+Un modèle visible n'est pas forcément disponible pour chaque protocole. Consultez d'abord la [matrice des API et des capacités](/fr/developer/capability-matrix) : elle décrit les endpoints réellement documentés par NexusAPI.
 </Warning>
-## Ne mélangez pas la configuration client avec les API générales
 
-Les outils CLI, les plugins d’éditeur et les programmes personnalisés peuvent utiliser différents protocoles et fichiers de configuration. Même si les noms des modèles sont les mêmes, vous ne pouvez pas copier directement toute la configuration d’un outil dans un autre.
+## Vérification minimale
 
-Méthode pour juger :
+1. Appelez `GET /v1/models` avec la clé concernée.
+2. Choisissez un ID retourné et compatible avec le protocole.
+3. Envoyez une courte requête de test.
+4. Vérifiez l'entrée correspondante dans le journal d'utilisation.
 
-- Configurez la clé de code du codex : lisez le tutoriel du codex et utilisez la configuration Réponses correspondante.
-- Configurez Claude Code : Lisez le tutoriel Claude Code en utilisant les variables d’environnement Anthropic.
-- Écrivez votre propre code : choisissez le chemin de requête et les paramètres en fonction de la référence de l’API.
-- En cas de doute : confirmez d’abord le nom du client et le chemin de la demande qu’il a envoyé.
-
-## Documentation de référence API
-
-Le chemin d’interface complet, les paramètres, la structure de requête et la structure de réponse sont présents [Référence de l’API NexusAPI](https://nexusapi.apifox.cn/) Maintenez le centre.
-
-Les centres d’aide expliquent « comment choisir et utiliser » ; Les références API sont responsables d’expliquer « quels sont les champs et structures ».
-
-## Comment confirmer la réussite de la configuration
-
-- Le client peut retourner le contenu complet normalement.
-- La requête correspondante apparaît dans le journal d’utilisation de la console.
-- Les modèles, les groupes et la consommation dans les journaux ont répondu aux attentes.
-
-Si l’appel échoue, enregistrez le texte d’erreur et l’ID de la demande, puis saisissez[Vérifiez vous-même le problème](/fr/faq/self-check)。
+En cas d'échec, conservez l'erreur complète et le Request ID, puis suivez l'[auto-vérification](/fr/faq/self-check). N'envoyez pas la même tâche en boucle.

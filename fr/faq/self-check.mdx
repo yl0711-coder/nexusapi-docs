@@ -1,59 +1,56 @@
 ---
-title: "Vérifiez vous-même le problème"
+title: "Auto-vérification"
+description: "Conservez les informations minimales et isolez une erreur NexusAPI avant de contacter le support."
 ---
 
-Si l’appel échoue, cliquez d’abord sur cette page pour effectuer la vérification de base. La plupart des configurations ou des problèmes occasionnels peuvent être déterminés en quelques minutes.
+La plupart des erreurs de configuration ou incidents temporaires peuvent être circonscrits en quelques minutes. Préservez d'abord les preuves, puis faites un seul test minimal à faible fréquence.
 
-## Étape 1 : Sauvegarder le site
+## 1. Conserver les preuves
 
-Avant de clôturer le client ou de refaire la demande, enregistrez :
+Avant de fermer le client ou de réessayer, notez :
 
-- Erreur complète dans le texte original
-- Demande d’ID
-- Heure et fuseau horaire d’occurrence
-- Le modèle utilisé
-- Le client et la version utilisée
-- Les interfaces de requêtes, par exemple `/v1/responses`
+- le texte complet de l'erreur et le Request ID ;
+- l'heure et le fuseau horaire ;
+- l'ID du modèle, l'endpoint et l'usage ou non du streaming ;
+- le client / SDK et sa version.
 
-Ne soumettez pas toutes les clés API, mots de passe, données privées ou contenu professionnel complet.
+Ne partagez pas une clé complète, un mot de passe, des données privées ou le contenu complet d'une demande métier.
 
-## Étape 2 : Déterminer le type de problème
+## 2. Identifier la catégorie
 
-| Phénomène | Contrôles de priorité |
+| Symptôme | À vérifier en premier |
 | --- | --- |
-| 401 | API Key、`Bearer` Préfixe, demande d’adresse |
-| 404 | Vérifiez si l’URL de base est dupliquée ou manquante `/v1` |
-| 400 | Modèles, interfaces, paramètres et états de session |
-| 429 | Concurrence et fréquence des requêtes |
-| 500 / 502 / 503 | Attends 10~30 secondes et réessaie |
-| 504 / 524 | Demande de contenu, délai d’attente et statut du service |
-| Équilibre insuffisant | Équilibre console, quantité de clés et regroupement |
+| 401 | Clé, préfixe `Bearer` et URL. |
+| 403 | Groupe, restriction de modèle, liste d'IP, compte ou refus en amont. |
+| 404 | Base URL, chemin, `/v1` absent ou dupliqué. |
+| 400 | Modèle, protocole, paramètres ou état de session. |
+| 429 | Concurrence et fréquence ; respectez `Retry-After`. |
+| 500 / 502 / 503 | Attendez 10 à 30 secondes puis réessayez une seule fois. |
+| 504 / 524 | Taille de demande, délai et état de service. |
+| `500, not implemented` | Ne réessayez pas : vérifiez un appel Responses vers un modèle Claude. |
+| `no available channel` | ID de modèle, groupe de jetons et disponibilité actuelle. |
 
-Pour des significations spécifiques, voir ci-dessous [FAQ sur les appels API](/fr/faq/common-errors)。
+Voir les [erreurs API courantes](/fr/faq/common-errors) pour le détail.
 
-## Étape 3 : Effectuer une vérification minimale
+## 3. Faire un test minimal
 
-1. Vérifiez que l’équilibre de la console et la clé API fonctionnent correctement.
-2. Recopiez l’ID du modèle depuis le carré du modèle.
-3. Créez une nouvelle session et envoyez un court texto.
-4. Réessayez une seule fois, et enregistrez un nouvel ID de demande.
-5. Vérifiez si le journal d’utilisation de la console affiche la requête correspondante.
+1. Confirmez le solde et le statut de la clé dans la console.
+2. Copiez à nouveau l'ID du modèle depuis le catalogue.
+3. Ouvrez une nouvelle session et envoyez un court texte.
+4. Réessayez au plus une fois en gardant le nouveau Request ID.
+5. Vérifiez l'entrée correspondante dans le journal.
 
-Si la nouvelle session réussit, le problème est généralement lié à l’état original de la session ou au contenu de la requête ; Si même la plus petite demande continue d’échouer, merci de soumettre une question.
-
-## Fourni lors du contact avec le support
-
-Veuillez fournir immédiatement ce qui suit :
+Si une session neuve fonctionne, l'état ou le contenu de la conversation initiale est probablement impliqué. Si le test minimal échoue aussi, envoyez les preuves ci-dessus.
 
 ```text
-发生时间（含时区）：
-Request ID：
-客户端及版本：
-模型：
-请求接口：
-错误原文：
-偶发还是持续发生：
-是否已用新会话验证：
+Heure (avec fuseau) :
+Request ID :
+Client et version :
+Modèle :
+Endpoint :
+Erreur complète :
+Intermittent ou permanent :
+Testé dans une nouvelle session :
 ```
 
-Plus l’information est complète, plus la vitesse de localisation est rapide. La clé API peut fournir jusqu’aux 6 derniers bits.
+Si l'identification d'une clé est nécessaire, ne donnez que ses six derniers caractères.

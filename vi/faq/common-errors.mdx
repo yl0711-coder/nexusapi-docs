@@ -1,150 +1,35 @@
 ---
-title: "Câu hỏi thường gặp về cuộc gọi API"
+title: "Lỗi API thường gặp"
+description: "Chẩn đoán lỗi NexusAPI theo mã lỗi, giao thức và Request ID."
 ---
 
-Trang này đề cập đến các lỗi phổ biến gặp phải khi gọi API trong Claude Code, Codex CLI, Cursor, plugin VS Code hoặc chương trình tùy chỉnh.
+Trước hết lưu toàn bộ lỗi, Request ID, thời gian, mô hình và endpoint. Lỗi tham số, giao thức hoặc trạng thái phiên không tự hết khi gửi lại liên tục.
 
-## Bạn nên làm gì đầu tiên khi gặp phải một sai lầm?
+## `status_code=500, not implemented`
 
-Khuyến nghị xử lý chúng theo thứ tự sau:
+Với kênh Claude kiểu Anthropic được gọi bằng `/v1/responses`, đây là **không tương thích giao thức**, không phải lỗi tạm thời.
 
-1. Lưu văn bản lỗi gốc và Mã Yêu Cầu.
-2. Chờ 10~30 giây rồi thử lại.
-3. Nếu cùng một phiên làm việc vẫn thất bại, hãy thử lại sau khi tạo phiên làm việc mới.
-4. Xác nhận rằng tên mẫu, giao diện yêu cầu và phiên bản khách hàng là chính xác.
-5. Nếu vẫn trượt, hãy gửi câu hỏi theo danh sách kiểm tra ở cuối trang này.
+1. Ứng dụng tự viết dùng `/v1/chat/completions`.
+2. Claude Code dùng cấu hình Messages trong [hướng dẫn Claude Code](/vi/tools/claude-code).
+3. Không gửi lại nguyên yêu cầu đó.
 
-Vui lòng không thử lại với tần suất cao trong thời gian ngắn, vì điều này có thể kích hoạt hạn chế tần suất và dẫn đến các tác vụ lặp đi lặp lại.
+## Mã HTTP
 
-## Vấn đề với 500, 502, 503, 504 hay 524 là gì?
-
-Những trạng thái này thường cho thấy dịch vụ đang tạm thời bận, kết nối bị gián đoạn hoặc phản hồi hết thời gian, và không nhất thiết có nghĩa là có vấn đề với khóa API hoặc chính yêu cầu của bạn.
-
-| Mã trạng thái | Ý nghĩa chung | Gợi ý |
+| Mã | Nguyên nhân thường gặp | Việc đầu tiên |
 | --- | --- | --- |
-| 500 | Xử lý yêu cầu thất bại | Thi lại sau; Gửi ID Yêu cầu khi nó vẫn tồn tại |
-| 502 | Nhận được phản hồi không hợp lệ hoặc không đầy đủ | Chờ 10~30 giây rồi thử lại |
-| 503 | Dịch vụ tạm thời không khả dụng | Hãy thử lại sau để tránh các yêu cầu lặp lại |
-| 504 / 524 | Yêu cầu thời gian chờ quá lâu | Rút ngắn nhập liệu hoặc thử lại sau |
+| 400 | Mô hình, endpoint, tham số hoặc phiên không hợp lệ | Kiểm tra giao thức và làm test tối thiểu ở phiên mới. |
+| 401 | Key thiếu, sai, hết hạn hoặc bị vô hiệu | Sao chép lại key và định dạng Bearer. |
+| 403 | Nhóm, hạn chế, IP, tài khoản hoặc upstream từ chối | Kiểm tra thiết lập key. |
+| 404 | Sai đường dẫn hoặc `/v1` bị lặp | Kiểm tra URL thực tế. |
+| 429 | Giới hạn tần suất hoặc đồng thời | Giảm đồng thời và theo `Retry-After`. |
+| 500 / 502 / 503 | Lỗi xử lý hoặc upstream tạm thời | Chờ 10–30 giây, thử lại một lần. |
+| 504 / 524 | Hết thời gian chờ | Nếu phù hợp giảm ngữ cảnh/đầu ra, lưu Request ID. |
 
-Nếu chỉ có một lần hỏng hóc và quá trình được hoàn thành tự động sau đó, thường không cần xử lý thêm. Nếu cùng một mẫu bị hỏng nhiều lần liên tiếp, vui lòng liên hệ với chúng tôi.
+## Các thông báo khác
 
-## 429 Yêu Cầu Quá Nhiều
+- **`no available channel`**: nhóm của key không có tuyến đang bật cho mô hình. Kiểm tra ID chính xác, nhóm và Chợ mô hình; tạo key mới hay nạp thêm tiền không khắc phục điều này.
+- **`Concurrency limit exceeded for user`**: chờ các yêu cầu hiện tại kết thúc và giảm mức đồng thời của client.
+- **`Content block not found`**: hay gặp ở phiên dài, gọi công cụ hoặc stream bị ngắt. Xem [Content block not found](/vi/faq/content-block-not-found).
+- **Lỗi/timeout ảnh**: kiểm tra mô hình, endpoint Images và tham số; không gửi lại ngay tác vụ ảnh giống hệt.
 
-Điều này cho thấy hiện tại có quá nhiều yêu cầu hoặc năng lực xử lý hiện có đã chạm đến giới hạn tạm thời.
-
-Khuyến nghị:
-
-- Hãy thử lại bằng các phương pháp rút lui theo cấp số nhân, ví dụ, chờ 2, 5, 10 hoặc 20 giây.
-- Giảm đồng thời và tần suất yêu cầu.
-- Không cho phép nhiều chương trình sử dụng cùng một API Key cùng lúc cho các yêu cầu đồng thời cao.
-- Nếu cuộc gọi tần số thấp vẫn hiển thị 429, vui lòng cung cấp Mã Yêu Cầu của bạn để liên hệ với chúng tôi.
-
-## 400 Yêu cầu xấu
-
-400 thường chỉ ra rằng định dạng yêu cầu, tham số hoặc trạng thái phiên không tương thích với giao diện hiện tại.
-
-Khuyến nghị kiểm tra theo thứ tự:
-
-1. Kiểm tra xem tên mẫu có chính xác không.
-2. Liệu yêu cầu có được gửi đến giao diện được mô hình hỗ trợ hay không.
-3. Kiểm tra xem client có phải là phiên bản mới nhất không.
-4. Dù là tham số thí nghiệm, gọi công cụ hay chức năng tiếp tục phiên làm việc đều được sử dụng.
-5. Liệu một phiên làm việc mới có thể được khôi phục sau khi đã được tạo hay không.
-
-Không nộp lại cùng một yêu cầu mà không có chỉnh sửa; Các vấn đề định dạng thường không tự động khôi phục sau khi thử lại.
-
-## Chữ ký không hợp lệ trong khối suy nghĩ
-
-Lỗi này có nghĩa là nội dung suy nghĩ đã lưu trong phiên hiện tại không thể được kiểm tra lại, thường thấy trong quá trình phục hồi phiên dài, thay đổi trạng thái máy khách hoặc nội dung phiên không tương thích.
-
-Khuyến nghị:
-
-1. Tạo phiên làm việc mới; không tiếp tục khôi phục phiên làm việc hiện tại.
-2. Cập nhật máy khách lên phiên bản mới nhất.
-3. Nếu cùng một phiên được sử dụng trên nhiều thiết bị, nó chỉ có thể tiếp tục trên một thiết bị.
-4. Nếu các phiên mới vẫn xuất hiện, vui lòng gửi đầy đủ lỗi và Mã Yêu Cầu.
-
-Những lỗi này không tự động được khắc phục bằng cách xóa bộ nhớ đệm đầu ra của mô hình; cách xử lý hiệu quả nhất thường là tạo một phiên làm việc mới.
-
-## previous_response_id chỉ được hỗ trợ trên Responses WebSocket v2
-
-Điều này có nghĩa là máy khách đang cố gắng tiếp tục phản hồi trước đó, nhưng phương thức kết nối hiện tại không hỗ trợ chế độ tiếp tục này.
-
-Khuyến nghị:
-
-- Tạo một phiên làm việc mới và thử lại.
-- Cập nhật máy khách.
-- Tắt tùy chọn tiếp tục phiên làm việc thử nghiệm hoặc tái sử dụng phản hồi.
-- Chương trình tùy chỉnh nên tránh tái sử dụng các chương trình không được hỗ trợ trong các yêu cầu HTTP thông thường `previous_response_id`。
-
-## Không tìm thấy khối nội dung
-
-Điều này thường có nghĩa là đoạn nội dung mong đợi của khách hàng chưa được nhận đầy đủ, có thể do các phiên làm việc dài, gọi công cụ hoặc phản hồi bị gián đoạn.
-
-Khuyến nghị tạo một phiên mới trước và rút ngắn nội dung đầu vào. Xem chi tiết các phương pháp xử lý [Không tìm thấy khối nội dung](/vi/faq/content-block-not-found)。
-
-## Không bật tạo ảnh hoặc mô hình không được hỗ trợ
-
-Điều này có nghĩa là mô hình hiện tại, loại tài khoản hoặc giao diện yêu cầu không hỗ trợ các khả năng được yêu cầu.
-
-Vui lòng kiểm tra:
-
-- Mô hình văn bản không nên gọi giao diện tạo ảnh.
-- Mô hình ảnh nên sử dụng giao diện hình ảnh được chỉ định trong tài liệu.
-- Kiểm tra xem tên mô hình có được viết đúng không.
-- Mô hình hiện tại có hỗ trợ hình ảnh, lệnh gọi công cụ hoặc tham số bạn sử dụng không?
-
-Chỉ thử lại thường không thể giải quyết các vấn đề mà khả năng không hỗ trợ.
-
-## Cân bằng không đủ, nhưng cân bằng console thì bình thường
-
-Nếu bảng điều khiển NexusAPI hiển thị số dư đủ, đừng nạp lại ngay lập tức. Thông báo này cũng có thể cho biết các tài nguyên dịch vụ được yêu cầu tạm thời không khả dụng.
-
-Vui lòng lưu Mã Yêu Cầu, chờ một chút, rồi thử lại; Liên hệ với chúng tôi để xác minh nếu vấn đề vẫn tiếp diễn.
-
-## Tại sao lỗi lại xuất hiện đầu tiên trong nhật ký, rồi sau đó lại hoàn thành nhiệm vụ?
-
-Hệ thống sẽ tự động thử lại sau các lỗi có thể khôi phục một phần, vì vậy cùng một ID Yêu cầu có thể có cả một bản ghi lỗi và một bản ghi thành công.
-
-Khi xác định kết quả cuối cùng, vui lòng tham khảo bản ghi cuối cùng của cùng Mã Yêu Cầu và xem khách hàng đã nhận được toàn bộ nội dung hay chưa.
-
-## Yêu cầu thất bại có bị tính phí không?
-
-Khi không có nội dung hợp lệ được tạo ra, các bản ghi lỗi thường hiển thị là 0 tiêu thụ.
-
-Các tình huống sau đây cần được kiểm tra riêng biệt:
-
-- Dịch vụ đã tạo nội dung, nhưng khách hàng bị ngắt kết nối trong quá trình tiếp nhận.
-- Cùng một ID Yêu cầu đầu tiên gây ra lỗi, sau đó tự động hoàn thành.
-- Khách hàng tự khởi tạo một yêu cầu mới.
-
-Nếu nghi ngờ có các khoản phí trùng lặp hoặc thất bại, vui lòng cung cấp Mã Yêu Cầu và thời gian xảy ra, chúng tôi sẽ xác minh các hồ sơ yêu cầu. Không gửi toàn bộ khóa API.
-
-## 401 Không được phép
-
-Nguyên nhân phổ biến:
-
-- Nhập sai hoặc thiếu khóa API `Bearer ` Tiền tố.
-- API Key đã bị xóa, vô hiệu hóa hoặc không hợp lệ.
-- Yêu cầu sử dụng địa chỉ truy cập sai.
-
-Vui lòng sao chép lại khóa API và kiểm tra tiêu đề yêu cầu:
-
-```http
-Authorization: Bearer <你的 API Key>
-```
-
-## Bạn cần cung cấp những gì khi liên hệ với chúng tôi?
-
-Để tìm nhanh hơn, hãy cố gắng cung cấp:
-
-- Yêu cầu ID。
-- Lỗi thời gian và múi giờ.
-- Lỗi văn bản gốc hoặc ảnh chụp màn hình.
-- Mô hình được sử dụng.
-- Công cụ và phiên bản được sử dụng.
-- Ví dụ giao diện yêu cầu `/v1/messages`、`/v1/chat/completions` Hoặc `/v1/responses`。
-- Câu hỏi là liệu nó xảy ra không thường xuyên, kéo dài, hay chỉ ảnh hưởng đến một phiên cụ thể.
-
-Không nộp đầy đủ Khóa API, mật khẩu, dữ liệu quyền riêng tư hoặc toàn bộ nội dung kinh doanh. API Key có thể cung cấp tối đa 6 bit cuối.
+Nếu có chi phí bất thường, đối chiếu Request ID và nhật ký cùng thời gian. Không giả định nền tảng sẽ tự thử lại một yêu cầu thông thường.

@@ -1,59 +1,61 @@
 ---
-title: "Self-check the issue"
+title: "Self-check before contacting support"
+description: "Collect the minimum evidence needed to diagnose a NexusAPI request failure."
 ---
 
-If the call fails, first click this page to complete the basic check. Most configurations or occasional issues can be determined within minutes.
+Most setup mistakes and transient failures can be narrowed down in a few minutes.
 
-## Step 1: Save the site
+## 1. Preserve the evidence
 
-Before closing the client or rerequesting, save:
+Before closing the client or retrying, save:
 
-- Complete error in the original text
+- Complete error text
 - Request ID
-- Time and time zone of occurrence
-- The model used
-- The client and version used
-- Request interfaces, for example `/v1/responses`
+- Time and time zone
+- Model ID
+- Client and version
+- Request endpoint, such as `/v1/responses`
 
-Do not submit full API Keys, passwords, private data, or full business content.
+Do not share full API keys, passwords, private data, or complete business content.
 
-## Step 2: Determine the type of problem
+## 2. Identify the category
 
-| Phenomenon | Priority checks |
+| Symptom | Check first |
 | --- | --- |
-| 401 | API Key、`Bearer` Prefix, request address |
-| 404 | Check if the base URL is duplicated or missing `/v1` |
-| 400 | Models, interfaces, parameters, and session states |
-| 429 | Concurrency and request frequency |
-| 500 / 502 / 503 | Wait 10~30 seconds and try again |
-| 504 / 524 | Request content, wait time, and service status |
-| Insufficient balance | Console balance, Key amount, and grouping |
+| 401 | API key, `Bearer` prefix, and request address |
+| 403 | Token group, model restriction, IP allowlist, account status, or upstream refusal |
+| 404 | Base URL and accidental duplicate or missing `/v1` |
+| 400 | Model, endpoint, parameters, or session state |
+| 429 | Concurrency and request rate |
+| 500 / 502 / 503 | Wait 10–30 seconds, then retry only once |
+| 504 / 524 | Request size, wait time, and service status |
+| `500, not implemented` | Do not retry; check whether `/v1/responses` was used with a Claude model |
+| `no available channel` | Model ID, token group, and current model availability |
+| Image timeout | Do not resubmit the same image task; keep its Request ID |
 
-For specific meanings, see below [API Call FAQ](/en/faq/common-errors)。
+See [API error guide](/en/faq/common-errors) for details.
 
-## Step 3: Perform a minimum verification
+## 3. Run one minimal test
 
-1. Confirm that the console balance and API Key are functioning properly.
-2. Re-copy the model ID from the model square.
-3. Create a new session and send a short text.
-4. Retry only once, and record a new Request ID.
-5. Check if the console usage log shows the corresponding request.
+1. Confirm console credit and API-key status.
+2. Copy the model ID again from the Model Marketplace.
+3. Start a new session and send a short text request.
+4. Retry only once and save the new Request ID.
+5. Check whether the matching request appears in the usage log.
 
-If the new session succeeds, the issue is usually related to the original session state or the content of the request; If even the smallest request continues to fail, please submit a question.
+If a new short session works, the original conversation state or request content is likely involved. If it still fails, submit the evidence.
 
-## Provided when contacting support
-
-Please provide the following at once:
+## What to send support
 
 ```text
-发生时间（含时区）：
-Request ID：
-客户端及版本：
-模型：
-请求接口：
-错误原文：
-偶发还是持续发生：
-是否已用新会话验证：
+Time (with time zone):
+Request ID:
+Client and version:
+Model:
+Endpoint:
+Full error text:
+Intermittent or persistent:
+Tested with a new session:
 ```
 
-The more complete the information, the faster the location speed. API Key can provide up to the last 6 bits.
+If an API key is necessary for identification, provide no more than its last six characters.

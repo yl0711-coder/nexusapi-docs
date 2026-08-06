@@ -1,18 +1,13 @@
 ---
-title: "Claude Code Setup Guide"
+title: "Claude Code setup"
+description: "Install Claude Code and connect it to NexusAPI using its native Anthropic configuration."
 ---
 
-Claude Code is an AI coding assistant for the terminal. This guide explains how to install it and connect it to NexusAPI.
-
-## System Requirements
-
-- macOS 13+, Ubuntu 20.04+, Debian 10+, or Windows 10 1809+
-- 4 GB or more memory; x64 or ARM64 processor
-- A network connection that can reach NexusAPI
+Claude Code is a terminal coding agent. It uses the native Anthropic Messages configuration, so its NexusAPI Base URL is `https://nexusapi.link` — **do not append `/v1`**.
 
 ## 1. Install Claude Code
 
-Use an official native installer when possible. A native installation does not require Node.js.
+Use an official installer. A native installation does not require Node.js.
 
 ### macOS, Linux, or WSL
 
@@ -26,44 +21,39 @@ curl -fsSL https://claude.ai/install.sh | bash
 irm https://claude.ai/install.ps1 | iex
 ```
 
-You can also install it with WinGet:
+You may also use WinGet on Windows or Homebrew on macOS:
 
 ```powershell
 winget install Anthropic.ClaudeCode
 ```
 
-### macOS Homebrew
-
 ```bash
 brew install --cask claude-code
 ```
 
-Verify the installation:
+Verify the installed client before editing configuration:
 
 ```bash
 claude --version
 claude doctor
 ```
 
-## 2. Configure a NexusAPI Token
+## 2. Create a NexusAPI key
 
-### Create a Token
+In the [NexusAPI console](https://nexusapi.link), open **Token Management → Add token**. Give the key a recognizable name, choose a Claude-compatible group that contains the model you need, and set an appropriate limit.
 
-Sign in to NexusAPI, open **Token Management**, click **Add Token**, and:
+Do not assume every Claude-branded model is available to every group; verify it in the Model Marketplace or with `/v1/models`.
 
-- Use a recognizable name.
-- Select a Claude-compatible group.
-- Set a reasonable credit limit for the project.
-- Keep other options at their defaults unless you need a specific restriction.
+## 3. Set user-level configuration
 
-### Open the Configuration File
+Claude Code reads user settings from:
 
-Claude Code stores user settings in:
+| System | File |
+| --- | --- |
+| macOS / Linux / WSL | `~/.claude/settings.json` |
+| Windows | `%USERPROFILE%\.claude\settings.json` |
 
-- Windows: `C:\Users\YourUserName\.claude\settings.json`
-- macOS / Linux / WSL: `~/.claude/settings.json`
-
-Create the directory and file on macOS, Linux, WSL, or Git Bash:
+Create it on macOS, Linux, WSL, or Git Bash:
 
 ```bash
 mkdir -p ~/.claude
@@ -77,54 +67,61 @@ New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
 notepad "$env:USERPROFILE\.claude\settings.json"
 ```
 
-If the file already exists, merge the `env` object below into it. Do not overwrite existing MCP, permission, or other settings.
-
-### Edit `settings.json`
-
-Replace the example token with your own:
+Merge the following `env` values into an existing file; do not overwrite your MCP, permissions, or other settings.
 
 ```json
 {
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "sk-your-api-token",
-    "ANTHROPIC_BASE_URL": "https://nexusapi.link",
-    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1"
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_NEXUSAPI_KEY",
+    "ANTHROPIC_BASE_URL": "https://nexusapi.link"
   }
 }
 ```
 
-## 3. Start Claude Code
+Keep this in your user directory, not in a project repository. Never commit or screenshot a real key.
 
-Restart the terminal, open your project directory, and run:
+<Tip>
+**Only disable experimental fields when the error asks for it**
+
+If an error explicitly mentions unsupported `context_management` or experimental inputs, add `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` to `env` and test again. It disables some preview fields and is not a default setting for every user.
+</Tip>
+
+## 4. Start and verify
+
+Open a new terminal, enter a project directory, and run:
 
 ```bash
 cd your-project-folder
 claude
 ```
 
-Follow the theme, safety, terminal, and workspace-trust prompts shown on first launch.
+Run `/status` inside Claude Code. Confirm that **Anthropic base URL** is `https://nexusapi.link` and authentication comes from `ANTHROPIC_AUTH_TOKEN`, then send a short text message.
 
 ## Troubleshooting
 
-If Claude Code cannot connect:
+### `Invalid API Key · Please run /login`
 
-1. Run `claude doctor`.
-2. Confirm that `ANTHROPIC_AUTH_TOKEN` and `ANTHROPIC_BASE_URL` are saved in valid JSON.
-3. Restart the terminal.
-4. Keep the original error, Request ID, `claude --version`, and `claude doctor` output when contacting support.
+Confirm that both environment values are saved, the key itself is enabled, and the terminal was restarted. Do not solve this by editing Claude's internal login state files.
 
-Do not use scripts that force internal onboarding fields in `.claude.json`. Those fields may change between releases, and overwriting the file can remove existing settings.
+### `Unable to connect to Anthropic services`
 
-If PowerShell blocks the installer, prefer WinGet. If you must change the policy, limit it to the current user:
+Run `claude doctor`, check the JSON syntax in `settings.json`, then reopen the terminal. If it persists, save the original error, `claude --version`, and `claude doctor` output.
 
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
+### `fetch failed`
 
-## Related Links
+First distinguish a model call from Claude Code's WebFetch feature.
 
-- [Official Claude Code installation guide](https://code.claude.com/docs/en/installation)
-- [Official environment-variable reference](https://code.claude.com/docs/en/env-vars)
-- [Official LLM gateway configuration](https://code.claude.com/docs/en/llm-gateway)
-- [Use Claude Code in VS Code or Cursor](/en/tools/cursor-vscode)
-- [Troubleshooting checklist](/en/faq/self-check)
+1. Send a one-line normal prompt. If it succeeds, NexusAPI model calls are working; troubleshoot WebFetch under its own network and safety rules.
+2. If all model calls fail, run `claude doctor` and use `/status` to confirm the Base URL is still `https://nexusapi.link`.
+3. Check local DNS, firewall, corporate network, or an existing trusted proxy for access to `nexusapi.link`.
+4. Open a fresh terminal and test once. For persistent failures, retain the version, doctor output, full error, and Request ID, then use the [self-check guide](/en/faq/self-check).
+
+### The status says `offline`
+
+Some auxiliary features check official or third-party services separately. Verify the actual gateway URL with `/status` and send a small text request before treating `offline` as an API outage.
+
+## Official references
+
+- [Claude Code installation](https://code.claude.com/docs/en/installation)
+- [Claude Code environment variables](https://code.claude.com/docs/en/env-vars)
+- [Claude Code gateway configuration](https://code.claude.com/docs/en/llm-gateway)

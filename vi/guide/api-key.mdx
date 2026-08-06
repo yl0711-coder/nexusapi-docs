@@ -1,52 +1,43 @@
 ---
-title: "Tạo và bảo mật khóa API"
+title: "Tạo và bảo vệ API Key"
+description: "Tạo API Key NexusAPI có giới hạn, lưu trữ an toàn và thay thế khi có nguy cơ lộ lọt."
 ---
 
-Khóa API là thông tin đăng nhập để gọi giao diện NexusAPI.
+API Key nhận diện bên gọi và quyết định nhóm mô hình được truy cập. Nên tạo khóa riêng cho mỗi dự án hoặc môi trường để dễ giới hạn chi phí, đối soát sử dụng và thu hồi quyền khi cần.
 
-## Quy trình tạo ra
+## Tạo key
 
-1. Đăng nhập vào bảng điều khiển NexusAPI.
-2. Truy cập trang Quản lý Token hoặc Quản lý Khóa API.
-3. Nhấp để thêm token.
-4. Nhập tên token.
-5. Chọn các nhóm có sẵn.
-6. Đặt hạn ngạch hoặc giới hạn theo ngân sách dự án.
-7. Sau khi gửi, sao chép khóa API đã tạo.
+1. Đăng nhập [console NexusAPI](https://nexusapi.link).
+2. Mở **Quản lý token** rồi chọn **Thêm token**.
+3. Đặt tên dễ nhận biết, ví dụ `production-api` hoặc `codex-local`.
+4. Chọn nhóm token có mô hình mục tiêu.
+5. Đặt hạn mức và, nếu cần, ngày hết hạn rồi lưu.
 
-## Cài đặt được khuyến nghị
+Sao chép key ngay sau khi tạo; giá trị đầy đủ có thể chỉ hiển thị một lần.
 
-| Đặt mục | Gợi ý |
+## Những điều cần quyết định
+
+| Mục | Vai trò |
 | --- | --- |
-| Tên gọi | Ví dụ, sử dụng tên dự án hoặc tên khách hàng `codex-work` |
-| Nhóm | Chọn nhóm chứa mô hình mục tiêu |
-| hạn ngạch | Giới hạn trên hợp lý được đặt theo mức sử dụng, có thể điều chỉnh sau này |
-| Giới hạn của mô hình | Chỉ kích hoạt khi thực sự cần thiết |
-| Danh sách trắng IP | Chỉ bật khi máy chủ có IP thoát cố định |
-| Thời hạn hiệu lực | Khuyến nghị đặt thời gian hết hạn cho các khóa kiểm tra tạm thời |
+| Nhóm token | Quyết định mô hình, kênh và quy tắc truy cập. |
+| Hạn mức | Giới hạn rủi ro chi phí của dự án hoặc thử nghiệm. |
+| Ngày hết hạn | Phù hợp quyền truy cập tạm thời. |
+| Giới hạn mô hình / danh sách IP | Chỉ bật khi thực sự cần. |
 
-## Cách sử dụng
+## Lưu trữ an toàn
 
-Chèn khóa API trong quá trình yêu cầu `Authorization` Tiêu đề yêu cầu:
+- Dùng biến môi trường, kho secret hoặc trình quản lý thông tin xác thực của hệ điều hành.
+- Không đưa key vào frontend, kho công khai, ảnh chụp, chat hoặc URL.
+- Không dùng chung một key cho các dịch vụ/nhóm không liên quan.
+- Nếu nghi ngờ lộ key, vô hiệu hóa hoặc xóa key cũ, tạo key mới và cập nhật nơi triển khai.
 
-```http
-Authorization: Bearer YOUR_API_KEY
+## Kiểm tra trước khi tích hợp
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-## Lời khuyên an toàn
+Lệnh này xác nhận key và cho biết mô hình đang nhìn thấy. Xem [ma trận khả năng](/vi/developer/capability-matrix) để chọn API phù hợp.
 
-- Không ghi khóa API vào kho mã công khai.
-- Không gửi toàn bộ khóa API dưới dạng ảnh chụp màn hình, phiếu hỗ trợ hoặc nhật ký trò chuyện.
-- Các dự án, thành viên và môi trường khác nhau được khuyến nghị sử dụng các khóa API khác nhau.
-- Môi trường sản xuất được đọc qua các biến môi trường hoặc dịch vụ quản lý khóa, không được ghi trực tiếp vào mã.
-- Thường xuyên kiểm tra nhật ký sử dụng; Nếu bạn phát hiện nguồn không quen thuộc hoặc chi tiêu bất thường, hãy ngay lập tức vô hiệu hóa Khóa cũ của bạn.
-- Nếu nghi ngờ có rò rỉ, trước tiên hãy tắt hoặc xóa khóa cũ, sau đó tạo một khóa mới và cập nhật chương trình sử dụng nó.
-
-## Sự khác biệt giữa API Key và mã truy cập hệ thống
-
-| Giấy chứng nhận | Mục đích |
-| --- | --- |
-| Khóa API | Gọi giao diện mô hình, thường là `sk-` Khởi đầu |
-| Mã truy cập hệ thống | Kiểm tra cách sử dụng tài khoản và các giao diện cấp tài khoản khác |
-
-Hai loại phiếu này không nên trộn lẫn, và không loại voucher nào nên được đưa vào tham số truy vấn URL.
+Nếu gặp 401, 403 hoặc mô hình không có, hãy kiểm tra trạng thái key, nhóm, số dư, giới hạn IP và định dạng `Bearer`, sau đó lưu Request ID.

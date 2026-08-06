@@ -1,75 +1,46 @@
 ---
-title: "存取方法概述"
+title: "接入方式總覽"
+description: "依照用戶端與模型能力，選擇正確的 NexusAPI 位址與協定。"
 ---
 
-NexusAPI 支援主流 AI 用戶端及類似 OpenAI 的介面呼叫。 不同工具可能會自動縫合路徑，所以你應該根據使用方式填寫地址。
+NexusAPI 可供自建程式、OpenAI 相容用戶端與常用程式設計工具使用。不同用戶端會自行拼接路徑，且使用的協定不完全相同；請先依使用情境選擇，不要把一個工具的設定直接複製到另一個工具。
 
-## 開始前的準備
+## 接入前的三項確認
 
-無論採用哪種方法，以下條件皆為必要條件：
+1. 在控制台建立 API Key，並設定合理額度。
+2. 確認該 Key 所屬群組包含目標模型。
+3. 從模型廣場或 `/v1/models` 複製準確的模型 ID。
 
-1. 在主控台建立 API 金鑰。
-2. 確認 API 金鑰群組包含目標模型。
-3. 從模型廣場複製出完整的型號ID。
-4. 請求是透過 HTTPS 位址提出的。
+## 依情境選擇入口
 
-## 常見用法
-
-| 如何使用 | 推薦閱讀 |
+| 你要做什麼 | 建議文件 |
 | --- | --- |
-| 自己寫程式或腳本 | [5分鐘內快速開始](/zh-TW/guide/quick-start) |
-| 克勞德密碼 | [Claude Code 設定教學](/zh-TW/tools/claude-code) |
-| Codex CLI | [Codex CLI 設定教學](/zh-TW/tools/codex-cli) |
-| CC 交換器 | [CC Switch 設定教學](/zh-TW/tools/cc-switch) |
-| VS Code / 游標 | [編輯器外掛教學](/zh-TW/tools/cursor-vscode) |
+| 自建應用、SDK、cURL 或自動化腳本 | [5 分鐘快速開始](/zh-TW/guide/quick-start) |
+| 使用 Claude Code | [Claude Code 教學](/zh-TW/tools/claude-code) |
+| 使用 Codex CLI | [Codex CLI 教學](/zh-TW/tools/codex-cli) |
+| 管理多個 CLI Provider | [CC Switch 教學](/zh-TW/tools/cc-switch) |
+| 在 VS Code 或 Cursor 中操作 Claude Code | [VS Code / Cursor 教學](/zh-TW/tools/cursor-vscode) |
 
-## 位址與協定比較
+## 位址與協定對照
 
-| 場景 | 填寫地址 | 主要協議 | 註釋 |
+| 情境 | Base URL | 起始協定 | 說明 |
 | --- | --- | --- | --- |
-| OpenAI SDK / 通用程式 | `https://nexusapi.link/v1` | 聊天複雜性等等 | 請求路徑由 SDK 或程式串接 |
-| Codex CLI | `https://nexusapi.link/v1` | 回應 | 請使用Codex教學中的供應者設定 |
-| 克勞德密碼 | `https://nexusapi.link` | 人類訊息 | 設定後不要新增多個位址 `/v1` |
-| CC 交換器 | 依照提供者類型填寫 | 這取決於目標工具 | Claude 的地址規則和 Codex 不同 |
-
-上表用於協助選擇存取方式。 完整的介面路徑、參數與反應結構仍為 [API 參考文件](https://nexusapi.apifox.cn/) 作為標準。
-
-## 為什麼地址可能不同
-
-通用的 OpenAI 式請求通常會使用：
-
-```text
-https://nexusapi.link/v1
-```
-
-有些客戶端要求省略此項 `/v1` 網站地址可能會自動填寫 `/chat/completions`、`/responses`、`/messages` 以及其他途徑。 請參考相應的工具教學以取得準確度。
+| OpenAI 相容 SDK 或一般程式 | `https://nexusapi.link/v1` | Chat Completions | SDK 通常會自行加上 `/chat/completions`。 |
+| Claude Code | `https://nexusapi.link` | Anthropic Messages | Base URL 不要再加 `/v1`。 |
+| Codex CLI | `https://nexusapi.link/v1` | Responses | 使用 Codex 的自訂 Provider 設定。 |
+| 圖片模型 | `https://nexusapi.link/v1` | Images | 僅限模型廣場明示支援圖片生成的模型。 |
 
 <Warning>
-**避免重複同樣的路**
+**模型可見不代表所有協定都可用**
 
-如果客戶會自動完成， `/v1`，可在人工填充後形成 `/v1/v1/...` 這也導致了404。 遇到 404 時，先確認客戶的實際請求地址。
+請先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)。它說明目前對外公開的端點，以及為何不能把底層軟體的每一條路由當作站點承諾。
 </Warning>
-## 不要將用戶端設定與一般 API 混用
 
-CLI 工具、編輯器外掛及自訂程式可能會使用不同的協定與設定檔。 即使型號名稱相同，你也無法直接將一個工具的整個配置複製到另一個工具中。
+## 最小驗證流程
 
-判斷方法：
+1. 以目前 Key 呼叫 `GET /v1/models`。
+2. 選取回傳且符合協定的模型 ID。
+3. 用一段簡短文字做一次測試。
+4. 在控制台使用紀錄確認請求與花費。
 
-- 設定 Codex CLI：閱讀 Codex 教學並使用相關的回應設定。
-- 設定 Claude 程式碼：閱讀使用 Anthropic 環境變數的 Claude Code 教學。
-- 寫自己的程式碼：根據 API 參考選擇請求路徑和參數。
-- 不確定時：先確認客戶名稱和實際請求路徑。
-
-## API 參考文件
-
-完整的介面路徑、參數、請求結構與回應結構皆已具備 [NexusAPI API 參考](https://nexusapi.apifox.cn/) 保持中間。
-
-幫助中心說明「如何選擇與使用」; API 引用負責解釋「什麼是欄位和結構」。
-
-## 如何確認設定成功
-
-- 客戶端可以正常回傳完整內容。
-- 對應的請求會出現在主控台使用紀錄中。
-- 日誌中的模型、分組與消耗量均符合預期。
-
-若呼叫失敗，請儲存錯誤文字與請求 ID，然後輸入[自我檢查問題](/zh-TW/faq/self-check)。
+若失敗，先保留完整錯誤與 Request ID，再依[問題自查](/zh-TW/faq/self-check)排查。不要高頻重送相同任務。

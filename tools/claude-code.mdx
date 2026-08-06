@@ -180,8 +180,12 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 ### Q: 请求总是显示 "fetch failed"？
 
-**A:** 可能是网络环境导致的问题。解决方案：
-1. 尝试使用代理工具
+**A:** 先区分是模型调用失败，还是 Claude Code 的网页访问功能失败：
+
+1. 在 Claude Code 中发送一句最短文本；若能正常回复，说明 NexusAPI 的模型调用本身正常，WebFetch 等独立网络功能应按 Claude Code 的原始错误和网络环境排查。
+2. 若所有模型请求都出现 `fetch failed`，运行 `claude doctor`，再用 `/status` 确认 `Anthropic base URL` 仍是 `https://nexusapi.link`。
+3. 检查本机网络、公司防火墙、DNS 或代理是否阻断了 `nexusapi.link`；只在你本来就需要代理的网络环境中使用受信任的系统或公司代理，不要为此安装来源不明的脚本。
+4. 完全关闭并重新打开终端后，用新会话再测试一次。持续失败时，保存 `claude --version`、`claude doctor` 输出、错误原文和 Request ID，再按[问题自查](/faq/self-check)提交。
 
 
 ### Q: API 报错如何处理？

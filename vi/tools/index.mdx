@@ -1,47 +1,36 @@
 ---
-title: "Chọn công cụ phù hợp với bạn"
+title: "Chọn công cụ client"
+description: "Chọn đúng công cụ NexusAPI và không trộn lẫn giao thức, URL hoặc thông tin xác thực."
 ---
 
-Các công cụ khác nhau phục vụ các cách làm việc khác nhau. Chọn dựa trên mục đích sử dụng của bạn, sau đó tiếp tục đến hướng dẫn tương ứng để tránh nhầm lẫn địa chỉ và tệp cấu hình.
+Hãy chọn công cụ theo cách làm việc rồi theo đúng hướng dẫn của nó. Chat Completions, Messages gốc và Responses là các giao thức khác nhau; không chuyển nguyên Base URL hoặc tệp cấu hình giữa các công cụ.
 
-## Lựa chọn nhanh
+## Chọn nhanh
 
-| Nhu cầu của bạn | Mục được khuyến nghị | Ai cũng phù hợp với bạn |
+| Mục tiêu | Hướng dẫn | Phù hợp với |
 | --- | --- | --- |
-| Để AI xử lý mã và các nhiệm vụ dự án trong terminal | [Mã Claude](/vi/tools/claude-code) | Các nhà phát triển sử dụng quy trình làm việc Claude |
-| Sử dụng các agent đầu cuối Codex | [Codex CLI](/vi/tools/codex-cli) | Các nhà phát triển sử dụng quy trình Responses / Codex |
-| Chuyển đổi giữa nhiều cấu hình Nhà cung cấp khác nhau | [Công tắc CC](/vi/tools/cc-switch) | Quản lý người dùng với nhiều cấu hình CLI cùng lúc |
-| Sử dụng Claude Code trong VS Code hoặc Cursor | [VS Mã / Con trỏ](/vi/tools/cursor-vscode) | Người dùng thích giao diện trình chỉnh sửa |
-| Viết chương trình riêng để gọi API | [Tổng quan về các phương thức truy cập](/vi/guide/integration-overview) | Các nhà phát triển ứng dụng và script tự động |
+| Agent lập trình trong terminal | [Claude Code](/vi/tools/claude-code) | Luồng làm việc Claude |
+| Codex trong terminal | [Codex CLI](/vi/tools/codex-cli) | Luồng Responses / Codex |
+| Nhiều provider cục bộ | [CC Switch](/vi/tools/cc-switch) | Chuyển cấu hình CLI |
+| Claude Code trong editor | [VS Code / Cursor](/vi/tools/cursor-vscode) | Làm việc trong editor |
+| Ứng dụng hoặc script | [Tổng quan tích hợp](/vi/guide/integration-overview) | SDK / tự động hóa |
 
-## Xác nhận trước khi cấu hình
+## Trước khi sửa cấu hình cục bộ
 
-1. Một API Key đã được tạo ra, và một giới hạn hợp lý đã được đặt ra.
-2. Nhóm API Key bao gồm mô hình mục tiêu.
-3. Sao chép chính xác ID mô hình từ ô mô hình.
-4. Công cụ sao lưu đã có cấu hình; không xóa toàn bộ thư mục cấu hình trực tiếp.
-5. Sau khi hoàn thành, gửi một yêu cầu thử nghiệm ngắn và kiểm tra nhật ký sử dụng.
+1. Tạo key có hạn mức phù hợp.
+2. Xác nhận nhóm của key và mô hình mục tiêu.
+3. Sao chép model ID chính xác từ Chợ mô hình hoặc `/v1/models`.
+4. Sao lưu tệp cấu hình hiện có.
+5. Chỉ test một yêu cầu nhỏ, không sửa file, rồi kiểm tra nhật ký.
 
 <Warning>
-**Không chạy trực tiếp các script một cú nhấp chuột có nguồn gốc không xác định**
-
-Các script cài đặt hoặc cấu hình tự động có thể sửa đổi cấu hình cục bộ, ghi khóa API hoặc cài đặt các thành phần của bên thứ ba. Trước khi chạy, hãy xác minh nguồn, đọc nội dung script và sao lưu cấu hình hiện có.
+Không chạy script “một lần nhấp” không rõ nguồn. Chúng có thể sửa cấu hình, lưu key hoặc cài mã bên thứ ba. Chỉ dùng nguồn chính thức, đọc nội dung script và không dán key vào mã không đáng tin.
 </Warning>
-## Tại sao địa chỉ lại khác nhau cho từng công cụ?
 
-Một số công cụ cần được bao gồm `/v1` Địa chỉ API, một số công cụ sẽ tự động nối các đường dẫn, trong khi những công cụ khác sử dụng giao thức Messages hoặc Responses gốc.
+| Loại client | Base URL thường dùng | Giao thức |
+| --- | --- | --- |
+| SDK / ứng dụng tương thích OpenAI | `https://nexusapi.link/v1` | Chat Completions |
+| Claude Code | `https://nexusapi.link` | Messages |
+| Codex CLI | `https://nexusapi.link/v1` | Provider Responses |
 
-Vui lòng sử dụng địa chỉ được cung cấp trong hướng dẫn tương ứng; không sao chép cấu hình của Claude Code, Codex CLI hoặc OpenAI SDK chung. Xem giải thích chi tiết[Tổng quan về các phương thức truy cập](/vi/guide/integration-overview)。
-
-## Công cụ của bạn không được bao gồm trong hướng dẫn
-
-Nếu một client hỗ trợ địa chỉ tùy chỉnh tương thích OpenAI, bạn có thể tham khảo trước[Bắt đầu nhanh chóng trong 5 phút](/vi/guide/quick-start)và tài liệu chính thức của khách hàng.
-
-Vui lòng xác nhận trước khi cấu hình:
-
-- Khách hàng có hỗ trợ URL Base tùy chỉnh không?
-- Khách hàng có sử dụng Hoàn thành trò chuyện hay Phản hồi không?
-- Liệu khách hàng có tự động hoàn thành dữ liệu hay không `/v1`。
-- Liệu mã số mô hình có thể nhập thủ công hay không.
-
-Các ứng dụng chưa xác minh sẽ không được đưa vào các hướng dẫn chính thức chỉ để tăng số trang.
+Khả năng thực tế vẫn phụ thuộc mô hình và nhóm; đọc [ma trận khả năng](/vi/developer/capability-matrix) trước.

@@ -1,62 +1,40 @@
 ---
-title: "Supported Models and Billing"
+title: "Models, token groups, and billing"
+description: "Understand NexusAPI model availability, token groups, and usage-based pricing."
 ---
 
-NexusAPI uses pay-as-you-go token billing. There is no monthly subscription fee.
-
-## Common Model Names
-
-When calling the API, make sure the `model` parameter matches a model available to your token group. Common model families include:
-
-### OpenAI
-
-- `gpt-5.4`
-- `gpt-4o`
-
-### Anthropic
-
-- `claude-opus-4-6`
-- `claude-sonnet-4-6`
-
-### Google
-
-- `gemini-3.1-pro-preview`
-- `gemini-3.1-flash-lite`
-
-For real-time model availability, group multipliers, and pricing, open the [NexusAPI model marketplace](https://nexusapi.link/pricing).
-
-## Token Groups
-
-When you create an API token, you can assign it to a token group. Groups can differ by upstream channel, model availability, price, and stability.
-
-### Upstream Channels
-
-- GPT, Claude, Gemini, and other models may route through different upstream channels depending on the group.
-- Channel differences may affect availability, latency, pricing, and stability.
-
-### Pricing
-
-- API pricing varies across upstream providers and token groups.
-- NexusAPI displays group pricing clearly so you can compare options before choosing a group.
-
-### Choosing a Group
-
-- Choose a group based on your requirements for cost, model support, response quality, and stability.
-- Use lower-cost groups for experimentation and higher-stability groups for production workloads.
-
-![NexusAPI Create Token panel for selecting a token group](/images/nexusapi/console-create-token.png)
-
-## Billing Multipliers
-
-Different token groups may apply different billing multipliers:
-
-- A multiplier below `1` means a discount: `0.8x` = 20% off, `0.5x` = 50% off.
-- A multiplier above `1` means a surcharge: `1.5x` = 50% extra.
+NexusAPI is usage-based: text models can charge for input, output, and cached tokens; image, audio, video, or task models can charge per image, duration, task, or another upstream unit. The live details in the Model Marketplace take precedence over this guide.
 
 ## Model Marketplace
 
-In the console, open [Model Marketplace](https://nexusapi.link/pricing) from the top-right menu to view models and group pricing.
+Use the **Model Marketplace** in the console to see current models, prices, and token-group availability:
 
-![NexusAPI model marketplace with provider and token-group filters](/images/nexusapi/model-marketplace.png)
+1. Sign in to the [NexusAPI console](https://nexusapi.link), then open the [Model Marketplace](https://nexusapi.link/pricing).
+2. Filter by model provider and available token group.
+3. Review the model ID, price, description, and supported endpoint types for that group.
 
-In the model marketplace, you can filter by provider and token group. The model list shows model IDs, prices, descriptions, supported API interfaces, and other related information.
+![NexusAPI Model Marketplace, filterable by provider and token group](/images/nexusapi/model-marketplace.png)
+
+## Choose the right token group
+
+The token group selected when you create a key determines which models and prices the key can use.
+
+- A model can appear in more than one group; choose by the target model, not only by the group name.
+- Filter the Model Marketplace by the group and confirm the exact model ID.
+- If one project needs different classes of models, separate API keys make limits and reconciliation easier.
+
+![Selecting a token group when creating a NexusAPI token](/images/nexusapi/console-create-token.png)
+
+## What makes up a charge
+
+- **Text models:** input tokens, output tokens, and cache-related usage can be priced separately.
+- **Image models:** size, quality, quantity, and model-specific options can affect the charge.
+- **Audio, video, and task models:** a charge can depend on duration, task type, or an upstream billing unit.
+
+Use the individual charge in the console usage log and the live Model Marketplace price to reconcile a request. Do not apply token-price rules to image or task models.
+
+## Check usage
+
+- View each request in the console usage log.
+- Read [usage and billing](/en/billing/usage-and-billing) for field meanings, cache usage, and error records.
+- For programmatic reconciliation, use the [usage-log API](/en/developer/usage-logs). It uses a system access token, not a model API key.

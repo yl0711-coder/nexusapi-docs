@@ -1,99 +1,26 @@
 ---
-title: "Sử dụng Claude Code trong VS Code và Cursor"
+title: "Claude Code trong VS Code hoặc Cursor"
+description: "Dùng extension Claude Code chính thức với cấu hình NexusAPI cấp người dùng hiện có."
 ---
 
-Phần mở rộng chính thức của Claude Code cung cấp các đoạn hội thoại đồ họa, xem trước sự khác biệt mã, tham chiếu tệp và xác minh quyền.
-VS Code được cấu hình tương tự như Cursor.
+Extension Claude Code chính thức có chat, xem trước diff, tham chiếu tệp và lời nhắc quyền. VS Code và Cursor dùng chung cấu hình cấp người dùng của Claude Code.
 
-## 1. Cài đặt tiện ích mở rộng
+## 1. Cài extension chính thức
 
-Vui lòng xác nhận trước khi bắt đầu:
-
-- Phiên bản VS Code là 1.98 trở lên.
-- ép [Hướng dẫn Claude Code](/vi/tools/claude-code) Cấu hình NexusAPI.
-- `~/.claude/settings.json` Khóa API và URL cơ sở hiện đã được kích hoạt.
-
-Mở cửa hàng mở rộng:
-
-- macOS:`Cmd + Shift + X`
-- Windows / Linux:`Ctrl + Shift + X`
-
-Tìm kiếm `Claude Code`, nhà xuất bản đã được xác nhận **thuộc về nhân chủng** Sau đó cài đặt lại. Nó cũng có thể là từ
-[Hướng dẫn Claude Code chính thức VS Code](https://code.claude.com/docs/en/vs-code)
-Vào cổng cài đặt cho VS Code hoặc Cursor.
+Hoàn thành [thiết lập Claude Code](/vi/tools/claude-code) trước. Trong Extensions, tìm **Claude Code** và xác nhận publisher là **Anthropic**. Có thể xem thêm [hướng dẫn VS Code chính thức](https://code.claude.com/docs/en/vs-code).
 
 <Warning>
-**Kiểm tra nhà xuất bản**
-
-Có thể có các tiện ích mở rộng bên thứ ba với tên tương tự trong cửa hàng mở rộng. Trước khi cài đặt, vui lòng đảm bảo tên tiện ích mở rộng là
-`Claude Code`, nhà xuất bản: `Anthropic`。
+Có thể có extension bên thứ ba giống tên. Chỉ dùng extension do Anthropic phát hành và không dán key vào bảng cài đặt của bên thứ ba.
 </Warning>
-## 2. Làm cho tiện ích mở rộng sử dụng NexusAPI
 
-Phần mở rộng Claude Code được chia sẻ với CLI `~/.claude/settings.json`。 Bình thường, bạn không cần phải có mặt ở đó
-VS Code hoặc Cursor `settings.json` Lặp lại nhập API Key ở giữa.
+## 2. Dùng chung cấu hình NexusAPI
 
-Nếu tiện ích mở rộng vẫn hiển thị thông báo đăng nhập:
+Extension đọc cùng `~/.claude/settings.json` như CLI (hoặc đường dẫn tương ứng trong hồ sơ Windows). Không lưu lặp key trong cài đặt workspace của VS Code hay Cursor.
 
-1. Mở Cài đặt Trình chỉnh sửa.
-2. Tìm kiếm `Claude Code login`。
-3. Đã kích hoạt **Tắt Nhắc Đăng nhập**。
-4. Thoát hoàn toàn và mở lại trình chỉnh sửa.
+Nếu editor vẫn yêu cầu đăng nhập: mở Settings, tìm `Claude Code login`, bật **Disable Login Prompt** nếu có, rồi khởi động lại hoàn toàn editor. Nếu editor mở từ desktop không nhận môi trường, chạy `code .` từ terminal đã cấu hình.
 
-Nếu trình chỉnh sửa không đọc được môi trường terminal, bạn có thể vào thư mục dự án từ terminal đã cấu hình và chạy nó:
+## 3. Kiểm tra an toàn
 
-```bash
-code .
-```
+Mở Claude Code từ sidebar hoặc Command Palette và yêu cầu: “Giải thích tệp hiện tại làm gì, không sửa tệp.” Sau khi thành công, kiểm tra bản ghi tương ứng trong nhật ký NexusAPI.
 
-Người dùng Cursor có thể khởi động lại Cursor hoặc chạy trực tiếp trong terminal tích hợp của Cursor `claude`。
-
-## 3. Mở mã Claude
-
-Sau khi cài đặt, bạn có thể mở nó bằng bất kỳ cách nào sau:
-
-- Nhấp vào biểu tượng ngôi sao Claude Code ở góc trên bên phải của trình chỉnh sửa.
-- Nhấp vào biểu tượng Claude Code trên thanh hoạt động bên trái.
-- Mở bảng lệnh và tìm kiếm `Claude Code`。
-- Nhấp vào thanh trạng thái ở góc dưới bên phải `Claude Code`。
-
-Nếu không có biểu tượng ở góc trên bên phải, vui lòng mở tệp mã trước; Biểu tượng này chỉ có thể xuất hiện sau khi mở tệp.
-
-![Ví dụ về giao diện mở rộng chính thức của Claude Code trong VS Code](/images/nexusapi/claude-code-vscode-official.jpg)
-
-> Ví dụ giao diện từ
-> [Tài liệu chính thức VS Code của Claude Code](https://code.claude.com/docs/en/vs-code)。
-> Các vị trí nút cụ thể có thể được cập nhật với phiên bản mở rộng.
-
-## 4. Xác minh cấu hình
-
-Gửi một yêu cầu đơn giản trong phần mở rộng, ví dụ:
-
-```text
-请解释当前打开文件的作用，不要修改代码。
-```
-
-Nếu nó trả về bình thường, nghĩa là tiện ích mở rộng đã đọc cấu hình NexusAPI. Nếu bạn gặp lỗi, vui lòng giữ:
-
-- Trình chỉnh sửa và phiên bản mở rộng
-- Phiên bản Claude Code
-- Văn bản gốc không chính xác
-- Mã yêu cầu
-
-Vậy hãy tham khảo[Tự kiểm tra vấn đề](/vi/faq/self-check)。
-
-## Câu hỏi thường gặp
-
-### Không xuất hiện nào sau khi cài đặt mở rộng
-
-Chạy bảng lệnh trong menu Chạy `Developer: Reload Window`, hoặc khởi động lại toàn bộ trình chỉnh sửa.
-
-### CLI hoạt động, nhưng các phần mở rộng thì không thể
-
-Mở rộng được xác nhận **Tắt Nhắc Đăng nhập** Đã bật và kiểm tra
-`~/.claude/settings.json` Đó có phải là một JSON hợp lệ không? Các tiện ích mở rộng và CLI nên chia sẻ cùng một cấu hình.
-
-### Không tìm thấy Cửa hàng Mở rộng Con trỏ
-
-Bạn có thể truy cập mục cài đặt Con trỏ từ hướng dẫn chính thức của Claude Code VS Code; Nếu con trỏ hiện tại có mặt
-Phiên bản này không hỗ trợ tiện ích mở rộng này và vẫn có thể chạy trong terminal tích hợp của Cursor `claude`。
+Khi có lỗi, cập nhật editor, extension và Claude Code, khởi động lại hoàn toàn, lưu lỗi và Request ID rồi làm [tự kiểm tra](/vi/faq/self-check). Không gửi key đầy đủ, secret của workspace hoặc mã nguồn riêng tư.

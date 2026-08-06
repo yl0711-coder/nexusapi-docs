@@ -1,24 +1,30 @@
 ---
-title: "Giới hạn mua"
+title: "Mua số dư"
+description: "Mua credit NexusAPI, kiểm tra ghi có và xử lý vấn đề thanh toán một cách an toàn."
 ---
 
-Sau khi đăng nhập vào bảng điều khiển NexusAPI, bạn có thể mua giới hạn tín dụng trong ví hoặc trên trang nạp tiền.
+NexusAPI trừ credit tài khoản theo mức sử dụng thực tế. Trước khi mua, hãy xác định ngân sách và mô hình cần dùng. Một lỗi đơn lẻ không phải lý do để thanh toán lặp lại nhiều lần.
 
-![Trên trang quản lý ví NexusAPI và giới hạn mua hàng, dữ liệu tài khoản đã được giảm nhạy cảm](/images/nexusapi/console-wallet-topup.png)
+## Quy trình mua online
 
-## Quy trình mua hàng
+1. Đăng nhập [console NexusAPI](https://nexusapi.link).
+2. Mở **Quản lý ví** hoặc trang credit.
+3. Chọn số tiền và phương thức thanh toán có sẵn.
+4. Hoàn thành thanh toán theo trang hướng dẫn.
+5. Quay lại console để kiểm tra số dư và trạng thái đơn hàng.
 
-1. Đăng nhập vào bảng điều khiển.
-2. Truy cập các trang quản lý ví hoặc gửi tiền trực tuyến.
-3. Chọn số tiền nạp tiền.
-4. Hoàn tất thanh toán.
-5. Quay lại bảng điều khiển để xác nhận hạn mức tín dụng đã được ghi có.
+<Tip>
+Lưu mã đơn, thời gian và múi giờ, số tiền và phương thức thanh toán. Các thông tin này giúp đối soát chính xác hơn ảnh chụp đơn lẻ.
+</Tip>
 
-## Ghi chú khi nhận
+## Có số dư nhưng vẫn không gọi được
 
-Thông thường, hạn mức tín dụng sẽ được ghi có tự động sau khi thanh toán trực tuyến hoàn tả. Nếu thanh toán thành công nhưng hạn mức tín dụng chưa đến trong thời gian dài, vui lòng liên hệ với quản trị viên và cung cấp:
+Credit chỉ là một điều kiện. Hãy kiểm tra thêm trạng thái, hạn mức và hạn sử dụng của key; nhóm token; model ID; và giao thức yêu cầu.
 
-- Tài khoản
-- Thời gian thanh toán
-- Số tiền thanh toán
-- Ảnh chụp màn hình đơn hàng thanh toán
+Đừng nhầm lẫn thiếu số dư, hạn mức key, hạn chế nhóm và lỗi upstream tạm thời. Xem [lỗi API thường gặp](/vi/faq/common-errors) để chẩn đoán theo thứ tự.
+
+## Vấn đề thanh toán hoặc ghi có
+
+Chờ thời gian xử lý ghi trên trang thanh toán rồi làm mới console. Nếu số dư chưa đổi, gửi mã đơn, thời gian và múi giờ, số tiền, phương thức thanh toán, định danh tài khoản và ảnh chụp cho hỗ trợ. Không gửi mật khẩu, toàn bộ số thẻ hoặc API Key.
+
+Theo dõi chi phí tại [mô hình, nhóm và giá](/vi/billing/models-pricing) và [sử dụng và thanh toán](/vi/billing/usage-and-billing).

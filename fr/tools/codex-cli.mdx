@@ -1,52 +1,39 @@
 ---
-title: "Installation et configuration de la ligne de clic Codex"
+title: "Configurer Codex CLI"
+description: "Installez Codex CLI et utilisez NexusAPI comme fournisseur Responses personnalisé."
 ---
 
-La code code code est l’agent de code natif d’OpenAI. Les commandes d’installation de cet article sont les suivantes `config.toml` Tous les champs sont marqués par
-[Entrepôt officiel du Codex OpenAI](https://github.com/openai/codex)Et
-[Référence officielle de configuration](https://learn.chatgpt.com/docs/config-file/config-advanced)comme standard ; NexusAPI
-Seules l’adresse API, la clé et l’identifiant du modèle sont fournies.
+Les commandes et champs `config.toml` suivent le [dépôt officiel Codex](https://github.com/openai/codex) et la [référence des fournisseurs personnalisés](https://learn.chatgpt.com/docs/config-file/config-advanced). NexusAPI fournit l'URL, la clé et l'ID de modèle.
 
-## 1. Installer la ligne de commande Codex
+## 1. Installer Codex
 
-Choisissez simplement une méthode d’installation officielle OpenAI ; ne mélangez pas plusieurs méthodes.
-
-### Windows PowerShell
+Choisissez une installation officielle :
 
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
 
-### macOS, Linux ou WSL
-
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
-### Utilisateurs avec Node.js installé
+Ou, avec Node.js :
 
 ```bash
 npm install -g @openai/codex
-```
-
-Installation de vérification :
-
-```bash
 codex --version
 ```
 
-## 2. Créer la clé NexusAPI
+## 2. Créer une clé compatible
 
-Exister [Console NexusAPI](https://nexusapi.link)Alors **Gestion des jetons → Ajouter des jetons**, et :
+Dans **Gestion des jetons → Ajouter un jeton**, choisissez un groupe contenant le modèle destiné à Codex / Responses. Consultez la [matrice des capacités](/fr/developer/capability-matrix) : un canal Claude de type Anthropic n'est pas automatiquement compatible Responses.
 
-1. Sélectionnez les groupes liés au Codex contenant le modèle cible.
-2. Utilisez des noms faciles à identifier, par exemple `codex-work`。
-3. Fixez des quotas raisonnables en fonction du budget du projet.
+## 3. Ajouter le fournisseur
 
-## 3. Configurer un fournisseur personnalisé
-
-Le fichier de configuration personnel du Codex est : Windows `%USERPROFILE%\\.codex\\config.toml`, ou macOS/Linux
-`~/.codex/config.toml`。 Créez ou ouvrez ce fichier avec n’importe quel éditeur de texte, puis écrivez :
+| Système | Fichier |
+| --- | --- |
+| Windows | `%USERPROFILE%\\.codex\\config.toml` |
+| macOS / Linux | `~/.codex/config.toml` |
 
 ```toml
 model_provider = "nexusapi"
@@ -59,68 +46,20 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-Généralités `YOUR_MODEL_ID` Remplacez par[Modèle Carré](https://nexusapi.link/pricing)Identifiant précis du modèle visible dans le groupe actuel de clés.
-`wire_api = "responses"`、`model_provider`、`base_url` Et `env_key` Tous sont des éléments personnalisables officiellement pris en charge par Codex
-Domaine des prestataires.
+N'enregistrez pas une vraie clé dans ce fichier ni dans `~/.codex/auth.json`, qui est le cache de connexion OpenAI de Codex.
 
-<Warning>
-**N’écrivez pas manuellement auth.json**
-
-`~/.codex/auth.json` Cache de connexion OpenAI pour Codex. NexusAPI utilise la version ci-dessus `env_key` pour lire les variables d’environnement,
-N’écrivez pas, ne commet pas et ne faites pas de capture d’écran de la clé NexusAPI sur le site `auth.json`。
-</Warning>
-## 4. Définir la variable d’environnement de clé API
-
-Poignée `sk-你的实际Key` Remplacez-la par la nouvelle Clé créée. Ne mets pas la vraie Clé à l’intérieur `config.toml`。
-
-### Windows PowerShell
+## 4. Définir la variable de clé
 
 ```powershell
-setx NEXUSAPI_API_KEY "sk-你的实际Key"
+setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
 ```
-
-Après exécution, fermez et rouvrez le terminal pour que la nouvelle variable d’environnement entre en action.
-
-### macOS, Linux ou WSL
-
-À exécuter sur le terminal actuel :
 
 ```bash
-export NEXUSAPI_API_KEY='sk-你的实际Key'
+export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
 ```
 
-Cette commande n’est valable que pour le terminal actuel. Si une rétention à long terme est nécessaire, veuillez utiliser les méthodes de gestion des identifiants ou de gestion des variables de l’environnement Shell de votre propre système ; N’écrivez pas les clés dans le dépôt du projet.
+`setx` nécessite un nouveau terminal ; `export` ne vaut que pour le shell courant. Utilisez le coffre ou la gestion d'environnement du système pour une conservation durable.
 
-## 5. Démarrage et validation
+## 5. Vérifier
 
-Après avoir saisi le répertoire du projet, lancez :
-
-```bash
-cd your-project-folder
-codex
-```
-
-Pour la première validation, il est recommandé d’initier une seule tâche qui ne modifie pas le fichier, par exemple :
-
-```text
-请说明当前仓库的目录结构，不要修改文件。
-```
-
-## VS Code / Curseur
-
-Installation disponible sur le magasin d’extension **OpenAI** Publié
-[Extension du codex](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。 Les extensions sont partagées avec CLI
-`~/.codex/config.toml`, il n’est pas nécessaire d’écrire l’adresse NexusAPI dans l’ancienne version de VS Code `chatgpt.apiBase` Ou
-`chatgpt.config` Field.
-
-## Dépannage
-
-1. Confirmez `NEXUSAPI_API_KEY` Déjà là**Terminal nouvellement ouvert**Efficace au milieu.
-2. Assurez-vous que la clé est activée et que l’équilibre est suffisant ; le groupe inclut le modèle sélectionné.
-3. Confirmez `model` L’ID affiché sur la place du modèle correspond parfaitement.
-4. Enregistrez le texte d’erreur original et l’ID de la requête pour référence complémentaire[Vérifiez vous-même le problème](/fr/faq/self-check)。
-
-## Source officielle
-
-- [Instructions d’installation de la ligne de commande OpenAI Codex](https://github.com/openai/codex)
-- [Configuration personnalisée du fournisseur du Codex OpenAI](https://learn.chatgpt.com/docs/config-file/config-advanced)
+Lancez `codex` dans un projet et demandez d'abord une tâche sans écriture, par exemple : « Explique la structure du dépôt sans modifier de fichiers. » En cas d'échec, vérifiez la nouvelle session de terminal, la clé, le groupe et l'ID de modèle, puis conservez le Request ID pour l'[auto-vérification](/fr/faq/self-check).

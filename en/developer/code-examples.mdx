@@ -1,74 +1,67 @@
 ---
-title: "Code Examples"
+title: "Code examples"
+description: "Use NexusAPI with Python, JavaScript, or cURL through Chat Completions."
 ---
 
-NexusAPI is compatible with the official OpenAI SDK and other OpenAI-compatible clients. In most integrations, the only required changes are the API Key and Base URL.
+The examples below use OpenAI Chat Completions. First confirm the selected model and protocol in the [API and model capability matrix](/en/developer/capability-matrix). For optional fields and full schemas, use the [Apifox API reference](https://nexusapi.apifox.cn/).
 
-### Core Parameters
+## Core settings
 
 - **Base URL:** `https://nexusapi.link/v1`
-- **API Key:** created in the [NexusAPI console](https://nexusapi.link), usually starting with `sk-`.
+- **API key:** create it in the [NexusAPI console](https://nexusapi.link)
+- **Model ID:** copy the exact ID from the Model Marketplace for the current key's group
 
-> **Note:** Send the API Key in the HTTP `Authorization` header as `Bearer sk-xxxxxx`.
-
-### Python
+## Python
 
 ```python
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="sk-your-nexusapi-token",
-    base_url="https://nexusapi.link/v1"
+    api_key="YOUR_API_KEY",
+    base_url="https://nexusapi.link/v1",
 )
 
-response = client.chat.completions.create(
-    model="claude-sonnet-4-6",
-    messages=[
-        {"role": "user", "content": "Hello, please introduce yourself."}
-    ],
-    stream=True
+stream = client.chat.completions.create(
+    model="YOUR_MODEL_ID",
+    messages=[{"role": "user", "content": "Introduce yourself."}],
+    stream=True,
 )
 
-for chunk in response:
+for chunk in stream:
     print(chunk.choices[0].delta.content or "", end="", flush=True)
 ```
 
-### JavaScript
+## JavaScript
 
 ```js
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-    apiKey: "sk-your-nexusapi-token",
-    baseURL: "https://nexusapi.link/v1"
+const client = new OpenAI({
+  apiKey: process.env.NEXUSAPI_API_KEY,
+  baseURL: "https://nexusapi.link/v1",
 });
 
-async function main() {
-    const stream = await openai.chat.completions.create({
-        model: "claude-sonnet-4-6",
-        messages: [{ role: "user", content: "Hello!" }],
-        stream: true,
-    });
-    for await (const chunk of stream) {
-        process.stdout.write(chunk.choices[0]?.delta?.content || "");
-    }
+const stream = await client.chat.completions.create({
+  model: "YOUR_MODEL_ID",
+  messages: [{ role: "user", content: "Introduce yourself." }],
+  stream: true,
+});
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.choices[0]?.delta?.content || "");
 }
-main();
 ```
 
-### cURL
+## cURL
 
 ```bash
-curl "https://nexusapi.link/v1/chat/completions" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk-your-nexusapi-token" \
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
   -d '{
-    "model": "gpt-5.5",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Test whether the API is reachable"
-      }
-    ]
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "Test that the API is reachable"}]
   }'
 ```
+
+Do not put an actual key in source code or commit it to a repository. Image generation uses a different endpoint; see the [image model guide](/en/guide/image-generation).

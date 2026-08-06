@@ -1,196 +1,81 @@
 ---
-title: "Tutoriel d’installation et d’utilisation de Claude Code"
+title: "Configurer Claude Code"
+description: "Installez Claude Code et connectez-le à NexusAPI avec la configuration Anthropic native."
 ---
 
-Claude Code est un puissant assistant de programmation IA qui vous permet de collaborer directement avec l’IA sur votre appareil. Ce tutoriel vous guidera tout au long du processus d’installation et de configuration.
-
-## Exigences système
-
-- Systèmes d’exploitation pris en charge : macOS 13+, Ubuntu 20.04+, Debian 10+ ou Windows 10 1809+
-- Matériel : Plus de 4 Go de mémoire, processeur x64 ou ARM64
-- L’installation de Windows est optionnelle [Git pour Windows](https://git-scm.com/install/windows), donc tu peux utiliser Git Bash
-- Réseau : Connexion réseau qui accède normalement aux services NexusAPI
+Claude Code utilise le protocole Messages Anthropic. Sa Base URL NexusAPI est donc `https://nexusapi.link` : **n'ajoutez pas `/v1`**.
 
 ## 1. Installer Claude Code
 
-Priorisez en utilisant la méthode d’installation native fournie par Claude Code. L’installation native ne nécessite pas de Node.js préinstallé.
-
-### macOS, Linux ou WSL
+Utilisez l'installeur officiel :
 
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-### Windows PowerShell
-
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
 
-Vous n’avez pas besoin d’exécuter PowerShell en tant qu’administrateur. Windows peut également être installé via WinGet :
-
-```powershell
-winget install Anthropic.ClaudeCode
-```
-
-### MacOS Homebrew
-
-```bash
-brew install --cask claude-code
-```
-
-Après l’installation, exécutez la commande suivante pour effectuer une vérification en lecture seule :
+Windows peut aussi utiliser `winget install Anthropic.ClaudeCode`, et macOS `brew install --cask claude-code`. Vérifiez ensuite :
 
 ```bash
 claude --version
 claude doctor
 ```
 
-## 2. Configurer les jetons API
+## 2. Créer une clé NexusAPI
 
-### Étape 1 : Obtenir le jeton API
-Connectez-vous à la console et cliquez sur Entrée à gauche`令牌管理`Sélectionnez le menu depuis "`添加令牌`Créez un nouveau jeton, avec les options suivantes de suggestion :
+Dans **Gestion des jetons → Ajouter un jeton**, choisissez un groupe contenant le modèle Claude voulu et définissez une limite. Vérifiez le protocole dans le catalogue ou la [matrice des capacités](/fr/developer/capability-matrix).
 
-> - Nom : Nom du jeton
-> - Quota : fixer des limites supérieures raisonnables en fonction de l’utilisation du projet
-> - Regroupement : Sélectionner des groupes liés à Claude
-> - Autres options : Conserver les paramètres par défaut
+## 3. Configurer le compte utilisateur
 
+| Système | Fichier |
+| --- | --- |
+| macOS / Linux / WSL | `~/.claude/settings.json` |
+| Windows | `%USERPROFILE%\\.claude\\settings.json` |
 
-### Étape 2 : Ouvrir le répertoire du fichier de configuration
+Sur macOS, Linux, WSL ou Git Bash :
 
-Trouvez le répertoire de stockage du fichier de configuration du code Claude selon votre système `.claude` , généralement situé à :
-
-- Fenêtres : `C:\\Users\\用户名文件夹\\.claude`
-- macOS : `~/.claude` Ou `.claude`
-- Linux : `~/.claude`
-
-Sur macOS, appuyez sur « Command+Shift+G » dans l’interface Finder et saisissez le chemin `~/.claude` Appuyez sur Entrée pour ouvrir le répertoire de configuration
-Si le répertoire n’existe pas, vous pouvez exécuter la commande suivante pour créer un fichier de configuration (applicable à macOS / Linux / WSL / Git Bash)
-```
+```bash
 mkdir -p ~/.claude
 touch ~/.claude/settings.json
 ```
-Windows peut d’abord créer un répertoire de configuration, puis ouvrir le fichier de configuration avec Notepad :
 
-```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
-notepad "$env:USERPROFILE\.claude\settings.json"
-```
-
-Si le fichier existe déjà, veuillez ajouter ce qui suit `env` Les champs doivent être fusionnés dans le champ, sans écraser le MCP original, les permissions ou d’autres configurations.
-
-
-### Étape 3 : Modifier le fichier de configuration
-
-Dans le répertoire de configuration, créez ou modifiez le fichier de configuration settings.json, écrivez les informations de configuration suivantes, où `ANTHROPIC_AUTH_TOKEN` Remplacez-le par votre propre jeton API
+Fusionnez ces valeurs dans `env` sans écraser vos autres réglages :
 
 ```json
 {
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "sk-您的 API 令牌",
-    "ANTHROPIC_BASE_URL": "https://nexusapi.link",
-    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1"
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_NEXUSAPI_KEY",
+    "ANTHROPIC_BASE_URL": "https://nexusapi.link"
   }
 }
 ```
-Ubuntu / macOS peut aussi être créé ou modifié directement via vi ou vim `settings.json` Documents
 
-```bash
-vim  ~/.claude/settings.json
-```
+Conservez ce fichier dans le profil utilisateur, jamais dans le dépôt du projet.
 
-## 3. Lancement de Claude Code
+## 4. Vérifier
 
-Après avoir terminé les modifications de configuration, redémarrez le terminal puis entrez dans le répertoire du projet :
+Ouvrez un nouveau terminal, lancez `claude`, puis exécutez `/status`. Vérifiez que **Anthropic base URL** vaut `https://nexusapi.link` et envoyez une courte question.
 
-```bash
-cd your-project-folder
-```
+## Problèmes fréquents
 
-Saisis-le dans le répertoire de votre projet `claude` Cela va démarrer et exécuter Claude Code :
+### `Invalid API Key · Please run /login`
 
-```bash
-claude
-```
-Après la première exécution, vous verrez les étapes de configuration suivantes :
+Vérifiez les deux variables, le statut de la clé et le redémarrage du terminal. Ne modifiez pas les fichiers internes d'état de connexion de Claude.
 
-1. **Choisissez un thème** → Sélectionnez votre thème préféré + appuyez sur Entrée
-2. **Avis de sécurité** → Confirmer les instructions de sécurité + appuyer sur Entrée
-3. **Configuration du terminal** → Utiliser la configuration par défaut + appuyer sur Entrée
-4. **Faites confiance au répertoire de travail** → Faites confiance au répertoire actuel + appuyez sur Entrée
+### `fetch failed`
 
-Vous pouvez maintenant commencer à coder avec votre assistant de programmation IA !
+1. Envoyez une courte question normale. Si elle fonctionne, le problème concerne probablement WebFetch ou une autre fonction réseau distincte.
+2. Si tous les appels échouent, lancez `claude doctor` et vérifiez l'URL avec `/status`.
+3. Contrôlez DNS, pare-feu, réseau d'entreprise ou proxy de confiance pour `nexusapi.link`.
+4. Ouvrez un nouveau terminal et testez une seule fois. En cas d'échec persistant, conservez version, sortie doctor, erreur complète et Request ID, puis suivez l'[auto-vérification](/fr/faq/self-check).
 
-## Impossible de se connecter aux services Anthropic
-Cours `claude` Si les erreurs suivantes surviennent :
+### État `offline`
 
-```text
-Unable to connect to Anthropic services
-Failed to connect to api.anthropic.com: ERR BAD REQUEST
-Please check your internet connection and network settings.
-Note: Claude Code might not be available in your country.
-```
-Courez en premier `claude doctor`, puis confirme-le `~/.claude/settings.json` Milieu
-`ANTHROPIC_AUTH_TOKEN` Et `ANTHROPIC_BASE_URL` Enregistré et au format JSON correct.
-Après avoir modifié la configuration, fermez et rouvrez le terminal, puis relancez-le `claude`。
+Certaines fonctions auxiliaires testent des services séparés. Vérifiez l'URL avec `/status` et une courte requête de modèle avant de conclure à une panne NexusAPI.
 
-Ne le réécrivez pas de force via des scripts `.claude.json` Champ d’état interne. Ces champs peuvent changer selon la version,
-Écraser directement les fichiers peut entraîner la perte du statut de connexion et de la configuration d’origine. Si le problème persiste, merci de le maintenir
-`claude --version`、`claude doctor` Contactez le support après la sortie et l’erreur du texte original.
-
-
-## Questions fréquemment posées
-
-### Q : Rencontre avec la « clé API invalide · Veuillez lancer l’erreur /login ?
-
-**A:** Cela indique que Claude Code n’a pas détecté de variables environnementales. Veuillez vérifier :
-- Est-ce qu’il est correctement réglé `ANTHROPIC_AUTH_TOKEN` Et `ANTHROPIC_BASE_URL`
-- Si la valeur de la variable d’environnement est correcte (token avec `sk-` Ouverture)
-- Si une configuration permanente est utilisée, le terminal a-t-il été redémarré ?
-
-### Q : PowerShell ne peut pas installer de scripts et rencontre des erreurs d’exécution de politique ?
-
-**A:** Vous pouvez d’abord passer à Windows CMD ou à la méthode d’installation officielle de WinGet. Des ajustements sont effectivement nécessaires
-Lors de l’utilisation des politiques PowerShell, seule la portée utilisateur actuelle est modifiée :
-
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
-
-Avant de jouer, veuillez confirmer que le problème est causé par des politiques locales ; ne modifiez pas la politique globale de l’ensemble de l’ordinateur.
-
-### Q : Pourquoi affiche-t-il le statut « hors ligne » ?
-
-**A:** Claude Code vérifie le statut du réseau en se connectant à Google. Afficher « hors ligne » n’affecte pas l’utilisation normale, cela indique simplement que Google ne peut pas être connecté.
-
-### Q : Pourquoi Fetch échoue-t-il lors de la navigation sur les pages web ?
-
-**A:** Avant d’accéder à une page web, Claude Code doit appeler le service Claude pour effectuer des contrôles de sécurité. Vous aurez besoin de :
-- Maintenir une connexion internet internationale stable
-- Utilisez des proxies globaux lorsque cela est nécessaire
-
-### Q : La requête indique-t-elle toujours « récupération échouée » ?
-
-**A:** Cela peut être un problème causé par l’environnement réseau. Solution :
-1. Essayez d’utiliser des outils de proxy
-
-
-### Q : Comment gérer les erreurs d’API ?
-
-**A:** Il se peut que la connexion réseau ou le service soit temporairement indisponible. Suggestions :
-- Code Claude de sortie (Ctrl+C)
-- Rediffusion `claude` Ordre
-- Si le problème persiste, enregistrez l’ID de requête et référez-le[Vérifiez vous-même le problème](/fr/faq/self-check)
-
-### Q : Erreur de connexion à la page web ?
-
-**A:** Essayez d’effacer les cookies du site, puis reconnectez-vous.
-
-## Liens connexes
-
-- [Documentation officielle d’installation du Code Claude](https://code.claude.com/docs/en/installation)
-- [Référence officielle de la variable d’environnement Claude Code](https://code.claude.com/docs/en/env-vars)
-- [Description officielle de la configuration de la passerelle Claude Code](https://code.claude.com/docs/en/llm-gateway)
-
----
+- [Installation officielle](https://code.claude.com/docs/en/installation)
+- [Variables d'environnement](https://code.claude.com/docs/en/env-vars)
+- [Configuration de gateway](https://code.claude.com/docs/en/llm-gateway)

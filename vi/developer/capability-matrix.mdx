@@ -1,0 +1,60 @@
+---
+title: "Ma trận API và khả năng mô hình"
+description: "Xác nhận mô hình, nhóm token và giao thức trước khi gọi NexusAPI."
+---
+
+NexusAPI là cổng mô hình; không phải mọi mô hình đều hoạt động với mọi API. **Mô hình, nhóm token và giao thức phải khớp với nhau.** Hãy lấy Chợ mô hình và kết quả trả về từ khóa hiện tại làm nguồn thông tin mới nhất.
+
+<Info>
+**Kiểm tra trước khi gọi**
+
+1. Xác nhận mô hình có trong nhóm token của khóa hiện tại.
+2. Xác nhận giao thức được đánh dấu cho mô hình đó trong Chợ mô hình.
+3. Dùng `/v1/models` để xem khóa thực sự nhìn thấy những mô hình nào, sau đó gửi một yêu cầu tối thiểu.
+</Info>
+
+## Các khả năng được công bố công khai
+
+| Mục tiêu | API / giao thức | Khi sử dụng | Giới hạn quan trọng |
+| --- | --- | --- | --- |
+| Liệt kê mô hình mà khóa hiện tại nhìn thấy | `GET /v1/models` | Sau khi tạo khóa và trước khi chọn mô hình | Chỉ phản ánh nhóm và giới hạn của khóa đó. |
+| Văn bản, trò chuyện và streaming | `POST /v1/chat/completions` | SDK tương thích OpenAI, script và hầu hết mô hình văn bản | Dùng mô hình được đánh dấu `openai`. |
+| Claude Code hoặc khách Anthropic gốc | `POST /v1/messages` | Khi mô hình được đánh dấu `anthropic` | Không thêm lặp lại `/v1` vào Base URL của Claude Code. |
+| Codex CLI | `POST /v1/responses` | Khi cấu hình provider theo [hướng dẫn Codex](/vi/tools/codex-cli) | Không dùng chung cho mọi mô hình; không dùng với các kênh Claude kiểu Anthropic hiện tại. |
+| Tạo ảnh | `POST /v1/images/generations` | Khi Chợ mô hình nêu rõ mô hình hỗ trợ tạo ảnh | Chỉ truyền tùy chọn mà mô hình ảnh đã chọn hỗ trợ. |
+
+<Warning>
+**Không xem mọi route của New API là cam kết của NexusAPI**
+
+Phần mềm New API nền tảng có thể có nhiều route tương thích hơn. NexusAPI chỉ công khai hỗ trợ những khả năng được ghi rõ trên trang này, Chợ mô hình hoặc tài liệu chính thức. Chỉnh sửa/biến thể ảnh, embeddings, âm thanh, rerank và Gemini gốc hiện chưa phải khả năng NexusAPI công khai chung; không nên suy đoán và thử trong production.
+</Warning>
+
+## Kiểm tra mô hình bằng khóa hiện tại
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+Sao chép ID tại `data[].id`. Một số phản hồi có `supported_endpoint_types`; nếu có, trường này cho biết mô hình được đánh dấu `openai` hoặc `anthropic`.
+
+`/v1/models` là ảnh chụp tại thời điểm hiện tại của một khóa. Chợ mô hình hiển thị thêm giá, nhóm và mô tả. Nếu khác nhau, hãy ưu tiên kết quả khóa hiện tại và trạng thái console.
+
+## Chọn giao thức nhanh
+
+| Bạn đang dùng | Bắt đầu từ |
+| --- | --- |
+| Python, JavaScript, cURL hoặc SDK tương thích OpenAI | `/v1/chat/completions` |
+| Claude Code | Cấu hình Messages trong [hướng dẫn Claude Code](/vi/tools/claude-code) |
+| Codex CLI | Provider Responses trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) |
+| Mô hình ảnh | [Hướng dẫn mô hình ảnh](/vi/guide/image-generation) |
+
+Nếu mô hình hiển thị nhưng yêu cầu vẫn lỗi, trước hết hãy kiểm tra ID mô hình, nhóm token và đường dẫn. Lưu Request ID rồi làm theo [tự kiểm tra](/vi/faq/self-check).
+
+## Xem chi tiết ở đâu
+
+- Trang này trả lời: “với mô hình hiện tại, cần dùng API nào?”.
+- [Chat Completions API](/vi/developer/openai-compatible) có ví dụ gọi văn bản tối thiểu.
+- [Tài liệu API Apifox](https://nexusapi.apifox.cn/) có mô tả trường yêu cầu và phản hồi.
+
+Khả năng và kênh mô hình có thể thay đổi. Hãy hỏi bộ phận hỗ trợ trước khi dùng một khả năng không có trong danh sách này.

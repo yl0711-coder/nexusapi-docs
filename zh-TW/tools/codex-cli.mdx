@@ -1,52 +1,39 @@
 ---
 title: "Codex CLI 安裝與設定"
+description: "安裝 Codex CLI，並把 NexusAPI 設為自訂 Responses Provider。"
 ---
 
-Codex CLI 是 OpenAI 的原生程式碼代理程式。 本文中的安裝指令如下 `config.toml` 所有欄位皆以
-[官方 OpenAI Codex 倉庫](https://github.com/openai/codex)且
-[官方配置參考](https://learn.chatgpt.com/docs/config-file/config-advanced)作為標準; NexusAPI
-僅提供 API 位址、金鑰與型號 ID。
+本頁的安裝命令和 `config.toml` 欄位依據 [OpenAI Codex 官方儲存庫](https://github.com/openai/codex)及[自訂 Provider 參考](https://learn.chatgpt.com/docs/config-file/config-advanced)。NexusAPI 僅提供位址、API Key 和模型 ID。
 
-## 1. 安裝 Codex CLI
+## 1. 安裝
 
-只要選擇一種官方的 OpenAI 安裝方式;不要混合多種方法。
-
-### Windows PowerShell
+選擇一種官方方式即可：
 
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
 
-### macOS、Linux 或 WSL
-
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
-### 安裝Node.js的使用者
+已安裝 Node.js 時可使用：
 
 ```bash
 npm install -g @openai/codex
-```
-
-驗證安裝：
-
-```bash
 codex --version
 ```
 
-## 2. 建立 NexusAPI 金鑰
+## 2. 建立相容的 Key
 
-存在 [NexusAPI 控制台](https://nexusapi.link)進場 **代幣管理→新增代幣**， 以及：
+在控制台 **令牌管理 → 新增令牌** 選擇包含目標 Codex／Responses 模型的群組，設定名稱和專案額度。請先看[能力矩陣](/zh-TW/developer/capability-matrix)，不要假設 Anthropic 類 Claude 渠道可使用 Responses。
 
-1. 選擇包含目標模型的Codex相關群組。
-2. 例如，使用容易辨識的名字 `codex-work`。
-3. 根據專案預算設定合理的配額。
+## 3. 設定自訂 Provider
 
-## 3. 設定自訂提供者
-
-Codex 個人設定檔為：Windows `%USERPROFILE%\\.codex\\config.toml`，或是macOS/Linux
-`~/.codex/config.toml`。 使用任何文字編輯器建立或開啟此檔案，然後寫下：
+| 系統 | 設定檔 |
+| --- | --- |
+| Windows | `%USERPROFILE%\\.codex\\config.toml` |
+| macOS／Linux | `~/.codex/config.toml` |
 
 ```toml
 model_provider = "nexusapi"
@@ -59,68 +46,28 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-概述 `YOUR_MODEL_ID` 替換為[模型廣場](https://nexusapi.link/pricing)目前的 Key 群組中顯示精確的型號 ID。
-`wire_api = "responses"`、`model_provider`、`base_url` 且 `env_key` 這些都是Codex官方支援的可自訂物品
-提供者領域。
+請將 `YOUR_MODEL_ID` 替換成目前 Key 可用的準確模型 ID。不要在設定檔中保存真實 Key。
 
 <Warning>
-**請勿手動寫入auth.json**
-
-`~/.codex/auth.json` Codex 的 OpenAI 登入快取。 NexusAPI 使用上述版本 `env_key` 讀取環境變數，
-請勿撰寫、提交或截圖 NexusAPI 金鑰至 `auth.json`。
+`~/.codex/auth.json` 是 Codex 的 OpenAI 登入快取。請不要把 NexusAPI Key 寫進它；上方設定會從 `env_key` 讀取環境變數。
 </Warning>
-## 4. 設定 API Key 環境變數
 
-把柄 `sk-你的实际Key` 用新建立的金鑰取代。 不要把真正的鑰匙放進去 `config.toml`。
+## 4. 設定環境變數
 
-### Windows PowerShell
+Windows PowerShell：
 
 ```powershell
-setx NEXUSAPI_API_KEY "sk-你的实际Key"
+setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
 ```
 
-執行後，關閉並重新開啟終端機，讓新的環境變數生效。
-
-### macOS、Linux 或 WSL
-
-在目前終端機上運行：
+macOS、Linux 或 WSL：
 
 ```bash
-export NEXUSAPI_API_KEY='sk-你的实际Key'
+export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
 ```
 
-此指令僅適用於目前終端機。 若需要長期保留，請使用您系統的憑證管理或 Shell 環境變數管理方法; 不要將金鑰寫入專案儲存庫。
+Windows 的 `setx` 需要新開終端才生效；臨時 `export` 僅對目前 Shell 生效。請使用系統憑證或受控的環境變數管理方案長期保存，不要提交到儲存庫。
 
-## 5. 啟動與驗證
+## 5. 驗證與排查
 
-進入專案目錄後，啟動：
-
-```bash
-cd your-project-folder
-codex
-```
-
-在第一次驗證時，建議只啟動一個不修改檔案的任務，例如：
-
-```text
-请说明当前仓库的目录结构，不要修改文件。
-```
-
-## VS Code / 游標
-
-安裝可從擴充商店取得 **OpenAI** 發表
-[法典擴充](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。 擴充功能與 CLI 共享
-`~/.codex/config.toml`，無需將 NexusAPI 位址寫入舊版 VS Code 中 `chatgpt.apiBase` 或者
-`chatgpt.config` 田野。
-
-## 故障排除
-
-1. 確認 `NEXUSAPI_API_KEY` 已經到了**新啟用的航廈**中間有效。
-2. 確保金鑰已啟用且餘額充足;群組包含所選模型。
-3. 確認 `model` 模型廣場上顯示的身分證完全吻合。
-4. 請儲存原始錯誤文字與請求編號以供進一步參考[自我檢查問題](/zh-TW/faq/self-check)。
-
-## 官方來源
-
-- [OpenAI Codex CLI 安裝說明](https://github.com/openai/codex)
-- [OpenAI Codex 自訂提供者配置](https://learn.chatgpt.com/docs/config-file/config-advanced)
+執行 `codex` 後，先提出「說明目前儲存庫結構，不要修改檔案」之類的唯讀任務。若失敗，確認新終端已取得 Key、Key／群組／模型 ID 正確，並保留錯誤及 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。

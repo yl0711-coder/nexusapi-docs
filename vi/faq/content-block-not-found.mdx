@@ -1,33 +1,20 @@
 ---
-title: "Không tìm thấy khối nội dung"
+title: "Content block not found"
+description: "Khắc phục lỗi khối nội dung không đầy đủ trong phiên dài, gọi công cụ hoặc streaming."
 ---
 
-`API Error: Content block not found` Điều này có nghĩa là khách hàng không tìm thấy đoạn nội dung mong đợi, thường thấy trong các phiên làm việc dài, các cuộc gọi công cụ hoặc phản hồi không kết thúc hoàn toàn.
+`API Error: Content block not found` có nghĩa client không tìm thấy khối nội dung mong đợi. Lỗi thường xuất hiện sau khi tiếp tục phiên dài, gọi công cụ hoặc stream bị ngắt.
 
-## Các bước điều trị được khuyến nghị
+## Các bước nên làm
 
-1. Tạo một phiên làm việc mới và gửi lại nội dung cần thiết.
-2. Cập nhật Claude Code, Codex, Cursor hoặc các plugin liên quan.
-3. Tạm thời vô hiệu hóa các cuộc gọi công cụ không cần thiết và các tính năng thử nghiệm.
-4. Rút ngắn nội dung của một mục duy nhất và tránh mang theo các bản ghi lịch sử quá dài.
-5. Kiểm tra xem cùng một mô hình có thể trả lời đúng chỉ với một câu hỏi đơn giản hay không.
+1. Mở phiên mới và chỉ gửi ngữ cảnh cần thiết.
+2. Cập nhật Claude Code, Codex, Cursor hoặc extension liên quan.
+3. Tạm tắt công cụ và tùy chọn thử nghiệm không cần thiết.
+4. Rút ngắn đầu vào một lần và lịch sử hội thoại mang theo.
+5. Thử cùng mô hình bằng một câu hỏi rất đơn giản.
 
-## Khi nào bạn cần liên hệ với chúng tôi?
+## Khi nào cần liên hệ hỗ trợ
 
-Vui lòng gửi câu hỏi của bạn trong các tình huống sau:
+Liên hệ hỗ trợ nếu lỗi lặp lại ở phiên mới với yêu cầu ngắn, xảy ra với nhiều mô hình hoặc đi kèm chi phí bất thường. Cung cấp Request ID, thời gian/múi giờ, công cụ và phiên bản, mô hình, lỗi hoặc ảnh chụp, và cho biết chỉ phiên cũ hay mọi phiên đều lỗi.
 
-- Ngay cả sau khi tạo phiên mới, nó vẫn lặp lại.
-- Ngay cả những vấn đề đơn giản cũng không thể giải quyết được.
-- Nhiều mô hình đồng thời thể hiện cùng một lỗi.
-- Tiêu thụ bất thường xảy ra sau khi xảy ra lỗi.
-
-Vui lòng cung cấp:
-
-- Yêu cầu ID。
-- Lỗi thời gian và múi giờ.
-- Công cụ và phiên bản được sử dụng.
-- Tên mẫu.
-- Lỗi văn bản gốc hoặc ảnh chụp màn hình.
-- Tất cả các phiên đều thất bại, hay chỉ phiên ban đầu bị thất bại?
-
-Vui lòng không gửi đầy đủ các khóa API hoặc toàn bộ nội dung phiên chứa thông tin riêng tư.
+Không cung cấp API Key đầy đủ hoặc toàn bộ hội thoại riêng tư.

@@ -1,37 +1,54 @@
 ---
-title: "Common Errors"
+title: "Common API errors"
+description: "Diagnose common NexusAPI client, protocol, and request failures."
 ---
 
-## 401 Unauthorized
+Before retrying, save the error text, Request ID, time, model, and endpoint. Do not send a full API key.
 
-Possible causes:
+<Tip>
+**Diagnose before retrying**
 
-- The API Key is incorrect.
-- The API Key was not provided.
-- The API Key has been deleted or expired.
+Parameter, protocol, and session-compatibility issues do not disappear through repeated requests. Retry a known transient failure only once and at a low frequency.
+</Tip>
 
-## 429 Too Many Requests
+## `status_code=500, not implemented`
 
-Possible causes:
+When this appears while `/v1/responses` calls a current Anthropic-type Claude channel, it is a protocol mismatch—not a temporary upstream outage.
 
-- Requests are being sent too frequently.
-- Platform rate limits have been triggered.
-- The upstream model service is busy.
+1. For a custom application, use `/v1/chat/completions`.
+2. For Claude Code, follow the [Claude Code guide](/en/tools/claude-code) and keep its native Messages configuration.
+3. Do not retry the same request unchanged.
 
-## 500 / 502 / 503
+## HTTP errors
 
-Possible causes:
+| Error | Typical cause | First action |
+| --- | --- | --- |
+| 400 | Invalid model, endpoint, parameter, or session state | Verify the protocol and run a minimal new-session test. |
+| 401 | Missing, invalid, expired, or disabled API key | Recopy the key and check `Authorization: Bearer ...`. |
+| 403 | Group, model restriction, IP allowlist, account, or upstream refusal | Check the key settings and model group. |
+| 404 | Wrong path or duplicate `/v1` | Check the actual request URL and use the client-specific guide. |
+| 429 | Rate limit or concurrency limit | Reduce concurrency and follow `Retry-After` when provided. |
+| 500 / 502 / 503 | Temporary processing or upstream failure | Wait 10–30 seconds and retry once. |
+| 504 / 524 | Request or upstream wait timeout | Shorten context/output where practical; keep the Request ID. |
 
-- NexusAPI service error.
-- Upstream model API error.
-- Channel configuration error.
+## `no available channel`
 
-## 524 Timeout
+The current key's group has no enabled route for that model. Check the exact model ID, token group, and Model Marketplace availability. Do not create new keys or top up repeatedly to solve it.
 
-Possible causes:
+## `Concurrency limit exceeded for user`
 
-- The upstream model did not respond in time.
-- The request payload is too large.
-- The selected model or channel is temporarily unstable.
+Too many active requests are using the account. Wait for existing requests to finish and reduce client concurrency. Recreating the API key does not remove this limit.
 
-Try again later, or switch to another available model.
+## Long conversations and tool calls
+
+- **`Invalid signature in thinking block`**: Start a new session, update the client, and avoid continuing the same session across multiple clients.
+- **`previous_response_id is only supported on Responses WebSocket v2`**: Start a new session and turn off experimental response reuse or update the client.
+- **`Content block not found`**: See [Content block not found](/en/faq/content-block-not-found).
+
+## Image generation
+
+Use image models only through the Images endpoint. For `Image generation is not enabled`, `model not supported`, or a timeout, check the model, key group, and parameter support first. Keep the Request ID and do not immediately submit the same job again.
+
+## Suspected unexpected charge
+
+Do not assume that an error will be retried by the platform. Check the final client result and matching Request IDs. If you need help, provide the relevant Request IDs and times.

@@ -1,48 +1,44 @@
 ---
-title: "OpenAI互換インターフェース"
+title: "Chat Completions API"
+description: "OpenAI Chat Completions 形式で NexusAPI のテキストモデルを呼び出します。"
 ---
 
-NexusAPIはOpenAIスタイルのインターフェースコールと互換性があります。
+このページは **OpenAI Chat Completions** のみを扱います。呼び出す前に、[API とモデル対応マトリクス](/ja/developer/capability-matrix)でモデル、トークングループ、プロトコルが合うことを確認してください。
 
-## チャットコンピューション
+<Tip>
+現在のモデル可用性はモデルマーケットプレイスと対応マトリクスで確認します。詳細なフィールドやレスポンス形式は [Apifox API リファレンス](https://nexusapi.apifox.cn/)を参照してください。
+</Tip>
 
-リクエストアドレス:
+## Endpoint
 
 ```text
 POST https://nexusapi.link/v1/chat/completions
 ```
 
-例示リクエスト:
+## 最小リクエスト
 
 ```bash
 curl 'https://nexusapi.link/v1/chat/completions' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer YOUR_API_KEY' \
   -d '{
-    "model": "claude-sonnet-4-6",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你好"
-      }
-    ]
+    "model": "YOUR_MODEL_ID",
+    "messages": [{"role": "user", "content": "こんにちは"}]
   }'
 ```
 
-## リクエストヘッド
-
-| リクエストヘッド | 必須 | 説明 |
+| Header | 必須 | 値 |
 | --- | --- | --- |
-| `Content-Type` | はい | 固定 `application/json` |
-| `Authorization` | はい | フォーマットは `Bearer YOUR_API_KEY` |
+| `Content-Type` | はい | `application/json` |
+| `Authorization` | はい | `Bearer YOUR_API_KEY` |
 
-## よくある誤り
+## よくある結果
 
-| 違う | 考えられる理由 |
+| 結果 | 最初の確認 |
 | --- | --- |
-| 401 | APIキーエラー、キーが配信されない、またはキーが無効です |
-| 429 | リクエストが速すぎたり、スロットリングがトリガーされたり、サービスが一時的に忙しくなったりします |
-| 500/502/503 | リクエスト処理が一時的に失敗するか、サービスが利用不能になる場合 |
-| 524 | 待ち時間が長すぎるとお願いします |
+| 401 | Key の欠落、無効、期限切れ、無効化。 |
+| 429 | リクエスト頻度、同時実行数、上流の一時制限。 |
+| 500 / 502 / 503 | 一時的な処理または上流障害。待機して一度だけ再試行。 |
+| 524 | 待機時間の上限超過。 |
 
-エラーが発生した場合はリクエストIDを保存し、参照してください[自己確認](/ja/faq/self-check)。 短期間で高頻度で再挑戦しないでください。
+Anthropic 型 Claude チャネルを `/v1/responses` で呼び出して `status_code=500, not implemented` が出た場合は、通常の 500 ではなくプロトコル不一致です。自作アプリでは Chat Completions、Claude Code ではネイティブ Messages 設定を使用してください。Request ID を保存して[自己確認](/ja/faq/self-check)を行います。

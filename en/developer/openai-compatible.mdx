@@ -1,46 +1,52 @@
 ---
-title: "OpenAI-Compatible API"
+title: "Chat Completions API"
+description: "Call NexusAPI text models with the OpenAI Chat Completions format."
 ---
 
-NexusAPI supports OpenAI-compatible API calls.
+This page covers **OpenAI Chat Completions** only. Before calling, read the [API and model capability matrix](/en/developer/capability-matrix) to confirm that the selected model and protocol match.
 
-## Chat Completions
+<Tip>
+**Use different sources for different questions**
 
-Endpoint:
+Use the [Apifox API reference](https://nexusapi.apifox.cn/) for full field and response schemas. Use the Model Marketplace and the capability matrix for current model availability, token-group access, and protocol selection.
+</Tip>
+
+## Endpoint
 
 ```text
 POST https://nexusapi.link/v1/chat/completions
 ```
 
-Example request:
+## Minimal request
 
 ```bash
 curl 'https://nexusapi.link/v1/chat/completions' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer YOUR_API_KEY' \
   -d '{
-    "model": "claude-sonnet-4-6",
+    "model": "YOUR_MODEL_ID",
     "messages": [
-      {
-        "role": "user",
-        "content": "Hello"
-      }
+      {"role": "user", "content": "Hello"}
     ]
   }'
 ```
 
-## Request Headers
+## Required headers
 
-| Header | Required | Description |
+| Header | Required | Value |
 | --- | --- | --- |
-| `Content-Type` | Yes | Must be `application/json` |
-| `Authorization` | Yes | Use the format `Bearer YOUR_API_KEY` |
+| `Content-Type` | Yes | `application/json` |
+| `Authorization` | Yes | `Bearer YOUR_API_KEY` |
 
-## Common Errors
+## Common failures
 
-| Error | Possible Cause |
+| Result | First things to check |
 | --- | --- |
-| 401 | Incorrect API Key, missing API Key, or expired API Key |
-| 429 | Too many requests, rate limiting, or upstream model congestion |
-| 500 / 502 / 503 | NexusAPI or upstream model service error |
-| 524 | Upstream response timeout |
+| 401 | Missing, invalid, expired, or disabled API key. |
+| 429 | Request rate, concurrency, or temporary upstream throttling. |
+| 500 / 502 / 503 | A temporary processing or upstream failure. |
+| 524 | The request exceeded a waiting limit. |
+
+If you see `status_code=500, not implemented` while calling a current Anthropic-type Claude channel through `/v1/responses`, do not retry it as a normal 500. Use `/v1/chat/completions` for a custom OpenAI-style application, or use Claude Code's native Messages configuration.
+
+For any other error, keep the Request ID and use the [self-check guide](/en/faq/self-check). Avoid rapid retries.
