@@ -1,0 +1,62 @@
+---
+title: "API Responses и Codex"
+description: "Выберите правильную интеграцию для Provider Codex или модели, подтверждённой для Responses."
+---
+
+`/v1/responses` — не универсальный «новый API чата». В NexusAPI он предназначен прежде всего для кастомного Provider из [руководства Codex CLI](/ru/tools/codex-cli), либо для модели, группы key и канала, явно подтверждённых для протокола Responses.
+
+<Warning>
+**Сначала подтвердите модель и канал**
+
+Не используйте `/v1/responses` для текущих Anthropic-типов Claude. При `status_code=500, not implemented` используйте [Chat Completions](/ru/developer/openai-compatible) или нативную конфигурацию [Messages](/ru/developer/anthropic-messages) в Claude Code.
+</Warning>
+
+## Endpoint и область применения
+
+```text
+POST https://nexusapi.link/v1/responses
+```
+
+| Сценарий | Рекомендуемый подход |
+| --- | --- |
+| Codex CLI | Используйте Provider `wire_api = "responses"` из [руководства Codex CLI](/ru/tools/codex-cli) |
+| Другое приложение с подтверждённой моделью Responses | Используйте его Responses client/Schema и сначала проверьте минимальный запрос |
+| Обычное OpenAI-совместимое текстовое приложение | Используйте [Chat Completions](/ru/developer/openai-compatible); не переключайтесь лишь из-за новизны API |
+| Anthropic-тип Claude | Используйте Messages или Chat Completions, не этот endpoint |
+
+## Минимальный запрос для проверки
+
+Только после подтверждения модели и канала проверьте связь так:
+
+```bash
+curl 'https://nexusapi.link/v1/responses' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_RESPONSES_MODEL_ID",
+    "input": "Ответьте только: соединение успешно"
+  }'
+```
+
+`input` — не то же поле, что `messages` в Chat Completions; ответ нельзя разбирать как `choices[0].message`. Полные поля, streaming-события и структуру результата смотрите в [справочнике API Apifox](https://nexusapi.apifox.cn/) или официальной Schema клиента.
+
+## Основные настройки Codex CLI
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Храните key в переменной окружения `NEXUSAPI_API_KEY`, а не в `config.toml` или `auth.json`. Установка, переменные ОС и проверка приведены в [руководстве Codex CLI](/ru/tools/codex-cli).
+
+## Что проверить сначала
+
+1. Группа key содержит модель, а ID полностью совпадает с каталогом.
+2. Клиент действительно обращается к `/v1/responses`, а не `/v1/v1/...`.
+3. Модель подтверждена для Responses; для Anthropic-type Claude выберите другой протокол.
+4. Сохраните Request ID, версию клиента и полный текст ошибки, затем выполните [самопроверку](/ru/faq/self-check).

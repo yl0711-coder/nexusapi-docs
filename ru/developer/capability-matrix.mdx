@@ -17,11 +17,11 @@ NexusAPI — это шлюз моделей: не каждая модель ра
 
 | Цель | API / протокол | Когда использовать | Важное ограничение |
 | --- | --- | --- | --- |
-| Список моделей, доступных текущему ключу | `GET /v1/models` | После создания ключа и до выбора модели | Отражает только группу и ограничения этого ключа. |
-| Текст, чат и потоковая передача | `POST /v1/chat/completions` | OpenAI-совместимые SDK, скрипты и большинство текстовых моделей | Используйте модель с пометкой `openai`. |
-| Claude Code или нативный Anthropic-клиент | `POST /v1/messages` | Если модель помечена как `anthropic` | Не добавляйте `/v1` повторно в Base URL Claude Code. |
-| Codex CLI | `POST /v1/responses` | При настройке провайдера по [руководству Codex](/ru/tools/codex-cli) | Это не универсальный маршрут; не используйте его для текущих Claude-каналов Anthropic. |
-| Генерация изображений | `POST /v1/images/generations` | Когда каталог явно указывает поддержку изображений | Передавайте только параметры, поддерживаемые выбранной моделью. |
+| Список моделей, доступных текущему ключу | [GET /v1/models](/ru/developer/api-basics) | После создания ключа и до выбора модели | Отражает только группу и ограничения этого ключа. |
+| Текст, чат и потоковая передача | [POST /v1/chat/completions](/ru/developer/openai-compatible) | OpenAI-совместимые SDK, скрипты и большинство текстовых моделей | Используйте модель с пометкой `openai`. |
+| Claude Code или нативный Anthropic-клиент | [POST /v1/messages](/ru/developer/anthropic-messages) | Если модель помечена как `anthropic` | Не добавляйте `/v1` повторно в Base URL Claude Code. |
+| Codex CLI | [POST /v1/responses](/ru/developer/responses) | При настройке провайдера по [руководству Codex](/ru/tools/codex-cli) | Это не универсальный маршрут; не используйте его для текущих Claude-каналов Anthropic. |
+| Генерация изображений | [POST /v1/images/generations](/ru/guide/image-generation) | Когда каталог явно указывает поддержку изображений | Передавайте только параметры, поддерживаемые выбранной моделью. |
 
 <Warning>
 **Не считайте все маршруты New API обещанием NexusAPI**
@@ -54,7 +54,8 @@ curl 'https://nexusapi.link/v1/models' \
 ## Где смотреть детали
 
 - Эта страница отвечает на вопрос: «какой API использовать для текущей модели?».
-- [Chat Completions API](/ru/developer/openai-compatible) содержит минимальный текстовый запрос.
+- [Основы API](/ru/developer/api-basics) описывают аутентификацию, модели и выбор протокола; [Chat Completions API](/ru/developer/openai-compatible) содержит минимальный текстовый запрос.
+- [Anthropic Messages](/ru/developer/anthropic-messages) и [Responses / Codex](/ru/developer/responses) определяют границы интеграции нативного Claude и Provider Codex.
 - В [справочнике API Apifox](https://nexusapi.apifox.cn/) есть описание полей запросов и ответов.
 
 Возможности моделей и каналы могут меняться. Перед использованием неуказанной возможности обратитесь в поддержку.

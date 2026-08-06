@@ -1,0 +1,64 @@
+---
+title: "Responses 接口与 Codex"
+description: "为 Codex Provider 和明确支持 Responses 的模型选择正确的接入方式。"
+---
+
+`/v1/responses` 不是通用的“更高级聊天接口”。在 NexusAPI 中，它主要用于按[Codex CLI 教程](/tools/codex-cli)配置的自定义 Provider，或模型、分组和渠道已明确支持 Responses 协议的场景。
+
+<Warning>
+**先确认模型与渠道**
+
+当前 Anthropic 类型 Claude 渠道不要使用 `/v1/responses`。这类调用出现 `status_code=500, not implemented` 时，应改用 [Chat Completions](/developer/openai-compatible)，或让 Claude Code 使用原生 [Messages](/developer/anthropic-messages) 配置。
+</Warning>
+
+## 端点和适用范围
+
+```text
+POST https://nexusapi.link/v1/responses
+```
+
+| 场景 | 推荐做法 |
+| --- | --- |
+| Codex CLI | 使用 [Codex CLI 教程](/tools/codex-cli)中的 `wire_api = "responses"` Provider 配置 |
+| 其他程序且当前模型明确支持 Responses | 使用该程序的 Responses 客户端或 Schema，并先做最小验证 |
+| 普通 OpenAI 兼容文本程序 | 直接使用 [Chat Completions](/developer/openai-compatible)，不要为了“新接口”强行切换 |
+| Anthropic 类型 Claude | 使用 Messages 或 Chat Completions，不使用本接口 |
+
+## 最小验证请求
+
+只有在模型和渠道确认支持时，才可用如下请求验证连通性：
+
+```bash
+curl 'https://nexusapi.link/v1/responses' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_RESPONSES_MODEL_ID",
+    "input": "请只回复：连接成功"
+  }'
+```
+
+`input` 与 Chat Completions 的 `messages` 不是同一字段，响应也不应按 `choices[0].message` 解析。完整的 Responses 字段、事件流和结果结构请看 [Apifox 接口参考](https://nexusapi.apifox.cn/)或所用客户端的官方 Schema。
+
+## Codex CLI 配置要点
+
+Codex 会根据 Provider 的 `wire_api` 决定请求格式。NexusAPI 的配置应保持以下关键项一致：
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Key 放在 `NEXUSAPI_API_KEY` 环境变量中，不要写入 `config.toml` 或 `auth.json`。完整的安装、各系统环境变量和验证流程见[Codex CLI 教程](/tools/codex-cli)。
+
+## 失败时先看什么
+
+1. Key 所属分组是否包含该模型，模型 ID 是否与模型广场一致。
+2. 客户端是否真的发往 `/v1/responses`，而不是重复拼出 `/v1/v1/...`。
+3. 所选模型是否是当前明确支持 Responses 的类型；若是 Anthropic 类型 Claude，改用正确协议。
+4. 保留 Request ID、客户端版本和完整错误原文，再按[问题自查](/faq/self-check)处理。

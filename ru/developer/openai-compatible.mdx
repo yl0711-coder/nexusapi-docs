@@ -32,6 +32,18 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | `Content-Type` | Да | `application/json` |
 | `Authorization` | Да | `Bearer YOUR_API_KEY` |
 
+## Минимальные поля и streaming
+
+| Поле | Нужен | Назначение |
+| --- | --- | --- |
+| `model` | Да | Точный ID, видимый текущему key и отмеченный `openai` |
+| `messages` | Да | Сообщения диалога в формате Chat Completions |
+| `stream` | Нет | Используйте `true` для streaming-событий, только если модель и клиент поддерживают их |
+
+В обычном ответе текст обычно читается из `choices[0].message.content`; в потоковом — из каждого `choices[0].delta.content`. Сначала проверьте модель и key минимальным запросом без streaming, затем включайте `stream` или добавляйте поля.
+
+`temperature`, tool calls, визуальный ввод и структурированный вывод не гарантированы для всех моделей только из-за «OpenAI-совместимости». Schema полей смотрите в [справочнике API Apifox](https://nexusapi.apifox.cn/), а доступность модели и канала — в [матрице возможностей](/ru/developer/capability-matrix) и каталоге.
+
 ## Первые проверки при ошибке
 
 | Результат | Что проверить |
@@ -42,3 +54,10 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | 524 | Превышен лимит ожидания. |
 
 `status_code=500, not implemented` при вызове Anthropic-типа Claude через `/v1/responses` означает несовместимость протокола, а не обычную ошибку 500. Для своего приложения используйте Chat Completions, для Claude Code — нативную настройку Messages. Сохраните Request ID и пройдите [самопроверку](/ru/faq/self-check).
+
+## Связанные API
+
+- Модели, видимые текущему key, и выбор протокола: [основы API](/ru/developer/api-basics)
+- Нативный клиент Claude / Anthropic: [Anthropic Messages](/ru/developer/anthropic-messages)
+- Provider Codex: [API Responses и Codex](/ru/developer/responses)
+- Генерация изображений: [Работа с моделями изображений](/ru/guide/image-generation)

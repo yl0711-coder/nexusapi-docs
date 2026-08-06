@@ -17,11 +17,11 @@ NexusAPI 是模型閘道，不代表每個模型都支援每一個 API。**模�
 
 | 目的 | 介面／協定 | 適用情境 | 重要限制 |
 | --- | --- | --- | --- |
-| 列出目前 Key 可用模型 | `GET /v1/models` | 建立 Key 後、選模型前 | 僅反映此 Key 的群組和限制。 |
-| 文字、對話與串流 | `POST /v1/chat/completions` | OpenAI 相容 SDK、程式與多數文字模型 | 請使用模型廣場標示為 `openai` 的模型。 |
-| Claude Code／Anthropic 原生用戶端 | `POST /v1/messages` | 模型標示為 `anthropic` 時 | Claude Code 的 Base URL 不要再重複加上 `/v1`。 |
-| Codex CLI | `POST /v1/responses` | 依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定 Provider 時 | 不是所有模型都可用，不能拿來呼叫目前的 Anthropic 類 Claude 渠道。 |
-| 圖片生成 | `POST /v1/images/generations` | 模型廣場明確標示支援圖片生成時 | 只傳送所選圖片模型支援的參數。 |
+| 列出目前 Key 可用模型 | [GET /v1/models](/zh-TW/developer/api-basics) | 建立 Key 後、選模型前 | 僅反映此 Key 的群組和限制。 |
+| 文字、對話與串流 | [POST /v1/chat/completions](/zh-TW/developer/openai-compatible) | OpenAI 相容 SDK、程式與多數文字模型 | 請使用模型廣場標示為 `openai` 的模型。 |
+| Claude Code／Anthropic 原生用戶端 | [POST /v1/messages](/zh-TW/developer/anthropic-messages) | 模型標示為 `anthropic` 時 | Claude Code 的 Base URL 不要再重複加上 `/v1`。 |
+| Codex CLI | [POST /v1/responses](/zh-TW/developer/responses) | 依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定 Provider 時 | 不是所有模型都可用，不能拿來呼叫目前的 Anthropic 類 Claude 渠道。 |
+| 圖片生成 | [POST /v1/images/generations](/zh-TW/guide/image-generation) | 模型廣場明確標示支援圖片生成時 | 只傳送所選圖片模型支援的參數。 |
 
 <Warning>
 **不要將 New API 的全部路由視為 NexusAPI 對外承諾**
@@ -54,7 +54,8 @@ curl 'https://nexusapi.link/v1/models' \
 ## 進一步閱讀
 
 - 本頁用於判斷「目前模型該使用哪個 API」。
-- [Chat Completions 介面](/zh-TW/developer/openai-compatible)提供最小文字請求。
+- [API 基礎](/zh-TW/developer/api-basics)說明驗證、模型查詢與協定選擇；[Chat Completions 介面](/zh-TW/developer/openai-compatible)提供最小文字請求。
+- [Anthropic Messages](/zh-TW/developer/anthropic-messages)與[Responses / Codex](/zh-TW/developer/responses)分別說明原生 Claude 與 Codex Provider 的串接邊界。
 - [Apifox API 文件](https://nexusapi.apifox.cn/)提供欄位級的請求與回應定義。
 
 模型能力與渠道可能變動。若需要本頁未列出的能力，請先向支援團隊確認。

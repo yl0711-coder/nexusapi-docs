@@ -1,0 +1,62 @@
+---
+title: "Responses API と Codex"
+description: "Codex Provider または Responses 対応が確認されたモデルに適切な接続方法を選びます。"
+---
+
+`/v1/responses` は汎用の「新しいチャット API」ではありません。NexusAPI では主に [Codex CLI ガイド](/ja/tools/codex-cli)で設定するカスタム Provider、またはモデル、Key グループ、チャネルが Responses プロトコル対応と明確に確認された場合に使用します。
+
+<Warning>
+**最初にモデルとチャネルを確認してください**
+
+現在の Anthropic 型 Claude チャネルでは `/v1/responses` を使わないでください。`status_code=500, not implemented` が出る場合は、[Chat Completions](/ja/developer/openai-compatible) を使うか、Claude Code をネイティブ [Messages](/ja/developer/anthropic-messages) 設定にしてください。
+</Warning>
+
+## エンドポイントと適用範囲
+
+```text
+POST https://nexusapi.link/v1/responses
+```
+
+| 場面 | 推奨方法 |
+| --- | --- |
+| Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の `wire_api = "responses"` Provider 設定を使用 |
+| Responses 対応が確認された別のアプリ | そのアプリの Responses クライアント/Schema を使い、最小リクエストから検証 |
+| 一般的な OpenAI 互換テキストアプリ | [Chat Completions](/ja/developer/openai-compatible)を使用。新しい API だからという理由だけで切り替えない |
+| Anthropic 型 Claude | Messages または Chat Completions を使用し、このエンドポイントは使わない |
+
+## 最小検証リクエスト
+
+モデルとチャネルの対応を確認した場合のみ、次で接続を確認します。
+
+```bash
+curl 'https://nexusapi.link/v1/responses' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_RESPONSES_MODEL_ID",
+    "input": "接続成功とだけ返答してください"
+  }'
+```
+
+`input` は Chat Completions の `messages` と別のフィールドで、レスポンスを `choices[0].message` として解析してはいけません。全フィールド、ストリーミングイベント、結果構造は [Apifox API リファレンス](https://nexusapi.apifox.cn/)またはクライアントの公式 Schema を参照してください。
+
+## Codex CLI 設定の要点
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Key は `NEXUSAPI_API_KEY` 環境変数に置き、`config.toml` や `auth.json` に書かないでください。インストール、OS 別環境変数、検証は[Codex CLI ガイド](/ja/tools/codex-cli)を参照してください。
+
+## 最初に確認すること
+
+1. Key グループにモデルがあり、モデル ID がモデルマーケットプレイスと完全に一致すること。
+2. クライアントが `/v1/responses` を送っており、`/v1/v1/...` ではないこと。
+3. モデルが Responses 対応と確認されていること。Anthropic 型 Claude では別のプロトコルを使うこと。
+4. Request ID、クライアントバージョン、エラー全文を保存し、[自己確認](/ja/faq/self-check)に従うこと。

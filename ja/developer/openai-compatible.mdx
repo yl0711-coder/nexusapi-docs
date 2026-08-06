@@ -32,6 +32,18 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | `Content-Type` | はい | `application/json` |
 | `Authorization` | はい | `Bearer YOUR_API_KEY` |
 
+## 最小フィールドとストリーミング
+
+| フィールド | 必須 | 用途 |
+| --- | --- | --- |
+| `model` | はい | 現在の Key に見え、`openai` と表示された正確なモデル ID |
+| `messages` | はい | Chat Completions 形式の会話メッセージ |
+| `stream` | いいえ | モデルとクライアントが対応する場合のみ `true` でストリーミングイベントを消費 |
+
+通常の応答では `choices[0].message.content` から、ストリーミングでは各 `choices[0].delta.content` からテキストを読みます。`stream` やオプションを追加する前に、非ストリーミングの最小リクエストでモデルと Key を確認してください。
+
+`temperature`、ツール呼び出し、画像入力、構造化出力などのオプションは、「OpenAI 互換」だけで全モデルに保証されるものではありません。フィールド Schema は [Apifox API リファレンス](https://nexusapi.apifox.cn/)で、モデル/チャネルの可用性は[API とモデル対応マトリクス](/ja/developer/capability-matrix)とモデルマーケットプレイスで確認してください。
+
 ## よくある結果
 
 | 結果 | 最初の確認 |
@@ -42,3 +54,10 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | 524 | 待機時間の上限超過。 |
 
 Anthropic 型 Claude チャネルを `/v1/responses` で呼び出して `status_code=500, not implemented` が出た場合は、通常の 500 ではなくプロトコル不一致です。自作アプリでは Chat Completions、Claude Code ではネイティブ Messages 設定を使用してください。Request ID を保存して[自己確認](/ja/faq/self-check)を行います。
+
+## 関連 API
+
+- 現在の Key に見えるモデルとプロトコル選択：[API 基本](/ja/developer/api-basics)
+- ネイティブ Claude / Anthropic クライアント：[Anthropic Messages](/ja/developer/anthropic-messages)
+- Codex Provider：[Responses API と Codex](/ja/developer/responses)
+- 画像生成：[画像モデルの利用方法](/ja/guide/image-generation)

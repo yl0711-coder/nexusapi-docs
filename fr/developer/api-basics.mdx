@@ -1,0 +1,67 @@
+---
+title: "Bases de l'API : authentification, modèles et protocoles"
+description: "Vérifiez l'URL de base, la clé API, l'ID du modèle et le protocole avant tout appel NexusAPI."
+---
+
+Cette page présente les règles communes à tous les appels de modèle. La [référence API Apifox](https://nexusapi.apifox.cn/) contient les schémas complets de requêtes et de réponses ; cette documentation explique **quel protocole choisir et comment commencer sans risque**.
+
+<Info>
+**Confirmez la capacité d'abord**
+
+Les modèles disponibles dépendent du groupe de votre clé API, des restrictions de modèle et de l'état du service. Le catalogue global ne garantit pas qu'un modèle soit appelable avec une clé donnée.
+</Info>
+
+## Les trois valeurs nécessaires
+
+| Valeur | Où l'obtenir | Rôle |
+| --- | --- | --- |
+| URL de base | Cette page | Envoie les requêtes du SDK ou du client à NexusAPI |
+| Clé API | Console → Gestion des tokens | Identifie l'appelant et les groupes accessibles |
+| ID du modèle | Catalogue ou `/v1/models` | Sélectionne le modèle de l'appel |
+
+Pour un client de type OpenAI, utilisez :
+
+```text
+https://nexusapi.link/v1
+```
+
+Pour un appel HTTP manuel, envoyez la clé dans `Authorization` :
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+Ne placez jamais une clé complète dans du code frontend, une capture, un chat ou un dépôt Git. Les règles d'URL varient selon le client : Claude Code utilise l'adresse sans `/v1`, tandis que Codex CLI utilise sa configuration Provider. Suivez le [guide de l'outil client](/fr/tools/index) concerné.
+
+## Lister les modèles visibles par la clé
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+Copiez un ID depuis `data[].id`. Cette liste indique les modèles **visibles actuellement par cette clé**, pas tout le catalogue. Si `supported_endpoint_types` est présent, il aide à identifier le type de protocole indiqué pour le modèle.
+
+## Choisir le bon protocole
+
+| Objectif | Chemin | Cas d'usage |
+| --- | --- | --- |
+| Texte, chat et streaming compatibles OpenAI | `POST /v1/chat/completions` | La plupart des applications, SDK OpenAI et clients génériques |
+| Anthropic natif / Claude Code | `POST /v1/messages` | Modèles libellés `anthropic` |
+| Provider Codex | `POST /v1/responses` | Seulement avec le [guide Codex CLI](/fr/tools/codex-cli) et un modèle confirmé |
+| Génération d'images | `POST /v1/images/generations` | Modèles image visibles pour le groupe actuel |
+
+Un même nom de modèle n'accepte pas forcément tous les formats. Vérifiez le protocole dans la [matrice des capacités](/fr/developer/capability-matrix), puis consultez :
+
+- [Chat Completions](/fr/developer/openai-compatible)
+- [Anthropic Messages](/fr/developer/anthropic-messages)
+- [Responses / Codex](/fr/developer/responses)
+- [Guide des modèles d'image](/fr/guide/image-generation)
+
+## Vérification minimale et nouvelles tentatives
+
+1. Listez les modèles puis envoyez une courte requête texte ou image minimale.
+2. Vérifiez l'ID, le groupe et le chemin avant d'ajouter des champs facultatifs, le streaming ou des lots.
+3. Conservez l'erreur, l'heure et le Request ID. Ne rejouez pas une requête non confirmée à haute fréquence.
+
+Pour `401`, vérifiez d'abord la clé. Pour `404`, vérifiez un `/v1` absent ou répété. Pour `400`, vérifiez modèle, protocole et champs. Consultez l'[auto-vérification](/fr/faq/self-check) pour la suite.

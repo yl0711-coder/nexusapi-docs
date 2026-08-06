@@ -1,0 +1,81 @@
+---
+title: "Anthropic Messages 接口"
+description: "使用原生 Anthropic Messages 协议调用标注为 anthropic 的模型。"
+---
+
+此接口适用于模型广场或当前 Key 模型列表中标注为 `anthropic` 的模型。调用前先查看[接口与模型能力矩阵](/developer/capability-matrix)：**模型、Key 分组和协议必须同时匹配**。
+
+<Warning>
+**不要把 Messages 当成所有模型的通用接口**
+
+OpenAI 兼容应用优先使用 [Chat Completions](/developer/openai-compatible)。当前 Anthropic 类型 Claude 渠道也不要改用 `/v1/responses`；出现 `not implemented` 时通常是协议不兼容，而不是可通过重试解决的临时错误。
+</Warning>
+
+## 端点与最小请求
+
+```text
+POST https://nexusapi.link/v1/messages
+```
+
+手写 HTTP 请求时，可使用以下最小示例：
+
+```bash
+curl 'https://nexusapi.link/v1/messages' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'anthropic-version: 2023-06-01' \
+  -d '{
+    "model": "YOUR_ANTHROPIC_MODEL_ID",
+    "max_tokens": 256,
+    "messages": [
+      {"role": "user", "content": "你好"}
+    ]
+  }'
+```
+
+| 项目 | 是否需要 | 说明 |
+| --- | --- | --- |
+| `model` | 是 | 使用当前 Key 可见、且标注为 `anthropic` 的准确模型 ID |
+| `max_tokens` | 是 | 本次最多生成的输出 Token 数 |
+| `messages` | 是 | Anthropic Messages 格式的会话内容 |
+| `anthropic-version` | 原生协议需要 | 使用 SDK 时由 SDK 管理；手写请求请按其兼容版本填写 |
+
+完整字段、工具调用、流式响应和响应结构请查看 [Apifox 接口参考](https://nexusapi.apifox.cn/)与所用 Anthropic 客户端的协议文档。可选字段是否可用，仍取决于具体模型和当前渠道。
+
+## 使用 Anthropic SDK
+
+原生 Anthropic SDK 会管理它所需的协议请求头。把 NexusAPI Key 传给 SDK，并把站点 Base URL 设为**不带 `/v1`**的地址：
+
+```python
+from anthropic import Anthropic
+
+client = Anthropic(
+    api_key="YOUR_API_KEY",
+    base_url="https://nexusapi.link",
+)
+
+message = client.messages.create(
+    model="YOUR_ANTHROPIC_MODEL_ID",
+    max_tokens=256,
+    messages=[{"role": "user", "content": "你好"}],
+)
+```
+
+SDK 会自行补全 `/v1/messages`；不要把 `base_url` 写成 `https://nexusapi.link/v1/messages`，否则容易得到重复路径或 404。
+
+## Claude Code 与自建程序的区别
+
+| 场景 | 应如何配置 |
+| --- | --- |
+| Claude Code | 按[Claude Code 教程](/tools/claude-code)在 `~/.claude/settings.json` 设置 `ANTHROPIC_BASE_URL=https://nexusapi.link` 和 `ANTHROPIC_AUTH_TOKEN` |
+| Anthropic SDK / 自建原生客户端 | Base URL 填 `https://nexusapi.link`，让客户端发送 Messages 协议 |
+| 自建 OpenAI SDK 程序 | 不要混用本页配置，改用 [Chat Completions](/developer/openai-compatible) |
+
+## 排查
+
+- `401`：检查 Key 是否正确、启用且没有泄露后被重置。
+- `404`：检查 Base URL 是否被 SDK 自动补全后重复加入 `/v1`。
+- `400` 或字段校验错误：先保留 `model`、`max_tokens`、`messages` 三项，以最小请求验证，再逐步加入可选字段。
+- `500, not implemented`：确认没有把 Anthropic 类型模型改走 `/v1/responses`。
+
+持续失败时保存 Request ID 和脱敏后的请求信息，按[问题自查](/faq/self-check)提交。

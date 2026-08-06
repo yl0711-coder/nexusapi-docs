@@ -1,0 +1,77 @@
+---
+title: "Anthropic Messages API"
+description: "Call models labelled anthropic with the native Anthropic Messages protocol."
+---
+
+Use this API for models labelled `anthropic` in the Model Marketplace or the model list for your current key. Read the [API and model capability matrix](/en/developer/capability-matrix) first: **the model, key group, and protocol must all match**.
+
+<Warning>
+**Messages is not a universal endpoint**
+
+Use [Chat Completions](/en/developer/openai-compatible) for OpenAI-compatible applications. Do not switch a current Anthropic-type Claude channel to `/v1/responses`; `not implemented` normally means a protocol mismatch, not a temporary error that retries can solve.
+</Warning>
+
+## Endpoint and minimum request
+
+```text
+POST https://nexusapi.link/v1/messages
+```
+
+```bash
+curl 'https://nexusapi.link/v1/messages' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'anthropic-version: 2023-06-01' \
+  -d '{
+    "model": "YOUR_ANTHROPIC_MODEL_ID",
+    "max_tokens": 256,
+    "messages": [{"role": "user", "content": "Hello"}]
+  }'
+```
+
+| Item | Required | Notes |
+| --- | --- | --- |
+| `model` | Yes | Exact model ID visible to the current key and labelled `anthropic` |
+| `max_tokens` | Yes | Maximum output tokens for this request |
+| `messages` | Yes | Conversation in Anthropic Messages format |
+| `anthropic-version` | Required by the native protocol | Managed by the SDK; use a compatible version for manual calls |
+
+Use the [Apifox API reference](https://nexusapi.apifox.cn/) and the protocol documentation for your Anthropic client for full fields, tools, streaming, and response schemas. Optional-field availability still depends on the selected model and channel.
+
+## Use the Anthropic SDK
+
+The native SDK manages its required protocol headers. Pass a NexusAPI key to the SDK and set its Base URL **without `/v1`**:
+
+```python
+from anthropic import Anthropic
+
+client = Anthropic(
+    api_key="YOUR_API_KEY",
+    base_url="https://nexusapi.link",
+)
+
+message = client.messages.create(
+    model="YOUR_ANTHROPIC_MODEL_ID",
+    max_tokens=256,
+    messages=[{"role": "user", "content": "Hello"}],
+)
+```
+
+The SDK appends `/v1/messages`. Do not set `base_url` to `https://nexusapi.link/v1/messages`, which can create a repeated path or 404.
+
+## Claude Code versus your own app
+
+| Scenario | Configuration |
+| --- | --- |
+| Claude Code | Follow the [Claude Code guide](/en/tools/claude-code): set `ANTHROPIC_BASE_URL=https://nexusapi.link` and `ANTHROPIC_AUTH_TOKEN` in `~/.claude/settings.json` |
+| Anthropic SDK / native app | Set Base URL to `https://nexusapi.link` and let the client send Messages |
+| OpenAI SDK app | Do not mix this setup into it; use [Chat Completions](/en/developer/openai-compatible) |
+
+## Troubleshooting
+
+- `401`: Check that the key is correct, enabled, and has not been reset after exposure.
+- `404`: Check whether an SDK has appended a second `/v1`.
+- `400`: Verify with only `model`, `max_tokens`, and `messages`, then add optional fields gradually.
+- `500, not implemented`: Make sure an Anthropic-type model is not being sent through `/v1/responses`.
+
+For persistent errors, keep the Request ID and a redacted request, then use the [self-check guide](/en/faq/self-check).

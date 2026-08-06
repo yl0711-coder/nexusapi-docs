@@ -32,6 +32,18 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | `Content-Type` | Oui | `application/json` |
 | `Authorization` | Oui | `Bearer YOUR_API_KEY` |
 
+## Champs minimaux et streaming
+
+| Champ | Obligatoire | Rôle |
+| --- | --- | --- |
+| `model` | Oui | ID exact visible par la clé actuelle et libellé `openai` |
+| `messages` | Oui | Messages de conversation au format Chat Completions |
+| `stream` | Non | Utilisez `true` pour consommer des événements de streaming seulement si le modèle et le client le prennent en charge |
+
+Pour une réponse normale, le texte est généralement dans `choices[0].message.content`; pour une réponse en flux, lisez chaque `choices[0].delta.content`. Vérifiez d'abord le modèle et la clé avec la requête minimale sans streaming, puis activez `stream` ou ajoutez des champs facultatifs.
+
+`temperature`, les appels d'outils, les entrées visuelles et les sorties structurées ne sont pas garantis pour tous les modèles parce qu'une API est « compatible OpenAI ». Consultez la [référence API Apifox](https://nexusapi.apifox.cn/) pour les Schema et la [matrice des capacités](/fr/developer/capability-matrix) ainsi que le Catalogue pour la disponibilité.
+
 ## Premiers contrôles en cas d'erreur
 
 | Résultat | Vérification |
@@ -42,3 +54,10 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | 524 | Dépassement du délai d'attente. |
 
 `status_code=500, not implemented` avec `/v1/responses` et un canal Claude de type Anthropic est une incompatibilité de protocole, pas un 500 transitoire. Utilisez Chat Completions pour une application personnalisée ou la configuration Messages de Claude Code. Conservez le Request ID et consultez l'[auto-vérification](/fr/faq/self-check).
+
+## API associées
+
+- Modèles visibles par la clé et choix du protocole : [bases de l'API](/fr/developer/api-basics)
+- Client Claude / Anthropic natif : [Anthropic Messages](/fr/developer/anthropic-messages)
+- Provider Codex : [API Responses et Codex](/fr/developer/responses)
+- Génération d'images : [Guide des modèles d'image](/fr/guide/image-generation)

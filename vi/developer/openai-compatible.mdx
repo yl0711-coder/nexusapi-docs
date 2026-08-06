@@ -32,6 +32,18 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | `Content-Type` | Có | `application/json` |
 | `Authorization` | Có | `Bearer YOUR_API_KEY` |
 
+## Trường tối thiểu và streaming
+
+| Trường | Bắt buộc | Mục đích |
+| --- | --- | --- |
+| `model` | Có | Model ID chính xác mà key hiện tại nhìn thấy và có nhãn `openai` |
+| `messages` | Có | Tin nhắn hội thoại theo định dạng Chat Completions |
+| `stream` | Không | Dùng `true` để nhận sự kiện streaming chỉ khi cả model và client đều hỗ trợ |
+
+Với phản hồi thường, văn bản thường đọc từ `choices[0].message.content`; với streaming, đọc từng `choices[0].delta.content`. Hãy xác nhận model và key bằng yêu cầu tối thiểu không stream trước khi bật `stream` hoặc thêm trường tùy chọn.
+
+`temperature`, tool calls, đầu vào ảnh và đầu ra có cấu trúc không được đảm bảo cho mọi model chỉ vì API “tương thích OpenAI”. Xem [tài liệu API Apifox](https://nexusapi.apifox.cn/) để biết schema trường; xem [ma trận khả năng](/vi/developer/capability-matrix) và Chợ mô hình để biết khả năng model/kênh.
+
 ## Kiểm tra đầu tiên khi lỗi
 
 | Kết quả | Hãy kiểm tra |
@@ -42,3 +54,10 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | 524 | Vượt giới hạn chờ. |
 
 `status_code=500, not implemented` khi gọi kênh Claude kiểu Anthropic qua `/v1/responses` là lỗi không tương thích giao thức, không phải 500 tạm thời. Ứng dụng tự viết nên dùng Chat Completions; Claude Code dùng cấu hình Messages gốc. Lưu Request ID và làm [tự kiểm tra](/vi/faq/self-check).
+
+## API liên quan
+
+- Liệt kê model key hiện tại nhìn thấy và chọn giao thức: [nền tảng API](/vi/developer/api-basics)
+- Client Claude / Anthropic gốc: [Anthropic Messages](/vi/developer/anthropic-messages)
+- Codex Provider: [API Responses và Codex](/vi/developer/responses)
+- Tạo ảnh: [Hướng dẫn mô hình hình ảnh](/vi/guide/image-generation)

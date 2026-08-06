@@ -17,11 +17,11 @@ NexusAPI はモデルゲートウェイです。すべてのモデルがすべ�
 
 | 目的 | エンドポイント／プロトコル | 利用場面 | 重要な制約 |
 | --- | --- | --- | --- |
-| 現在のキーで見えるモデルの一覧 | `GET /v1/models` | キー作成後、モデル選択前 | このキーのグループと制限だけを反映します。 |
-| テキスト、チャット、ストリーミング | `POST /v1/chat/completions` | OpenAI 互換 SDK、スクリプト、多くのテキストモデル | モデルマーケットプレイスで `openai` と表示されたモデルを使います。 |
-| Claude Code／Anthropic ネイティブクライアント | `POST /v1/messages` | モデルが `anthropic` と表示されている場合 | Claude Code の Base URL に `/v1` を重ねて追加しないでください。 |
-| Codex CLI | `POST /v1/responses` | [Codex CLI ガイド](/ja/tools/codex-cli)どおりにプロバイダーを設定した場合 | 万能ではありません。現在の Anthropic 型 Claude チャネルには使えません。 |
-| 画像生成 | `POST /v1/images/generations` | モデルマーケットプレイスで画像生成対応が明示された場合 | 選択した画像モデルが対応するオプションだけを送信します。 |
+| 現在のキーで見えるモデルの一覧 | [GET /v1/models](/ja/developer/api-basics) | キー作成後、モデル選択前 | このキーのグループと制限だけを反映します。 |
+| テキスト、チャット、ストリーミング | [POST /v1/chat/completions](/ja/developer/openai-compatible) | OpenAI 互換 SDK、スクリプト、多くのテキストモデル | モデルマーケットプレイスで `openai` と表示されたモデルを使います。 |
+| Claude Code／Anthropic ネイティブクライアント | [POST /v1/messages](/ja/developer/anthropic-messages) | モデルが `anthropic` と表示されている場合 | Claude Code の Base URL に `/v1` を重ねて追加しないでください。 |
+| Codex CLI | [POST /v1/responses](/ja/developer/responses) | [Codex CLI ガイド](/ja/tools/codex-cli)どおりにプロバイダーを設定した場合 | 万能ではありません。現在の Anthropic 型 Claude チャネルには使えません。 |
+| 画像生成 | [POST /v1/images/generations](/ja/guide/image-generation) | モデルマーケットプレイスで画像生成対応が明示された場合 | 選択した画像モデルが対応するオプションだけを送信します。 |
 
 <Warning>
 **New API の全ルートを NexusAPI の提供保証と見なさないでください**
@@ -54,7 +54,8 @@ curl 'https://nexusapi.link/v1/models' \
 ## 詳細情報
 
 - このページは「現在のモデルにどの API を使うか」を判断するためのものです。
-- [Chat Completions API](/ja/developer/openai-compatible)には最小のテキスト呼び出しがあります。
+- [API 基本](/ja/developer/api-basics)には認証、モデル取得、プロトコル選択があり、[Chat Completions API](/ja/developer/openai-compatible)には最小のテキスト呼び出しがあります。
+- [Anthropic Messages](/ja/developer/anthropic-messages)と[Responses / Codex](/ja/developer/responses)には、ネイティブ Claude と Codex Provider の接続範囲があります。
 - [Apifox API リファレンス](https://nexusapi.apifox.cn/)ではリクエストとレスポンスの各フィールドを確認できます。
 
 モデル能力とチャネルは変わる場合があります。ここにない能力を使う前に、サポートへ確認してください。

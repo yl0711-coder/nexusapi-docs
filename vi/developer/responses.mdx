@@ -1,0 +1,62 @@
+---
+title: "API Responses và Codex"
+description: "Chọn cách tích hợp đúng cho Codex Provider hoặc model đã xác nhận hỗ trợ Responses."
+---
+
+`/v1/responses` không phải là “API chat mới hơn” dùng chung. Trong NexusAPI, nó chủ yếu dành cho Provider tùy chỉnh trong [hướng dẫn Codex CLI](/vi/tools/codex-cli), hoặc trường hợp model, nhóm key và kênh đã xác nhận rõ hỗ trợ giao thức Responses.
+
+<Warning>
+**Xác nhận model và kênh trước**
+
+Không dùng `/v1/responses` cho kênh Claude kiểu Anthropic hiện tại. Nếu gặp `status_code=500, not implemented`, dùng [Chat Completions](/vi/developer/openai-compatible), hoặc để Claude Code dùng cấu hình [Messages](/vi/developer/anthropic-messages) gốc.
+</Warning>
+
+## Endpoint và phạm vi
+
+```text
+POST https://nexusapi.link/v1/responses
+```
+
+| Tình huống | Cách nên dùng |
+| --- | --- |
+| Codex CLI | Dùng cấu hình Provider `wire_api = "responses"` trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) |
+| Ứng dụng khác có model đã xác nhận Responses | Dùng Responses client/schema của ứng dụng và kiểm tra yêu cầu tối thiểu trước |
+| Ứng dụng văn bản tương thích OpenAI thông thường | Dùng [Chat Completions](/vi/developer/openai-compatible); không chuyển chỉ vì API này mới hơn |
+| Claude kiểu Anthropic | Dùng Messages hoặc Chat Completions, không dùng endpoint này |
+
+## Yêu cầu kiểm tra tối thiểu
+
+Chỉ sau khi xác nhận model và kênh hỗ trợ, kiểm tra kết nối bằng:
+
+```bash
+curl 'https://nexusapi.link/v1/responses' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_RESPONSES_MODEL_ID",
+    "input": "Chỉ trả lời: kết nối thành công"
+  }'
+```
+
+`input` không giống `messages` của Chat Completions và phản hồi không nên được đọc là `choices[0].message`. Xem [tài liệu API Apifox](https://nexusapi.apifox.cn/) hoặc schema chính thức của client để biết đầy đủ trường, sự kiện streaming và cấu trúc kết quả.
+
+## Điểm chính khi cấu hình Codex CLI
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Để key trong biến môi trường `NEXUSAPI_API_KEY`, không ghi vào `config.toml` hoặc `auth.json`. Xem [hướng dẫn Codex CLI](/vi/tools/codex-cli) để cài đặt, biến môi trường từng hệ điều hành và kiểm tra.
+
+## Kiểm tra đầu tiên
+
+1. Nhóm key chứa model và model ID khớp chính xác với Chợ mô hình.
+2. Client thực sự gọi `/v1/responses`, không phải `/v1/v1/...`.
+3. Model đã xác nhận hỗ trợ Responses; với Claude kiểu Anthropic hãy dùng giao thức khác.
+4. Lưu Request ID, phiên bản client và toàn bộ lỗi, sau đó làm theo [tự kiểm tra](/vi/faq/self-check).

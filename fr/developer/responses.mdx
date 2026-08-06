@@ -1,0 +1,62 @@
+---
+title: "API Responses et Codex"
+description: "Choisissez la bonne intégration pour un Provider Codex ou un modèle confirmé pour Responses."
+---
+
+`/v1/responses` n'est pas une « nouvelle API de chat » universelle. Dans NexusAPI, il sert surtout au Provider personnalisé configuré dans le [guide Codex CLI](/fr/tools/codex-cli), ou à un modèle, groupe de clé et canal explicitement confirmés pour le protocole Responses.
+
+<Warning>
+**Confirmez le modèle et le canal d'abord**
+
+N'utilisez pas `/v1/responses` pour les canaux Claude actuels de type Anthropic. En cas de `status_code=500, not implemented`, utilisez [Chat Completions](/fr/developer/openai-compatible), ou la configuration native [Messages](/fr/developer/anthropic-messages) de Claude Code.
+</Warning>
+
+## Endpoint et périmètre
+
+```text
+POST https://nexusapi.link/v1/responses
+```
+
+| Situation | Approche recommandée |
+| --- | --- |
+| Codex CLI | Utilisez la configuration Provider `wire_api = "responses"` du [guide Codex CLI](/fr/tools/codex-cli) |
+| Autre application avec modèle confirmé pour Responses | Utilisez son client ou schéma Responses et vérifiez d'abord une requête minimale |
+| Application texte OpenAI générique | Utilisez [Chat Completions](/fr/developer/openai-compatible) ; ne basculez pas uniquement parce que cette API est plus récente |
+| Claude de type Anthropic | Utilisez Messages ou Chat Completions, pas cet endpoint |
+
+## Requête minimale de vérification
+
+Uniquement après confirmation du modèle et du canal :
+
+```bash
+curl 'https://nexusapi.link/v1/responses' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -d '{
+    "model": "YOUR_RESPONSES_MODEL_ID",
+    "input": "Répondez seulement : connexion réussie"
+  }'
+```
+
+`input` n'est pas le champ `messages` de Chat Completions et la réponse ne doit pas être lue comme `choices[0].message`. Consultez la [référence API Apifox](https://nexusapi.apifox.cn/) ou le schéma officiel de votre client pour les champs complets, événements de streaming et résultat.
+
+## Points clés de la configuration Codex CLI
+
+```toml
+model_provider = "nexusapi"
+model = "YOUR_MODEL_ID"
+
+[model_providers.nexusapi]
+base_url = "https://nexusapi.link/v1"
+env_key = "NEXUSAPI_API_KEY"
+wire_api = "responses"
+```
+
+Conservez la clé dans la variable `NEXUSAPI_API_KEY`, jamais dans `config.toml` ou `auth.json`. Le [guide Codex CLI](/fr/tools/codex-cli) couvre l'installation, les variables par système et la vérification.
+
+## Premiers contrôles
+
+1. Le groupe de la clé contient le modèle et son ID correspond exactement au catalogue.
+2. Le client envoie bien `/v1/responses`, pas `/v1/v1/...`.
+3. Le modèle prend explicitement en charge Responses ; utilisez un autre protocole pour Claude Anthropic.
+4. Conservez le Request ID, la version du client et l'erreur complète, puis suivez l'[auto-vérification](/fr/faq/self-check).

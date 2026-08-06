@@ -17,11 +17,11 @@ NexusAPI est une passerelle de modèles : un modèle n'est pas automatiquement c
 
 | Objectif | API / protocole | Utilisation | Limite importante |
 | --- | --- | --- | --- |
-| Lister les modèles visibles par la clé | `GET /v1/models` | Après la création d'une clé et avant le choix du modèle | Reflète les groupes et restrictions de cette clé uniquement. |
-| Texte, chat et streaming | `POST /v1/chat/completions` | SDK OpenAI compatibles, scripts et la plupart des modèles texte | Utilisez un modèle marqué `openai`. |
-| Claude Code ou client Anthropic natif | `POST /v1/messages` | Lorsque le modèle est marqué `anthropic` | N'ajoutez pas une seconde fois `/v1` à l'URL de base de Claude Code. |
-| Codex CLI | `POST /v1/responses` | Avec le fournisseur configuré dans le [guide Codex](/fr/tools/codex-cli) | Ce n'est pas universel, notamment pour les canaux Claude de type Anthropic. |
-| Génération d'images | `POST /v1/images/generations` | Lorsqu'un modèle est explicitement indiqué comme compatible dans le catalogue | N'envoyez que les options supportées par ce modèle. |
+| Lister les modèles visibles par la clé | [GET /v1/models](/fr/developer/api-basics) | Après la création d'une clé et avant le choix du modèle | Reflète les groupes et restrictions de cette clé uniquement. |
+| Texte, chat et streaming | [POST /v1/chat/completions](/fr/developer/openai-compatible) | SDK OpenAI compatibles, scripts et la plupart des modèles texte | Utilisez un modèle marqué `openai`. |
+| Claude Code ou client Anthropic natif | [POST /v1/messages](/fr/developer/anthropic-messages) | Lorsque le modèle est marqué `anthropic` | N'ajoutez pas une seconde fois `/v1` à l'URL de base de Claude Code. |
+| Codex CLI | [POST /v1/responses](/fr/developer/responses) | Avec le fournisseur configuré dans le [guide Codex](/fr/tools/codex-cli) | Ce n'est pas universel, notamment pour les canaux Claude de type Anthropic. |
+| Génération d'images | [POST /v1/images/generations](/fr/guide/image-generation) | Lorsqu'un modèle est explicitement indiqué comme compatible dans le catalogue | N'envoyez que les options supportées par ce modèle. |
 
 <Warning>
 **Toutes les routes de New API ne sont pas des promesses NexusAPI**
@@ -54,7 +54,8 @@ Si le modèle est visible mais que l'appel échoue, vérifiez d'abord son ID, le
 ## Pour aller plus loin
 
 - Cette page répond à « quelle API utiliser avec ce modèle aujourd'hui ? ».
-- [Chat Completions](/fr/developer/openai-compatible) fournit un appel texte minimal.
+- [Bases de l'API](/fr/developer/api-basics) explique l'authentification, la découverte des modèles et le choix du protocole ; [Chat Completions](/fr/developer/openai-compatible) fournit un appel texte minimal.
+- [Anthropic Messages](/fr/developer/anthropic-messages) et [Responses / Codex](/fr/developer/responses) définissent les limites d'intégration du Claude natif et du Provider Codex.
 - La [référence API Apifox](https://nexusapi.apifox.cn/) détaille les champs des requêtes et réponses.
 
 Les canaux et capacités peuvent évoluer. Demandez confirmation au support avant d'utiliser une capacité absente de cette page.

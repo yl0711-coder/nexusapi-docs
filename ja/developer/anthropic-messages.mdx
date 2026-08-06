@@ -1,0 +1,77 @@
+---
+title: "Anthropic Messages API"
+description: "anthropic と表示されたモデルをネイティブ Anthropic Messages プロトコルで呼び出します。"
+---
+
+この API は、モデルマーケットプレイスまたは現在の Key のモデル一覧で `anthropic` と表示されたモデルに使用します。先に[API とモデル対応マトリクス](/ja/developer/capability-matrix)を確認してください。**モデル、Key グループ、プロトコルのすべてが一致している必要があります。**
+
+<Warning>
+**Messages は汎用エンドポイントではありません**
+
+OpenAI 互換アプリでは [Chat Completions](/ja/developer/openai-compatible) を使用してください。現在の Anthropic 型 Claude チャネルを `/v1/responses` に切り替えないでください。`not implemented` は通常、一時的なエラーではなくプロトコル不一致です。
+</Warning>
+
+## エンドポイントと最小リクエスト
+
+```text
+POST https://nexusapi.link/v1/messages
+```
+
+```bash
+curl 'https://nexusapi.link/v1/messages' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'anthropic-version: 2023-06-01' \
+  -d '{
+    "model": "YOUR_ANTHROPIC_MODEL_ID",
+    "max_tokens": 256,
+    "messages": [{"role": "user", "content": "こんにちは"}]
+  }'
+```
+
+| 項目 | 必須 | 説明 |
+| --- | --- | --- |
+| `model` | はい | 現在の Key に見え、`anthropic` と表示された正確なモデル ID |
+| `max_tokens` | はい | このリクエストの最大出力 Token 数 |
+| `messages` | はい | Anthropic Messages 形式の会話 |
+| `anthropic-version` | ネイティブプロトコルで必要 | SDK では自動管理。手動リクエストでは互換バージョンを指定 |
+
+全フィールド、ツール、ストリーミング、レスポンス Schema は [Apifox API リファレンス](https://nexusapi.apifox.cn/)と使用する Anthropic クライアントのプロトコル文書を参照してください。オプションの可用性はモデルとチャネルによって異なります。
+
+## Anthropic SDK を使う
+
+ネイティブ SDK は必要なプロトコルヘッダーを管理します。NexusAPI Key を渡し、Base URL を**`/v1` なし**に設定します。
+
+```python
+from anthropic import Anthropic
+
+client = Anthropic(
+    api_key="YOUR_API_KEY",
+    base_url="https://nexusapi.link",
+)
+
+message = client.messages.create(
+    model="YOUR_ANTHROPIC_MODEL_ID",
+    max_tokens=256,
+    messages=[{"role": "user", "content": "こんにちは"}],
+)
+```
+
+SDK が `/v1/messages` を追加します。`base_url` に `https://nexusapi.link/v1/messages` を設定すると、パス重複や 404 の原因になります。
+
+## Claude Code と自作アプリの違い
+
+| 場面 | 設定 |
+| --- | --- |
+| Claude Code | [Claude Code ガイド](/ja/tools/claude-code)に従い、`~/.claude/settings.json` で `ANTHROPIC_BASE_URL=https://nexusapi.link` と `ANTHROPIC_AUTH_TOKEN` を設定 |
+| Anthropic SDK / ネイティブアプリ | Base URL を `https://nexusapi.link` に設定し、クライアントに Messages を送らせる |
+| OpenAI SDK アプリ | この設定を混在させず、[Chat Completions](/ja/developer/openai-compatible) を使用 |
+
+## トラブルシューティング
+
+- `401`：Key が正しく有効で、漏えい後に再発行されていないか確認します。
+- `404`：SDK が 2 回目の `/v1` を追加していないか確認します。
+- `400`：`model`、`max_tokens`、`messages` だけで検証してから、オプションを段階的に追加します。
+- `500, not implemented`：Anthropic 型モデルを `/v1/responses` に送っていないか確認します。
+
+解決しない場合は Request ID とマスク済みリクエストを保存し、[自己確認](/ja/faq/self-check)を行ってください。

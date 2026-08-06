@@ -17,11 +17,11 @@ NexusAPI 是模型网关，不是“任意模型都能使用任意接口”的�
 
 | 目标 | 接口 / 协议 | 何时使用 | 关键限制 |
 | --- | --- | --- | --- |
-| 查看当前 Key 可用模型 | `GET /v1/models` | 创建 Key 后、选模型前 | 返回内容随 Key 分组和模型限制变化；它不是全站模型清单 |
-| 文本、聊天、流式输出 | `POST /v1/chat/completions` | OpenAI 兼容 SDK、脚本和多数文本模型 | 只使用模型广场标注为 `openai` 的模型 |
-| Claude Code / 原生 Anthropic 客户端 | `POST /v1/messages` | 模型标注为 `anthropic` 时 | Claude Code 的地址配置不要重复拼接 `/v1` |
-| Codex CLI | `POST /v1/responses` | 仅按 [Codex CLI 教程](/tools/codex-cli) 配置的 Provider 使用 | 不是所有模型都支持；当前 Anthropic 类型 Claude 渠道不要使用此接口 |
-| 图片生成 | `POST /v1/images/generations` | 模型广场明确标为支持图片生成时 | 仅传入该图片模型支持的参数；避免把图片参数发到聊天接口 |
+| 查看当前 Key 可用模型 | [GET /v1/models](/developer/api-basics) | 创建 Key 后、选模型前 | 返回内容随 Key 分组和模型限制变化；它不是全站模型清单 |
+| 文本、聊天、流式输出 | [POST /v1/chat/completions](/developer/openai-compatible) | OpenAI 兼容 SDK、脚本和多数文本模型 | 只使用模型广场标注为 `openai` 的模型 |
+| Claude Code / 原生 Anthropic 客户端 | [POST /v1/messages](/developer/anthropic-messages) | 模型标注为 `anthropic` 时 | Claude Code 的地址配置不要重复拼接 `/v1` |
+| Codex CLI | [POST /v1/responses](/developer/responses) | 仅按 [Codex CLI 教程](/tools/codex-cli) 配置的 Provider 使用 | 不是所有模型都支持；当前 Anthropic 类型 Claude 渠道不要使用此接口 |
+| 图片生成 | [POST /v1/images/generations](/guide/image-generation) | 模型广场明确标为支持图片生成时 | 仅传入该图片模型支持的参数；避免把图片参数发到聊天接口 |
 
 <Warning>
 **不要把网关底层路由当成平台承诺**
@@ -54,7 +54,8 @@ curl 'https://nexusapi.link/v1/models' \
 ## 与完整字段参考的关系
 
 - 本页回答“**当前模型该用哪种接口**”。
-- [Chat Completions 接口](/developer/openai-compatible)给出最小 OpenAI 文本调用示例。
+- [API 基础](/developer/api-basics)说明鉴权、模型查询和协议选择；[Chat Completions 接口](/developer/openai-compatible)给出最小 OpenAI 文本调用示例。
+- [Anthropic Messages](/developer/anthropic-messages)和[Responses / Codex](/developer/responses)分别说明原生 Claude 与 Codex Provider 的接入边界。
 - [Apifox 接口参考](https://nexusapi.apifox.cn/)用于查询具体字段和响应结构。
 
 模型能力和渠道会调整；如果需要某项未在本页列出的能力，请先联系支持确认，不要直接用生产任务试错。

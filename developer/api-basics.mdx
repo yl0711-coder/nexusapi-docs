@@ -1,0 +1,69 @@
+---
+title: "API 基础：鉴权、模型与协议"
+description: "在调用前确认 Base URL、API Key、模型 ID 与接口协议。"
+---
+
+这页说明所有模型调用共用的基础规则。完整的字段定义和响应 Schema 请看 [Apifox 接口参考](https://nexusapi.apifox.cn/)；本帮助中心负责说明**该选什么协议、如何安全地开始调用**。
+
+<Info>
+**先做一次能力确认**
+
+NexusAPI 的可用模型会随 API Key 的分组、模型限制和实时状态变化。不要把模型广场里的全站列表当成某一把 Key 一定可调用的清单。
+</Info>
+
+## 三项必要信息
+
+| 信息 | 获取位置 | 用途 |
+| --- | --- | --- |
+| Base URL | 本页 | 让 SDK 或客户端把请求发送到 NexusAPI |
+| API Key | 控制台 → 令牌管理 | 识别调用身份和可用分组 |
+| 模型 ID | 模型广场或 `/v1/models` | 指定本次实际调用的模型 |
+
+通用 OpenAI 风格客户端使用：
+
+```text
+https://nexusapi.link/v1
+```
+
+手写 HTTP 请求时，把 API Key 放入 `Authorization`：
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+不要把完整 Key 写入前端、截图、聊天记录或 Git 仓库。不同客户端是否要填写 `/v1` 并不完全相同：Claude Code 使用不带 `/v1` 的站点地址，Codex CLI 按其 Provider 配置填写。请优先遵循对应的[客户端工具教程](/tools/index)。
+
+## 用当前 Key 列出模型
+
+创建 Key 或切换分组后，先运行一次：
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+从响应的 `data[].id` 复制模型 ID。模型列表只表示**这把 Key 当前可见**的模型，不代表全部平台模型；若响应中包含 `supported_endpoint_types`，可用它辅助判断标注的协议类型。
+
+## 选择正确的协议
+
+| 目标 | 路径 | 适用场景 |
+| --- | --- | --- |
+| OpenAI 兼容文本、聊天、流式输出 | `POST /v1/chat/completions` | 多数自建程序、OpenAI SDK 和通用客户端 |
+| 原生 Anthropic / Claude Code | `POST /v1/messages` | 模型标注为 `anthropic` 时 |
+| Codex Provider | `POST /v1/responses` | 仅按 [Codex CLI 教程](/tools/codex-cli) 配置且模型明确支持时 |
+| 图片生成 | `POST /v1/images/generations` | 当前分组可见且标明支持图片的模型 |
+
+模型名称相同，不等于它可以接受任意一种请求格式。先在[接口与模型能力矩阵](/developer/capability-matrix)确认协议，再选下面的详细说明：
+
+- [Chat Completions](/developer/openai-compatible)
+- [Anthropic Messages](/developer/anthropic-messages)
+- [Responses / Codex](/developer/responses)
+- [图片模型使用说明](/guide/image-generation)
+
+## 最小验证和重试原则
+
+1. 先列模型，再发送一条短文本或最小图片请求。
+2. 确认模型 ID、Key 分组和路径正确后，才加入可选参数、流式输出或批量任务。
+3. 出错时保留错误原文、发生时间和 Request ID；不要在未确认结果前高频重放同一请求。
+
+`401` 通常应检查 Key；`404` 首先检查 `/v1` 是否重复或缺失；`400` 首先检查模型、协议和字段。更多处理方式见[问题自查](/faq/self-check)。

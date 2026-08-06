@@ -125,8 +125,11 @@
             "group": "开发者接入",
             "icon": "braces",
             "pages": [
+              "developer/api-basics",
               "developer/capability-matrix",
               "developer/openai-compatible",
+              "developer/anthropic-messages",
+              "developer/responses",
               "developer/code-examples",
               "developer/usage-logs"
             ]
@@ -231,8 +234,11 @@
             "group": "開發者串接",
             "icon": "braces",
             "pages": [
+              "zh-TW/developer/api-basics",
               "zh-TW/developer/capability-matrix",
               "zh-TW/developer/openai-compatible",
+              "zh-TW/developer/anthropic-messages",
+              "zh-TW/developer/responses",
               "zh-TW/developer/code-examples",
               "zh-TW/developer/usage-logs"
             ]
@@ -337,8 +343,11 @@
             "group": "Developer API",
             "icon": "braces",
             "pages": [
+              "en/developer/api-basics",
               "en/developer/capability-matrix",
               "en/developer/openai-compatible",
+              "en/developer/anthropic-messages",
+              "en/developer/responses",
               "en/developer/code-examples",
               "en/developer/usage-logs"
             ]
@@ -443,8 +452,11 @@
             "group": "API développeur",
             "icon": "braces",
             "pages": [
+              "fr/developer/api-basics",
               "fr/developer/capability-matrix",
               "fr/developer/openai-compatible",
+              "fr/developer/anthropic-messages",
+              "fr/developer/responses",
               "fr/developer/code-examples",
               "fr/developer/usage-logs"
             ]
@@ -549,8 +561,11 @@
             "group": "開発者向け API",
             "icon": "braces",
             "pages": [
+              "ja/developer/api-basics",
               "ja/developer/capability-matrix",
               "ja/developer/openai-compatible",
+              "ja/developer/anthropic-messages",
+              "ja/developer/responses",
               "ja/developer/code-examples",
               "ja/developer/usage-logs"
             ]
@@ -655,8 +670,11 @@
             "group": "API для разработчиков",
             "icon": "braces",
             "pages": [
+              "ru/developer/api-basics",
               "ru/developer/capability-matrix",
               "ru/developer/openai-compatible",
+              "ru/developer/anthropic-messages",
+              "ru/developer/responses",
               "ru/developer/code-examples",
               "ru/developer/usage-logs"
             ]
@@ -761,8 +779,11 @@
             "group": "API cho nhà phát triển",
             "icon": "braces",
             "pages": [
+              "vi/developer/api-basics",
               "vi/developer/capability-matrix",
               "vi/developer/openai-compatible",
+              "vi/developer/anthropic-messages",
+              "vi/developer/responses",
               "vi/developer/code-examples",
               "vi/developer/usage-logs"
             ]

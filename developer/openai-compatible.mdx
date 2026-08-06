@@ -43,6 +43,18 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | `Content-Type` | 是 | 固定为 `application/json` |
 | `Authorization` | 是 | 格式为 `Bearer YOUR_API_KEY` |
 
+## 最小字段与流式输出
+
+| 字段 | 是否需要 | 用途 |
+| --- | --- | --- |
+| `model` | 是 | 使用当前 Key 可见、且标注为 `openai` 的准确模型 ID |
+| `messages` | 是 | 按 Chat Completions 格式传递会话消息 |
+| `stream` | 否 | `true` 时按流式事件消费；只在所选模型和客户端均支持时使用 |
+
+普通响应通常从 `choices[0].message.content` 读取文本；流式响应则逐段读取 `choices[0].delta.content`。先用本页的非流式最小请求验证模型和 Key，再开启 `stream` 或添加可选参数。
+
+`temperature`、工具调用、视觉输入、结构化输出等可选字段并不因“OpenAI 兼容”而对所有模型自动可用。字段 Schema 看 [Apifox 接口参考](https://nexusapi.apifox.cn/)，模型和渠道能力仍以[接口与模型能力矩阵](/developer/capability-matrix)及模型广场为准。
+
 ## 常见错误
 
 | 错误 | 可能原因 |
@@ -55,3 +67,10 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 遇到 `status_code=500, not implemented` 时，不要按普通 500 重试；当请求的是当前平台 Anthropic 类型 Claude 渠道时，这通常是误用了不兼容的 `/v1/responses` 接口，详见[常见错误说明](/faq/common-errors)。
 
 遇到其他错误时请保存 Request ID，并参考[问题自查](/faq/self-check)。不要在短时间内连续高频重试。
+
+## 相关接口
+
+- 先列出当前 Key 可见模型并选择协议：[API 基础](/developer/api-basics)
+- 原生 Claude / Anthropic 客户端：[Anthropic Messages](/developer/anthropic-messages)
+- Codex Provider：[Responses 接口与 Codex](/developer/responses)
+- 图片生成：[图片模型使用说明](/guide/image-generation)

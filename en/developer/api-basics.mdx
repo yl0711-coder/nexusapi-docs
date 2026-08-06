@@ -1,0 +1,67 @@
+---
+title: "API basics: authentication, models, and protocols"
+description: "Confirm the Base URL, API key, model ID, and protocol before making a NexusAPI call."
+---
+
+This page covers the rules shared by every model call. Use the [Apifox API reference](https://nexusapi.apifox.cn/) for complete request and response schemas; this documentation explains **which protocol to choose and how to start safely**.
+
+<Info>
+**Confirm capability first**
+
+Available models change with your API key group, model restrictions, and live service state. The whole-site Model Marketplace is not a promise that every model is callable by a particular key.
+</Info>
+
+## Three required values
+
+| Value | Where to get it | Purpose |
+| --- | --- | --- |
+| Base URL | This page | Sends SDK or client requests to NexusAPI |
+| API key | Console → Token management | Identifies the caller and accessible groups |
+| Model ID | Model Marketplace or `/v1/models` | Selects the model for a request |
+
+For a standard OpenAI-style client, use:
+
+```text
+https://nexusapi.link/v1
+```
+
+For manual HTTP calls, send the key in `Authorization`:
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+Never put a complete key in frontend code, screenshots, chat history, or a Git repository. Client URL rules vary: Claude Code uses the site address without `/v1`, while Codex CLI uses its Provider configuration. Follow the relevant [client tool guide](/en/tools/index).
+
+## List models visible to this key
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+Copy a model ID from `data[].id`. This is the set **currently visible to that key**, not a full platform catalog. If a response includes `supported_endpoint_types`, it can help identify the protocol type shown for the model.
+
+## Select the right protocol
+
+| Goal | Path | Use it for |
+| --- | --- | --- |
+| OpenAI-compatible text, chat, and streaming | `POST /v1/chat/completions` | Most custom apps, OpenAI SDKs, and generic clients |
+| Native Anthropic / Claude Code | `POST /v1/messages` | Models labelled `anthropic` |
+| Codex Provider | `POST /v1/responses` | Only with the [Codex CLI guide](/en/tools/codex-cli) and a confirmed model |
+| Image generation | `POST /v1/images/generations` | Image-capable models visible to the current group |
+
+The same model name does not mean every request format is accepted. Confirm the protocol in the [API and model capability matrix](/en/developer/capability-matrix), then read:
+
+- [Chat Completions](/en/developer/openai-compatible)
+- [Anthropic Messages](/en/developer/anthropic-messages)
+- [Responses / Codex](/en/developer/responses)
+- [Image model guide](/en/guide/image-generation)
+
+## Minimal verification and retries
+
+1. List models, then send one short text request or minimum image request.
+2. Confirm the model ID, key group, and path before adding optional fields, streaming, or batch work.
+3. Keep the error text, time, and Request ID on failure. Do not replay an unconfirmed request at high frequency.
+
+For `401`, check the key first. For `404`, check a missing or repeated `/v1`. For `400`, check the model, protocol, and fields. See the [self-check guide](/en/faq/self-check) for more.

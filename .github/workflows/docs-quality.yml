@@ -1,0 +1,39 @@
+name: Docs quality
+
+on:
+  pull_request:
+    paths:
+      - "**/*.mdx"
+      - "docs.json"
+      - "scripts/check-docs.mjs"
+      - ".github/workflows/docs-quality.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.mdx"
+      - "docs.json"
+      - "scripts/check-docs.mjs"
+      - ".github/workflows/docs-quality.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate routes, locales, frontmatter, and internal links
+        run: node scripts/check-docs.mjs
+
+      - name: Run Mintlify broken-link check
+        run: npx --yes mint@latest broken-links

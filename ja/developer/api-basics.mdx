@@ -1,0 +1,67 @@
+---
+title: "API 基本：認証・モデル・プロトコル"
+description: "NexusAPI を呼び出す前に Base URL、API Key、モデル ID、プロトコルを確認します。"
+---
+
+このページでは、すべてのモデル呼び出しに共通する基本ルールを説明します。完全なリクエスト/レスポンス Schema は [Apifox API リファレンス](https://nexusapi.apifox.cn/)を参照し、ここでは**選ぶべきプロトコルと安全な開始方法**を説明します。
+
+<Info>
+**先に対応状況を確認してください**
+
+利用可能なモデルは API Key のグループ、モデル制限、リアルタイムの状態によって変わります。モデルマーケットプレイスの全体一覧は、特定の Key で必ず呼び出せることを保証するものではありません。
+</Info>
+
+## 必要な 3 つの値
+
+| 値 | 取得場所 | 用途 |
+| --- | --- | --- |
+| Base URL | このページ | SDK / クライアントのリクエスト送信先 |
+| API Key | コンソール → トークン管理 | 呼び出し元と利用可能グループの識別 |
+| モデル ID | モデルマーケットプレイスまたは `/v1/models` | 呼び出すモデルの指定 |
+
+標準的な OpenAI 形式クライアントでは、次を使用します。
+
+```text
+https://nexusapi.link/v1
+```
+
+手動 HTTP リクエストでは Key を `Authorization` に入れます。
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+Key 全体をフロントエンド、スクリーンショット、チャット履歴、Git リポジトリに入れないでください。URL の指定方法はクライアントにより異なります。Claude Code は `/v1` なし、Codex CLI は Provider 設定を使用します。該当する[クライアントツールのガイド](/ja/tools/index)に従ってください。
+
+## この Key で見えるモデルを一覧する
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+`data[].id` からモデル ID をコピーします。これは**その Key に現在見えている**モデルの一覧であり、プラットフォーム全体のカタログではありません。`supported_endpoint_types` が返る場合は、モデルに表示されたプロトコル種別の判断に使えます。
+
+## 正しいプロトコルを選ぶ
+
+| 目的 | パス | 利用場面 |
+| --- | --- | --- |
+| OpenAI 互換のテキスト、チャット、ストリーミング | `POST /v1/chat/completions` | 多くの自作アプリ、OpenAI SDK、汎用クライアント |
+| ネイティブ Anthropic / Claude Code | `POST /v1/messages` | `anthropic` と表示されたモデル |
+| Codex Provider | `POST /v1/responses` | [Codex CLI ガイド](/ja/tools/codex-cli)に従い、モデル対応が確認できた場合のみ |
+| 画像生成 | `POST /v1/images/generations` | 現在のグループに表示され、画像対応と示されたモデル |
+
+同じモデル名でも、すべてのリクエスト形式を受け付けるとは限りません。[API とモデル対応マトリクス](/ja/developer/capability-matrix)で確認してから、次を読んでください。
+
+- [Chat Completions](/ja/developer/openai-compatible)
+- [Anthropic Messages](/ja/developer/anthropic-messages)
+- [Responses / Codex](/ja/developer/responses)
+- [画像モデルの利用方法](/ja/guide/image-generation)
+
+## 最小検証と再試行の原則
+
+1. まずモデル一覧を取得し、短いテキストまたは最小の画像リクエストを 1 回送ります。
+2. モデル ID、Key グループ、パスを確認してからオプション、ストリーミング、バッチを追加します。
+3. 失敗時はエラー文、時刻、Request ID を保存し、結果未確認のリクエストを高頻度で再送しないでください。
+
+`401` はまず Key、`404` は `/v1` の不足または重複、`400` はモデル、プロトコル、フィールドを確認します。詳しくは[自己確認](/ja/faq/self-check)を参照してください。

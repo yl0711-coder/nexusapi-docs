@@ -1,0 +1,67 @@
+---
+title: "Nền tảng API: xác thực, mô hình và giao thức"
+description: "Xác nhận Base URL, API Key, model ID và giao thức trước khi gọi NexusAPI."
+---
+
+Trang này trình bày các quy tắc chung cho mọi lời gọi mô hình. Dùng [tài liệu API Apifox](https://nexusapi.apifox.cn/) để xem schema yêu cầu/phản hồi đầy đủ; tài liệu này giải thích **nên chọn giao thức nào và bắt đầu an toàn ra sao**.
+
+<Info>
+**Hãy xác nhận khả năng trước**
+
+Mô hình khả dụng thay đổi theo nhóm API Key, giới hạn mô hình và trạng thái dịch vụ thực tế. Danh sách toàn bộ trong Chợ mô hình không bảo đảm một key cụ thể có thể gọi mọi mô hình.
+</Info>
+
+## Ba giá trị bắt buộc
+
+| Giá trị | Lấy ở đâu | Mục đích |
+| --- | --- | --- |
+| Base URL | Trang này | Gửi yêu cầu của SDK hoặc client tới NexusAPI |
+| API Key | Console → Token management | Xác định người gọi và các nhóm có thể dùng |
+| Model ID | Chợ mô hình hoặc `/v1/models` | Chọn mô hình cho yêu cầu |
+
+Với client theo kiểu OpenAI, dùng:
+
+```text
+https://nexusapi.link/v1
+```
+
+Khi tự gửi HTTP, truyền key trong `Authorization`:
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+Không đưa key đầy đủ vào frontend, ảnh chụp, lịch sử chat hoặc Git. Quy tắc URL thay đổi theo client: Claude Code dùng địa chỉ không có `/v1`, Codex CLI dùng cấu hình Provider. Hãy theo [hướng dẫn công cụ client](/vi/tools/index) tương ứng.
+
+## Liệt kê mô hình mà key hiện tại nhìn thấy
+
+```bash
+curl 'https://nexusapi.link/v1/models' \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+Sao chép model ID từ `data[].id`. Đây là danh sách mô hình **hiện nhìn thấy bởi key đó**, không phải toàn bộ danh mục. Nếu phản hồi có `supported_endpoint_types`, trường này giúp nhận biết loại giao thức được ghi cho mô hình.
+
+## Chọn đúng giao thức
+
+| Mục tiêu | Đường dẫn | Dùng cho |
+| --- | --- | --- |
+| Văn bản, chat, stream tương thích OpenAI | `POST /v1/chat/completions` | Hầu hết ứng dụng tự viết, OpenAI SDK và client phổ biến |
+| Anthropic gốc / Claude Code | `POST /v1/messages` | Mô hình có nhãn `anthropic` |
+| Codex Provider | `POST /v1/responses` | Chỉ dùng theo [hướng dẫn Codex CLI](/vi/tools/codex-cli) và mô hình đã được xác nhận |
+| Tạo ảnh | `POST /v1/images/generations` | Mô hình tạo ảnh hiển thị với nhóm hiện tại |
+
+Cùng một tên mô hình không có nghĩa là mọi định dạng yêu cầu đều được chấp nhận. Xác nhận trong [ma trận khả năng](/vi/developer/capability-matrix), sau đó đọc:
+
+- [Chat Completions](/vi/developer/openai-compatible)
+- [Anthropic Messages](/vi/developer/anthropic-messages)
+- [Responses / Codex](/vi/developer/responses)
+- [Hướng dẫn mô hình hình ảnh](/vi/guide/image-generation)
+
+## Kiểm tra tối thiểu và thử lại
+
+1. Liệt kê mô hình, sau đó gửi một yêu cầu văn bản ngắn hoặc tạo ảnh tối thiểu.
+2. Xác nhận model ID, nhóm key và đường dẫn trước khi thêm trường tùy chọn, stream hoặc tác vụ hàng loạt.
+3. Khi lỗi, lưu nội dung lỗi, thời điểm và Request ID. Không gửi lại một yêu cầu chưa rõ kết quả với tần suất cao.
+
+Với `401`, kiểm tra key trước. Với `404`, kiểm tra `/v1` bị thiếu hoặc lặp. Với `400`, kiểm tra mô hình, giao thức và trường. Xem [tự kiểm tra](/vi/faq/self-check) để biết thêm.

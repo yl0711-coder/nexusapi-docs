@@ -35,7 +35,7 @@ curl 'https://nexusapi.link/v1/images/generations' \
 
 ## 參數與結果
 
-不同圖片模型支援的尺寸、品質、數量和回傳格式不完全相同。只有在模型廣場或[介面參考](/zh-TW/developer/openai-compatible)標明支援時，才傳入 `size`、`quality`、`n`、`response_format` 等可選參數。
+不同圖片模型支援的尺寸、品質、數量和回傳格式不完全相同。只有在模型廣場或 [Apifox API 文件](https://nexusapi.apifox.cn/)標明支援時，才傳入 `size`、`quality`、`n`、`response_format` 等可選參數。通用驗證、模型查詢與協定選擇見 [API 基礎](/zh-TW/developer/api-basics)。
 
 回應通常會在 `data` 陣列中傳回圖片結果。回傳的是 URL 或 Base64 資料、每次能生成幾張圖片，請以所選模型的介面說明和實際回應為準。
 
