@@ -5,7 +5,7 @@
 
 ## 内容范围
 
-- 简体中文的产品使用、接口接入、工具配置、账单说明和故障排查
+- 七种语言的产品使用、接口接入、工具配置、账单说明和故障排查
 - 截图等静态资源位于 images/nexusapi/
 - 旧项目中未完成人工审校的多语言草稿不会发布到新版站点
 
@@ -35,7 +35,7 @@ node scripts/check-docs.mjs
 
 1. 检查导航指向的页面是否存在；
 2. 检查七种语言的路由是否一一对应；
-3. 检查每页的 `title`、`description` 与站内链接；
+3. 检查每页的 `title`、`description`、站内链接和本地教程截图；
 4. 运行 Mintlify 的 `broken-links` 检查。
 
 工作流会在推送 `main` 和创建/更新 Pull Request 时运行。若要让不通过的检查**无法合并**，需要在 GitHub 仓库的 **Settings → Branches → Add branch protection rule** 中为 `main` 勾选 **Require a pull request before merging** 与 **Require status checks to pass before merging**，并选择 `Validate documentation`。

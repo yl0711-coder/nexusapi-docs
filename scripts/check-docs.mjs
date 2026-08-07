@@ -107,6 +107,15 @@ for (const file of mdxFiles) {
       addFailure(`${relativeFile}: internal link "${link}" has no matching .mdx page.`);
     }
   }
+
+  const localAssets = [...content.matchAll(/(?:!?\]\(|(?:src|href)=["'])(\/images\/[^\s)"'#?]+)(?:[?#][^\s)"']*)?(?:\)|["'])/g)];
+  for (const match of localAssets) {
+    const asset = match[1];
+    const assetPath = path.join(root, asset.replace(/^\//, ''));
+    if (!fs.existsSync(assetPath)) {
+      addFailure(`${relativeFile}: local image asset "${asset}" does not exist.`);
+    }
+  }
 }
 
 if (failures.length) {

@@ -116,7 +116,7 @@ paru -S cc-switch-bin
 
 | 字段 | 建议填写 |
 | --- | --- |
-| App / 应用 | `Claude` |
+| App / 应用 | `Claude Code`（旧版可能显示为 `Claude`） |
 | Name / 名称 | `NexusAPI Claude` |
 | Endpoint / Base URL | `https://nexusapi.link` |
 | API Key | `sk-您的 NexusAPI 令牌` |
@@ -128,7 +128,7 @@ paru -S cc-switch-bin
 示例：
 
 ```text
-App: Claude
+App: Claude Code
 Name: NexusAPI Claude
 Endpoint: https://nexusapi.link
 API Key: sk-xxxxxxxx
@@ -138,9 +138,10 @@ Sonnet Model: YOUR_CLAUDE_MODEL_ID
 
 注意：
 
-1. Claude Code 的 NexusAPI Endpoint 不要加 `/v1`。
-2. 配置完成后，在 CC Switch 中切换到该 Provider。
-3. 重新打开终端，再运行 `claude`。
+1. 新版 CC Switch 请选 `Claude Code`；若旧版界面显示 `Claude`，请选择对应 Claude Code 的 Provider，不要选 Claude Desktop。
+2. Claude Code 的 NexusAPI Endpoint 不要加 `/v1`。
+3. 配置完成后，在 CC Switch 中切换到该 Provider。
+4. 重新打开终端，再运行 `claude`。
 
 验证方式：
 

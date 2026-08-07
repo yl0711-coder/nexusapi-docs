@@ -7,7 +7,7 @@ description: "既存の NexusAPI ユーザー設定で、公式 Claude Code 拡�
 
 ## 1. 公式拡張をインストールする
 
-先に [Claude Code の設定](/ja/tools/claude-code)を完了してください。拡張機能画面で **Claude Code** を検索し、発行元が **Anthropic** であることを確認します。[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)も参照できます。
+VS Code 1.94 以降を使用していることを確認し、先に [Claude Code の設定](/ja/tools/claude-code)を完了してください。拡張機能画面で **Claude Code** を検索し、発行元が **Anthropic** であることを確認します。[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)も参照できます。
 
 <Warning>
 類似する第三者拡張がある場合があります。Anthropic が公開したものだけを使い、第三者設定画面に Key を貼り付けないでください。
@@ -17,7 +17,7 @@ description: "既存の NexusAPI ユーザー設定で、公式 Claude Code 拡�
 
 拡張は CLI と同じ `~/.claude/settings.json`（Windows はユーザープロファイルの対応パス）を読みます。VS Code / Cursor のワークスペース設定に Key を重複保存しないでください。
 
-ログイン画面が出る場合は、設定で `Claude Code login` を検索し、表示されている場合は **Disable Login Prompt** を有効にしてからエディターを完全に再起動します。デスクトップ起動で環境を継承しない場合は、設定済みターミナルから `code .` を実行します。
+ログイン画面が出る場合は、設定で `Claude Code login` を検索し、**Disable Login Prompt** を有効にしてからエディターを完全に再起動します。
 
 ## 3. 安全に確認する
 
