@@ -1,0 +1,21 @@
+/*
+ * Mintlify exposes `nav-logo` as a stable styling hook. Keep the wordmark
+ * separate from the icon asset so the favicon and Open Graph logo stay compact.
+ */
+nav-logo {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.625rem;
+  overflow: visible;
+  width: auto;
+}
+
+nav-logo::after {
+  color: currentColor;
+  content: "NexusAPI";
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}

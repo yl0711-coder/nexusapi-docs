@@ -50,3 +50,8 @@ node scripts/check-docs.mjs
 5. 先完成 Dashboard 给出的两个 TXT 验证记录，再把目标子域名的 CNAME 指向 Mintlify 给出的地址。
 
 不要在仓库、文档或截图中提交 API Key、系统令牌、账户余额或用户日志。
+
+## 品牌标识
+
+站点左上角的品牌区由三处共同维护：`docs.json` 负责目标地址、`brand.css`
+显示 `NexusAPI` 文字标识、`brand-link.js` 将品牌链接固定为在新窗口打开官网。
