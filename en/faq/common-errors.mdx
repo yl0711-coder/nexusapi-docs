@@ -104,7 +104,7 @@ The client is continuing a prior response over an unsupported connection method.
 
 ### `Content block not found`
 
-The client did not receive an expected complete content fragment, often during a long conversation, tool call, or interrupted stream. If this happens **only with Claude models**, check the channel first: a Claude channel that uses the Anthropic protocol must have the **Anthropic Claude** type, not **OpenAI**. Save the channel and retry with a new session and a simple request. If it persists, shorten the context, temporarily disable tool calls, and send support the Request ID, time, model, and original error.
+The client did not receive an expected complete content fragment, often during a long conversation, tool call, or interrupted stream. Start a new session, shorten the input, and send a simple test first. If it persists, temporarily disable nonessential tool calls and send support the Request ID, time, model, and original error. We will use those details to investigate the platform-side channel and service configuration.
 
 ## Image-generation timeout or unsupported capability
 
