@@ -9,6 +9,8 @@ The official Claude Code extension offers chat, diff previews, file references, 
 
 Before starting, confirm that you use VS Code 1.94 or later and complete the [Claude Code setup](/en/tools/claude-code). In the editor's Extensions view, search for **Claude Code** and confirm that the publisher is **Anthropic**. You can also use the [official VS Code guide](https://code.claude.com/docs/en/vs-code).
 
+Open Extensions with <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> on macOS or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> on Windows and Linux.
+
 <Warning>
 Similar third-party extensions may appear in search. Install the extension published by Anthropic, and do not paste API keys into a third-party settings panel.
 </Warning>
@@ -23,21 +25,42 @@ If the editor still shows a sign-in prompt:
 2. Enable **Disable Login Prompt**.
 3. Fully restart the editor.
 
-## 3. Verify with a safe request
+Do not write the NexusAPI key to a project `.vscode/settings.json`, and do not sync, screenshot, or commit a settings file containing it. Keep the key only in the user-level `~/.claude/settings.json`.
 
-Open Claude Code from its editor icon, Activity Bar, Command Palette, or status bar. Send a read-only test such as:
+If a current Cursor release cannot install the extension, run `claude` in Cursor’s integrated terminal and keep the same user-level Claude Code configuration.
+
+## 3. Open Claude Code
+
+You can open the extension from its top-right editor icon, the Activity Bar, the Command Palette, or the status bar. If the icon is absent, open a code file first; the extension can show that entry point only after a file is open.
+
+## 4. Verify with a safe request
+
+![Official Claude Code extension shown in VS Code](/images/nexusapi/claude-code-vscode-official.jpg)
+
+> The example interface is from the [official Claude Code VS Code documentation](https://code.claude.com/docs/en/vs-code). Button locations can change with extension releases.
+
+Send a read-only test such as:
 
 ```text
 Explain what the current file does without modifying it.
 ```
 
-Then verify one matching entry in the NexusAPI usage log.
+Then run `/status` and verify that **Anthropic base URL** is `https://nexusapi.link`, then verify one matching entry in the NexusAPI usage log.
 
 ## Troubleshooting
 
-- Confirm the extension, editor, and Claude Code versions are current.
-- Use `/status` in the integrated terminal to confirm the Base URL is `https://nexusapi.link`.
-- Restart the entire editor after changing `settings.json`.
-- Preserve the original error and Request ID, then use [self-check](/en/faq/self-check).
+### The extension does not appear
+
+Run **Developer: Reload Window** from the Command Palette or fully restart the editor.
+
+### The CLI works but the extension does not
+
+Confirm that `~/.claude/settings.json` is in the user directory, not the project directory. Recheck its Base URL and key, enable **Disable Login Prompt**, then fully restart the editor.
+
+### Cursor cannot find the extension
+
+Use the Cursor entry point in the [official VS Code guide](https://code.claude.com/docs/en/vs-code). If this Cursor release does not support it, use `claude` from its integrated terminal instead.
+
+For persistent errors, retain the editor, extension, and Claude Code versions, the original error, and the Request ID, then use [self-check](/en/faq/self-check).
 
 Never send a full API key, workspace secret, or private source file to support.

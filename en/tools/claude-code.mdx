@@ -5,6 +5,13 @@ description: "Install Claude Code and connect it to NexusAPI using its native An
 
 Claude Code is a terminal coding agent. It uses the native Anthropic Messages configuration, so its NexusAPI Base URL is `https://nexusapi.link` — **do not append `/v1`**.
 
+## System requirements
+
+- macOS 13+, Ubuntu 20.04+, Debian 10+, or Windows 10 version 1809+.
+- At least 4 GB of memory and an x64 or ARM64 CPU.
+- A network that can reach NexusAPI.
+- On Windows, [Git for Windows](https://git-scm.com/install/windows) is optional when you prefer Git Bash.
+
 ## 1. Install Claude Code
 
 Use an official installer. A native installation does not require Node.js.
@@ -44,7 +51,13 @@ In the [NexusAPI console](https://nexusapi.link), open **Token Management → Ad
 
 Do not assume every Claude-branded model is available to every group; verify it in the Model Marketplace or with `/v1/models`.
 
+### Choose safe key settings
+
+Use a project-specific name and a sensible limit. Enable a model restriction or IP allowlist only when you understand the operational impact, and give short-lived test keys an expiry date.
+
 ## 3. Set user-level configuration
+
+### Locate the configuration folder
 
 Claude Code reads user settings from:
 
@@ -67,6 +80,8 @@ New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
 notepad "$env:USERPROFILE\.claude\settings.json"
 ```
 
+### Set the environment values
+
 Merge the following `env` values into an existing file; do not overwrite your MCP, permissions, or other settings.
 
 ```json
@@ -86,16 +101,27 @@ Keep this in your user directory, not in a project repository. Never commit or s
 If an error explicitly mentions unsupported `context_management` or experimental inputs, add `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` to `env` and test again. It disables some preview fields and is not a default setting for every user.
 </Tip>
 
+You can also open the file directly on macOS or Linux:
+
+```bash
+vim ~/.claude/settings.json
+```
+
 ## 4. Start and verify
 
 Open a new terminal, enter a project directory, and run:
 
 ```bash
 cd your-project-folder
+```
+
+```bash
 claude
 ```
 
 Run `/status` inside Claude Code. Confirm that **Anthropic base URL** is `https://nexusapi.link` and authentication comes from `ANTHROPIC_AUTH_TOKEN`, then send a short text message.
+
+At first launch, follow the client’s theme, safety notice, terminal, and workspace-trust prompts. Trust only project directories that you recognize.
 
 ## Troubleshooting
 
@@ -106,6 +132,23 @@ Confirm that both environment values are saved, the key itself is enabled, and t
 ### `Unable to connect to Anthropic services`
 
 Run `claude doctor`, check the JSON syntax in `settings.json`, then reopen the terminal. If it persists, save the original error, `claude --version`, and `claude doctor` output.
+
+```text
+Unable to connect to Anthropic services
+Failed to connect to api.anthropic.com: ERR BAD REQUEST
+```
+
+Do not use a script to overwrite internal fields in `.claude.json`. They can change between releases and overwriting the file can remove existing sign-in state or settings.
+
+### PowerShell blocks the installer
+
+Use WinGet or the official installer from Windows CMD first. If you have verified that the issue is only your local execution policy, change the policy for the current user only:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+Do not change a machine-wide policy merely to install a client.
 
 ### `fetch failed`
 
@@ -119,6 +162,18 @@ First distinguish a model call from Claude Code's WebFetch feature.
 ### The status says `offline`
 
 Some auxiliary features check official or third-party services separately. Verify the actual gateway URL with `/status` and send a small text request before treating `offline` as an API outage.
+
+### WebFetch fails but normal chat works
+
+WebFetch can have separate domain-safety checks and external network access. If a short normal chat request succeeds, keep the NexusAPI Base URL unchanged and troubleshoot the WebFetch error under Claude Code’s own network guidance.
+
+### An API request fails
+
+Exit the session, start a fresh `claude` session, and test one short request. If the problem remains, preserve the Request ID and use the [self-check guide](/en/faq/self-check).
+
+### Browser sign-in fails
+
+Clear only the affected site’s browser cookies and try again. A browser sign-in issue does not prove that the API key configuration is wrong.
 
 ## Official references
 

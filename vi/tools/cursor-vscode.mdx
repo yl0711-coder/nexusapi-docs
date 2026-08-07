@@ -9,6 +9,8 @@ Extension Claude Code chính thức có chat, xem trước diff, tham chiếu t�
 
 Trước tiên, hãy bảo đảm bạn dùng VS Code 1.94 trở lên và hoàn thành [thiết lập Claude Code](/vi/tools/claude-code). Trong Extensions, tìm **Claude Code** và xác nhận publisher là **Anthropic**. Có thể xem thêm [hướng dẫn VS Code chính thức](https://code.claude.com/docs/en/vs-code).
 
+Mở Extensions bằng <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> trên macOS hoặc <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> trên Windows và Linux.
+
 <Warning>
 Có thể có extension bên thứ ba giống tên. Chỉ dùng extension do Anthropic phát hành và không dán key vào bảng cài đặt của bên thứ ba.
 </Warning>
@@ -19,8 +21,40 @@ Extension đọc cùng `~/.claude/settings.json` như CLI (hoặc đường dẫ
 
 Nếu editor vẫn yêu cầu đăng nhập: mở Settings, tìm `Claude Code login`, bật **Disable Login Prompt**, rồi khởi động lại hoàn toàn editor.
 
-## 3. Kiểm tra an toàn
+Không lưu lặp key NexusAPI trong `.vscode/settings.json` của dự án, không đồng bộ, chụp ảnh hay commit cấu hình có key. Chỉ lưu key trong `~/.claude/settings.json` cấp người dùng.
 
-Mở Claude Code từ sidebar hoặc Command Palette và yêu cầu: “Giải thích tệp hiện tại làm gì, không sửa tệp.” Sau khi thành công, kiểm tra bản ghi tương ứng trong nhật ký NexusAPI.
+Nếu bản Cursor hiện tại không cài được extension, hãy chạy `claude` trong terminal tích hợp của Cursor với cùng cấu hình cấp người dùng.
 
-Khi có lỗi, cập nhật editor, extension và Claude Code, khởi động lại hoàn toàn, lưu lỗi và Request ID rồi làm [tự kiểm tra](/vi/faq/self-check). Không gửi key đầy đủ, secret của workspace hoặc mã nguồn riêng tư.
+## 3. Mở Claude Code
+
+Mở Claude Code từ biểu tượng, Activity Bar, Command Palette hoặc status bar. Nếu không thấy biểu tượng ở góc trên phải, hãy mở một tệp mã trước.
+
+## 4. Kiểm tra an toàn
+
+![Extension Claude Code chính thức hiển thị trong VS Code](/images/nexusapi/claude-code-vscode-official.jpg)
+
+> Ví dụ giao diện lấy từ [tài liệu VS Code chính thức của Claude Code](https://code.claude.com/docs/en/vs-code). Vị trí nút có thể thay đổi theo phiên bản extension.
+
+Gửi thử một yêu cầu chỉ đọc:
+
+```text
+Giải thích tệp đang mở dùng để làm gì, không sửa mã.
+```
+
+Sau đó chạy `/status`, xác nhận **Anthropic base URL** là `https://nexusapi.link`, rồi kiểm tra bản ghi tương ứng trong nhật ký NexusAPI.
+
+## Khắc phục sự cố
+
+### Extension không xuất hiện sau khi cài
+
+Chạy **Developer: Reload Window** trong Command Palette hoặc khởi động lại hoàn toàn editor.
+
+### CLI dùng được nhưng extension không dùng được
+
+Xác nhận `~/.claude/settings.json` nằm trong thư mục người dùng, không phải thư mục dự án, và Base URL/key chính xác. Bật **Disable Login Prompt** rồi khởi động lại hoàn toàn editor.
+
+### Cursor không tìm thấy extension
+
+Hãy dùng điểm cài cho Cursor trong [hướng dẫn VS Code chính thức](https://code.claude.com/docs/en/vs-code). Nếu phiên bản hiện tại không hỗ trợ extension, hãy dùng `claude` trong terminal tích hợp của Cursor.
+
+Nếu sự cố tiếp diễn, lưu phiên bản editor, extension và Claude Code, nguyên văn lỗi và Request ID, rồi làm [tự kiểm tra](/vi/faq/self-check). Không gửi key đầy đủ, secret của workspace hoặc mã nguồn riêng tư.

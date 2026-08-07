@@ -18,6 +18,18 @@ La console affiche une synthèse et des journaux de consommation pour rapprocher
 | Coût | Montant enregistré pour la requête. |
 | Request ID | Identifiant unique permettant de retrouver la même requête. |
 
+## Entrée, sortie et cache
+
+- Les **tokens d’entrée** comprennent le prompt, le contexte de conversation et certaines informations d’outils.
+- Les **tokens de sortie** sont générés par le modèle.
+- Les **lectures de cache** correspondent aux tokens lus depuis un cache de contexte ; leur prix peut différer du prix d’entrée normal.
+
+La prise en charge et le prix du cache varient selon le modèle. Consultez les informations en direct du [catalogue de modèles](https://nexusapi.link/pricing).
+
+## Pourquoi un journal peut apparaître en retard
+
+Un court délai peut exister entre la fin de la requête, la comptabilisation et son affichage dans la console. Si une requête terminée n’apparaît pas immédiatement, actualisez plus tard ; ne renvoyez pas la tâche métier seulement pour créer une autre ligne de journal.
+
 ## Une requête en erreur est-elle toujours gratuite ?
 
 Non. Une erreur sans résultat facturable est souvent à zéro, mais une requête déjà traitée en amont, un flux interrompu ou une nouvelle tentative envoyée par le client peuvent laisser une écriture de coût. Rapprochez toujours le **même Request ID**, l'heure et le journal final ; ne vous fiez pas seulement à l'interface du client.
@@ -30,3 +42,9 @@ Non. Une erreur sans résultat facturable est souvent à zéro, mais une requêt
 4. Conservez les données brutes et l'intervalle de requête avant une agrégation.
 
 En cas de coût inattendu, envoyez le Request ID, l'heure et le fuseau, le modèle, l'état final côté client et l'erreur éventuelle. Ne communiquez pas une clé complète ni une conversation confidentielle.
+
+## Consulter ou exporter l’usage
+
+- Utilisez la synthèse et le journal de la console pour le contrôle quotidien.
+- Filtrez les détails par période, modèle et groupe avant un export ou une agrégation.
+- Conservez les Request ID dans les exports afin de pouvoir analyser une ligne inhabituelle plus tard.

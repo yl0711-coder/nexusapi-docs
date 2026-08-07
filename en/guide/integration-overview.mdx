@@ -70,6 +70,22 @@ Some clients require the site URL without `/v1`, or add `/chat/completions`, `/r
 If a client already appends `/v1`, entering a URL that includes it can produce `/v1/v1/...` and a 404 error. Check the actual request URL first when you see a 404.
 </Warning>
 
+## Do not mix client configuration with a generic API
+
+CLI tools, editor extensions, and your own application can use different protocols and configuration files. Even when the model name is the same, do not copy an entire configuration from one tool into another.
+
+- **Codex CLI:** follow the [Codex CLI guide](/en/tools/codex-cli) and use its Responses provider settings.
+- **Claude Code:** follow the [Claude Code guide](/en/tools/claude-code) and keep its native Anthropic Messages configuration.
+- **Your own text application:** start with Chat Completions unless its SDK explicitly requires another protocol.
+- **Image generation:** use the image endpoint; do not send image-generation parameters to a text chat endpoint.
+- **Not sure:** identify the exact client and inspect the request path it sends before changing settings.
+
+## API reference
+
+Use the [API and model capability matrix](/en/developer/capability-matrix) to confirm the protocol for the model you want to use. The smallest Chat Completions request is documented in [Chat Completions](/en/developer/openai-compatible).
+
+This help center explains how to choose and configure an integration, and provides minimal requests you can verify. Optional parameters still depend on the client protocol and the model currently shown in the Model Marketplace.
+
 ## Confirm that the setup works
 
 - The client returns a complete response.

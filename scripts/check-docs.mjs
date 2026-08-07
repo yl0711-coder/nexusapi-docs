@@ -38,6 +38,14 @@ function relativeRoute(page, directory) {
   return directory ? page.replace(new RegExp(`^${directory}/`), '') : page;
 }
 
+function structuralMetrics(content) {
+  return {
+    headings: (content.match(/^#{2,3} /gm) || []).length,
+    codeFenceLines: (content.match(/^```/gm) || []).length,
+    localImages: (content.match(/\]\(\/images\//g) || []).length,
+  };
+}
+
 const languages = docsConfig.navigation?.languages || [];
 const defaultLanguage = languages.find((language) => language.default);
 
@@ -114,6 +122,36 @@ for (const file of mdxFiles) {
     const assetPath = path.join(root, asset.replace(/^\//, ''));
     if (!fs.existsSync(assetPath)) {
       addFailure(`${relativeFile}: local image asset "${asset}" does not exist.`);
+    }
+  }
+}
+
+// A localized page must preserve the default-language page's instructional
+// structure. This catches accidental summary-only translations while allowing
+// natural differences in wording and language length.
+if (defaultLanguage) {
+  const defaultDirectory = localeDirectory(defaultLanguage.language);
+  for (const route of defaultRoutes) {
+    const sourcePage = defaultDirectory ? `${defaultDirectory}/${route}` : route;
+    const sourcePath = pageFile(sourcePage);
+    if (!fs.existsSync(sourcePath)) continue;
+
+    const sourceMetrics = structuralMetrics(fs.readFileSync(sourcePath, 'utf8'));
+    for (const language of languages) {
+      if (language === defaultLanguage) continue;
+      const directory = localeDirectory(language.language);
+      const localizedPage = directory ? `${directory}/${route}` : route;
+      const localizedPath = pageFile(localizedPage);
+      if (!fs.existsSync(localizedPath)) continue;
+
+      const localizedMetrics = structuralMetrics(fs.readFileSync(localizedPath, 'utf8'));
+      for (const [metric, sourceValue] of Object.entries(sourceMetrics)) {
+        if (localizedMetrics[metric] < sourceValue) {
+          addFailure(
+            `${language.language}: localized page "${localizedPage}" has ${localizedMetrics[metric]} ${metric}, fewer than the default-language source (${sourceValue}).`,
+          );
+        }
+      }
     }
   }
 }

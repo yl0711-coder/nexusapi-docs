@@ -1,35 +1,139 @@
 ---
 title: "Lỗi API thường gặp"
-description: "Chẩn đoán lỗi NexusAPI theo mã lỗi, giao thức và Request ID."
+description: "Chẩn đoán các lỗi client, giao thức, yêu cầu và thanh toán phổ biến của NexusAPI."
 ---
 
-Trước hết lưu toàn bộ lỗi, Request ID, thời gian, mô hình và endpoint. Lỗi tham số, giao thức hoặc trạng thái phiên không tự hết khi gửi lại liên tục.
+Trang này áp dụng cho Claude Code, Codex CLI, Cursor, extension VS Code và ứng dụng tự xây dựng. Trước khi thử lại, hãy lưu **nguyên văn lỗi, Request ID, thời điểm, mô hình và endpoint yêu cầu**. Không gửi API Key đầy đủ.
+
+<Tip>
+**Chẩn đoán trước khi thử lại**
+
+Lỗi tham số, endpoint và tương thích phiên không tự hết khi lặp lại cùng yêu cầu. Chỉ thử lại một lần, với tần suất thấp, khi đã xác định có thể là dao động tạm thời.
+</Tip>
 
 ## `status_code=500, not implemented`
 
-Với kênh Claude kiểu Anthropic được gọi bằng `/v1/responses`, đây là **không tương thích giao thức**, không phải lỗi tạm thời.
+Nếu lỗi có cả `status_code=500` và `not implemented`, đồng thời `/v1/responses` đang gọi **kênh Claude kiểu Anthropic**, đó là **không tương thích giao thức**, không phải sự cố upstream sẽ tự hết khi chờ. new-api rc4 có route này nhưng kênh Anthropic không có triển khai chuyển đổi yêu cầu Responses.
 
-1. Ứng dụng tự viết dùng `/v1/chat/completions`.
-2. Claude Code dùng cấu hình Messages trong [hướng dẫn Claude Code](/vi/tools/claude-code).
-3. Không gửi lại nguyên yêu cầu đó.
+1. Với ứng dụng tự xây dựng, chuyển sang `/v1/chat/completions`.
+2. Với Claude Code, làm theo [hướng dẫn Claude Code](/vi/tools/claude-code) và giữ cấu hình Messages gốc.
+3. Không gửi lại nguyên yêu cầu đó; chờ hoặc đổi mạng không sửa được lỗi này.
 
-## Mã HTTP
+Khi cần hỗ trợ, gửi ví dụ đã che thông tin, tên model và Request ID, không gửi key.
 
-| Mã | Nguyên nhân thường gặp | Việc đầu tiên |
-| --- | --- | --- |
-| 400 | Mô hình, endpoint, tham số hoặc phiên không hợp lệ | Kiểm tra giao thức và làm test tối thiểu ở phiên mới. |
-| 401 | Key thiếu, sai, hết hạn hoặc bị vô hiệu | Sao chép lại key và định dạng Bearer. |
-| 403 | Nhóm, hạn chế, IP, tài khoản hoặc upstream từ chối | Kiểm tra thiết lập key. |
-| 404 | Sai đường dẫn hoặc `/v1` bị lặp | Kiểm tra URL thực tế. |
-| 429 | Giới hạn tần suất hoặc đồng thời | Giảm đồng thời và theo `Retry-After`. |
-| 500 / 502 / 503 | Lỗi xử lý hoặc upstream tạm thời | Chờ 10–30 giây, thử lại một lần. |
-| 504 / 524 | Hết thời gian chờ | Nếu phù hợp giảm ngữ cảnh/đầu ra, lưu Request ID. |
+## 400 Bad Request / tham số không tương thích
 
-## Các thông báo khác
+400 thường nghĩa là định dạng yêu cầu, tham số hoặc trạng thái phiên không đúng với endpoint hiện tại.
 
-- **`no available channel`**: nhóm của key không có tuyến đang bật cho mô hình. Kiểm tra ID chính xác, nhóm và Chợ mô hình; tạo key mới hay nạp thêm tiền không khắc phục điều này.
-- **`Concurrency limit exceeded for user`**: chờ các yêu cầu hiện tại kết thúc và giảm mức đồng thời của client.
-- **`Content block not found`**: hay gặp ở phiên dài, gọi công cụ hoặc stream bị ngắt. Xem [Content block not found](/vi/faq/content-block-not-found).
-- **Lỗi/timeout ảnh**: kiểm tra mô hình, endpoint Images và tham số; không gửi lại ngay tác vụ ảnh giống hệt.
+1. Sao chép chính xác model ID từ Chợ mô hình.
+2. Xác nhận endpoint, model và client khớp trong [tổng quan tích hợp](/vi/guide/integration-overview).
+3. Kiểm tra model có hỗ trợ tham số ảnh, tool call, reasoning hoặc tiếp tục phiên hay không.
+4. Cập nhật client hoặc SDK cũ.
+5. Tạo phiên mới và gửi một yêu cầu văn bản ngắn.
 
-Nếu có chi phí bất thường, đối chiếu Request ID và nhật ký cùng thời gian. Không giả định nền tảng sẽ tự thử lại một yêu cầu thông thường.
+Không lặp lại yêu cầu chưa thay đổi.
+
+## 401 Unauthorized
+
+Nguyên nhân thường là key thiếu, sai, bị vô hiệu hóa/hết hạn hoặc header xác thực sai định dạng.
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+Sao chép lại key từ console và kiểm tra URL yêu cầu. Không gửi toàn bộ key cho hỗ trợ. Nếu nghi lộ key, vô hiệu hóa key cũ, tạo key mới và cập nhật ứng dụng.
+
+## 403 Forbidden
+
+403 nghĩa là yêu cầu bị từ chối. Các lý do phổ biến: key không có quyền vào nhóm đã chọn, hạn chế model, IP allowlist không khớp, trạng thái tài khoản không khả dụng hoặc upstream từ chối.
+
+Kiểm tra nhóm key, hạn chế model và IP allowlist, rồi thử một yêu cầu văn bản ngắn. Nếu vẫn lỗi, cung cấp Request ID, model, thời gian và nguyên văn lỗi. Không cố vượt hạn chế bằng cách tạo key liên tục hoặc retry tần suất cao.
+
+## 404 Not Found / địa chỉ yêu cầu sai
+
+Hãy kiểm tra trước:
+
+- Base URL có bị ghép thành `/v1/v1/...` không;
+- client có tự thêm `/v1` hoặc đường dẫn endpoint không;
+- bạn có dùng đúng `/v1/chat/completions`, `/v1/responses`, `/v1/messages` hoặc `/v1/images/generations` không.
+
+Quy tắc URL tùy công cụ; dùng [hướng dẫn công cụ](/vi/tools/) tương ứng.
+
+Model không khả dụng thường không phải 404. Trong new-api rc4, model ngoài nhóm key, channel bị tắt hoặc không thể định tuyến thường trả `503` / `no available channel`.
+
+## 429 Too Many Requests
+
+429 có thể do giới hạn tốc độ của nền tảng hoặc giới hạn ngắn hạn của model. `Concurrency limit exceeded for user` thường là giới hạn đồng thời của upstream hoặc client; không chỉ dựa vào mã trạng thái để kết luận key có lỗi.
+
+- Giảm đồng thời; ưu tiên tuân theo `Retry-After`, nếu không có thì dùng exponential backoff kèm jitter ngẫu nhiên.
+- Không để nhiều chương trình retry nhanh bằng cùng key.
+- Nếu vẫn xuất hiện khi gọi thưa, gửi Request ID để kiểm tra khả dụng dịch vụ.
+
+## 500, 502, 503, 504 hoặc 524
+
+Ngoài lỗi `not implemented` nêu trên, các mã này thường là lỗi xử lý, ngắt kết nối, quá tải hoặc timeout, không nhất thiết do key hay prompt sai.
+
+| Mã | Cách xử lý khuyến nghị |
+| --- | --- |
+| `500` / `502` / `503` | Chờ 10–30 giây rồi chỉ thử lại một lần; nếu tiếp diễn, lưu Request ID. |
+| `504` / `524` | Nếu có thể, giảm ngữ cảnh, tool call hoặc độ dài đầu ra rồi thử lại sau. |
+
+Đừng gửi liên tục một tác vụ dài khi cùng model đang lỗi lặp lại.
+
+## `no available channel` / model hiện không có dịch vụ khả dụng
+
+new-api rc4 không tìm được channel đang bật và có thể định tuyến cho model đó trong nhóm của key hiện tại. Model ID sai, model chưa có trong nhóm, channel bị tắt hoặc tạm thời không khả dụng đều có thể gây lỗi này.
+
+Hãy thử lại sau hoặc chọn model khác đang hiển thị cho nhóm trong Chợ mô hình. Nếu lỗi tiếp diễn, gửi tên model, Request ID và thời gian; không cần nạp lại tiền hoặc tạo key mới.
+
+## `Concurrency limit exceeded for user`
+
+Số yêu cầu đang hoạt động của tài khoản đã đạt giới hạn. Chờ yêu cầu đang chạy kết thúc rồi giảm đồng thời. Không cần vô hiệu hóa hay tạo lại API Key vì lỗi này.
+
+## Lỗi hội thoại dài hoặc tool call
+
+### `Invalid signature in thinking block`
+
+Nội dung reasoning đã lưu trong phiên hiện tại không còn xác thực được; điều này hay xảy ra khi tiếp tục phiên dài, trạng thái client thay đổi hoặc khả năng tương thích thay đổi. Hãy tạo phiên mới, cập nhật client và tránh tiếp tục cùng một phiên trên nhiều thiết bị.
+
+### `previous_response_id is only supported on Responses WebSocket v2`
+
+Client đang tiếp tục phản hồi cũ qua cách kết nối không được hỗ trợ. Hãy tạo phiên mới, tắt tính năng tiếp tục/tái sử dụng phản hồi thử nghiệm hoặc cập nhật client.
+
+### `Content block not found`
+
+Client không nhận được mảnh nội dung hoàn chỉnh cần thiết, thường trong hội thoại dài, tool call hoặc stream bị ngắt. Tạo phiên mới, rút ngắn đầu vào và gửi test đơn giản. Xem [Content block not found](/vi/faq/content-block-not-found).
+
+## Hết thời gian tạo ảnh hoặc không hỗ trợ khả năng
+
+Model ảnh chỉ dùng endpoint ảnh; model văn bản không dùng được endpoint tạo ảnh. Tạo ảnh hiện là yêu cầu đồng bộ và có thể mất thời gian, vì vậy không gửi cùng một tác vụ ảnh nhiều lần trước khi biết kết quả đầu tiên.
+
+- `Image generation is not enabled` / `model not supported`: kiểm tra model, endpoint và tham số.
+- `504` / `524` / client timeout: lưu Request ID và thời gian, không tạo lại ngay.
+
+Xem [hướng dẫn mô hình ảnh](/vi/guide/image-generation).
+
+## Có số dư nhưng key báo không đủ hạn mức
+
+Kiểm tra credit tài khoản, hạn mức API Key, ngày hết hạn và nhóm token. Không nạp lặp lại chỉ vì một thông báo. Nếu tiếp diễn, cung cấp Request ID để kiểm tra.
+
+## Lỗi có tự thành công sau đó không?
+
+Đừng cho rằng nền tảng sẽ tự hoàn tất yêu cầu bị lỗi về sau. Các yêu cầu thông thường không có cam kết retry tự động ở cấp nền tảng. Nếu client hoặc ứng dụng gửi lại, thường sẽ tạo Request ID mới.
+
+Xác định kết quả bằng bản ghi cuối của Request ID tương ứng và việc client có nhận nội dung đầy đủ hay không. Nếu nghi bị trừ phí trùng, cung cấp các Request ID và thời gian liên quan.
+
+## Thông tin cần gửi hỗ trợ
+
+```text
+Thời điểm, bao gồm múi giờ:
+Request ID:
+Mô hình:
+Endpoint yêu cầu:
+Phiên bản client hoặc SDK:
+Streaming / ảnh / tool call:
+Nguyên văn lỗi hoặc ảnh chụp:
+Lỗi ngẫu nhiên hay liên tục:
+```
+
+Không gửi API Key đầy đủ, mật khẩu, dữ liệu riêng tư hoặc toàn bộ nội dung công việc. Nếu cần nhận diện key, chỉ cung cấp tối đa sáu ký tự cuối.

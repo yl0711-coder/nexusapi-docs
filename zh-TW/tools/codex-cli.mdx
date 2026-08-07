@@ -9,18 +9,28 @@ description: "安裝 Codex CLI，並把 NexusAPI 設為自訂 Responses Provider
 
 選擇一種官方方式即可：
 
+### Windows PowerShell
+
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
+
+### macOS、Linux 或 WSL
 
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
-已安裝 Node.js 時可使用：
+### 已安裝 Node.js 的使用者
 
 ```bash
 npm install -g @openai/codex
+codex --version
+```
+
+安裝完成後亦可在新終端單獨確認版本：
+
+```bash
 codex --version
 ```
 
@@ -54,13 +64,13 @@ wire_api = "responses"
 
 ## 4. 設定環境變數
 
-Windows PowerShell：
+### Windows PowerShell
 
 ```powershell
 setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
 ```
 
-macOS、Linux 或 WSL：
+### macOS、Linux 或 WSL
 
 ```bash
 export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
@@ -70,4 +80,33 @@ Windows 的 `setx` 需要新開終端才生效；臨時 `export` 僅對目前 Sh
 
 ## 5. 驗證與排查
 
-執行 `codex` 後，先提出「說明目前儲存庫結構，不要修改檔案」之類的唯讀任務。若失敗，確認新終端已取得 Key、Key／群組／模型 ID 正確，並保留錯誤及 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。
+進入專案目錄後啟動：
+
+```bash
+cd your-project-folder
+codex
+```
+
+首次請使用不修改檔案的任務：
+
+```text
+請說明目前儲存庫的目錄結構，不要修改檔案。
+```
+
+然後檢查控制台使用紀錄。若失敗，確認新終端已取得 Key、Key／群組／模型 ID 正確，並保留錯誤及 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。
+
+## 問題排查
+
+1. 確認 `NEXUSAPI_API_KEY` 已在新開的終端中生效。
+2. 確認 Key 已啟用、帳戶額度足夠且所屬群組包含選定模型。
+3. 從模型廣場或 `/v1/models` 重新複製完全一致的模型 ID。
+4. 持續錯誤時保存原始錯誤與 Request ID，並依[問題自查](/zh-TW/faq/self-check)處理。
+
+## VS Code / Cursor
+
+可從擴充功能市集安裝由 [OpenAI 發布的 Codex 擴充功能](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。它會共用使用者層級的 Codex 設定；不要在 VS Code 寫入舊版的 `chatgpt.apiBase` 或 `chatgpt.config` 欄位。
+
+## 官方來源
+
+- [OpenAI Codex CLI 安裝說明](https://github.com/openai/codex)
+- [OpenAI Codex 自訂 Provider 設定](https://learn.chatgpt.com/docs/config-file/config-advanced)

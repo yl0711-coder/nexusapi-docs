@@ -20,6 +20,8 @@ Nhóm xác định kênh, mô hình và quy tắc giá mà key có thể dùng. 
 
 Nên dùng key riêng cho production, thử nghiệm và từng trung tâm chi phí, đặt tên rõ ràng và giới hạn phù hợp. Trước khi triển khai, gọi `/v1/models` để xem chính xác mô hình key đó truy cập được.
 
+![Chọn nhóm token khi tạo token NexusAPI](/images/nexusapi/console-create-token-vi.png)
+
 ## Chi phí được tạo thành như thế nào
 
 Tùy mô hình, token đầu vào, token đầu ra, đọc cache hoặc các đơn vị khác được nêu rõ có thể được tính riêng. Giá cuối cùng là giá trị trong nhật ký sử dụng áp dụng theo quy tắc hiện tại của Chợ mô hình.
@@ -31,3 +33,8 @@ Tùy mô hình, token đầu vào, token đầu ra, đọc cache hoặc các đ�
 | Trạng thái “thành công” trong client | Nhật ký có Request ID, token và chi phí |
 
 Khả năng dùng còn phụ thuộc giao thức: SDK chung thường dùng Chat Completions, Claude Code dùng Messages, Codex CLI dùng Responses. Hãy xem [ma trận khả năng](/vi/developer/capability-matrix) trước.
+
+## Kiểm tra mức sử dụng
+
+- Có thể xem từng yêu cầu và khoản phí trong nhật ký sử dụng của console.
+- Ý nghĩa các trường token, cache và bản ghi lỗi được giải thích trong [mức sử dụng và thanh toán](/vi/billing/usage-and-billing).

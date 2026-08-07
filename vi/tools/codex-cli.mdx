@@ -9,18 +9,28 @@ Các lệnh và trường `config.toml` dựa trên [kho Codex chính thức](ht
 
 Chọn một cách chính thức:
 
+### Windows PowerShell
+
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
+
+### macOS, Linux hoặc WSL
 
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
-Hoặc khi đã có Node.js:
+### Khi đã cài Node.js
 
 ```bash
 npm install -g @openai/codex
+codex --version
+```
+
+Sau khi cài, hãy kiểm tra riêng phiên bản trong terminal mới:
+
+```bash
 codex --version
 ```
 
@@ -50,9 +60,13 @@ Không lưu key thật trong tệp này hoặc `~/.codex/auth.json`, vì đó l�
 
 ## 4. Đặt biến môi trường
 
+### Windows PowerShell
+
 ```powershell
 setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
 ```
+
+### macOS, Linux hoặc WSL
 
 ```bash
 export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
@@ -62,4 +76,33 @@ Sau `setx` phải mở terminal mới. `export` chỉ hiệu lực trong shell h
 
 ## 5. Kiểm tra
 
-Chạy `codex` trong dự án, trước hết yêu cầu một tác vụ chỉ đọc như: “Giải thích cấu trúc repository, không sửa tệp.” Nếu lỗi, kiểm tra terminal mới, key, nhóm và model ID, lưu Request ID rồi làm [tự kiểm tra](/vi/faq/self-check).
+Trong thư mục dự án, chạy:
+
+```bash
+cd your-project-folder
+codex
+```
+
+Với lần đầu, hãy dùng tác vụ chỉ đọc:
+
+```text
+Giải thích cấu trúc repository, không sửa tệp.
+```
+
+Sau đó kiểm tra nhật ký sử dụng của console. Nếu lỗi, kiểm tra terminal mới, key, nhóm và model ID, lưu Request ID rồi làm [tự kiểm tra](/vi/faq/self-check).
+
+## Khắc phục sự cố
+
+1. Dùng terminal được mở sau khi đặt `NEXUSAPI_API_KEY`.
+2. Xác nhận key đang bật, tài khoản có credit và nhóm chứa mô hình đã chọn.
+3. Sao chép lại model ID chính xác từ Chợ mô hình hoặc `/v1/models`.
+4. Lưu nguyên văn lỗi và Request ID, rồi làm [tự kiểm tra](/vi/faq/self-check).
+
+## VS Code / Cursor
+
+Có thể cài [tiện ích Codex do OpenAI phát hành](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt) từ marketplace. Tiện ích dùng chung cấu hình Codex cấp người dùng; không thêm các thiết lập cũ `chatgpt.apiBase` hoặc `chatgpt.config` vào VS Code.
+
+## Nguồn chính thức
+
+- [Cài đặt OpenAI Codex CLI](https://github.com/openai/codex)
+- [Cấu hình custom provider OpenAI Codex](https://learn.chatgpt.com/docs/config-file/config-advanced)

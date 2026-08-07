@@ -5,6 +5,13 @@ description: "Claude Code をインストールし、Anthropic ネイティブ�
 
 Claude Code は Anthropic のネイティブ Messages 設定を使います。NexusAPI の Base URL は `https://nexusapi.link` で、**`/v1` は追加しません**。
 
+## システム要件
+
+- macOS 13+、Ubuntu 20.04+、Debian 10+、または Windows 10 1809+。
+- 4 GB 以上のメモリと x64 または ARM64 CPU。
+- NexusAPI に接続できるネットワーク。
+- Windows で Git Bash を使う場合、[Git for Windows](https://git-scm.com/install/windows)は任意です。
+
 ## 1. Claude Code をインストールする
 
 公式インストーラーを使ってください。
@@ -19,6 +26,18 @@ irm https://claude.ai/install.ps1 | iex
 
 Windows では `winget install Anthropic.ClaudeCode`、macOS では `brew install --cask claude-code` も使えます。確認コマンド：
 
+### Windows WinGet
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### macOS Homebrew
+
+```bash
+brew install --cask claude-code
+```
+
 ```bash
 claude --version
 claude doctor
@@ -28,7 +47,13 @@ claude doctor
 
 コンソールの **トークン管理 → トークンを追加** で、対象 Claude モデルを含むグループを選び、上限を設定します。モデル名だけで判断せず、マーケットプレイスまたは[対応マトリクス](/ja/developer/capability-matrix)で確認してください。
 
+### 安全な Key 設定を選ぶ
+
+プロジェクトごとに分かる名前と適切な上限を使います。モデル制限や IP 許可リストは影響を理解した場合だけ有効にし、短期テスト Key には有効期限を設定します。
+
 ## 3. ユーザー設定を作成する
+
+### 設定ディレクトリを確認する
 
 | OS | パス |
 | --- | --- |
@@ -41,6 +66,15 @@ macOS、Linux、WSL、Git Bash では以下を実行します。
 mkdir -p ~/.claude
 touch ~/.claude/settings.json
 ```
+
+Windows PowerShell では、先にフォルダを作成して設定ファイルを開きます。
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+notepad "$env:USERPROFILE\.claude\settings.json"
+```
+
+### 環境変数を設定する
 
 既存設定を上書きせず、次の `env` を統合します。
 
@@ -55,15 +89,56 @@ touch ~/.claude/settings.json
 
 ユーザーディレクトリに保存し、プロジェクトリポジトリには置かないでください。
 
+<Tip>
+**実験的なフィールドを無効にするのは、互換性エラーが出た場合だけです**
+
+エラーに `context_management` または未対応の実験的入力が明記された場合だけ、`env` に `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` を追加して再試行してください。一部のプレビュー機能を無効にする設定であり、全ユーザーの既定値ではありません。
+</Tip>
+
+```bash
+vim ~/.claude/settings.json
+```
+
 ## 4. 起動と確認
 
-新しいターミナルで `claude` を実行し、`/status` で **Anthropic base URL** が `https://nexusapi.link` であることを確認してから、短い質問を送ります。
+新しいターミナルでプロジェクトへ移動し、次を実行します。
+
+```bash
+cd your-project-folder
+```
+
+```bash
+claude
+```
+
+`/status` で **Anthropic base URL** が `https://nexusapi.link`、認証元が `ANTHROPIC_AUTH_TOKEN` であることを確認してから、短い質問を送ります。初回起動時は、テーマ、安全性、ターミナル、作業ディレクトリの信頼設定に従います。信頼できるプロジェクトだけを許可してください。
 
 ## よくある問題
 
 ### `Invalid API Key · Please run /login`
 
 二つの環境値、Key の有効状態、ターミナルの再起動を確認します。Claude の内部ログイン状態ファイルを直接変更しないでください。
+
+### Anthropic サービスに接続できない
+
+`claude doctor` を実行し、`settings.json` の JSON 構文と二つの環境変数を確認してから、ターミナルを開き直します。続く場合は、エラー本文、`claude --version`、`claude doctor` の出力を保存してください。
+
+```text
+Unable to connect to Anthropic services
+Failed to connect to api.anthropic.com: ERR BAD REQUEST
+```
+
+`.claude.json` の内部状態フィールドをスクリプトで上書きしないでください。バージョンで変わる可能性があり、既存のログイン状態や設定が失われるおそれがあります。
+
+### PowerShell がインストーラーをブロックする
+
+まず WinGet または Windows CMD から公式インストーラーを使用してください。ローカルの実行ポリシーだけが原因であることを確認した場合は、現在のユーザーに限って変更します。
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+クライアントのインストールだけを目的に、コンピューター全体のポリシーを変更しないでください。
 
 ### `fetch failed`
 
@@ -75,6 +150,20 @@ touch ~/.claude/settings.json
 ### `offline` と表示される
 
 補助機能が別サービスを確認している場合があります。`/status` と短いモデルリクエストで実際のゲートウェイ呼び出しを確認してください。
+
+### 通常のチャットは動くが WebFetch が失敗する
+
+WebFetch は別のドメイン安全性チェックや外部ネットワーク接続を使うことがあります。短いテキスト会話が成功するなら NexusAPI Base URL は変更せず、Claude Code のネットワーク規則に従って WebFetch のエラーを調べてください。
+
+### API リクエストが失敗する
+
+現在のセッションを終了し、新しい `claude` セッションで短いリクエストを一度だけ試します。続く場合は Request ID を保存して、[自己確認](/ja/faq/self-check)を確認してください。
+
+### ブラウザでのログインに失敗する
+
+該当サイトの Cookie だけを消去してから再試行してください。ブラウザのログイン問題だけで API Key 設定が誤っているとは判断できません。
+
+## 公式リファレンス
 
 - [公式インストールガイド](https://code.claude.com/docs/en/installation)
 - [環境変数](https://code.claude.com/docs/en/env-vars)

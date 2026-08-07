@@ -41,3 +41,12 @@ curl 'https://nexusapi.link/v1/models' \
 這個請求能確認 Key 是否有效，以及目前能看見哪些模型。實際模型與協定的選擇請看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)。
 
 若收到 401、403 或模型不可用，先確認 Key 狀態、群組、額度、IP 限制與 `Authorization: Bearer ...` 格式；保留 Request ID 後再依[問題自查](/zh-TW/faq/self-check)處理。
+
+## API Key 與其他憑證
+
+| 憑證 | 用途 |
+| --- | --- |
+| API Key | 呼叫 Chat Completions、Responses、Messages、Images 與 `/v1/models` 等模型 API。 |
+| 控制台登入狀態／Cookie | 僅供瀏覽器登入控制台，不能作為模型 API 的呼叫憑證。 |
+
+請勿把任何憑證放進 URL 查詢參數，也不要向客服傳送完整憑證。

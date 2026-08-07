@@ -23,7 +23,7 @@ npx mint@latest dev
 npx mint@latest broken-links
 ~~~
 
-检查导航、七种语言页面是否齐全、Frontmatter 和站内链接：
+检查导航、七种语言页面是否齐全、Frontmatter、站内链接，以及译文是否保留原文的教程结构：
 
 ~~~bash
 node scripts/check-docs.mjs
@@ -36,7 +36,8 @@ node scripts/check-docs.mjs
 1. 检查导航指向的页面是否存在；
 2. 检查七种语言的路由是否一一对应；
 3. 检查每页的 `title`、`description`、站内链接和本地教程截图；
-4. 运行 Mintlify 的 `broken-links` 检查。
+4. 检查每个译文页的章节、代码示例和教程截图数量不低于简体中文源页，防止后续提交把完整教程缩成摘要；
+5. 运行 Mintlify 的 `broken-links` 检查。
 
 工作流会在推送 `main` 和创建/更新 Pull Request 时运行。若要让不通过的检查**无法合并**，需要在 GitHub 仓库的 **Settings → Branches → Add branch protection rule** 中为 `main` 勾选 **Require a pull request before merging** 与 **Require status checks to pass before merging**，并选择 `Validate documentation`。
 

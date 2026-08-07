@@ -9,18 +9,28 @@ description: "Codex CLI をインストールし、NexusAPI をカスタム Resp
 
 公式の方法を一つ選びます。
 
+### Windows PowerShell
+
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
+
+### macOS、Linux、WSL
 
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
-Node.js がある場合：
+### Node.js がすでにある場合
 
 ```bash
 npm install -g @openai/codex
+codex --version
+```
+
+インストール後は新しいターミナルでバージョンを個別に確認できます。
+
+```bash
 codex --version
 ```
 
@@ -50,9 +60,13 @@ wire_api = "responses"
 
 ## 4. 環境変数を設定する
 
+### Windows PowerShell
+
 ```powershell
 setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
 ```
+
+### macOS、Linux、WSL
 
 ```bash
 export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
@@ -62,4 +76,33 @@ export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
 
 ## 5. 確認
 
-プロジェクトで `codex` を起動し、まず「リポジトリ構成を説明し、ファイルは変更しないでください」のような読み取り専用タスクを送ります。失敗時は Key、グループ、モデル ID、新しいターミナルを確認し、Request ID を保存して[自己確認](/ja/faq/self-check)を行います。
+プロジェクトディレクトリで次を実行します。
+
+```bash
+cd your-project-folder
+codex
+```
+
+最初はファイルを変更しないタスクを送ります。
+
+```text
+リポジトリの構成を説明し、ファイルは変更しないでください。
+```
+
+その後、コンソールの利用ログを確認します。失敗時は Key、グループ、モデル ID、新しいターミナルを確認し、Request ID を保存して[自己確認](/ja/faq/self-check)を行います。
+
+## トラブルシューティング
+
+1. `NEXUSAPI_API_KEY` を設定した後に開いた新しいターミナルを使用します。
+2. Key が有効で、アカウントのクレジットがあり、グループに選択モデルがあることを確認します。
+3. モデルマーケットプレイスまたは `/v1/models` から正確な ID をコピーし直します。
+4. エラー本文と Request ID を保存して、[自己確認](/ja/faq/self-check)を確認します。
+
+## VS Code / Cursor
+
+拡張機能マーケットプレイスから [OpenAI 公開の Codex 拡張機能](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)をインストールできます。ユーザーレベルの Codex 設定を共用するため、VS Code に旧式の `chatgpt.apiBase` や `chatgpt.config` を追加しないでください。
+
+## 公式ソース
+
+- [OpenAI Codex CLI のインストール](https://github.com/openai/codex)
+- [OpenAI Codex のカスタム Provider 設定](https://learn.chatgpt.com/docs/config-file/config-advanced)

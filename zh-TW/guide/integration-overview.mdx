@@ -3,44 +3,93 @@ title: "接入方式總覽"
 description: "依照用戶端與模型能力，選擇正確的 NexusAPI 位址與協定。"
 ---
 
-NexusAPI 可供自建程式、OpenAI 相容用戶端與常用程式設計工具使用。不同用戶端會自行拼接路徑，且使用的協定不完全相同；請先依使用情境選擇，不要把一個工具的設定直接複製到另一個工具。
+NexusAPI 支援常用 AI 用戶端與 OpenAI 風格 API。不同工具可能會自行補上路徑，因此請依實際使用方式填寫位址；不要把某一個工具的整段設定直接複製到另一個工具。
 
-## 接入前的三項確認
+## 開始前準備
 
-1. 在控制台建立 API Key，並設定合理額度。
-2. 確認該 Key 所屬群組包含目標模型。
-3. 從模型廣場或 `/v1/models` 複製準確的模型 ID。
+不論採用哪一種接入方式，請先確認：
 
-## 依情境選擇入口
+1. 已在控制台建立 API Key。
+2. 該 API Key 所屬群組包含目標模型。
+3. 已從模型廣場複製正確的模型 ID。
+4. 已確認目標模型支援的介面類型，並以 HTTPS 位址發出請求。
 
-| 你要做什麼 | 建議文件 |
+## 常見使用方式
+
+| 使用方式 | 建議閱讀 |
 | --- | --- |
-| 自建應用、SDK、cURL 或自動化腳本 | [5 分鐘快速開始](/zh-TW/guide/quick-start) |
-| 使用 Claude Code | [Claude Code 教學](/zh-TW/tools/claude-code) |
-| 使用 Codex CLI | [Codex CLI 教學](/zh-TW/tools/codex-cli) |
-| 管理多個 CLI Provider | [CC Switch 教學](/zh-TW/tools/cc-switch) |
-| 在 VS Code 或 Cursor 中操作 Claude Code | [VS Code / Cursor 教學](/zh-TW/tools/cursor-vscode) |
+| 自建程式或指令碼 | [5 分鐘快速開始](/zh-TW/guide/quick-start) |
+| Claude Code | [Claude Code 設定教學](/zh-TW/tools/claude-code) |
+| Codex CLI | [Codex CLI 設定教學](/zh-TW/tools/codex-cli) |
+| CC Switch | [CC Switch 設定教學](/zh-TW/tools/cc-switch) |
+| VS Code / Cursor | [編輯器外掛教學](/zh-TW/tools/cursor-vscode) |
+| 圖片生成 | [圖片模型使用說明](/zh-TW/guide/image-generation) |
 
 ## 位址與協定對照
 
-| 情境 | Base URL | 起始協定 | 說明 |
+| 情境 | 填寫位址 | 主要協定 | 注意事項 |
 | --- | --- | --- | --- |
-| OpenAI 相容 SDK 或一般程式 | `https://nexusapi.link/v1` | Chat Completions | SDK 通常會自行加上 `/chat/completions`。 |
-| Claude Code | `https://nexusapi.link` | Anthropic Messages | Base URL 不要再加 `/v1`。 |
-| Codex CLI | `https://nexusapi.link/v1` | Responses | 使用 Codex 的自訂 Provider 設定。 |
-| 圖片模型 | `https://nexusapi.link/v1` | Images | 僅限模型廣場明示支援圖片生成的模型。 |
+| OpenAI SDK／一般文字程式 | `https://nexusapi.link/v1` | Chat Completions | 請求路徑由 SDK 或程式補上。 |
+| Codex CLI | `https://nexusapi.link/v1` | Responses | 使用 Codex 教學中的 Provider 設定。 |
+| Claude Code | `https://nexusapi.link` | Anthropic Messages | 請勿在設定位址後重複加上 `/v1`。 |
+| CC Switch | 依 Provider 類型填寫 | 取決於目標工具 | Claude 與 Codex 的位址規則不同。 |
+| 圖片模型 | `https://nexusapi.link/v1` | Images | 僅使用模型廣場標示支援圖片生成的模型。 |
+
+此表用於協助選擇接入方式。請先查看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)確認模型和協定；欄位級參數與回應格式請看 [Chat Completions 介面](/zh-TW/developer/openai-compatible)。特定 Key 與模型的即時可用性仍以模型廣場為準。
+
+## 先選擇正確的協定
+
+相同 Base URL 不代表所有模型都接受同一種請求格式。請依使用情境選擇：
+
+| 你要做什麼 | 建議端點 | 使用時機 |
+| --- | --- | --- |
+| 一般文字、聊天或串流輸出 | `/v1/chat/completions` | 模型可透過 OpenAI 相容路由使用時。 |
+| Codex CLI 和相符的 Provider | `/v1/responses` | 用戶端與所選模型均已設定為 Responses 時。 |
+| Claude Code 或原生 Anthropic 用戶端 | `/v1/messages` | 模型可透過 Anthropic 路由使用時。 |
+| 圖片生成 | `/v1/images/generations` | 模型明確標示支援圖片生成時。 |
 
 <Warning>
-**模型可見不代表所有協定都可用**
+**不要把 Responses 當成 Claude 的通用替代方案**
 
-請先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)。它說明目前對外公開的端點，以及為何不能把底層軟體的每一條路由當作站點承諾。
+若目前 Anthropic 類型 Claude 渠道透過 `/v1/responses` 回傳 `status_code=500, not implemented`，自建程式請改用 `/v1/chat/completions`；Claude Code 則維持原生 Messages 設定。重送相同請求不會修正協定不相容的問題。
 </Warning>
 
-## 最小驗證流程
+## 為什麼位址看起來可能不同
 
-1. 以目前 Key 呼叫 `GET /v1/models`。
-2. 選取回傳且符合協定的模型 ID。
-3. 用一段簡短文字做一次測試。
-4. 在控制台使用紀錄確認請求與花費。
+通用 OpenAI 風格請求通常使用：
 
-若失敗，先保留完整錯誤與 Request ID，再依[問題自查](/zh-TW/faq/self-check)排查。不要高頻重送相同任務。
+```text
+https://nexusapi.link/v1
+```
+
+有些用戶端要求填寫不含 `/v1` 的站點位址，或會自行補上 `/chat/completions`、`/responses`、`/messages` 等路徑。請以相應工具教學為準；圖片模型則依照[圖片模型使用說明](/zh-TW/guide/image-generation)呼叫。
+
+<Warning>
+**避免重複路徑**
+
+如果用戶端本身會補上 `/v1`，手動填入後可能形成 `/v1/v1/...` 並造成 404。遇到 404 時，先檢查用戶端實際送出的請求位址。
+</Warning>
+
+## 不要混用用戶端設定與通用 API
+
+CLI 工具、編輯器外掛與自建程式可能使用不同協定和設定檔。即使模型名稱相同，也不要把某個工具的整段設定直接套用到另一個工具。
+
+- **設定 Codex CLI：**請閱讀 Codex 教學，使用 Responses 相關設定。
+- **設定 Claude Code：**請閱讀 Claude Code 教學，使用 Anthropic Messages 相關設定。
+- **自行開發文字程式：**除非 SDK 明確要求其他協定，否則先從 Chat Completions 開始。
+- **呼叫圖片：**使用圖片端點，不要把圖片生成參數傳給文字聊天端點。
+- **不確定時：**先確認用戶端名稱，並檢查其實際送出的請求路徑。
+
+## API 參考文件
+
+先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)，確認目標模型應使用的協定；Chat Completions 的最小請求見[Chat Completions 介面](/zh-TW/developer/openai-compatible)。
+
+本說明中心負責解釋「如何選擇與設定」，並提供可直接驗證的最小請求。選用欄位仍須依使用的用戶端協定及模型廣場目前顯示的能力決定。
+
+## 如何確認設定成功
+
+- 用戶端可正常取得完整回應。
+- 控制台使用紀錄出現對應請求。
+- 紀錄中的模型、群組與扣費符合預期。
+
+若呼叫失敗，請保留錯誤原文與 Request ID，接著進入[問題自查](/zh-TW/faq/self-check)。

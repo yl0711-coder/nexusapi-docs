@@ -5,6 +5,13 @@ description: "Installez Claude Code et connectez-le à NexusAPI avec la configur
 
 Claude Code utilise le protocole Messages Anthropic. Sa Base URL NexusAPI est donc `https://nexusapi.link` : **n'ajoutez pas `/v1`**.
 
+## Prérequis système
+
+- macOS 13+, Ubuntu 20.04+, Debian 10+ ou Windows 10 version 1809+ ;
+- au moins 4 Go de mémoire et un processeur x64 ou ARM64 ;
+- un réseau pouvant joindre NexusAPI ;
+- sous Windows, [Git for Windows](https://git-scm.com/install/windows) est facultatif si vous utilisez Git Bash.
+
 ## 1. Installer Claude Code
 
 Utilisez l'installeur officiel :
@@ -19,6 +26,18 @@ irm https://claude.ai/install.ps1 | iex
 
 Windows peut aussi utiliser `winget install Anthropic.ClaudeCode`, et macOS `brew install --cask claude-code`. Vérifiez ensuite :
 
+### Windows avec WinGet
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### macOS avec Homebrew
+
+```bash
+brew install --cask claude-code
+```
+
 ```bash
 claude --version
 claude doctor
@@ -28,7 +47,13 @@ claude doctor
 
 Dans **Gestion des jetons → Ajouter un jeton**, choisissez un groupe contenant le modèle Claude voulu et définissez une limite. Vérifiez le protocole dans le catalogue ou la [matrice des capacités](/fr/developer/capability-matrix).
 
+### Choisir des réglages de clé sûrs
+
+Utilisez un nom propre au projet et une limite adaptée. Activez une restriction de modèle ou une liste d’IP seulement si vous en comprenez les effets ; donnez une expiration aux clés de test temporaires.
+
 ## 3. Configurer le compte utilisateur
+
+### Trouver le dossier de configuration
 
 | Système | Fichier |
 | --- | --- |
@@ -41,6 +66,15 @@ Sur macOS, Linux, WSL ou Git Bash :
 mkdir -p ~/.claude
 touch ~/.claude/settings.json
 ```
+
+Sous Windows PowerShell, créez d’abord le dossier puis ouvrez le fichier :
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+notepad "$env:USERPROFILE\.claude\settings.json"
+```
+
+### Définir les variables d’environnement
 
 Fusionnez ces valeurs dans `env` sans écraser vos autres réglages :
 
@@ -55,15 +89,56 @@ Fusionnez ces valeurs dans `env` sans écraser vos autres réglages :
 
 Conservez ce fichier dans le profil utilisateur, jamais dans le dépôt du projet.
 
+<Tip>
+**Désactivez les champs expérimentaux seulement si le message le demande**
+
+Si l’erreur mentionne explicitement `context_management` ou des entrées expérimentales non prises en charge, ajoutez `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` à `env` et réessayez. Ce réglage désactive certains champs de préversion : ce n’est pas une configuration par défaut.
+</Tip>
+
+```bash
+vim ~/.claude/settings.json
+```
+
 ## 4. Vérifier
 
-Ouvrez un nouveau terminal, lancez `claude`, puis exécutez `/status`. Vérifiez que **Anthropic base URL** vaut `https://nexusapi.link` et envoyez une courte question.
+Ouvrez un nouveau terminal, placez-vous dans le projet et exécutez :
+
+```bash
+cd your-project-folder
+```
+
+```bash
+claude
+```
+
+Exécutez ensuite `/status`. Vérifiez que **Anthropic base URL** vaut `https://nexusapi.link` et que l’authentification vient de `ANTHROPIC_AUTH_TOKEN`, puis envoyez une courte question. Lors du premier lancement, ne faites confiance qu’aux répertoires de projet que vous reconnaissez.
 
 ## Problèmes fréquents
 
 ### `Invalid API Key · Please run /login`
 
 Vérifiez les deux variables, le statut de la clé et le redémarrage du terminal. Ne modifiez pas les fichiers internes d'état de connexion de Claude.
+
+### Impossible de joindre les services Anthropic
+
+Lancez `claude doctor`, vérifiez la syntaxe JSON de `settings.json`, puis rouvrez le terminal. Si le problème persiste, gardez le texte d’erreur, `claude --version` et la sortie de `claude doctor`.
+
+```text
+Unable to connect to Anthropic services
+Failed to connect to api.anthropic.com: ERR BAD REQUEST
+```
+
+N’écrasez pas par script les champs internes de `.claude.json` : ils peuvent changer avec les versions et l’écrasement peut supprimer un état de connexion ou d’autres réglages.
+
+### PowerShell bloque l’installateur
+
+Essayez d’abord WinGet ou l’installateur officiel depuis Windows CMD. Si vous avez vérifié que seul le réglage local d’exécution est en cause, modifiez uniquement la portée de l’utilisateur courant :
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+Ne modifiez pas une stratégie globale de la machine uniquement pour installer un client.
 
 ### `fetch failed`
 
@@ -75,6 +150,20 @@ Vérifiez les deux variables, le statut de la clé et le redémarrage du termina
 ### État `offline`
 
 Certaines fonctions auxiliaires testent des services séparés. Vérifiez l'URL avec `/status` et une courte requête de modèle avant de conclure à une panne NexusAPI.
+
+### WebFetch échoue mais le chat normal fonctionne
+
+WebFetch peut utiliser des contrôles de domaine et un accès réseau externes distincts. Si une requête texte courte fonctionne, laissez la Base URL NexusAPI inchangée et examinez l’erreur WebFetch selon les règles réseau propres à Claude Code.
+
+### Un appel API échoue
+
+Fermez la session, ouvrez une nouvelle session `claude` et testez une seule courte requête. Si l’échec continue, conservez le Request ID et utilisez l’[auto-vérification](/fr/faq/self-check).
+
+### Échec de connexion dans le navigateur
+
+Supprimez seulement les cookies du site concerné, puis réessayez. Un problème de connexion dans le navigateur ne prouve pas que la clé API est mal configurée.
+
+## Références officielles
 
 - [Installation officielle](https://code.claude.com/docs/en/installation)
 - [Variables d'environnement](https://code.claude.com/docs/en/env-vars)

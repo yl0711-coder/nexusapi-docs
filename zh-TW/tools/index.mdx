@@ -29,6 +29,12 @@ description: "選擇正確的 NexusAPI 用戶端，避免混用協定、位址�
 這類腳本可能改寫本機設定、寫入憑證或安裝第三方程式。只使用官方來源，執行前閱讀內容，且絕不把 API Key 貼進不可信的腳本。
 </Warning>
 
+## 為什麼每個工具的位址不同
+
+有些工具需要含 `/v1` 的 API 位址，有些會自行補上路徑，另一些使用原生 Messages 或 Responses 協定。
+
+請使用各教學提供的位址；不要把 Claude Code、Codex CLI 與一般 OpenAI SDK 的設定互相複製。詳細原理請見[接入方式總覽](/zh-TW/guide/integration-overview)。
+
 ## 協定與位址速查
 
 | 用戶端類型 | 常用 Base URL | 起始協定 |
@@ -38,3 +44,9 @@ description: "選擇正確的 NexusAPI 用戶端，避免混用協定、位址�
 | Codex CLI | `https://nexusapi.link/v1` | Responses Provider |
 
 實際可用協定仍由模型與令牌群組決定；請先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)。
+
+## 教學裡沒有你的工具
+
+若某個用戶端支援自訂 OpenAI 相容 Base URL，可先參考[5 分鐘快速開始](/zh-TW/guide/quick-start)與該用戶端的官方文件。
+
+設定前請確認它是否支援自訂 Base URL、使用 Chat Completions 還是 Responses、會否自動補上 `/v1`，以及能否手動填寫模型 ID。未經驗證的用戶端不會只為增加頁面數量而列入正式教學。

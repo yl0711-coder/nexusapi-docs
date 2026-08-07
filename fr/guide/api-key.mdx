@@ -41,3 +41,12 @@ curl 'https://nexusapi.link/v1/models' \
 Ce test confirme que la clé est reconnue et montre les modèles visibles. Pour choisir l'API correcte, consultez la [matrice des capacités](/fr/developer/capability-matrix).
 
 Pour une erreur 401, 403 ou de modèle indisponible, vérifiez l'état de la clé, le groupe, le crédit, les restrictions IP et le préfixe `Bearer`, puis conservez le Request ID.
+
+## Clé API et autres identifiants
+
+| Identifiant | Usage |
+| --- | --- |
+| Clé API | Appelle les API de modèles : Chat Completions, Responses, Messages, Images et `/v1/models`. |
+| Session / cookie de console | Sert uniquement à ouvrir la console dans le navigateur ; ce n’est pas un identifiant d’API de modèle. |
+
+Ne placez jamais un identifiant dans les paramètres de l’URL et ne transmettez jamais sa valeur complète au support.

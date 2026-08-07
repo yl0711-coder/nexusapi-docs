@@ -18,6 +18,18 @@ Tổng quan và nhật ký trong console dùng để đối soát yêu cầu, ch
 | Chi phí | Số tiền được ghi cho yêu cầu. |
 | Request ID | Mã duy nhất để tìm đúng yêu cầu. |
 
+## Đầu vào, đầu ra và cache
+
+- **Token đầu vào** gồm prompt, ngữ cảnh hội thoại và một phần thông tin công cụ.
+- **Token đầu ra** là nội dung do mô hình tạo.
+- **Đọc cache** là token đọc từ cache ngữ cảnh; giá có thể khác token đầu vào thông thường.
+
+Khả năng hỗ trợ cache và cách tính giá tùy theo mô hình. Hãy xem thông tin mới nhất trong [Chợ mô hình](https://nexusapi.link/pricing).
+
+## Vì sao nhật ký có thể xuất hiện chậm
+
+Có thể có một khoảng trễ ngắn giữa lúc yêu cầu hoàn tất, hệ thống ghi nhận chi phí và console trả kết quả. Nếu một yêu cầu đã xong chưa hiện ngay, hãy làm mới sau; không gửi lại tác vụ chỉ để tạo thêm một bản ghi.
+
 ## Yêu cầu lỗi có luôn miễn phí không?
 
 Không. Lỗi không tạo kết quả tính phí thường là 0, nhưng upstream có thể đã xử lý, stream có thể bị ngắt, hoặc client có thể gửi một yêu cầu mới. Luôn đối chiếu **cùng Request ID, thời điểm và bản ghi cuối cùng**; không chỉ dựa vào màn hình client có nhận được nội dung hay không.
@@ -30,3 +42,9 @@ Không. Lỗi không tạo kết quả tính phí thường là 0, nhưng upstre
 4. Giữ dữ liệu gốc và khoảng thời gian truy vấn trước khi tổng hợp.
 
 Nếu nghi ngờ bị trừ phí bất thường, cung cấp Request ID, thời gian/múi giờ, mô hình, kết quả cuối cùng từ client và lỗi gốc. Không cung cấp key đầy đủ hoặc toàn bộ hội thoại riêng tư.
+
+## Xem hoặc xuất mức sử dụng
+
+- Dùng phần tổng quan và nhật ký của console để kiểm tra hằng ngày.
+- Lọc chi tiết theo thời gian, mô hình và nhóm trước khi xuất hoặc tổng hợp.
+- Giữ Request ID trong dữ liệu xuất để có thể truy vết bản ghi bất thường sau này.

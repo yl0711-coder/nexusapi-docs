@@ -5,6 +5,13 @@ description: "Cài Claude Code và kết nối NexusAPI bằng cấu hình Anthr
 
 Claude Code dùng Anthropic Messages gốc. Base URL NexusAPI là `https://nexusapi.link`; **không thêm `/v1`**.
 
+## Yêu cầu hệ thống
+
+- macOS 13+, Ubuntu 20.04+, Debian 10+ hoặc Windows 10 phiên bản 1809+;
+- ít nhất 4 GB bộ nhớ và CPU x64 hoặc ARM64;
+- mạng có thể kết nối NexusAPI;
+- khi dùng Git Bash trên Windows, có thể cài [Git for Windows](https://git-scm.com/install/windows).
+
 ## 1. Cài Claude Code
 
 Dùng trình cài chính thức:
@@ -19,6 +26,18 @@ irm https://claude.ai/install.ps1 | iex
 
 Có thể dùng `winget install Anthropic.ClaudeCode` trên Windows hoặc `brew install --cask claude-code` trên macOS. Kiểm tra cài đặt:
 
+### Windows WinGet
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### macOS Homebrew
+
+```bash
+brew install --cask claude-code
+```
+
 ```bash
 claude --version
 claude doctor
@@ -28,7 +47,13 @@ claude doctor
 
 Trong **Quản lý token → Thêm token**, chọn nhóm có mô hình Claude cần dùng và đặt hạn mức. Đừng chỉ dựa vào tên mô hình; xác nhận ở Chợ mô hình hoặc [ma trận khả năng](/vi/developer/capability-matrix).
 
+### Chọn cài đặt key an toàn
+
+Dùng tên dễ nhận biết theo dự án và hạn mức phù hợp. Chỉ bật hạn chế model hoặc IP allowlist khi hiểu rõ ảnh hưởng; đặt ngày hết hạn cho key thử nghiệm ngắn hạn.
+
 ## 3. Tạo cấu hình cấp người dùng
+
+### Xác định thư mục cấu hình
 
 | Hệ thống | Đường dẫn |
 | --- | --- |
@@ -41,6 +66,15 @@ Trên macOS, Linux, WSL hoặc Git Bash:
 mkdir -p ~/.claude
 touch ~/.claude/settings.json
 ```
+
+Trên Windows PowerShell, hãy tạo thư mục trước rồi mở tệp cấu hình:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+notepad "$env:USERPROFILE\.claude\settings.json"
+```
+
+### Đặt biến môi trường
 
 Gộp các giá trị sau vào `env` hiện có, không ghi đè MCP hoặc quyền khác:
 
@@ -55,15 +89,56 @@ Gộp các giá trị sau vào `env` hiện có, không ghi đè MCP hoặc quy�
 
 Lưu trong thư mục người dùng, không lưu trong kho dự án.
 
+<Tip>
+**Chỉ tắt các trường thử nghiệm khi lỗi tương thích yêu cầu**
+
+Chỉ khi lỗi nói rõ về `context_management` hoặc trường thử nghiệm không được hỗ trợ, hãy thêm `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` vào `env` rồi thử lại. Cài đặt này tắt một số trường preview và không phải cấu hình mặc định cho mọi người dùng.
+</Tip>
+
+```bash
+vim ~/.claude/settings.json
+```
+
 ## 4. Khởi động và kiểm tra
 
-Mở terminal mới, chạy `claude`, rồi dùng `/status`. Xác nhận **Anthropic base URL** là `https://nexusapi.link` và gửi một câu hỏi ngắn.
+Mở terminal mới, chuyển vào thư mục dự án rồi chạy:
+
+```bash
+cd your-project-folder
+```
+
+```bash
+claude
+```
+
+Dùng `/status` để xác nhận **Anthropic base URL** là `https://nexusapi.link` và nguồn xác thực là `ANTHROPIC_AUTH_TOKEN`, sau đó gửi một câu hỏi ngắn. Lần chạy đầu, hãy làm theo các bước chọn giao diện, an toàn, terminal và tin cậy thư mục làm việc; chỉ tin cậy dự án bạn nhận biết.
 
 ## Vấn đề thường gặp
 
 ### `Invalid API Key · Please run /login`
 
 Kiểm tra hai biến, trạng thái key và việc mở lại terminal. Không sửa trực tiếp các tệp trạng thái đăng nhập nội bộ của Claude.
+
+### Không thể kết nối dịch vụ Anthropic
+
+Chạy `claude doctor`, kiểm tra cú pháp JSON của `settings.json` và hai biến môi trường rồi mở lại terminal. Nếu vẫn lỗi, lưu nguyên văn lỗi, `claude --version` và đầu ra `claude doctor`.
+
+```text
+Unable to connect to Anthropic services
+Failed to connect to api.anthropic.com: ERR BAD REQUEST
+```
+
+Không dùng script ghi đè các trường trạng thái nội bộ trong `.claude.json`. Các trường này có thể đổi theo phiên bản, và ghi đè có thể làm mất trạng thái đăng nhập hoặc cài đặt hiện có.
+
+### PowerShell chặn trình cài
+
+Trước hết hãy dùng WinGet hoặc trình cài chính thức từ Windows CMD. Nếu đã xác nhận chỉ chính sách thực thi của người dùng hiện tại gây lỗi, chỉ thay đổi trong phạm vi người dùng đó:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+Không thay đổi chính sách toàn máy chỉ để cài một client.
 
 ### `fetch failed`
 
@@ -75,6 +150,20 @@ Kiểm tra hai biến, trạng thái key và việc mở lại terminal. Không 
 ### Trạng thái `offline`
 
 Một số chức năng phụ kiểm tra dịch vụ riêng. Hãy xác nhận lời gọi gateway thực tế bằng `/status` và yêu cầu mô hình ngắn trước khi coi NexusAPI đang lỗi.
+
+### WebFetch lỗi nhưng chat thường vẫn hoạt động
+
+WebFetch có thể dùng kiểm tra an toàn tên miền và truy cập mạng bên ngoài riêng. Nếu yêu cầu văn bản ngắn hoạt động, giữ nguyên Base URL NexusAPI và xử lý lỗi WebFetch theo quy tắc mạng của Claude Code.
+
+### Yêu cầu API thất bại
+
+Đóng phiên hiện tại, mở phiên `claude` mới và chỉ thử một yêu cầu ngắn. Nếu lỗi lặp lại, lưu Request ID rồi làm [tự kiểm tra](/vi/faq/self-check).
+
+### Đăng nhập bằng trình duyệt thất bại
+
+Chỉ xóa cookie của trang bị ảnh hưởng rồi thử lại. Lỗi đăng nhập trình duyệt không tự nó chứng minh cấu hình API Key sai.
+
+## Tài liệu chính thức
 
 - [Cài đặt chính thức](https://code.claude.com/docs/en/installation)
 - [Biến môi trường](https://code.claude.com/docs/en/env-vars)

@@ -41,3 +41,12 @@ curl 'https://nexusapi.link/v1/models' \
 このリクエストで Key の有効性と見えるモデルを確認できます。モデルと API の選び方は [API とモデル対応マトリクス](/ja/developer/capability-matrix)を参照してください。
 
 401、403、モデル未対応の場合は、Key の状態、グループ、残高、IP 制限、`Bearer` 形式を確認し、Request ID を保存してください。
+
+## API Key と他の認証情報
+
+| 認証情報 | 用途 |
+| --- | --- |
+| API Key | Chat Completions、Responses、Messages、Images、`/v1/models` などのモデル API を呼び出します。 |
+| コンソールのログイン状態／Cookie | ブラウザでコンソールにログインするためだけの情報で、モデル API の認証には使えません。 |
+
+認証情報を URL のクエリパラメーターに入れたり、完全な値をサポートへ送ったりしないでください。

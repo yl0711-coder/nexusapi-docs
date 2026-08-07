@@ -27,6 +27,14 @@ Choisissez d'abord l'outil adapté à votre flux de travail, puis suivez son gui
 N'exécutez pas de script « en un clic » de source inconnue. Il peut modifier la configuration, enregistrer des identifiants ou installer du code tiers. Utilisez les sources officielles, lisez le script et ne collez jamais une clé dans un script non fiable.
 </Warning>
 
+## Pourquoi l’adresse dépend de l’outil
+
+Certains outils attendent une adresse API avec `/v1`, d’autres ajoutent eux-mêmes le chemin, tandis que certains utilisent les protocoles natifs Messages ou Responses.
+
+Utilisez l’adresse indiquée par le guide concerné ; ne mélangez pas les réglages de Claude Code, Codex CLI et d’un SDK OpenAI générique. Les règles sont détaillées dans l’[aperçu d’intégration](/fr/guide/integration-overview).
+
+## Repère rapide : protocole et URL
+
 | Type de client | Base URL habituelle | Protocole |
 | --- | --- | --- |
 | SDK OpenAI compatible / application | `https://nexusapi.link/v1` | Chat Completions |
@@ -34,3 +42,9 @@ N'exécutez pas de script « en un clic » de source inconnue. Il peut modifier 
 | Codex CLI | `https://nexusapi.link/v1` | Provider Responses |
 
 La disponibilité dépend encore du modèle et du groupe : consultez la [matrice des capacités](/fr/developer/capability-matrix).
+
+## Votre outil n’est pas listé
+
+Si le client accepte une Base URL compatible OpenAI personnalisée, commencez par le [démarrage rapide](/fr/guide/quick-start), puis consultez la documentation officielle de ce client.
+
+Avant de le configurer, vérifiez s’il ajoute automatiquement `/v1`, le protocole qu’il envoie et s’il autorise un model ID personnalisé. Les instructions pour les clients non vérifiés ne sont pas publiées uniquement pour allonger la liste.

@@ -41,3 +41,12 @@ curl 'https://nexusapi.link/v1/models' \
 Lệnh này xác nhận key và cho biết mô hình đang nhìn thấy. Xem [ma trận khả năng](/vi/developer/capability-matrix) để chọn API phù hợp.
 
 Nếu gặp 401, 403 hoặc mô hình không có, hãy kiểm tra trạng thái key, nhóm, số dư, giới hạn IP và định dạng `Bearer`, sau đó lưu Request ID.
+
+## API Key và các thông tin xác thực khác
+
+| Thông tin xác thực | Mục đích |
+| --- | --- |
+| API Key | Gọi các API mô hình như Chat Completions, Responses, Messages, Images và `/v1/models`. |
+| Phiên đăng nhập / cookie console | Chỉ dùng để đăng nhập console bằng trình duyệt; không dùng làm thông tin xác thực cho model API. |
+
+Không đưa bất kỳ thông tin xác thực nào vào tham số URL và không gửi toàn bộ giá trị key cho bộ phận hỗ trợ.

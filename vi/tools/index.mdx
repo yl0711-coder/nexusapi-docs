@@ -27,6 +27,14 @@ Hãy chọn công cụ theo cách làm việc rồi theo đúng hướng dẫn c
 Không chạy script “một lần nhấp” không rõ nguồn. Chúng có thể sửa cấu hình, lưu key hoặc cài mã bên thứ ba. Chỉ dùng nguồn chính thức, đọc nội dung script và không dán key vào mã không đáng tin.
 </Warning>
 
+## Vì sao URL của từng công cụ khác nhau
+
+Một số công cụ cần địa chỉ API có `/v1`, một số tự nối đường dẫn, và một số dùng giao thức Messages hoặc Responses gốc.
+
+Hãy dùng địa chỉ trong hướng dẫn của từng công cụ; không sao chép cấu hình giữa Claude Code, Codex CLI và SDK OpenAI chung. Xem [tổng quan tích hợp](/vi/guide/integration-overview) để biết nguyên tắc chi tiết.
+
+## Tra nhanh giao thức và URL
+
 | Loại client | Base URL thường dùng | Giao thức |
 | --- | --- | --- |
 | SDK / ứng dụng tương thích OpenAI | `https://nexusapi.link/v1` | Chat Completions |
@@ -34,3 +42,9 @@ Không chạy script “một lần nhấp” không rõ nguồn. Chúng có th�
 | Codex CLI | `https://nexusapi.link/v1` | Provider Responses |
 
 Khả năng thực tế vẫn phụ thuộc mô hình và nhóm; đọc [ma trận khả năng](/vi/developer/capability-matrix) trước.
+
+## Công cụ của bạn không có trong danh sách
+
+Nếu client hỗ trợ Base URL tùy chỉnh tương thích OpenAI, trước hết hãy xem [bắt đầu nhanh](/vi/guide/quick-start) và tài liệu chính thức của client đó.
+
+Trước khi cấu hình, xác nhận client có tự thêm `/v1` không, gửi giao thức nào và có cho phép nhập model ID tùy chỉnh không. Hướng dẫn cho client chưa được kiểm chứng sẽ không được đưa vào chỉ để làm dài danh sách.

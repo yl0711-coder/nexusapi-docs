@@ -1,44 +1,95 @@
 ---
 title: "Tổng quan cách tích hợp"
-description: "Chọn URL và giao thức NexusAPI phù hợp với client và mô hình của bạn."
+description: "Chọn URL và giao thức NexusAPI phù hợp với ứng dụng khách và mô hình bạn sử dụng."
 ---
 
-NexusAPI có thể được dùng từ ứng dụng tự viết, client tương thích OpenAI hoặc công cụ lập trình. Mỗi client ghép URL và dùng giao thức khác nhau. Hãy chọn theo tình huống, không sao chép nguyên cấu hình từ công cụ này sang công cụ khác.
+NexusAPI hỗ trợ các ứng dụng khách AI phổ biến và API theo kiểu OpenAI. Mỗi công cụ có thể tự nối thêm một phần đường dẫn, vì vậy hãy điền địa chỉ đúng với cách sử dụng của bạn; không sao chép nguyên cấu hình của một công cụ sang công cụ khác.
 
-## Ba bước kiểm tra trước khi kết nối
+## Chuẩn bị trước khi tích hợp
 
-1. Tạo API Key trong console và đặt giới hạn phù hợp.
-2. Xác nhận nhóm token của khóa có mô hình cần dùng.
-3. Sao chép chính xác model ID từ Chợ mô hình hoặc `/v1/models`.
+Dù chọn cách tích hợp nào, hãy xác nhận rằng:
 
-## Chọn theo mục đích
+1. Bạn đã tạo API Key trong bảng điều khiển.
+2. Nhóm của API Key đó có quyền dùng mô hình mục tiêu.
+3. Bạn đã sao chép chính xác model ID từ Chợ mô hình.
+4. Bạn đã kiểm tra loại API mà mô hình hỗ trợ và gửi yêu cầu qua HTTPS.
+
+## Các cách sử dụng phổ biến
 
 | Bạn muốn làm gì | Tài liệu nên đọc |
 | --- | --- |
-| Ứng dụng, SDK, cURL hoặc script tự động | [Bắt đầu nhanh](/vi/guide/quick-start) |
-| Claude Code | [Thiết lập Claude Code](/vi/tools/claude-code) |
-| Codex CLI | [Thiết lập Codex CLI](/vi/tools/codex-cli) |
-| Quản lý nhiều provider CLI | [Thiết lập CC Switch](/vi/tools/cc-switch) |
-| Claude Code trong VS Code hoặc Cursor | [VS Code / Cursor](/vi/tools/cursor-vscode) |
+| Ứng dụng hoặc script tự xây dựng | [Bắt đầu trong 5 phút](/vi/guide/quick-start) |
+| Claude Code | [Hướng dẫn cấu hình Claude Code](/vi/tools/claude-code) |
+| Codex CLI | [Hướng dẫn cấu hình Codex CLI](/vi/tools/codex-cli) |
+| CC Switch | [Hướng dẫn cấu hình CC Switch](/vi/tools/cc-switch) |
+| VS Code / Cursor | [Hướng dẫn tiện ích editor](/vi/tools/cursor-vscode) |
+| Tạo ảnh | [Hướng dẫn dùng mô hình ảnh](/vi/guide/image-generation) |
 
-## URL và giao thức
+## Đối chiếu URL và giao thức
 
-| Tình huống | Base URL | Điểm bắt đầu | Lưu ý |
+| Tình huống | Địa chỉ cần điền | Giao thức chính | Lưu ý |
 | --- | --- | --- | --- |
-| SDK tương thích OpenAI / ứng dụng chung | `https://nexusapi.link/v1` | Chat Completions | SDK thường tự nối `/chat/completions`. |
-| Claude Code | `https://nexusapi.link` | Anthropic Messages | Không thêm `/v1`. |
-| Codex CLI | `https://nexusapi.link/v1` | Responses | Dùng custom provider của Codex. |
-| Mô hình ảnh | `https://nexusapi.link/v1` | Images | Chỉ dùng với mô hình được ghi rõ là hỗ trợ ảnh. |
+| OpenAI SDK / ứng dụng văn bản thông thường | `https://nexusapi.link/v1` | Chat Completions | SDK hoặc ứng dụng sẽ nối đường dẫn yêu cầu. |
+| Codex CLI | `https://nexusapi.link/v1` | Responses | Dùng cấu hình Provider trong hướng dẫn Codex. |
+| Claude Code | `https://nexusapi.link` | Anthropic Messages | Không thêm lặp lại `/v1` vào địa chỉ cấu hình. |
+| CC Switch | Theo loại Provider | Phụ thuộc công cụ đích | Quy tắc URL của Claude và Codex khác nhau. |
+| Mô hình ảnh | `https://nexusapi.link/v1` | Images | Chỉ dùng mô hình được ghi rõ là hỗ trợ tạo ảnh. |
+
+Bảng này giúp chọn phương án tích hợp. Trước tiên, hãy xem [ma trận khả năng API và mô hình](/vi/developer/capability-matrix) để xác nhận mô hình và giao thức; xem [Chat Completions](/vi/developer/openai-compatible) để biết tham số và cấu trúc phản hồi. Khả năng sử dụng thực tế của một Key và mô hình vẫn lấy Chợ mô hình làm chuẩn.
+
+## Chọn đúng giao thức trước
+
+Cùng một Base URL không có nghĩa mọi mô hình đều chấp nhận cùng một định dạng yêu cầu.
+
+| Mục tiêu | Endpoint khuyến nghị | Dùng khi |
+| --- | --- | --- |
+| Văn bản, hội thoại hoặc streaming thông thường | `/v1/chat/completions` | Mô hình dùng được qua tuyến tương thích OpenAI. |
+| Codex CLI và Provider tương ứng | `/v1/responses` | Client và mô hình đã chọn được cấu hình cho Responses. |
+| Claude Code hoặc client Anthropic gốc | `/v1/messages` | Mô hình dùng được qua tuyến Anthropic. |
+| Tạo ảnh | `/v1/images/generations` | Mô hình được ghi rõ là hỗ trợ tạo ảnh. |
 
 <Warning>
-Mô hình hiển thị không có nghĩa là nó dùng được với mọi giao thức. Hãy đọc [ma trận API và khả năng mô hình](/vi/developer/capability-matrix) trước: trang này nêu các endpoint mà NexusAPI công bố hỗ trợ.
+**Không dùng Responses như phương án thay thế chung cho Claude**
+
+Nếu kênh Claude kiểu Anthropic hiện tại trả về `status_code=500, not implemented` qua `/v1/responses`, hãy đổi ứng dụng tự xây dựng sang `/v1/chat/completions`, hoặc giữ cấu hình Messages gốc của Claude Code. Gửi lại đúng yêu cầu đó sẽ không khắc phục sự không tương thích giao thức.
 </Warning>
 
-## Kiểm tra tối thiểu
+## Vì sao URL có thể trông khác nhau
 
-1. Gọi `GET /v1/models` bằng khóa hiện tại.
-2. Chọn ID được trả về và phù hợp giao thức.
-3. Gửi một yêu cầu văn bản ngắn.
-4. Kiểm tra bản ghi tương ứng trong console.
+Yêu cầu theo kiểu OpenAI thông thường dùng:
 
-Nếu lỗi, lưu toàn bộ lỗi và Request ID rồi làm [tự kiểm tra](/vi/faq/self-check). Không gửi lặp một tác vụ trong vòng lặp.
+```text
+https://nexusapi.link/v1
+```
+
+Một số client yêu cầu URL trang web không có `/v1`, hoặc tự thêm `/chat/completions`, `/responses`, `/messages`. Hãy làm theo hướng dẫn của công cụ tương ứng; với mô hình ảnh, xem [hướng dẫn mô hình ảnh](/vi/guide/image-generation).
+
+<Warning>
+**Tránh lặp đường dẫn**
+
+Nếu client đã tự thêm `/v1`, việc tự nhập thêm có thể tạo thành `/v1/v1/...` và gây lỗi 404. Khi gặp 404, trước hết hãy kiểm tra URL yêu cầu thực tế mà client gửi đi.
+</Warning>
+
+## Không trộn cấu hình client với API thông thường
+
+Công cụ CLI, tiện ích editor và ứng dụng tự xây dựng có thể dùng giao thức và tệp cấu hình khác nhau. Dù model name giống nhau, không được áp nguyên cấu hình của một công cụ sang công cụ khác.
+
+- **Codex CLI:** đọc [hướng dẫn Codex CLI](/vi/tools/codex-cli) và dùng cấu hình Responses của nó.
+- **Claude Code:** đọc [hướng dẫn Claude Code](/vi/tools/claude-code) và giữ cấu hình Anthropic Messages gốc.
+- **Ứng dụng văn bản tự xây dựng:** bắt đầu bằng Chat Completions, trừ khi SDK yêu cầu rõ một giao thức khác.
+- **Tạo ảnh:** dùng endpoint ảnh; không gửi tham số tạo ảnh đến endpoint chat văn bản.
+- **Khi chưa chắc chắn:** xác định tên client chính xác và đường dẫn mà nó thực sự gửi trước khi đổi cấu hình.
+
+## Tài liệu tham khảo API
+
+Hãy dùng [ma trận khả năng API và mô hình](/vi/developer/capability-matrix) để xác nhận giao thức phù hợp với mô hình mục tiêu. Yêu cầu Chat Completions tối thiểu được trình bày tại [Chat Completions](/vi/developer/openai-compatible).
+
+Trung tâm trợ giúp này giải thích cách chọn và cấu hình tích hợp, đồng thời cung cấp yêu cầu tối thiểu có thể kiểm chứng. Các tham số tùy chọn vẫn phụ thuộc vào giao thức của client và khả năng hiện hiển thị trong Chợ mô hình.
+
+## Cách xác nhận cấu hình thành công
+
+- Client trả về một phản hồi hoàn chỉnh.
+- Yêu cầu tương ứng xuất hiện trong nhật ký sử dụng của bảng điều khiển.
+- Mô hình, nhóm và khoản phí trong nhật ký đúng như mong đợi.
+
+Nếu gọi thất bại, hãy lưu nguyên văn lỗi và Request ID, sau đó xem [tự kiểm tra sự cố](/vi/faq/self-check).

@@ -16,10 +16,41 @@ CC Switch はローカル AI CLI の Provider 設定を管理します。NexusAP
 
 モデルとプロトコルの組み合わせは[対応マトリクス](/ja/developer/capability-matrix)で確認します。
 
+```text
+NexusAPI コンソール
+→ トークン管理
+→ API Key を作成またはコピー
+```
+
 ## CC Switch をインストールする
 
-- macOS：`brew install --cask cc-switch`
-- Windows / Linux：[公式 Releases](https://github.com/farion1231/cc-switch/releases)から適切なパッケージを取得します。
+### macOS
+
+```bash
+brew install --cask cc-switch
+```
+
+インストール後、アプリケーションから CC Switch を開きます。
+
+### Windows
+
+[公式 Releases](https://github.com/farion1231/cc-switch/releases)から `.msi` またはポータブル `.zip` を取得します。
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+### Linux
+
+[公式 Releases](https://github.com/farion1231/cc-switch/releases)から `.deb` または `.AppImage` を取得します。Arch Linux ではコミュニティ管理の AUR パッケージを利用できます。
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+```bash
+paru -S cc-switch-bin
+```
 
 <Warning>
 [CC Switch 公式リポジトリ](https://github.com/farion1231/cc-switch)または公式 Releases のみを使用してください。支払いや NexusAPI の資格情報を求める第三者サイトは使用しないでください。
@@ -29,6 +60,22 @@ CC Switch はローカル AI CLI の Provider 設定を管理します。NexusAP
 
 **Provider 管理 → 追加**でアプリを選び、endpoint、Key、モデルを入力して保存し、Provider を切り替えます。
 
+```text
+CC Switch を開く
+→ Provider を追加
+→ 設定するアプリを選択
+→ NexusAPI endpoint、API Key、モデル ID を入力
+→ Provider を保存
+→ Provider を切り替え
+→ 新しいターミナルで対応 CLI を起動して確認
+```
+
+![公式 CC Switch の Provider 追加画面。NexusAPI ではカスタム設定を選択](/images/nexusapi/cc-switch-add-provider-official.png)
+
+![キーをマスクした公式 CC Switch Provider フォーム例](/images/nexusapi/cc-switch-provider-form-official.png)
+
+> 画像は [CC Switch 公式リポジトリ](https://github.com/farion1231/cc-switch)のものです。フォーム中の URL、モデル、gateway 名は NexusAPI の実値ではありません。
+
 ### Claude Code
 
 | 項目 | 値 |
@@ -36,9 +83,31 @@ CC Switch はローカル AI CLI の Provider 設定を管理します。NexusAP
 | App | `Claude Code` |
 | Name | `NexusAPI Claude` |
 | Endpoint | `https://nexusapi.link` |
+| API Key | NexusAPI Key |
 | Primary model | Key のグループで使える Claude 互換モデル ID |
 
-`/v1` は追加しません。`claude` を起動し、`/status` と短い質問で確認します。
+Haiku、Sonnet、Opus の任意欄は空欄にするか、Key で使える対応モデルを入れます。最小設定例：
+
+```text
+App: Claude Code
+Name: NexusAPI Claude
+Endpoint: https://nexusapi.link
+API Key: YOUR_NEXUSAPI_KEY
+Primary Model: YOUR_CLAUDE_MODEL_ID
+Sonnet Model: YOUR_CLAUDE_MODEL_ID
+```
+
+新しい CC Switch では `Claude Code` を選択します。旧 UI では `Claude` と表示される場合がありますが、Claude Desktop ではなく Claude Code の Provider を選びます。`/v1` は追加しません。切り替え後、新しいターミナルで実行します。
+
+```bash
+claude
+```
+
+`/status` と短い質問で確認します。
+
+```text
+一文で自己紹介してください。
+```
 
 ### Codex
 
@@ -47,13 +116,65 @@ CC Switch はローカル AI CLI の Provider 設定を管理します。NexusAP
 | App | `Codex` |
 | Name | `NexusAPI Codex` |
 | Endpoint | `https://nexusapi.link/v1` |
+| API Key | NexusAPI Key |
 | Primary model | グループで使える Responses 向けモデル ID |
 
-`codex` を起動して読み取り専用タスクで確認します。現在の Key のモデル一覧：
+最小設定例：
+
+```text
+App: Codex
+Name: NexusAPI Codex
+Endpoint: https://nexusapi.link/v1
+API Key: YOUR_NEXUSAPI_KEY
+Primary Model: YOUR_CODEX_MODEL_ID
+```
+
+Codex は OpenAI 互換 endpoint を使うため `/v1` が必要です。切り替え後に実行します。
+
+```bash
+codex
+```
+
+最初は読み取り専用タスクで確認します。
+
+## 現在の Key で使えるモデルを確認する
+
+現在の Key のモデル一覧：
 
 ```bash
 curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-失敗時は Provider が実際に切り替わったか、アプリを再起動したか、Claude / Codex の `/v1` の違い、グループとモデル ID を確認し、Request ID を保存してください。
+`data[].id` がその Key で使えるモデル ID です。Provider 名や古いスクリーンショットで推測しないでください。
+
+## ツールごとの Endpoint ルール
+
+| ツール | Endpoint |
+| --- | --- |
+| Claude Code | `https://nexusapi.link` |
+| Codex | `https://nexusapi.link/v1` |
+
+## よくある問題
+
+### 切り替え後も公式アドレスに送信される
+
+CC Switch で NexusAPI Provider が選択されているか確認し、端末を開き直します。対象 CLI のローカル設定が CC Switch の設定を上書きしていないかも確認してください。
+
+### API Key が無効
+
+NexusAPI のトークン管理で作成した Key であること、有効期限、残高、モデル制限を確認します。Key はそのままコピーし、接頭辞を手入力や推測で変更しないでください。
+
+### モデルが使えない
+
+グループ、モデル制限、同じ Key の `/v1/models` 応答を確認します。モデルがそこにない場合は、CC Switch を何度も編集せず、表示されるモデルを使用するか、モデル名と Request ID を添えてサポートに連絡してください。
+
+### Claude Code が `/login` を求める
+
+NexusAPI Provider を使う際、Claude 公式アカウントへログインする必要はありません。CC Switch の NexusAPI Provider に戻して、ターミナルを開き直してください。
+
+## 推奨手順
+
+1. CC Switch で Provider を手動追加します。
+2. 選択した Key の `/v1/models` で利用可能なモデルを確認します。
+3. 複雑なタスクの前に短いリクエストで確認します。

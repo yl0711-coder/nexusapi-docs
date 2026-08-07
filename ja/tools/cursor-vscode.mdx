@@ -9,6 +9,8 @@ description: "既存の NexusAPI ユーザー設定で、公式 Claude Code 拡�
 
 VS Code 1.94 以降を使用していることを確認し、先に [Claude Code の設定](/ja/tools/claude-code)を完了してください。拡張機能画面で **Claude Code** を検索し、発行元が **Anthropic** であることを確認します。[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)も参照できます。
 
+macOS では <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>、Windows／Linux では <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> で拡張機能画面を開けます。
+
 <Warning>
 類似する第三者拡張がある場合があります。Anthropic が公開したものだけを使い、第三者設定画面に Key を貼り付けないでください。
 </Warning>
@@ -19,8 +21,40 @@ VS Code 1.94 以降を使用していることを確認し、先に [Claude Code
 
 ログイン画面が出る場合は、設定で `Claude Code login` を検索し、**Disable Login Prompt** を有効にしてからエディターを完全に再起動します。
 
-## 3. 安全に確認する
+NexusAPI Key をプロジェクトの `.vscode/settings.json` に重複して保存したり、Key を含む設定を同期・スクリーンショット・コミットしたりしないでください。Key はユーザーディレクトリの `~/.claude/settings.json` だけに保存します。
 
-サイドバーまたはコマンドパレットから Claude Code を開き、「現在のファイルの内容を説明し、変更しないでください」のような読み取り専用テストを送ります。成功後、NexusAPI の利用ログで対応リクエストを確認します。
+現在の Cursor が拡張機能をインストールできない場合は、Cursor の統合ターミナルで `claude` を実行し、同じユーザーレベル設定を使います。
 
-問題時はエディター、拡張、Claude Code を更新し、完全に再起動してから試してください。エラーと Request ID を保存し、[自己確認](/ja/faq/self-check)へ進みます。完全な Key、ワークスペースの秘密、機密ソースコードを送らないでください。
+## 3. Claude Code を開く
+
+アイコン、アクティビティバー、コマンドパレット、ステータスバーから Claude Code を開きます。右上のアイコンが見えない場合は、まずコードファイルを開いてください。
+
+## 4. 安全に確認する
+
+![VS Code に表示された公式 Claude Code 拡張機能](/images/nexusapi/claude-code-vscode-official.jpg)
+
+> この画面例は [Claude Code 公式 VS Code ドキュメント](https://code.claude.com/docs/en/vs-code)のものです。ボタンの位置は拡張機能の更新で変わることがあります。
+
+読み取り専用のテストを送信します。
+
+```text
+現在開いているファイルの役割を説明し、コードは変更しないでください。
+```
+
+次に `/status` で **Anthropic base URL** が `https://nexusapi.link` であることを確認し、NexusAPI の利用ログで対応するリクエストを確認します。
+
+## トラブルシューティング
+
+### インストール後に拡張機能が表示されない
+
+コマンドパレットで **Developer: Reload Window** を実行するか、エディターを完全に再起動します。
+
+### CLI は動くが拡張機能が動かない
+
+`~/.claude/settings.json` がプロジェクト内ではなくユーザーディレクトリにあること、Base URL と Key が正しいことを確認します。**Disable Login Prompt** を有効にして、エディターを完全に再起動します。
+
+### Cursor で拡張機能が見つからない
+
+[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)の Cursor 用導線を使用してください。現在のバージョンで未対応の場合は、Cursor の統合ターミナルで `claude` を使います。
+
+継続する問題では、エディター、拡張機能、Claude Code のバージョン、エラー本文、Request ID を保存して[自己確認](/ja/faq/self-check)を行います。完全な Key、ワークスペースのシークレット、機密ソースコードを送らないでください。

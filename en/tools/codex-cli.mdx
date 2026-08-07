@@ -90,7 +90,17 @@ cd your-project-folder
 codex
 ```
 
-For the first task, use a read-only instruction such as: `Explain the repository layout without changing files.` Then check the console usage log.
+For the first task, use a read-only instruction such as:
+
+```text
+Explain the repository layout without changing files.
+```
+
+Then check the console usage log.
+
+## VS Code / Cursor
+
+Install the [Codex extension published by OpenAI](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt) from the extension marketplace. It uses the same user-level Codex configuration; do not add the legacy `chatgpt.apiBase` or `chatgpt.config` settings to VS Code.
 
 ## Troubleshooting
 
@@ -99,4 +109,7 @@ For the first task, use a read-only instruction such as: `Explain the repository
 3. Recopy the exact model ID from the Model Marketplace or `/v1/models`.
 4. Save the complete error and Request ID, then use the [self-check guide](/en/faq/self-check).
 
-For editor use, install the [Codex extension published by OpenAI](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt). It uses the same user-level Codex configuration; do not add legacy `chatgpt.apiBase` settings.
+## Official sources
+
+- [OpenAI Codex CLI installation](https://github.com/openai/codex)
+- [OpenAI Codex custom-provider configuration](https://learn.chatgpt.com/docs/config-file/config-advanced)

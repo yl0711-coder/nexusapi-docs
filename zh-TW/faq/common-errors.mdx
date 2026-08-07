@@ -1,35 +1,139 @@
 ---
 title: "常見 API 錯誤"
-description: "依錯誤碼、模型協定與 Request ID 排查 NexusAPI 請求問題。"
+description: "診斷 NexusAPI 常見的用戶端、協定、請求與計費錯誤。"
 ---
 
-發生錯誤時，先保留錯誤原文、Request ID、時間、模型與端點。參數、協定和會話相容性問題不會因高頻重試而自動恢復。
+本頁適用於 Claude Code、Codex CLI、Cursor、VS Code 擴充套件和自建程式。重試前請保存**錯誤原文、Request ID、發生時間、模型與請求端點**；不要傳送完整 API Key。
+
+<Tip>
+**先判斷，再重試**
+
+參數、介面或會話相容性問題不會因重複請求而自動恢復。只對已確認的短暫波動做一次低頻重試，避免重複工作與額外花費。
+</Tip>
 
 ## `status_code=500, not implemented`
 
-若以 `/v1/responses` 呼叫目前 Anthropic 類 Claude 渠道而出現這個訊息，這是**協定不相容**，不是暫時性上游故障。
+若錯誤同時包含 `status_code=500` 和 `not implemented`，且你使用 `/v1/responses` 呼叫目前的 **Anthropic 類型 Claude 渠道**，這是**協定不相容**，不是等待即可恢復的上游故障。new-api rc4 雖有該路由，但 Anthropic 渠道沒有 Responses 請求轉換實作。
 
-1. 自建程式請使用 `/v1/chat/completions`。
-2. Claude Code 請依[Claude Code 教學](/zh-TW/tools/claude-code)使用原生 Messages 設定。
-3. 不要原樣重送請求。
+1. 自建程式請改用 OpenAI Chat Completions：`/v1/chat/completions`。
+2. Claude Code 請依[Claude Code 教學](/zh-TW/tools/claude-code)設定，勿直接對 Claude 模型發送 Responses 請求。
+3. 不要原樣重試；等待或換網路都不會修正協定不相容。
 
-## HTTP 狀態碼
+需要協助時，請提供已遮蔽的請求範例、模型名稱與 Request ID，勿提供 API Key。
 
-| 狀態 | 常見原因 | 第一個動作 |
-| --- | --- | --- |
-| 400 | 模型、端點、參數或會話格式不正確 | 確認協定後用新會話做最小測試。 |
-| 401 | Key 缺失、無效、到期或停用 | 重新複製 Key，檢查 Bearer 格式。 |
-| 403 | 群組、模型限制、IP 白名單、帳戶或上游拒絕 | 檢查 Key 設定與群組。 |
-| 404 | 路徑錯誤或 `/v1` 重複 | 查看實際請求 URL 與用戶端教學。 |
-| 429 | 頻率或併發限制 | 降低併發並遵循 `Retry-After`。 |
-| 500／502／503 | 暫時處理或上游問題 | 等待 10–30 秒後只重試一次。 |
-| 504／524 | 請求或上游等待超時 | 適當縮短內容或輸出，保存 Request ID。 |
+## 400 Bad Request／參數不相容
 
-## 其他常見訊息
+400 通常表示請求格式、參數或會話狀態不符合目前端點要求。請依序檢查：
 
-- **`no available channel`**：目前 Key 群組沒有此模型的啟用路由。檢查精確模型 ID、群組和模型廣場，不要靠重建 Key 或重複充值解決。
-- **`Concurrency limit exceeded for user`**：現有請求尚未完成，請等待並降低用戶端併發。
-- **`Content block not found`**：常見於長會話、工具呼叫或中斷的串流。請看[Content block not found](/zh-TW/faq/content-block-not-found)。
-- **圖片模型錯誤或超時**：確認模型、圖片端點和參數；不要立即重送相同圖片任務。
+1. 模型 ID 是否從模型廣場準確複製。
+2. 端點是否與模型和用戶端相符；請先看[接入方式總覽](/zh-TW/guide/integration-overview)。
+3. 是否帶入目前模型不支援的圖片、工具呼叫、推理或會話續接參數。
+4. 用戶端或 SDK 是否過舊。
+5. 新建會話後，以簡短文字是否仍會出現。
 
-如懷疑重複扣費，請比對同一時間範圍的 Request ID 和使用紀錄。不要假設平台會替一般請求自動重試。
+不要在未修改原因的情況下反覆提交同一請求。
+
+## 401 Unauthorized
+
+常見原因是 API Key 缺失、填寫錯誤、已停用／到期，或鑑權標頭格式錯誤。
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+請從控制台重新複製 Key 並確認請求位址。不要把完整 Key 傳給支援；若懷疑洩漏，先停用舊 Key、建立新 Key，再更新程式。
+
+## 403 Forbidden
+
+403 表示這次請求被拒絕。常見原因包括：Key 無權使用所選群組、啟用了模型限制、IP 白名單不符合、帳戶狀態不可用；也可能由上游模型服務拒絕。
+
+先核對 Key 的群組、模型限制與 IP 白名單，再用一條簡短文字驗證。若持續出現，請提供 Request ID、模型、時間和錯誤原文；不要用高頻重試或不斷建立 Key 來規避限制。
+
+## 404 Not Found／請求位址錯誤
+
+優先檢查：
+
+- Base URL 是否被拼成 `/v1/v1/...`。
+- 用戶端是否已自動補上 `/v1` 或具體路徑。
+- 路徑是否為平台支援的 `/v1/chat/completions`、`/v1/responses`、`/v1/messages` 或 `/v1/images/generations`。
+
+不同工具的位址規則不同，請用對應的[工具教學](/zh-TW/tools/)。
+
+模型不可用通常不是 404。在 new-api rc4 中，模型不在目前 Key 群組、渠道停用或沒有可路由渠道時，更常見 `503`／`no available channel`。
+
+## 429 Too Many Requests
+
+429 可能來自平台的模型頻率限制，也可能是模型服務的短期限流。像 `Concurrency limit exceeded for user` 的原文通常是上游或用戶端自身的並發限制，不能只憑狀態碼判斷 API Key 壞了。
+
+- 降低並發；有 `Retry-After` 時優先依它等待，沒有時再用含隨機抖動的指數退避。
+- 不要讓多個程式以同一把 Key 同時高頻重試。
+- 低頻仍持續出現時，提供 Request ID 以便確認服務可用性。
+
+## 500、502、503、504 或 524
+
+除前述 `not implemented` 協定錯誤外，這些狀態通常代表處理失敗、連線中斷、服務繁忙或等候超時，不一定是 Key 或提示詞錯誤。
+
+| 狀態 | 建議處理 |
+| --- | --- |
+| `500`／`502`／`503` | 等待 10–30 秒後只重試一次；持續發生時提交 Request ID。 |
+| `504`／`524` | 可行時縮短上下文、工具呼叫或輸出長度，稍後再試。 |
+
+同一模型連續失敗時，請勿不斷重送長任務；保留現場資訊後聯絡支援。
+
+## `no available channel`／目前模型沒有可用服務
+
+這表示 new-api rc4 在目前 Key 使用的群組中，找不到已啟用且承載該模型的可路由渠道。模型 ID 拼錯、模型未在群組上架、渠道停用或暫時不可用都可能造成。
+
+可稍後重試，或改用模型廣場中目前群組可見的其他模型。若持續出現，提交模型名、Request ID 與時間即可，不需要重複儲值或重建 Key。
+
+## `Concurrency limit exceeded for user`
+
+帳戶目前的活躍請求數已達上限。等待進行中的請求結束、降低用戶端並發後再試；不要因此停用或重建 API Key。
+
+## 長會話或工具呼叫錯誤
+
+### `Invalid signature in thinking block`
+
+目前會話保存的推理內容無法再驗證，常見於長會話恢復、用戶端狀態改變或相容性變動。請新建會話、更新用戶端，並避免在多台裝置繼續同一會話；反覆重試原會話通常無法恢復。
+
+### `previous_response_id is only supported on Responses WebSocket v2`
+
+用戶端正在以不支援的連線方式續接先前回應。請新建會話、關閉實驗性的會話續接／回應重用功能，或更新用戶端。
+
+### `Content block not found`
+
+用戶端未收到預期的完整內容片段，常見於長會話、工具呼叫或串流中斷。先新建會話、縮短輸入並發送簡單測試；詳見 [Content block not found](/zh-TW/faq/content-block-not-found)。
+
+## 圖片生成超時或能力不支援
+
+圖片模型只能使用圖片端點，文字模型不能使用圖片生成端點。目前圖片生成是同步請求，可能比文字請求久；在未確認第一次結果前不要連續重複提交同一圖片任務。
+
+- `Image generation is not enabled`／`model not supported`：確認模型、端點與參數相符。
+- `504`／`524`／用戶端超時：保留 Request ID 和時間，勿立即重新生成。
+
+請閱讀[圖片模型使用說明](/zh-TW/guide/image-generation)。
+
+## 帳戶有額度但 Key 顯示額度不足
+
+請檢查帳戶餘額、API Key 的額度上限、有效期與令牌群組。不要只因一次提示反覆儲值；持續出現時提供 Request ID 供查核。
+
+## 錯誤後會自動成功嗎？
+
+不要假設錯誤表示平台稍後一定會完成請求。一般呼叫不承諾平台層級的自動重試；若用戶端或程式再次發送，通常會產生新的 Request ID。
+
+請以對應 Request ID 的最終紀錄以及用戶端是否收到完整內容判斷結果。懷疑重複扣費時，提供相關 Request ID 與時間。
+
+## 聯絡支援時請一次提供
+
+```text
+發生時間（含時區）：
+Request ID：
+模型：
+請求端點：
+用戶端或 SDK 版本：
+是否串流／圖片／工具呼叫：
+完整錯誤原文或截圖：
+偶發還是持續發生：
+```
+
+請勿提供完整 API Key、密碼、隱私資料或完整業務內容。如需識別 Key，最多只提供後六碼。

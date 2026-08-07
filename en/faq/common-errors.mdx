@@ -1,54 +1,141 @@
 ---
 title: "Common API errors"
-description: "Diagnose common NexusAPI client, protocol, and request failures."
+description: "Diagnose common NexusAPI client, protocol, request, and billing failures."
 ---
 
-Before retrying, save the error text, Request ID, time, model, and endpoint. Do not send a full API key.
+This page applies to Claude Code, Codex CLI, Cursor, VS Code extensions, and custom applications. Before retrying, save the **original error, Request ID, time, model, and request endpoint**. Never send a full API key.
 
 <Tip>
 **Diagnose before retrying**
 
-Parameter, protocol, and session-compatibility issues do not disappear through repeated requests. Retry a known transient failure only once and at a low frequency.
+Parameter, endpoint, and session-compatibility issues do not resolve through repeated requests. Retry a known transient failure only once and at a low frequency; this avoids duplicate work and additional charges.
 </Tip>
 
 ## `status_code=500, not implemented`
 
-When this appears while `/v1/responses` calls a current Anthropic-type Claude channel, it is a protocol mismatch—not a temporary upstream outage.
+If the error includes both `status_code=500` and `not implemented`, and the request uses `/v1/responses` for a current **Anthropic-type Claude channel**, it is a **protocol incompatibility**, not an upstream failure that will recover by waiting. The new-api rc4 route exists, but Anthropic channels do not implement a Responses request conversion.
 
-1. For a custom application, use `/v1/chat/completions`.
-2. For Claude Code, follow the [Claude Code guide](/en/tools/claude-code) and keep its native Messages configuration.
-3. Do not retry the same request unchanged.
+1. For a custom application, switch to OpenAI Chat Completions: `/v1/chat/completions`.
+2. For Claude Code, follow the [Claude Code guide](/en/tools/claude-code); do not send a Responses request directly to a Claude model.
+3. Do not retry the same request unchanged. Waiting or changing networks will not fix this mismatch.
 
-## HTTP errors
+When asking for help, provide a redacted request example, model name, and Request ID—never the API key.
 
-| Error | Typical cause | First action |
-| --- | --- | --- |
-| 400 | Invalid model, endpoint, parameter, or session state | Verify the protocol and run a minimal new-session test. |
-| 401 | Missing, invalid, expired, or disabled API key | Recopy the key and check `Authorization: Bearer ...`. |
-| 403 | Group, model restriction, IP allowlist, account, or upstream refusal | Check the key settings and model group. |
-| 404 | Wrong path or duplicate `/v1` | Check the actual request URL and use the client-specific guide. |
-| 429 | Rate limit or concurrency limit | Reduce concurrency and follow `Retry-After` when provided. |
-| 500 / 502 / 503 | Temporary processing or upstream failure | Wait 10–30 seconds and retry once. |
-| 504 / 524 | Request or upstream wait timeout | Shorten context/output where practical; keep the Request ID. |
+## 400 Bad Request / incompatible parameters
 
-## `no available channel`
+A 400 usually means that the request shape, a parameter, or session state is not valid for the current endpoint.
 
-The current key's group has no enabled route for that model. Check the exact model ID, token group, and Model Marketplace availability. Do not create new keys or top up repeatedly to solve it.
+Check in this order:
+
+1. Copy the model ID exactly from the Model Marketplace.
+2. Confirm that the endpoint matches the model and client in the [integration overview](/en/guide/integration-overview).
+3. Check whether the model supports the image, tool-calling, reasoning, or session-continuation parameters you are sending.
+4. Update the client or SDK when it is old.
+5. Start a new session and send a short text request.
+
+Do not submit the same request repeatedly without changing the cause.
+
+## 401 Unauthorized
+
+Typical causes are a missing, mistyped, disabled, expired API key, or an incorrectly formatted authentication header.
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+Copy the key again from the console and confirm the request URL. Do not send the complete key to support. If it may have been exposed, disable it first, create a replacement, and update the affected application.
+
+## 403 Forbidden
+
+A 403 means that this request was denied. Common platform-side reasons include a key without access to the selected group, a model restriction, an IP allowlist mismatch, or an unavailable account state; an upstream model service can also refuse a request.
+
+Check the key’s group, model restriction, and IP allowlist, then test with one short text request. If it continues, provide the Request ID, model, time, and original error. Do not try to bypass the restriction by rapidly creating new keys or retrying at high frequency.
+
+## 404 Not Found / wrong request address
+
+Check these points first:
+
+- The Base URL was not assembled as `/v1/v1/...`.
+- The client does not already add `/v1` or the endpoint path.
+- The request uses a supported route, such as `/v1/chat/completions`, `/v1/responses`, `/v1/messages`, or `/v1/images/generations`.
+
+URL rules differ by tool; use the relevant [tool guide](/en/tools/).
+
+An unavailable model is not normally a 404. In new-api rc4, a model outside the key’s group, a disabled channel, or no routable channel is more often reported as `503` / `no available channel`.
+
+## 429 Too Many Requests
+
+429 can come from a platform model-rate limit or a temporary limit in the model service. An error such as `Concurrency limit exceeded for user` is usually an upstream or client-side concurrency limit; do not treat the status code alone as proof that the API key is broken.
+
+- Reduce concurrency. Follow `Retry-After` when it exists; otherwise use exponential backoff with random jitter.
+- Do not let several programs retry rapidly with the same key.
+- If it continues even at a low rate, provide the Request ID so service availability can be checked.
+
+## 500, 502, 503, 504, or 524
+
+Except for the `not implemented` protocol error above, these statuses usually mean processing failed, a connection broke, a service is busy, or a wait timed out. They do not necessarily mean that the key or prompt is wrong.
+
+| Status | Recommended action |
+| --- | --- |
+| `500` / `502` / `503` | Wait 10–30 seconds, then retry once only. If it continues, provide the Request ID. |
+| `504` / `524` | Where practical, shorten context, tool calls, or output length, then try later. |
+
+When the same model fails repeatedly, do not keep resubmitting a long task. Preserve the evidence and contact support.
+
+## `no available channel` / no current service for this model
+
+This means new-api rc4 could not find an enabled, routable channel carrying that model inside the group used by the current key. A mistyped model ID, a model not offered in the group, a disabled channel, or temporary channel unavailability can all cause it.
+
+Try later or choose another model currently visible for the group in the Model Marketplace. If it persists, submit the model name, Request ID, and time. You do not need to top up again or create new keys to resolve this message.
 
 ## `Concurrency limit exceeded for user`
 
-Too many active requests are using the account. Wait for existing requests to finish and reduce client concurrency. Recreating the API key does not remove this limit.
+The account already has the maximum number of active requests. Wait for existing requests to finish, then reduce concurrency. Do not disable or recreate the API key just because of this error.
 
-## Long conversations and tool calls
+## Long conversations or tool-call failures
 
-- **`Invalid signature in thinking block`**: Start a new session, update the client, and avoid continuing the same session across multiple clients.
-- **`previous_response_id is only supported on Responses WebSocket v2`**: Start a new session and turn off experimental response reuse or update the client.
-- **`Content block not found`**: See [Content block not found](/en/faq/content-block-not-found).
+### `Invalid signature in thinking block`
 
-## Image generation
+Saved reasoning content in the current session can no longer be verified. This often occurs when a long session is resumed, the client state changes, or compatibility changes. Start a new session, update the client, and avoid continuing the same session across multiple devices. Repeating the original session usually does not recover it.
 
-Use image models only through the Images endpoint. For `Image generation is not enabled`, `model not supported`, or a timeout, check the model, key group, and parameter support first. Keep the Request ID and do not immediately submit the same job again.
+### `previous_response_id is only supported on Responses WebSocket v2`
 
-## Suspected unexpected charge
+The client is continuing a prior response over an unsupported connection method. Start a new session, turn off experimental session continuation or response reuse, or update the client.
 
-Do not assume that an error will be retried by the platform. Check the final client result and matching Request IDs. If you need help, provide the relevant Request IDs and times.
+### `Content block not found`
+
+The client did not receive an expected complete content fragment, often during a long conversation, tool call, or interrupted stream. Start a new session, shorten the input, and send a simple test first. See [Content block not found](/en/faq/content-block-not-found).
+
+## Image-generation timeout or unsupported capability
+
+Image models must use the image endpoint; text models cannot use an image-generation endpoint. Image generation is currently synchronous and can take longer than a text request. Do not submit the same image job repeatedly before the first result is known.
+
+- `Image generation is not enabled` / `model not supported`: verify that the model, endpoint, and parameters match.
+- `504` / `524` / client timeout: retain the Request ID and time; do not immediately regenerate.
+
+See [image model usage](/en/guide/image-generation).
+
+## Credit is available but the key reports an insufficient limit
+
+Check the account credit, API-key limit, expiry, and token group. Do not top up repeatedly because of one message. For a persistent issue, provide the Request ID for review.
+
+## Will an error complete automatically later?
+
+Do not assume that an error means the platform will later complete the request. Ordinary calls do not have a platform-level automatic retry guarantee. If a client or application sends another request, it normally creates a new Request ID.
+
+Use the final log for the matching Request ID and whether the client received complete content to determine the result. If you suspect a duplicate charge, provide the relevant Request IDs and times.
+
+## What to send to support
+
+```text
+Time, including time zone:
+Request ID:
+Model:
+Request endpoint:
+Client or SDK version:
+Streaming / image / tool call:
+Complete error text or screenshot:
+Intermittent or persistent:
+```
+
+Do not submit a full API key, password, private data, or complete business content. If key identification is needed, provide at most its last six characters.

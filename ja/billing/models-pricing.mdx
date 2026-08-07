@@ -20,6 +20,8 @@ NexusAPI は固定月額ではなく実利用量で課金します。モデル�
 
 本番・テスト・コスト単位ごとに Key を分け、名前と上限を明確にすることを推奨します。デプロイ前は `/v1/models` で Key が実際に見られるモデルを確認します。
 
+![NexusAPI のトークン作成時にトークングループを選ぶ画面](/images/nexusapi/console-create-token-ja.png)
+
 ## 費用の内訳
 
 モデルにより、入力 Token、出力 Token、キャッシュ読み取り、その他の明示された単位が別々に計算されることがあります。最終的な金額は、マーケットプレイスの現在のルールを適用した利用ログの値です。
@@ -31,3 +33,8 @@ NexusAPI は固定月額ではなく実利用量で課金します。モデル�
 | クライアントの「成功」表示 | Request ID、Token、金額を含む利用ログ |
 
 利用可否はプロトコルにも依存します。一般 SDK は Chat Completions、Claude Code は Messages、Codex CLI は Responses を使います。[対応マトリクス](/ja/developer/capability-matrix)を先に確認してください。
+
+## 利用状況を確認する
+
+- 各リクエストと消費額は、コンソールの利用ログで確認できます。
+- Token、キャッシュ、エラー記録の項目は[利用量と請求](/ja/billing/usage-and-billing)で説明しています。

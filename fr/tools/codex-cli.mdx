@@ -9,18 +9,28 @@ Les commandes et champs `config.toml` suivent le [dépôt officiel Codex](https:
 
 Choisissez une installation officielle :
 
+### Windows PowerShell
+
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
+
+### macOS, Linux ou WSL
 
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
 
-Ou, avec Node.js :
+### Utilisateur ayant déjà Node.js
 
 ```bash
 npm install -g @openai/codex
+codex --version
+```
+
+Après l’installation, vérifiez aussi la version dans un nouveau terminal :
+
+```bash
 codex --version
 ```
 
@@ -50,9 +60,13 @@ N'enregistrez pas une vraie clé dans ce fichier ni dans `~/.codex/auth.json`, q
 
 ## 4. Définir la variable de clé
 
+### Windows PowerShell
+
 ```powershell
 setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
 ```
+
+### macOS, Linux ou WSL
 
 ```bash
 export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
@@ -62,4 +76,33 @@ export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
 
 ## 5. Vérifier
 
-Lancez `codex` dans un projet et demandez d'abord une tâche sans écriture, par exemple : « Explique la structure du dépôt sans modifier de fichiers. » En cas d'échec, vérifiez la nouvelle session de terminal, la clé, le groupe et l'ID de modèle, puis conservez le Request ID pour l'[auto-vérification](/fr/faq/self-check).
+Dans le répertoire du projet, lancez :
+
+```bash
+cd your-project-folder
+codex
+```
+
+Commencez par une tâche sans écriture :
+
+```text
+Explique la structure du dépôt sans modifier de fichiers.
+```
+
+Vérifiez ensuite le journal d’utilisation de la console. En cas d'échec, vérifiez la nouvelle session de terminal, la clé, le groupe et l'ID de modèle, puis conservez le Request ID pour l'[auto-vérification](/fr/faq/self-check).
+
+## Résolution des problèmes
+
+1. Utilisez un terminal ouvert après la définition de `NEXUSAPI_API_KEY`.
+2. Vérifiez que la clé est activée, que le compte est crédité et que le groupe contient le modèle.
+3. Recopiez l’ID exact depuis le catalogue ou `/v1/models`.
+4. Conservez l’erreur d’origine et le Request ID, puis utilisez l’[auto-vérification](/fr/faq/self-check).
+
+## VS Code / Cursor
+
+Installez l’[extension Codex publiée par OpenAI](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt) depuis le marketplace. Elle utilise la même configuration Codex au niveau de l’utilisateur ; n’ajoutez pas les anciens paramètres `chatgpt.apiBase` ou `chatgpt.config` dans VS Code.
+
+## Sources officielles
+
+- [Installation de Codex CLI par OpenAI](https://github.com/openai/codex)
+- [Configuration de custom provider Codex par OpenAI](https://learn.chatgpt.com/docs/config-file/config-advanced)

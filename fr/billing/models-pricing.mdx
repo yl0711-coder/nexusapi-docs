@@ -20,6 +20,8 @@ Le groupe détermine les canaux, modèles et règles de prix accessibles à la c
 
 Bonnes pratiques : utilisez des clés distinctes pour la production et les tests, nommez-les clairement, et fixez des limites adaptées. Avant un déploiement, utilisez `/v1/models` pour voir les modèles réellement accessibles à la clé.
 
+![Choix d’un groupe de jetons lors de la création d’un jeton NexusAPI](/images/nexusapi/console-create-token-fr.png)
+
 ## Composition d'un coût
 
 Selon le modèle, le prix peut distinguer tokens d'entrée, tokens de sortie, lecture de cache ou d'autres unités clairement indiquées. Le montant final est celui du journal d'utilisation, appliqué selon les règles actuelles du catalogue.
@@ -31,5 +33,10 @@ Selon le modèle, le prix peut distinguer tokens d'entrée, tokens de sortie, le
 | État « réussi » du client | Journal avec Request ID, tokens et coût |
 
 La disponibilité dépend aussi du protocole. Les SDK généraux utilisent souvent Chat Completions, Claude Code utilise Messages et Codex CLI utilise Responses. Consultez d'abord la [matrice des capacités](/fr/developer/capability-matrix).
+
+## Consulter l’usage
+
+- Chaque requête et son coût peuvent être consultés dans le journal d’utilisation de la console.
+- Les champs de tokens, de cache et des enregistrements d’erreur sont expliqués dans [usage et facturation](/fr/billing/usage-and-billing).
 
 Pour les champs de chaque appel, voir [usage et facturation](/fr/billing/usage-and-billing).

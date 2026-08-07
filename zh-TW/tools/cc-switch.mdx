@@ -16,10 +16,41 @@ CC Switch 可管理本機 AI CLI 的 Provider 設定。手動新增 NexusAPI Pro
 
 請以[能力矩陣](/zh-TW/developer/capability-matrix)確認模型與協定，而不是只看全站模型名稱。
 
+```text
+NexusAPI 控制台
+→ 令牌管理
+→ 建立或複製 API Key
+```
+
 ## 安裝 CC Switch
 
-- macOS：`brew install --cask cc-switch`
-- Windows／Linux：從 [官方 Releases](https://github.com/farion1231/cc-switch/releases) 下載對應套件。
+### macOS
+
+```bash
+brew install --cask cc-switch
+```
+
+安裝完成後，從「應用程式」開啟 CC Switch。
+
+### Windows
+
+從 [官方 Releases](https://github.com/farion1231/cc-switch/releases)下載 `.msi` 安裝套件並依指示完成。若使用便攜版，可下載 `.zip` 後解壓直接執行。
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+### Linux
+
+從 [官方 Releases](https://github.com/farion1231/cc-switch/releases)下載對應的 `.deb` 或 `.AppImage`。Arch Linux 使用者可選擇社群維護的 AUR 套件：
+
+```text
+https://github.com/farion1231/cc-switch/releases
+```
+
+```bash
+paru -S cc-switch-bin
+```
 
 <Warning>
 僅使用 [CC Switch 官方儲存庫](https://github.com/farion1231/cc-switch)或 Releases。不要從要求付款、帳號或 NexusAPI 憑證的第三方頁面下載。
@@ -28,6 +59,24 @@ CC Switch 可管理本機 AI CLI 的 Provider 設定。手動新增 NexusAPI Pro
 ## 新增 Provider
 
 開啟 **Provider 管理 → 新增 Provider**，選擇目標應用、填入端點、API Key 與模型 ID，儲存後切換到此 Provider。
+
+```text
+開啟 CC Switch
+→ 新增 Provider
+→ 選擇要設定的應用
+→ 填寫 NexusAPI Endpoint、API Key 與模型 ID
+→ 儲存 Provider
+→ 切換到該 Provider
+→ 在新終端開啟對應 CLI 驗證
+```
+
+![CC Switch 官方新增 Provider 畫面；接入 NexusAPI 時請選擇自訂設定](/images/nexusapi/cc-switch-add-provider-official.png)
+
+> 圖片來自 [CC Switch 官方儲存庫](https://github.com/farion1231/cc-switch)，採用其 MIT License。圖中其他 Provider 僅是介面示例；接入 NexusAPI 時請選擇自訂設定。
+
+![CC Switch 官方 Provider 表單示例，Key 已遮蔽](/images/nexusapi/cc-switch-provider-form-official.png)
+
+> 此為 [CC Switch 官方儲存庫](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png)的示例表單。圖中的 URL、模型和 Gateway 名稱不是 NexusAPI 實際參數，請以下表為準。
 
 ### Claude Code
 
@@ -39,7 +88,28 @@ CC Switch 可管理本機 AI CLI 的 Provider 設定。手動新增 NexusAPI Pro
 | API Key | 你的 NexusAPI Key |
 | Primary model | Key 群組可用的 Claude 相容模型 ID |
 
-**Claude 不要加 `/v1`**。切換後執行 `claude`、使用 `/status`，再送一條短訊息。
+Haiku、Sonnet、Opus 等選填模型欄位可留空，或填入 Key 可用的對應模型。最小設定示例：
+
+```text
+App: Claude Code
+Name: NexusAPI Claude
+Endpoint: https://nexusapi.link
+API Key: YOUR_NEXUSAPI_KEY
+Primary Model: YOUR_CLAUDE_MODEL_ID
+Sonnet Model: YOUR_CLAUDE_MODEL_ID
+```
+
+新版 CC Switch 請選 `Claude Code`；舊版介面可能顯示 `Claude`，請選對應的 Claude Code Provider，不要選 Claude Desktop。**Claude Endpoint 不要加 `/v1`**。切換後重開終端並執行：
+
+```bash
+claude
+```
+
+以 `/status` 和短訊息驗證：
+
+```text
+請用一句話自我介紹。
+```
 
 ### Codex
 
@@ -51,7 +121,25 @@ CC Switch 可管理本機 AI CLI 的 Provider 設定。手動新增 NexusAPI Pro
 | API Key | 你的 NexusAPI Key |
 | Primary model | Key 群組可用、適合 Responses 的模型 ID |
 
-切換後執行 `codex`，以唯讀任務驗證。
+最小設定示例：
+
+```text
+App: Codex
+Name: NexusAPI Codex
+Endpoint: https://nexusapi.link/v1
+API Key: YOUR_NEXUSAPI_KEY
+Primary Model: YOUR_CODEX_MODEL_ID
+```
+
+Codex 使用 OpenAI 相容端點，因此需要 `/v1`。若站點有 Codex 專用群組，建議在該群組建立 Key 後再設定。切換後重開終端並執行：
+
+```bash
+codex
+```
+
+先用唯讀任務驗證，再執行正式工作。
+
+## 查詢目前 Key 可用模型
 
 可使用下列方式確認目前 Key 可用模型：
 
@@ -60,4 +148,37 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-若失敗，先確認 CC Switch 確實切換、重開程式，並檢查 Claude／Codex 的 `/v1` 差異、群組和模型 ID。持續錯誤請保留 Request ID 並依[問題自查](/zh-TW/faq/self-check)處理。
+回應中的 `data[].id` 就是目前 Key 實際可用的模型 ID；不要依 Provider 名稱或舊截圖猜測。
+
+## 各工具的 Endpoint 規則
+
+| 工具 | Endpoint |
+| --- | --- |
+| Claude Code | `https://nexusapi.link` |
+| Codex | `https://nexusapi.link/v1` |
+
+不確定時請按上表填寫，而不是從另一個用戶端複製位址。
+
+## 常見問題
+
+### 切換後仍請求官方位址
+
+確認 CC Switch 已選到 NexusAPI Provider；切換後關閉並重新開啟終端；再檢查目標 CLI 是否有自己的本機設定檔覆寫 CC Switch。
+
+### API Key 無效
+
+確認 Key 由 NexusAPI 令牌管理建立、已啟用、未到期、帳戶額度足夠且沒有被模型限制擋住。請原樣複製 Key，不要手動添加或猜測前綴。
+
+### 模型不可用
+
+檢查 Key 群組、模型限制和同一把 Key 的 `/v1/models` 結果。若回應中沒有該模型，不要反覆修改 CC Switch；請改用可見模型，或提供模型名和 Request ID 聯絡支援。
+
+### Claude Code 要求執行 `/login`
+
+使用 NexusAPI Provider 時，不要登入 Claude 官方帳戶。切回 CC Switch 的 NexusAPI Provider 後重開終端；Gateway Key 應由 Provider 設定提供。
+
+## 建議流程
+
+1. 在 CC Switch 手動新增 Provider。
+2. 使用選定 Key 的 `/v1/models` 查詢可用模型。
+3. 先用短請求驗證，再執行複雜任務。
