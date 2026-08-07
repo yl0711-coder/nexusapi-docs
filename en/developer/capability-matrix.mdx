@@ -3,7 +3,7 @@ title: "API and model capability matrix"
 description: "Confirm the model, token group, and protocol before calling NexusAPI."
 ---
 
-NexusAPI is a model gateway; it does not promise that every model works with every API. **The model, token group, and protocol must all match.** Use the Model Marketplace and the result returned by your current key as the live source of truth.
+The model, token group, and protocol used with NexusAPI must all match. Use the Model Marketplace and the result returned by your current key as the live source of truth.
 
 <Info>
 **Confirm before you call**
@@ -24,9 +24,9 @@ NexusAPI is a model gateway; it does not promise that every model works with eve
 | Image generation | [POST /v1/images/generations](/en/guide/image-generation) | `supported_endpoint_types` includes `image-generation` | Pass only options supported by the selected image model. |
 
 <Warning>
-**Do not treat every New API route as a NexusAPI promise**
+**Use the documented public capability scope**
 
-The underlying New API software can contain more compatible routes than this table. NexusAPI supports only the capabilities explicitly described here, in the Model Marketplace, or in an official guide. Image edits and variations, embeddings, audio, rerank, and native Gemini are not currently documented as general public NexusAPI capabilities; do not use a production workload to guess whether they work.
+Use the capabilities listed on this page, in the Model Marketplace, or in an official guide. Image edits and variations, embeddings, audio, rerank, and native Gemini are not currently documented as general public NexusAPI capabilities; contact support before using any of them in production.
 </Warning>
 
 ## Check models with the current key

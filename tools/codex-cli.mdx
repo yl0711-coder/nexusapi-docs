@@ -65,10 +65,9 @@ wire_api = "responses"
 Provider 字段。
 
 <Warning>
-**不要手工写入 auth.json**
+**将 NexusAPI Key 保存在环境变量**
 
-`~/.codex/auth.json` 用于 Codex 的 OpenAI 登录缓存。NexusAPI 使用上面的 `env_key` 方式读取环境变量，
-不要把 NexusAPI Key 写入、提交或截图到 `auth.json`。
+NexusAPI 通过上面的 `env_key` 从 `NEXUSAPI_API_KEY` 读取 Key。`auth.json` 可能包含 Codex 的凭据状态；无需把 NexusAPI Key 写入其中，也不要将包含 Key 的文件提交到仓库或截图分享。
 </Warning>
 
 ## 4. 设置 API Key 环境变量

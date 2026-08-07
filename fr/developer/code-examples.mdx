@@ -8,7 +8,7 @@ Les exemples utilisent OpenAI Chat Completions. Vérifiez d'abord le modèle et 
 ## Paramètres de base
 
 - Base URL : `https://nexusapi.link/v1`
-- Clé : créée dans la [console NexusAPI](https://nexusapi.link)
+- Clé : créée dans la [console NexusAPI](https://nexusapi.link) ; elle commence généralement par `sk-`
 - Modèle : ID exact du catalogue ou de `/v1/models`
 
 ## Python
@@ -35,7 +35,7 @@ print(response.choices[0].message.content)
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.NEXUSAPI_API_KEY,
+  apiKey: "YOUR_API_KEY",
   baseURL: "https://nexusapi.link/v1",
 });
 
@@ -56,4 +56,4 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"Tester la connexion"}]}'
 ```
 
-Ne mettez jamais une vraie clé dans le code source. Ces exemples Chat Completions ne s'appliquent que si `supported_endpoint_types` contient `openai` ; s'il ne contient pas `openai-response`, ne considérez pas `/v1/responses` comme un substitut général. La génération d'images utilise un autre endpoint : consultez le [guide des images](/fr/guide/image-generation). Vérifiez la disponibilité des options dans le Catalogue de modèles.
+Ne mettez jamais une vraie clé dans le code source. Ces exemples Chat Completions ne s'appliquent que si `supported_endpoint_types` contient `openai`. Utilisez [Responses et Codex](/fr/developer/responses) uniquement lorsque `openai-response` est présent. La génération d'images utilise un autre endpoint : consultez le [guide des images](/fr/guide/image-generation). Vérifiez la disponibilité des options dans le Catalogue de modèles.

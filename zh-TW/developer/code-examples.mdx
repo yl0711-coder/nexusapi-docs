@@ -8,7 +8,7 @@ description: "使用 Python、JavaScript 或 cURL 透過 Chat Completions 呼叫
 ## 基本設定
 
 - Base URL：`https://nexusapi.link/v1`
-- API Key：在 [NexusAPI 控制台](https://nexusapi.link)的令牌管理建立
+- API Key：在 [NexusAPI 控制台](https://nexusapi.link)的令牌管理建立，通常以 `sk-` 開頭
 - Model ID：從模型廣場或 `/v1/models` 複製準確值
 
 ## Python
@@ -35,7 +35,7 @@ print(response.choices[0].message.content)
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.NEXUSAPI_API_KEY,
+  apiKey: "YOUR_API_KEY",
   baseURL: "https://nexusapi.link/v1",
 });
 
@@ -56,4 +56,4 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"測試連線"}]}'
 ```
 
-請不要把真實 Key 寫入程式碼或提交到儲存庫。本頁範例僅適用於該模型的 `supported_endpoint_types` 包含 `openai` 時；若未包含 `openai-response`，不要把 `/v1/responses` 當作通用替代介面。圖片生成使用不同端點，請看[圖片模型說明](/zh-TW/guide/image-generation)；可選參數是否可用以模型廣場為準。
+請不要把真實 Key 寫入程式碼或提交到儲存庫。本頁範例僅適用於該模型的 `supported_endpoint_types` 包含 `openai` 時；僅在包含 `openai-response` 時使用 [Responses 介面與 Codex](/zh-TW/developer/responses)。圖片生成使用不同端點，請看[圖片模型說明](/zh-TW/guide/image-generation)；可選參數是否可用以模型廣場為準。

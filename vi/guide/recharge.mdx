@@ -3,7 +3,7 @@ title: "Mua số dư"
 description: "Mua credit NexusAPI, kiểm tra ghi có và xử lý vấn đề thanh toán một cách an toàn."
 ---
 
-NexusAPI trừ credit tài khoản theo mức sử dụng thực tế. Trước khi mua, hãy xác định ngân sách và mô hình cần dùng. Một lỗi đơn lẻ không phải lý do để thanh toán lặp lại nhiều lần.
+NexusAPI trừ credit tài khoản theo mức sử dụng thực tế. Trước khi mua, hãy xác định ngân sách và mô hình cần dùng.
 
 ![Trang Quản lý ví và mua credit của NexusAPI, thông tin tài khoản đã được che](/images/nexusapi/console-wallet-topup-vi.png)
 
@@ -25,8 +25,18 @@ Credit chỉ là một điều kiện. Hãy kiểm tra thêm trạng thái, hạ
 
 Đừng nhầm lẫn thiếu số dư, hạn mức key, hạn chế nhóm và lỗi upstream tạm thời. Xem [lỗi API thường gặp](/vi/faq/common-errors) để chẩn đoán theo thứ tự.
 
-## Vấn đề thanh toán hoặc ghi có
+## Kiểm tra thanh toán và ghi có
 
-Chờ thời gian xử lý ghi trên trang thanh toán rồi làm mới console. Nếu số dư chưa đổi, gửi mã đơn, thời gian và múi giờ, số tiền, phương thức thanh toán, định danh tài khoản và ảnh chụp cho hỗ trợ. Không gửi mật khẩu, toàn bộ số thẻ hoặc API Key.
+Chờ thời gian xử lý ghi trên trang thanh toán rồi làm mới console. Nếu số dư chưa đổi, hãy liên hệ hỗ trợ và cung cấp:
+
+- ID người dùng hoặc ID tài khoản (không cần mật khẩu);
+- thời gian thanh toán và múi giờ;
+- kênh thanh toán và số tiền;
+- mã đơn hàng hoặc mã giao dịch thanh toán;
+- khi cần, ảnh chụp đã che thông tin cá nhân.
+
+<Warning>
+Hỗ trợ sẽ không bao giờ yêu cầu mật khẩu, mã xác nhận thanh toán, toàn bộ số thẻ ngân hàng hoặc toàn bộ API Key.
+</Warning>
 
 Theo dõi chi phí tại [mô hình, nhóm và giá](/vi/billing/models-pricing) và [sử dụng và thanh toán](/vi/billing/usage-and-billing).

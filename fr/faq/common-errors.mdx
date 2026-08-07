@@ -13,11 +13,11 @@ Les problèmes de paramètres, d’endpoint et de compatibilité de session ne d
 
 ## `status_code=500, not implemented`
 
-Si le message contient `status_code=500` et `not implemented`, que `supported_endpoint_types` du modèle sélectionné ne contient pas `openai-response` et que la requête utilise `/v1/responses`, il s’agit d’une **incompatibilité de protocole**, pas d’une indisponibilité temporaire.
+Si le message contient `status_code=500` et `not implemented`, vérifiez d’abord que le modèle sélectionné prend en charge le protocole de l’endpoint appelé. Par exemple, `/v1/responses` requiert `openai-response` dans `supported_endpoint_types`. En l’absence de ce type, il s’agit d’une **incompatibilité de protocole**, pas d’une indisponibilité temporaire.
 
 1. Dans une application maison, choisissez l’endpoint selon `supported_endpoint_types` ; utilisez `/v1/chat/completions` lorsqu’il contient `openai`.
 2. Dans Claude Code, suivez le [guide Claude Code](/fr/tools/claude-code) et vérifiez que le modèle prend en charge `anthropic`.
-3. Ne répétez pas la même requête : attendre ou changer de réseau ne corrige pas ce problème.
+3. Choisissez l'endpoint correspondant avant un nouvel essai : attendre ou changer de réseau ne corrige pas ce problème.
 
 Pour le support, fournissez un exemple expurgé, le modèle et le Request ID, jamais la clé.
 
@@ -31,7 +31,7 @@ Une 400 indique généralement un format de requête, un paramètre ou un état 
 4. Mettez à jour un client ou SDK ancien.
 5. Créez une nouvelle session et envoyez un texte court.
 
-Ne renvoyez pas la requête inchangée en boucle.
+Après avoir corrigé la cause probable, faites une requête minimale pour vérifier le résultat.
 
 ## 401 Unauthorized
 
@@ -47,7 +47,7 @@ Recopiez la clé depuis la console et vérifiez l’URL. Ne donnez pas sa valeur
 
 Une 403 signifie que cette requête est refusée : groupe non autorisé, restriction de modèle, liste d’IP non correspondante, état du compte ou refus du service upstream.
 
-Vérifiez le groupe, les restrictions de modèle et la liste d’IP, puis testez une courte requête texte. Si l’erreur persiste, fournissez Request ID, modèle, heure et message original. Ne contournez pas une restriction par des créations de clés ou des essais rapides.
+Vérifiez le groupe, les restrictions de modèle et la liste d’IP, puis testez une courte requête texte. Si l’erreur persiste, fournissez Request ID, modèle, heure et message original. Des essais fréquents ou la création de nouvelles clés ne résolvent pas une restriction d'accès.
 
 ## 404 Not Found / mauvaise adresse
 
@@ -78,17 +78,17 @@ Hors incompatibilité `not implemented`, ces codes indiquent souvent un échec d
 | `500` / `502` / `503` | Attendez 10 à 30 secondes, puis réessayez une seule fois. Gardez le Request ID si cela continue. |
 | `504` / `524` | Réduisez si possible contexte, appels d’outils ou longueur de sortie, puis réessayez plus tard. |
 
-N’envoyez pas en continu une longue tâche qui échoue avec le même modèle.
+En cas d'échecs répétés du même modèle, suspendez les longues tâches supplémentaires, conservez les informations et contactez le support.
 
 ## `no available channel` / aucun service actuel pour ce modèle
 
 Le groupe de la clé actuelle n’a temporairement aucun service disponible pour ce modèle. Un ID mal saisi, un modèle non proposé dans ce groupe, une indisponibilité temporaire ou une maintenance peuvent produire ce message.
 
-Réessayez plus tard ou choisissez un autre modèle visible pour ce groupe. Si cela persiste, envoyez le nom du modèle, le Request ID et l’heure ; il n’est pas nécessaire de recharger le compte ou de recréer la clé.
+Réessayez plus tard ou choisissez un autre modèle visible pour ce groupe. Si cela persiste, envoyez le nom du modèle, le Request ID et l’heure ; ce message n'est pas lié à l'ajout de crédit ou à la recréation d'une clé.
 
 ## `Concurrency limit exceeded for user`
 
-Le compte a atteint son nombre maximal de requêtes actives. Attendez la fin des requêtes en cours, puis réduisez la concurrence. Ne désactivez pas et ne recréez pas la clé pour cette erreur.
+Le compte a atteint son nombre maximal de requêtes actives. Attendez la fin des requêtes en cours, puis réduisez la concurrence. Cette erreur seule ne nécessite pas de désactiver ou recréer la clé.
 
 ## Erreurs de longues sessions ou d’appels d’outils
 
@@ -106,20 +106,20 @@ Le client n’a pas reçu un fragment de contenu attendu, souvent pendant une lo
 
 ## Délai d’image ou capacité non prise en charge
 
-Les modèles d’image doivent utiliser l’endpoint Images ; un modèle texte ne peut pas utiliser un endpoint de génération d’images. La génération est synchrone et peut être plus lente : ne soumettez pas plusieurs fois la même tâche avant le premier résultat.
+Les modèles d’image doivent utiliser l’endpoint Images ; un modèle texte ne peut pas utiliser un endpoint de génération d’images. La génération est synchrone et peut être plus lente : avant de soumettre à nouveau la même tâche, vérifiez le résultat de la première requête.
 
 - `Image generation is not enabled` / `model not supported` : vérifiez modèle, endpoint et paramètres.
-- `504` / `524` / timeout client : conservez Request ID et heure, sans régénération immédiate.
+- `504` / `524` / timeout client : conservez Request ID et heure, puis décidez si une nouvelle génération est nécessaire.
 
 Consultez [l’utilisation des modèles d’image](/fr/guide/image-generation).
 
 ## Le compte est crédité mais la clé indique une limite insuffisante
 
-Vérifiez le crédit du compte, la limite de la clé, son expiration et le groupe de jetons. Ne rechargez pas plusieurs fois après un seul message. En cas de persistance, fournissez le Request ID.
+Vérifiez le crédit du compte, la limite de la clé, son expiration et le groupe de jetons. Un message isolé peut aussi venir d'une limite de clé, d'une expiration ou d'une règle de groupe : vérifiez-les avant de recharger. En cas de persistance, fournissez le Request ID.
 
 ## Une erreur sera-t-elle automatiquement réussie plus tard ?
 
-Ne supposez pas qu’une erreur sera terminée plus tard par la plateforme. Les appels ordinaires n’ont pas de garantie de réessai automatique au niveau plateforme. Une nouvelle requête du client crée généralement un nouveau Request ID.
+Une erreur ne signifie pas nécessairement que la plateforme terminera la requête plus tard. Les appels ordinaires n’ont pas de garantie de réessai automatique au niveau plateforme. Une nouvelle requête du client crée généralement un nouveau Request ID.
 
 Décidez à partir du journal final du même Request ID et de la réception complète du contenu côté client. En cas de suspicion de double débit, fournissez les Request ID et heures concernés.
 

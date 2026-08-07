@@ -78,7 +78,7 @@ Open CC Switch
 
 ![Official CC Switch provider-form example with the key masked](/images/nexusapi/cc-switch-provider-form-official.png)
 
-> This is an example form from the [CC Switch repository](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png). Its example URL, model, and gateway name are not NexusAPI values; use the tables below.
+> This is an example form from the [CC Switch repository](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png). Its URL, model, and gateway name are interface examples only; use the NexusAPI values in the tables below.
 
 ### Claude Code provider
 
@@ -121,7 +121,7 @@ Introduce yourself in one sentence.
 | Name | `NexusAPI Codex` |
 | Endpoint / Base URL | `https://nexusapi.link/v1` |
 | API key | Your NexusAPI key |
-| Primary model | An appropriate Responses / Codex model ID available to the key |
+| Primary model | A model ID available to the key whose `supported_endpoint_types` includes `openai-response` |
 
 For a minimal provider, use:
 
@@ -133,7 +133,7 @@ API Key: YOUR_NEXUSAPI_KEY
 Primary Model: YOUR_CODEX_MODEL_ID
 ```
 
-Codex uses an OpenAI-compatible endpoint and therefore requires `/v1`. If the site provides a dedicated Codex token group, create the key in that group before configuring CC Switch. After switching providers, run:
+Codex uses the Responses protocol and therefore requires `/v1`. The model must be available to the selected key. After switching providers, run:
 
 ```bash
 codex
@@ -150,7 +150,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copy an ID from `data[].id`; do not guess from a provider name or copied screenshot.
+Copy an ID from `data[].id`. Choose an `anthropic`-capable model for Claude Code, and an `openai-response`-capable model for Codex.
 
 ## Endpoint rules by tool
 

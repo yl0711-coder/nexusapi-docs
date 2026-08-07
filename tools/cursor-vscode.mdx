@@ -10,7 +10,7 @@ VS Code 与 Cursor 共用同一份 Claude Code 用户级配置，因此只需配
 
 开始前请确认：
 
-- VS Code 版本为 1.94 或更高版本。
+- VS Code 版本为 1.98 或更高版本。
 - 已按 [Claude Code 教程](/tools/claude-code) 配置 NexusAPI。
 - `~/.claude/settings.json` 中的 API Key 和 Base URL 已生效。
 
@@ -40,9 +40,9 @@ VS Code 与 Cursor 共用同一份 Claude Code 用户级配置，因此只需配
 
 如果扩展仍然显示 Anthropic 官方登录页：
 
-1. 打开编辑器设置，搜索 `Claude Code login`。
-2. 勾选 **Disable Login Prompt**。
-3. 完全重启编辑器后再打开 Claude Code。
+1. 检查扩展是否为最新版本。
+2. 若当前版本提供 **Disable Login Prompt** 设置，可在编辑器设置中搜索 `Claude Code login` 后开启。
+3. 完全重启编辑器后再打开 Claude Code；若没有此设置，先在编辑器集成终端运行 `claude` 验证用户级配置。
 
 <Warning>
 **保护 API Key**
@@ -94,7 +94,7 @@ Cursor 能安装 Claude Code 扩展时会使用同一份用户级配置；如果
 
 ### CLI 能用，但扩展不能用
 
-确认 `~/.claude/settings.json` 位于**用户目录**而非项目目录，且其中的 Base URL 和 Key 正确；然后在编辑器中启用 **Disable Login Prompt** 并完全重启。
+确认 `~/.claude/settings.json` 位于**用户目录**而非项目目录，且其中的 Base URL 和 Key 正确；如果当前版本提供 **Disable Login Prompt**，可开启后完全重启编辑器。
 
 ### Cursor 扩展商店找不到
 

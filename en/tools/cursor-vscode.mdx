@@ -7,7 +7,7 @@ The official Claude Code extension offers chat, diff previews, file references, 
 
 ## 1. Install the official extension
 
-Before starting, confirm that you use VS Code 1.94 or later and complete the [Claude Code setup](/en/tools/claude-code). In the editor's Extensions view, search for **Claude Code** and confirm that the publisher is **Anthropic**. You can also use the [official VS Code guide](https://code.claude.com/docs/en/vs-code).
+Before starting, confirm that you use VS Code 1.98 or later and complete the [Claude Code setup](/en/tools/claude-code). In the editor's Extensions view, search for **Claude Code** and confirm that the publisher is **Anthropic**. You can also use the [official VS Code guide](https://code.claude.com/docs/en/vs-code).
 
 Open Extensions with <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> on macOS or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> on Windows and Linux.
 
@@ -21,9 +21,9 @@ The extension reads the same `~/.claude/settings.json` (or Windows user-profile 
 
 If the editor still shows a sign-in prompt:
 
-1. Open editor settings and search for `Claude Code login`.
-2. Enable **Disable Login Prompt**.
-3. Fully restart the editor.
+1. Check that the extension is up to date.
+2. If the current release provides **Disable Login Prompt**, search editor settings for `Claude Code login` and enable it.
+3. Fully restart the editor. If that setting is unavailable, verify the user-level configuration first by running `claude` in the integrated terminal.
 
 Do not write the NexusAPI key to a project `.vscode/settings.json`, and do not sync, screenshot, or commit a settings file containing it. Keep the key only in the user-level `~/.claude/settings.json`.
 
@@ -55,7 +55,7 @@ Run **Developer: Reload Window** from the Command Palette or fully restart the e
 
 ### The CLI works but the extension does not
 
-Confirm that `~/.claude/settings.json` is in the user directory, not the project directory. Recheck its Base URL and key, enable **Disable Login Prompt**, then fully restart the editor.
+Confirm that `~/.claude/settings.json` is in the user directory, not the project directory. Recheck its Base URL and key; if the current release provides **Disable Login Prompt**, enable it and fully restart the editor.
 
 ### Cursor cannot find the extension
 

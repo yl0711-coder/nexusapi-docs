@@ -7,7 +7,7 @@ Extension Claude Code chính thức có chat, xem trước diff, tham chiếu t�
 
 ## 1. Cài extension chính thức
 
-Trước tiên, hãy bảo đảm bạn dùng VS Code 1.94 trở lên và hoàn thành [thiết lập Claude Code](/vi/tools/claude-code). Trong Extensions, tìm **Claude Code** và xác nhận publisher là **Anthropic**. Có thể xem thêm [hướng dẫn VS Code chính thức](https://code.claude.com/docs/en/vs-code).
+Trước tiên, hãy bảo đảm bạn dùng VS Code 1.98 trở lên và hoàn thành [thiết lập Claude Code](/vi/tools/claude-code). Trong Extensions, tìm **Claude Code** và xác nhận publisher là **Anthropic**. Có thể xem thêm [hướng dẫn VS Code chính thức](https://code.claude.com/docs/en/vs-code).
 
 Mở Extensions bằng <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> trên macOS hoặc <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> trên Windows và Linux.
 
@@ -19,7 +19,7 @@ Có thể có extension bên thứ ba giống tên. Chỉ dùng extension do Ant
 
 Extension đọc cùng `~/.claude/settings.json` như CLI (hoặc đường dẫn tương ứng trong hồ sơ Windows). Không lưu lặp key trong cài đặt workspace của VS Code hay Cursor.
 
-Nếu editor vẫn yêu cầu đăng nhập: mở Settings, tìm `Claude Code login`, bật **Disable Login Prompt**, rồi khởi động lại hoàn toàn editor.
+Nếu editor vẫn yêu cầu đăng nhập và phiên bản hiện tại có cài đặt **Disable Login Prompt**, mở Settings, tìm `Claude Code login`, bật cài đặt đó rồi khởi động lại hoàn toàn editor.
 
 Không lưu lặp key NexusAPI trong `.vscode/settings.json` của dự án, không đồng bộ, chụp ảnh hay commit cấu hình có key. Chỉ lưu key trong `~/.claude/settings.json` cấp người dùng.
 
@@ -51,7 +51,7 @@ Chạy **Developer: Reload Window** trong Command Palette hoặc khởi động 
 
 ### CLI dùng được nhưng extension không dùng được
 
-Xác nhận `~/.claude/settings.json` nằm trong thư mục người dùng, không phải thư mục dự án, và Base URL/key chính xác. Bật **Disable Login Prompt** rồi khởi động lại hoàn toàn editor.
+Xác nhận `~/.claude/settings.json` nằm trong thư mục người dùng, không phải thư mục dự án, và Base URL/key chính xác. Nếu phiên bản hiện tại có **Disable Login Prompt**, hãy bật nó rồi khởi động lại hoàn toàn editor.
 
 ### Cursor không tìm thấy extension
 

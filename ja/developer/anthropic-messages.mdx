@@ -6,9 +6,9 @@ description: "`supported_endpoint_types` に anthropic を含むモデルをネ�
 この API は、現在の Key の `/v1/models` 応答で `supported_endpoint_types` に `anthropic` を含むモデルに使用します。先に[API とモデル対応マトリクス](/ja/developer/capability-matrix)を確認してください。**モデル、Key グループ、プロトコルのすべてが一致している必要があります。**
 
 <Warning>
-**Messages は汎用エンドポイントではありません**
+**Messages を使用する条件**
 
-OpenAI 互換アプリでは [Chat Completions](/ja/developer/openai-compatible) を使用してください。`supported_endpoint_types` に `anthropic` が含まれないモデルでは、Messages を汎用 endpoint として扱わないでください。`not implemented` は通常、一時的なエラーではなくプロトコル不一致です。
+この endpoint は `supported_endpoint_types` に `anthropic` を含むモデルだけに使用します。OpenAI 互換アプリでは [Chat Completions](/ja/developer/openai-compatible) を使用してください。モデルに `anthropic` がない場合は、そのモデルに対応する endpoint を選びます。`not implemented` は通常、一時的なエラーではなくプロトコル不一致です。
 </Warning>
 
 ## エンドポイントと最小リクエスト
@@ -65,7 +65,7 @@ SDK が `/v1/messages` を追加します。`base_url` に `https://nexusapi.lin
 | --- | --- |
 | Claude Code | [Claude Code ガイド](/ja/tools/claude-code)に従い、`~/.claude/settings.json` で `ANTHROPIC_BASE_URL=https://nexusapi.link` と `ANTHROPIC_AUTH_TOKEN` を設定 |
 | Anthropic SDK / ネイティブアプリ | Base URL を `https://nexusapi.link` に設定し、クライアントに Messages を送らせる |
-| OpenAI SDK アプリ | この設定を混在させず、[Chat Completions](/ja/developer/openai-compatible) を使用 |
+| OpenAI SDK アプリ | [Chat Completions](/ja/developer/openai-compatible) を使用 |
 
 ## トラブルシューティング
 

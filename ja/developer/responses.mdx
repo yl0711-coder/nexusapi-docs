@@ -3,12 +3,12 @@ title: "Responses API と Codex"
 description: "Codex Provider または Responses 対応が確認されたモデルに適切な接続方法を選びます。"
 ---
 
-`/v1/responses` は汎用の「新しいチャット API」ではありません。NexusAPI では主に [Codex CLI ガイド](/ja/tools/codex-cli)で設定するカスタム Provider、または現在の Key の `/v1/models` 応答で `supported_endpoint_types` に `openai-response` を含むモデルに使用します。
+NexusAPI では、`/v1/responses` は [Codex CLI ガイド](/ja/tools/codex-cli)で設定するカスタム Provider、または現在の Key の `/v1/models` 応答で `supported_endpoint_types` に `openai-response` を含むモデルに使用します。
 
 <Warning>
-**最初に対応プロトコルを確認してください**
+**Responses を使用する条件**
 
-`supported_endpoint_types` に `openai-response` が含まれない場合は、`/v1/responses` を使わないでください。`status_code=500, not implemented` が出る場合は、一時エラーとして再試行せず、そのモデルで示されたプロトコルを使用してください。
+`/v1/responses` は `supported_endpoint_types` に `openai-response` を含む場合だけ使用します。`status_code=500, not implemented` が出る場合は、そのモデルで示されたプロトコルを使用してください。通常は一時的な再試行対象ではありません。
 </Warning>
 
 ## エンドポイントと適用範囲
@@ -21,7 +21,7 @@ POST https://nexusapi.link/v1/responses
 | --- | --- |
 | Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の `wire_api = "responses"` Provider 設定を使用 |
 | `supported_endpoint_types` に `openai-response` を含むモデルを使う別のアプリ | そのアプリの Responses クライアント/Schema を使い、最小リクエストから検証 |
-| 一般的な OpenAI 互換テキストアプリ | [Chat Completions](/ja/developer/openai-compatible)を使用。新しい API だからという理由だけで切り替えない |
+| 一般的な OpenAI 互換テキストアプリ | [Chat Completions](/ja/developer/openai-compatible)を優先 |
 | `openai-response` を含まないモデル | `supported_endpoint_types` に示された Chat Completions または Messages を使用し、この endpoint は使わない |
 
 ## 最小検証リクエスト

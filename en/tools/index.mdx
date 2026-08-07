@@ -24,9 +24,9 @@ Choose the tool for the way you work, then use its dedicated guide. Do not copy 
 5. Test with one small, read-only request and check the usage log.
 
 <Warning>
-**Do not run unknown one-click scripts**
+**Use installation scripts from trusted sources**
 
-Installation or configuration scripts can modify local settings, write credentials, or install third-party code. Use official sources, read a script before running it, and never paste an API key into a script you do not trust.
+Installation or configuration scripts can modify local settings, write credentials, or install third-party code. Run one only after verifying the source, reviewing the script, and backing up existing configuration.
 </Warning>
 
 ## Match the tool to the protocol
@@ -41,4 +41,4 @@ The available protocol depends on the model and token group. Read the [API and m
 
 ## A tool is not listed here
 
-If the client supports a custom OpenAI-compatible Base URL, begin with the [quick start](/en/guide/quick-start) and that client's official documentation. Confirm whether it adds `/v1` automatically, which protocol it sends, and whether it permits a custom model ID. We do not publish unverified client instructions merely to expand the list.
+If the client supports a custom OpenAI-compatible Base URL, begin with the [quick start](/en/guide/quick-start) and that client's official documentation. Confirm whether it adds `/v1` automatically, which protocol it sends, and whether it permits a custom model ID. For an unlisted client, use those sources to run a minimal test; we can consider adding a formal guide once the setup is verified.

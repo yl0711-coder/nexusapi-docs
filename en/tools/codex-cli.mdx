@@ -60,9 +60,9 @@ wire_api = "responses"
 Replace `YOUR_MODEL_ID` with the exact model ID available to the key. Do not put the actual key in this file.
 
 <Warning>
-**Do not write a NexusAPI key to `auth.json`**
+**Keep the NexusAPI key in an environment variable**
 
-`~/.codex/auth.json` is Codex's OpenAI login cache. The configuration above reads the key from `env_key`; keep NexusAPI credentials out of `auth.json`, source code, and screenshots.
+The configuration above reads the key from `NEXUSAPI_API_KEY` through `env_key`. `auth.json` can contain Codex credential state; there is no need to put a NexusAPI key in it. Keep the key out of source code and screenshots as well.
 </Warning>
 
 ## 4. Set the environment variable

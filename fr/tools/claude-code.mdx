@@ -7,7 +7,7 @@ Claude Code utilise le protocole Messages Anthropic. Sa Base URL NexusAPI est do
 
 ## Prérequis système
 
-- macOS 13+, Ubuntu 20.04+, Debian 10+ ou Windows 10 version 1809+ ;
+- macOS 13+, Ubuntu 20.04+, Debian 10+, Alpine Linux 3.19+ ou Windows 10 version 1809+ ;
 - au moins 4 Go de mémoire et un processeur x64 ou ARM64 ;
 - un réseau pouvant joindre NexusAPI ;
 - sous Windows, [Git for Windows](https://git-scm.com/install/windows) est facultatif si vous utilisez Git Bash.
@@ -92,12 +92,8 @@ Conservez ce fichier dans le profil utilisateur, jamais dans le dépôt du proje
 <Tip>
 **Désactivez les champs expérimentaux seulement si le message le demande**
 
-Si l’erreur mentionne explicitement `context_management` ou des entrées expérimentales non prises en charge, ajoutez `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` à `env` et réessayez. Ce réglage désactive certains champs de préversion : ce n’est pas une configuration par défaut.
+Si l’erreur mentionne explicitement `context_management` ou des entrées expérimentales non prises en charge, ajoutez `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` à `env` et réessayez. Ce réglage désactive certains champs de préversion ; utilisez-le uniquement pour ce type d’erreur de compatibilité.
 </Tip>
-
-```bash
-vim ~/.claude/settings.json
-```
 
 ## 4. Vérifier
 
@@ -111,7 +107,7 @@ cd your-project-folder
 claude
 ```
 
-Exécutez ensuite `/status`. Vérifiez que **Anthropic base URL** vaut `https://nexusapi.link` et que l’authentification vient de `ANTHROPIC_AUTH_TOKEN`, puis envoyez une courte question. Lors du premier lancement, ne faites confiance qu’aux répertoires de projet que vous reconnaissez.
+Exécutez ensuite `/status`. Vérifiez que **Anthropic base URL** vaut `https://nexusapi.link` et que l’authentification vient de `ANTHROPIC_AUTH_TOKEN`, puis envoyez une courte question.
 
 ## Problèmes fréquents
 
@@ -128,7 +124,7 @@ Unable to connect to Anthropic services
 Failed to connect to api.anthropic.com: ERR BAD REQUEST
 ```
 
-N’écrasez pas par script les champs internes de `.claude.json` : ils peuvent changer avec les versions et l’écrasement peut supprimer un état de connexion ou d’autres réglages.
+N’écrasez pas par script les champs internes de `.claude.json` : ils peuvent changer avec les versions et l’écrasement peut supprimer des réglages existants.
 
 ### PowerShell bloque l’installateur
 
@@ -138,7 +134,7 @@ Essayez d’abord WinGet ou l’installateur officiel depuis Windows CMD. Si vou
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
 
-Ne modifiez pas une stratégie globale de la machine uniquement pour installer un client.
+Après avoir confirmé que la stratégie locale est la cause, modifiez uniquement celle de l’utilisateur courant.
 
 ### `fetch failed`
 
@@ -149,19 +145,15 @@ Ne modifiez pas une stratégie globale de la machine uniquement pour installer u
 
 ### État `offline`
 
-Certaines fonctions auxiliaires testent des services séparés. Vérifiez l'URL avec `/status` et une courte requête de modèle avant de conclure à une panne NexusAPI.
+Certaines fonctions auxiliaires testent des services séparés. Vérifiez l'URL avec `/status` et une courte requête de modèle ; `offline` seul ne signifie pas forcément une panne NexusAPI.
 
 ### WebFetch échoue mais le chat normal fonctionne
 
-WebFetch peut utiliser des contrôles de domaine et un accès réseau externes distincts. Si une requête texte courte fonctionne, laissez la Base URL NexusAPI inchangée et examinez l’erreur WebFetch selon les règles réseau propres à Claude Code.
+WebFetch peut utiliser des contrôles de domaine et un accès réseau externes distincts. Si une requête texte courte fonctionne, la Base URL NexusAPI n'a pas besoin d'être modifiée ; examinez l’erreur WebFetch selon les règles réseau propres à Claude Code.
 
 ### Un appel API échoue
 
 Fermez la session, ouvrez une nouvelle session `claude` et testez une seule courte requête. Si l’échec continue, conservez le Request ID et utilisez l’[auto-vérification](/fr/faq/self-check).
-
-### Échec de connexion dans le navigateur
-
-Supprimez seulement les cookies du site concerné, puis réessayez. Un problème de connexion dans le navigateur ne prouve pas que la clé API est mal configurée.
 
 ## Références officielles
 

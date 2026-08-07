@@ -27,7 +27,7 @@ Ne partagez pas une clé complète, un mot de passe, des données privées ou le
 | 429 | Concurrence et fréquence ; respectez `Retry-After`. |
 | 500 / 502 / 503 | Attendez 10 à 30 secondes puis réessayez une seule fois. |
 | 504 / 524 | Taille de demande, délai et état de service. |
-| `500, not implemented` | Ne réessayez pas : vérifiez un appel Responses vers un modèle Claude. |
+| `500, not implemented` | Vérifiez que `supported_endpoint_types` du modèle contient le protocole utilisé par la requête. |
 | `no available channel` | ID de modèle, groupe de jetons et disponibilité actuelle. |
 
 Voir les [erreurs API courantes](/fr/faq/common-errors) pour le détail.

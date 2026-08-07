@@ -74,7 +74,7 @@ CC Switch を開く
 
 ![キーをマスクした公式 CC Switch Provider フォーム例](/images/nexusapi/cc-switch-provider-form-official.png)
 
-> 画像は [CC Switch 公式リポジトリ](https://github.com/farion1231/cc-switch)のものです。フォーム中の URL、モデル、gateway 名は NexusAPI の実値ではありません。
+> 画像は [CC Switch 公式リポジトリ](https://github.com/farion1231/cc-switch)のものです。フォーム中の URL、モデル、gateway 名は画面例です。NexusAPI の実際の値は下の表を使用してください。
 
 ### Claude Code
 
@@ -117,7 +117,7 @@ claude
 | Name | `NexusAPI Codex` |
 | Endpoint | `https://nexusapi.link/v1` |
 | API Key | NexusAPI Key |
-| Primary model | グループで使える Responses 向けモデル ID |
+| Primary model | グループで使え、`supported_endpoint_types` に `openai-response` を含むモデル ID |
 
 最小設定例：
 
@@ -129,7 +129,7 @@ API Key: YOUR_NEXUSAPI_KEY
 Primary Model: YOUR_CODEX_MODEL_ID
 ```
 
-Codex は OpenAI 互換 endpoint を使うため `/v1` が必要です。切り替え後に実行します。
+Codex は Responses プロトコルを使うため `/v1` が必要です。選択した Key で使えるモデルを設定してください。切り替え後に実行します。
 
 ```bash
 codex
@@ -146,7 +146,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-`data[].id` がその Key で使えるモデル ID です。Provider 名や古いスクリーンショットで推測しないでください。
+`data[].id` がその Key で使えるモデル ID です。Claude Code には `anthropic` 対応モデル、Codex には `openai-response` 対応モデルを選択してください。
 
 ## ツールごとの Endpoint ルール
 

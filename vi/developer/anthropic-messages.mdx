@@ -6,9 +6,9 @@ description: "Gọi mô hình có `supported_endpoint_types` chứa anthropic b�
 Dùng API này khi `supported_endpoint_types` trong `/v1/models` của key hiện tại chứa `anthropic`. Hãy xem [ma trận khả năng](/vi/developer/capability-matrix) trước: **mô hình, nhóm key và giao thức phải cùng khớp**.
 
 <Warning>
-**Messages không phải endpoint chung cho mọi mô hình**
+**Phạm vi sử dụng Messages**
 
-Ứng dụng tương thích OpenAI nên dùng [Chat Completions](/vi/developer/openai-compatible). Nếu `supported_endpoint_types` không chứa `anthropic`, không xem Messages là endpoint chung; `not implemented` thường là không tương thích giao thức, không phải lỗi tạm thời có thể giải quyết bằng retry.
+API này chỉ phù hợp với model có `supported_endpoint_types` chứa `anthropic`. Ứng dụng tương thích OpenAI nên dùng [Chat Completions](/vi/developer/openai-compatible); nếu không có `anthropic`, hãy chọn giao thức mà model hỗ trợ. `not implemented` thường là không tương thích giao thức, không phải lỗi tạm thời có thể giải quyết bằng retry.
 </Warning>
 
 ## Endpoint và yêu cầu tối thiểu

@@ -56,7 +56,7 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-N'enregistrez pas une vraie clé dans ce fichier ni dans `~/.codex/auth.json`, qui est le cache de connexion OpenAI de Codex.
+N'enregistrez pas une vraie clé dans ce fichier. La configuration lit la clé depuis `NEXUSAPI_API_KEY` via `env_key` ; `auth.json` peut contenir l'état des identifiants Codex, mais il n'est pas nécessaire d'y écrire une clé NexusAPI. Ne partagez jamais de fichier contenant une clé réelle.
 
 ## 4. Définir la variable de clé
 

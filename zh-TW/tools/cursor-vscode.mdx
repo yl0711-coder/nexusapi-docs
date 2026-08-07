@@ -7,7 +7,7 @@ description: "以既有的 NexusAPI 使用者設定，在官方 Claude Code 編�
 
 ## 1. 安裝官方擴充套件
 
-請先確認 VS Code 為 1.94 或更新版本，並完成 [Claude Code 設定](/zh-TW/tools/claude-code)。在編輯器擴充套件搜尋 **Claude Code**，並確認發佈者為 **Anthropic**；也可查看[官方 VS Code 教學](https://code.claude.com/docs/en/vs-code)。
+請先確認 VS Code 為 1.98 或更新版本，並完成 [Claude Code 設定](/zh-TW/tools/claude-code)。在編輯器擴充套件搜尋 **Claude Code**，並確認發佈者為 **Anthropic**；也可查看[官方 VS Code 教學](https://code.claude.com/docs/en/vs-code)。
 
 macOS 可按 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>，Windows／Linux 可按 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> 開啟擴充套件市集。
 
@@ -21,9 +21,9 @@ macOS 可按 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>，Windows／Linux 可�
 
 若仍顯示登入提示：
 
-1. 開啟編輯器設定並搜尋 `Claude Code login`。
-2. 啟用 **Disable Login Prompt**。
-3. 完全重啟編輯器。
+1. 確認擴充套件已更新至最新版本。
+2. 若目前版本提供 **Disable Login Prompt**，可在編輯器設定搜尋 `Claude Code login` 後啟用。
+3. 完全重啟編輯器；若沒有此設定，請先在整合終端執行 `claude`，確認使用者層級設定。
 
 不要把 NexusAPI Key 寫進專案的 `.vscode/settings.json`，也不要同步、截圖或提交包含 Key 的設定。Key 只應放在使用者目錄中的 `~/.claude/settings.json`。
 
@@ -55,7 +55,7 @@ macOS 可按 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>，Windows／Linux 可�
 
 ### CLI 能用，但擴充套件不能用
 
-確認 `~/.claude/settings.json` 位於使用者目錄而非專案目錄，且 Base URL 和 Key 正確；啟用 **Disable Login Prompt** 後完全重啟編輯器。
+確認 `~/.claude/settings.json` 位於使用者目錄而非專案目錄，且 Base URL 和 Key 正確；若目前版本提供 **Disable Login Prompt**，可啟用後完全重啟編輯器。
 
 ### Cursor 市集找不到擴充套件
 

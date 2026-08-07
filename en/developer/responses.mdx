@@ -3,12 +3,12 @@ title: "Responses API and Codex"
 description: "Choose the correct integration for a Codex Provider or a model confirmed to support Responses."
 ---
 
-`/v1/responses` is not a universal “newer chat API.” In NexusAPI, it is primarily for the custom Provider configured in the [Codex CLI guide](/en/tools/codex-cli), or for a model whose `supported_endpoint_types` in `/v1/models` includes `openai-response`.
+In NexusAPI, `/v1/responses` is for the custom Provider configured in the [Codex CLI guide](/en/tools/codex-cli), or for a model whose `supported_endpoint_types` in `/v1/models` includes `openai-response`.
 
 <Warning>
-**Confirm the supported protocol first**
+**When to use Responses**
 
-If `supported_endpoint_types` does not include `openai-response`, do not use `/v1/responses`. If you receive `status_code=500, not implemented`, use the protocol listed for that model instead of treating it as a temporary error to retry.
+Use `/v1/responses` only when `supported_endpoint_types` includes `openai-response`. If you receive `status_code=500, not implemented`, use the protocol listed for that model; this normally is not a temporary error to retry.
 </Warning>
 
 ## Endpoint and scope
@@ -21,7 +21,7 @@ POST https://nexusapi.link/v1/responses
 | --- | --- |
 | Codex CLI | Use the `wire_api = "responses"` Provider configuration in the [Codex CLI guide](/en/tools/codex-cli) |
 | Another app with a model whose `supported_endpoint_types` includes `openai-response` | Use that app's Responses client or schema and verify a minimum request first |
-| General OpenAI-compatible text app | Use [Chat Completions](/en/developer/openai-compatible); do not switch just because this API is newer |
+| General OpenAI-compatible text app | Prefer [Chat Completions](/en/developer/openai-compatible) |
 | A model without `openai-response` | Use the Chat Completions or Messages protocol listed in `supported_endpoint_types`, not this endpoint |
 
 ## Minimum verification request

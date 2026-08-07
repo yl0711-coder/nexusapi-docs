@@ -3,12 +3,12 @@ title: "API Responses và Codex"
 description: "Chọn cách tích hợp đúng cho Codex Provider hoặc model đã xác nhận hỗ trợ Responses."
 ---
 
-`/v1/responses` không phải là “API chat mới hơn” dùng chung. Trong NexusAPI, nó chủ yếu dành cho Provider tùy chỉnh trong [hướng dẫn Codex CLI](/vi/tools/codex-cli), hoặc model có `supported_endpoint_types` trong `/v1/models` chứa `openai-response`.
+Trong NexusAPI, `/v1/responses` dành cho custom provider trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) và cho model có `supported_endpoint_types` trong `/v1/models` chứa `openai-response`.
 
 <Warning>
 **Xác nhận giao thức được hỗ trợ trước**
 
-Nếu `supported_endpoint_types` không chứa `openai-response`, không dùng `/v1/responses`. Nếu gặp `status_code=500, not implemented`, dùng giao thức được liệt kê cho model đó thay vì xem đây là lỗi tạm thời để retry.
+Trước khi dùng `/v1/responses`, hãy xác nhận `supported_endpoint_types` có `openai-response`. Nếu gặp `status_code=500, not implemented`, chuyển sang giao thức được liệt kê cho model đó và thực hiện một kiểm tra ngắn.
 </Warning>
 
 ## Endpoint và phạm vi

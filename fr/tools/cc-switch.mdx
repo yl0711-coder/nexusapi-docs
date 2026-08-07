@@ -74,7 +74,7 @@ Ouvrir CC Switch
 
 ![Exemple officiel de formulaire Provider CC Switch, clé masquée](/images/nexusapi/cc-switch-provider-form-official.png)
 
-> Les deux images viennent du [dépôt officiel CC Switch](https://github.com/farion1231/cc-switch). Les URL, modèles et noms de gateway visibles dans le second exemple ne sont pas des valeurs NexusAPI.
+> Les deux images viennent du [dépôt officiel CC Switch](https://github.com/farion1231/cc-switch). Les URL, modèles et noms de gateway visibles dans le second exemple sont des éléments d’interface ; utilisez les valeurs NexusAPI indiquées ci-dessous.
 
 ### Claude Code
 
@@ -117,7 +117,7 @@ Présente-toi en une phrase.
 | Nom | `NexusAPI Codex` |
 | Endpoint | `https://nexusapi.link/v1` |
 | Clé API | Votre clé NexusAPI |
-| Modèle principal | Modèle Responses disponible au groupe |
+| Modèle principal | Modèle disponible au groupe dont `supported_endpoint_types` contient `openai-response` |
 
 Exemple minimal :
 
@@ -129,7 +129,7 @@ API Key: YOUR_NEXUSAPI_KEY
 Primary Model: YOUR_CODEX_MODEL_ID
 ```
 
-Codex exige `/v1` car il utilise l’endpoint compatible OpenAI. Lancez ensuite :
+Codex utilise le protocole Responses et exige donc `/v1`. Le modèle doit être disponible à la clé sélectionnée. Lancez ensuite :
 
 ```bash
 codex
@@ -146,7 +146,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copiez un identifiant depuis `data[].id` ; ne le devinez pas d’après le nom d’un Provider ou une ancienne capture.
+Copiez un identifiant depuis `data[].id`. Pour Claude Code, choisissez un modèle prenant en charge `anthropic` ; pour Codex, un modèle prenant en charge `openai-response`.
 
 ## Règles d’endpoint
 

@@ -3,7 +3,7 @@ title: "Matrice des API et des capacités de modèles"
 description: "Vérifiez le modèle, le groupe de jetons et le protocole avant d'appeler NexusAPI."
 ---
 
-NexusAPI est une passerelle de modèles : un modèle n'est pas automatiquement compatible avec chaque API. **Le modèle, le groupe de jetons et le protocole doivent correspondre.** Le catalogue de modèles et la réponse de votre clé actuelle sont les sources de vérité.
+Le modèle, le groupe de jetons et le protocole utilisés avec NexusAPI doivent correspondre. Le catalogue de modèles et la réponse de votre clé actuelle sont les sources de vérité.
 
 <Info>
 **À vérifier avant l'appel**
@@ -24,9 +24,9 @@ NexusAPI est une passerelle de modèles : un modèle n'est pas automatiquement c
 | Génération d'images | [POST /v1/images/generations](/fr/guide/image-generation) | `supported_endpoint_types` contient `image-generation` | N'envoyez que les options supportées par ce modèle. |
 
 <Warning>
-**Toutes les routes de New API ne sont pas des promesses NexusAPI**
+**Utilisez le périmètre des capacités publiquement documentées**
 
-Le logiciel New API sous-jacent peut proposer davantage de routes compatibles. NexusAPI ne prend en charge publiquement que les capacités indiquées ici, dans le catalogue de modèles ou dans une documentation officielle. L'édition ou les variations d'images, embeddings, audio, rerank et Gemini natif ne sont pas actuellement des capacités générales documentées : ne les devinez pas en production.
+Utilisez les capacités indiquées ici, dans le catalogue de modèles ou dans une documentation officielle. L'édition ou les variations d'images, embeddings, audio, rerank et Gemini natif ne sont pas actuellement des capacités publiques générales : contactez le support avant de les utiliser en production.
 </Warning>
 
 ## Vérifier les modèles avec la clé actuelle

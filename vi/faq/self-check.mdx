@@ -27,7 +27,7 @@ Không gửi API Key đầy đủ, mật khẩu, dữ liệu riêng tư hoặc t
 | 429 | Đồng thời và tần suất; theo `Retry-After`. |
 | 500 / 502 / 503 | Chờ 10–30 giây rồi chỉ thử lại một lần. |
 | 504 / 524 | Kích thước yêu cầu, thời gian chờ, trạng thái dịch vụ. |
-| `500, not implemented` | Không thử lại; đối chiếu endpoint đang dùng với `supported_endpoint_types` của model. |
+| `500, not implemented` | Kiểm tra xem `supported_endpoint_types` của model có chứa giao thức đang dùng trong yêu cầu hay không. |
 | `no available channel` | Model ID, nhóm token, khả năng hiện tại. |
 
 Xem chi tiết tại [lỗi API thường gặp](/vi/faq/common-errors).

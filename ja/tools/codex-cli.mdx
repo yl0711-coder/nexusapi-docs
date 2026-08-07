@@ -56,7 +56,7 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-実際の Key をこのファイルや `~/.codex/auth.json` に保存しないでください。`auth.json` は Codex の OpenAI ログインキャッシュです。
+実際の Key はこのファイルに保存しないでください。この設定は `env_key` を通じて `NEXUSAPI_API_KEY` から Key を読み取ります。`auth.json` には Codex の認証状態が含まれる場合がありますが、NexusAPI Key を書き込む必要はありません。実際の Key を含むファイルを共有・コミットしないでください。
 
 ## 4. 環境変数を設定する
 

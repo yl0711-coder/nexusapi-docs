@@ -8,7 +8,7 @@ The examples below use OpenAI Chat Completions. First confirm the selected model
 ## Core settings
 
 - **Base URL:** `https://nexusapi.link/v1`
-- **API key:** create it in the [NexusAPI console](https://nexusapi.link)
+- **API key:** create it in the [NexusAPI console](https://nexusapi.link); it usually begins with `sk-`
 - **Model ID:** copy the exact ID from the Model Marketplace for the current key's group
 
 ## Python
@@ -21,14 +21,12 @@ client = OpenAI(
     base_url="https://nexusapi.link/v1",
 )
 
-stream = client.chat.completions.create(
+response = client.chat.completions.create(
     model="YOUR_MODEL_ID",
     messages=[{"role": "user", "content": "Introduce yourself."}],
-    stream=True,
 )
 
-for chunk in stream:
-    print(chunk.choices[0].delta.content or "", end="", flush=True)
+print(response.choices[0].message.content)
 ```
 
 ## JavaScript
@@ -37,19 +35,16 @@ for chunk in stream:
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.NEXUSAPI_API_KEY,
+  apiKey: "YOUR_API_KEY",
   baseURL: "https://nexusapi.link/v1",
 });
 
-const stream = await client.chat.completions.create({
+const response = await client.chat.completions.create({
   model: "YOUR_MODEL_ID",
   messages: [{ role: "user", content: "Introduce yourself." }],
-  stream: true,
 });
 
-for await (const chunk of stream) {
-  process.stdout.write(chunk.choices[0]?.delta?.content || "");
-}
+console.log(response.choices[0].message.content);
 ```
 
 ## cURL
@@ -64,4 +59,4 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   }'
 ```
 
-Do not put an actual key in source code or commit it to a repository. These Chat Completions examples apply only when `supported_endpoint_types` contains `openai`; if it does not contain `openai-response`, do not treat `/v1/responses` as a general substitute. Image generation uses a different endpoint; see the [image model guide](/en/guide/image-generation).
+Do not put an actual key in source code or commit it to a repository. These Chat Completions examples apply only when `supported_endpoint_types` contains `openai`. Use [Responses API and Codex](/en/developer/responses) only when it contains `openai-response`. Image generation uses a different endpoint; see the [image model guide](/en/guide/image-generation).

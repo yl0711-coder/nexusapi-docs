@@ -6,9 +6,9 @@ description: "Appelez les modèles dont `supported_endpoint_types` contient anth
 Utilisez cette API lorsque `supported_endpoint_types` dans `/v1/models` pour votre clé actuelle contient `anthropic`. Consultez d'abord la [matrice des capacités](/fr/developer/capability-matrix) : **modèle, groupe de clé et protocole doivent correspondre**.
 
 <Warning>
-**Messages n'est pas un endpoint universel**
+**Quand utiliser Messages**
 
-Pour une application compatible OpenAI, utilisez [Chat Completions](/fr/developer/openai-compatible). Si `supported_endpoint_types` ne contient pas `anthropic`, ne traitez pas Messages comme un endpoint universel : `not implemented` indique généralement une incompatibilité de protocole, pas une erreur temporaire.
+Utilisez cet endpoint uniquement lorsque `supported_endpoint_types` contient `anthropic`. Une application compatible OpenAI doit utiliser [Chat Completions](/fr/developer/openai-compatible) ; si un modèle ne liste pas `anthropic`, choisissez l'un de ses endpoints compatibles. `not implemented` indique généralement une incompatibilité de protocole, pas une erreur temporaire.
 </Warning>
 
 ## Endpoint et requête minimale
@@ -65,7 +65,7 @@ Le SDK ajoute `/v1/messages`. N'utilisez pas `https://nexusapi.link/v1/messages`
 | --- | --- |
 | Claude Code | Suivez le [guide Claude Code](/fr/tools/claude-code) : `ANTHROPIC_BASE_URL=https://nexusapi.link` et `ANTHROPIC_AUTH_TOKEN` dans `~/.claude/settings.json` |
 | SDK Anthropic / client natif | URL de base `https://nexusapi.link`, puis laissez le client envoyer Messages |
-| Application avec SDK OpenAI | Ne mélangez pas cette configuration ; utilisez [Chat Completions](/fr/developer/openai-compatible) |
+| Application avec SDK OpenAI | Utilisez [Chat Completions](/fr/developer/openai-compatible) |
 
 ## Dépannage
 

@@ -3,12 +3,12 @@ title: "API Responses et Codex"
 description: "Choisissez la bonne intégration pour un Provider Codex ou un modèle confirmé pour Responses."
 ---
 
-`/v1/responses` n'est pas une « nouvelle API de chat » universelle. Dans NexusAPI, il sert surtout au Provider personnalisé configuré dans le [guide Codex CLI](/fr/tools/codex-cli), ou à un modèle dont `supported_endpoint_types` dans `/v1/models` contient `openai-response`.
+Dans NexusAPI, `/v1/responses` sert au Provider personnalisé configuré dans le [guide Codex CLI](/fr/tools/codex-cli), ou à un modèle dont `supported_endpoint_types` dans `/v1/models` contient `openai-response`.
 
 <Warning>
-**Confirmez d'abord le protocole pris en charge**
+**Quand utiliser Responses**
 
-Si `supported_endpoint_types` ne contient pas `openai-response`, n'utilisez pas `/v1/responses`. En cas de `status_code=500, not implemented`, utilisez le protocole indiqué pour ce modèle au lieu de traiter l'erreur comme temporaire et de réessayer.
+Utilisez `/v1/responses` uniquement lorsque `supported_endpoint_types` contient `openai-response`. En cas de `status_code=500, not implemented`, utilisez le protocole indiqué pour ce modèle : ce n'est généralement pas une erreur temporaire à réessayer.
 </Warning>
 
 ## Endpoint et périmètre
@@ -21,7 +21,7 @@ POST https://nexusapi.link/v1/responses
 | --- | --- |
 | Codex CLI | Utilisez la configuration Provider `wire_api = "responses"` du [guide Codex CLI](/fr/tools/codex-cli) |
 | Autre application avec modèle dont `supported_endpoint_types` contient `openai-response` | Utilisez son client ou schéma Responses et vérifiez d'abord une requête minimale |
-| Application texte OpenAI générique | Utilisez [Chat Completions](/fr/developer/openai-compatible) ; ne basculez pas uniquement parce que cette API est plus récente |
+| Application texte OpenAI générique | Préférez [Chat Completions](/fr/developer/openai-compatible) |
 | Modèle sans `openai-response` | Utilisez le protocole Chat Completions ou Messages indiqué dans `supported_endpoint_types`, pas cet endpoint |
 
 ## Requête minimale de vérification

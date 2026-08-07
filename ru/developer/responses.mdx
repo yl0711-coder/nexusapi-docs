@@ -3,12 +3,12 @@ title: "API Responses и Codex"
 description: "Выберите правильную интеграцию для Provider Codex или модели, подтверждённой для Responses."
 ---
 
-`/v1/responses` — не универсальный «новый API чата». В NexusAPI он предназначен прежде всего для кастомного Provider из [руководства Codex CLI](/ru/tools/codex-cli), либо для модели, у которой `supported_endpoint_types` в `/v1/models` содержит `openai-response`.
+В NexusAPI `/v1/responses` предназначен для custom provider из [руководства Codex CLI](/ru/tools/codex-cli) и для моделей, у которых `supported_endpoint_types` в `/v1/models` содержит `openai-response`.
 
 <Warning>
 **Сначала подтвердите поддерживаемый протокол**
 
-Если `supported_endpoint_types` не содержит `openai-response`, не используйте `/v1/responses`. При `status_code=500, not implemented` используйте указанный для этой модели протокол, а не считайте ошибку временной и повторяйте запрос.
+Перед использованием `/v1/responses` убедитесь, что `supported_endpoint_types` содержит `openai-response`. При `status_code=500, not implemented` переключитесь на протокол, указанный для этой модели, и выполните короткий тест.
 </Warning>
 
 ## Endpoint и область применения

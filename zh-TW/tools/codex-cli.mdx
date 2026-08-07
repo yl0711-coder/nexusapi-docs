@@ -59,7 +59,7 @@ wire_api = "responses"
 請將 `YOUR_MODEL_ID` 替換成目前 Key 可用的準確模型 ID。不要在設定檔中保存真實 Key。
 
 <Warning>
-`~/.codex/auth.json` 是 Codex 的 OpenAI 登入快取。請不要把 NexusAPI Key 寫進它；上方設定會從 `env_key` 讀取環境變數。
+請將 NexusAPI Key 保存在環境變數。上方設定會透過 `env_key` 從 `NEXUSAPI_API_KEY` 讀取 Key；`auth.json` 可能包含 Codex 的憑證狀態，無須把 NexusAPI Key 寫入其中，也不要將包含 Key 的檔案提交或截圖分享。
 </Warning>
 
 ## 4. 設定環境變數

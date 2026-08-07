@@ -3,11 +3,11 @@ title: "Claude Code 安装使用教程"
 description: "NexusAPI：Claude Code 安装使用教程"
 ---
 
-Claude Code 是一个强大的 AI 编程助手，让您可以直接在终端中与 AI 协作编程。本教程将指导您完成安装和配置过程。
+Claude Code 是 Anthropic 提供的终端代码智能体。本教程说明如何安装它，并通过 NexusAPI 进行配置和验证。
 
 ## 系统要求
 
-- 支持的操作系统：macOS 13+、Ubuntu 20.04+、Debian 10+ 或 Windows 10 1809+
+- 支持的操作系统：macOS 13+、Ubuntu 20.04+、Debian 10+、Alpine Linux 3.19+ 或 Windows 10 1809+
 - 硬件：4 GB 以上内存，x64 或 ARM64 处理器
 - Windows 可选安装 [Git for Windows](https://git-scm.com/install/windows)，以便使用 Git Bash
 - 网络：可正常访问 NexusAPI 服务的网络连接
@@ -50,24 +50,25 @@ claude doctor
 ## 2. 配置 API 令牌
 
 ### 步骤 1：获取 API 令牌
-登录控制台，点击进入左侧`令牌管理`菜单选择「`添加令牌`」创建一个新的令牌，令牌建议选项如下：
+登录 NexusAPI 控制台，进入“令牌管理”并选择“添加令牌”，创建新的令牌：
 
 > - 名称：令牌名称
 > - 额度：按项目用途设置合理上限
-> - 分组：选择 Claude 相关分组
+> - 分组：选择模型广场中可调用 Claude Code 所需模型的分组
 > - 其他选项：保持默认设置
 
 
 ### 步骤 2：打开配置文件目录
 
-根据您的系统找到 Claude Code 配置文件的存放目录 `.claude` ，一般位于：
+Claude Code 的用户级配置目录通常位于：
 
 - Windows: `C:\\Users\\用户名文件夹\\.claude`
-- macOS: `~/.claude` 或 `.claude`
+- macOS: `~/.claude`
 - Linux: `~/.claude`
 
-macOS 在访达界面按下 “Command+Shift+G”，输入路径 `~/.claude` 回车，即可打开配置目录
-如果目录不存在，可运行以下命令创建配置文件（适用 macOS / Linux / WSL / Git Bash）
+macOS 可在访达中按 `Command + Shift + G`，输入 `~/.claude` 后打开该目录。
+
+如果目录不存在，可运行以下命令创建配置文件（适用 macOS / Linux / WSL / Git Bash）：
 ```
 mkdir -p ~/.claude
 touch ~/.claude/settings.json
@@ -84,7 +85,7 @@ notepad "$env:USERPROFILE\.claude\settings.json"
 
 ### 步骤 3：修改配置文件
 
-在配置目录下，新建或修改 settings.json 配置文件，写入以下配置信息，其中将 `ANTHROPIC_AUTH_TOKEN` 替换为您自己的 API 令牌
+在配置目录下新建或修改 `settings.json`，将 `ANTHROPIC_AUTH_TOKEN` 替换为自己的 API Key：
 
 ```json
 {
@@ -100,13 +101,8 @@ notepad "$env:USERPROFILE\.claude\settings.json"
 <Tip>
 **仅在兼容错误时关闭实验字段**
 
-如果错误原文提示 `context_management`、`Extra inputs are not permitted` 等不支持字段，可在 `env` 中额外设置 `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` 后重试。它会关闭部分预发布字段，不建议作为所有用户的默认配置。
+如果错误原文提示 `context_management`、`Extra inputs are not permitted` 等不支持字段，可在 `env` 中额外设置 `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` 后重试。它会关闭部分预发布字段，仅在这类兼容错误出现时使用即可。
 </Tip>
-Ubuntu / macOS 也可通过 vi 或 vim 直接创建或修改 `settings.json` 文件
-
-```bash
-vim  ~/.claude/settings.json
-```
 
 ## 3. 启动 Claude Code
 
@@ -122,15 +118,7 @@ cd your-project-folder
 claude
 ```
 
-启动后输入 `/status`，确认其中显示的 `Anthropic base URL` 是 `https://nexusapi.link`，并确认认证来源为 `ANTHROPIC_AUTH_TOKEN`。这比只看是否弹出登录页更可靠。
-初次运行启动后，您将看到以下配置步骤：
-
-1. **选择主题** → 选择您喜欢的主题 + 按 Enter
-2. **安全须知** → 确认安全须知 + 按 Enter
-3. **Terminal 配置** → 使用默认配置 + 按 Enter
-4. **工作目录信任** → 信任当前目录 + 按 Enter
-
-现在您可以开始与您的 AI 编程助手一起写代码了！
+启动后输入 `/status`，确认其中显示的 `Anthropic base URL` 是 `https://nexusapi.link`，并确认认证来源为 `ANTHROPIC_AUTH_TOKEN`。完成后即可开始使用 Claude Code。
 
 ## 无法连接到 Anthropic 服务
 运行 `claude` 后如果出现以下错误：
@@ -146,7 +134,7 @@ Note: Claude Code might not be available in your country.
 修改配置后关闭并重新打开终端，再运行 `claude`。
 
 不要通过脚本强行改写 `.claude.json` 中的内部状态字段。这些字段可能随版本变化，
-并且直接覆盖文件可能丢失原有登录状态和配置。问题仍然存在时，请保留
+直接覆盖文件也可能丢失原有配置。问题仍然存在时，请保留
 `claude --version`、`claude doctor` 输出和错误原文后联系支持。
 
 
@@ -154,7 +142,7 @@ Note: Claude Code might not be available in your country.
 
 ### Q: 遇到 "Invalid API Key · Please run /login" 错误？
 
-**A:** 这表明 Claude Code 未检测到环境变量。请检查：
+**A:** 这通常表示 Claude Code 未检测到环境变量。请检查：
 - 是否正确设置了 `ANTHROPIC_AUTH_TOKEN` 和 `ANTHROPIC_BASE_URL`
 - 环境变量值是否正确（令牌以 `sk-` 开头）
 - 如果使用了永久配置，是否重启了终端
@@ -168,15 +156,15 @@ PowerShell 策略时，只修改当前用户范围：
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
 
-执行前请确认这是本机策略导致的问题，不要修改整台电脑的全局策略。
+执行前请确认这是本机策略导致的问题；只修改当前用户范围即可。
 
 ### Q: 为什么显示 "offline" 状态？
 
-**A:** Claude Code 的部分辅助功能会单独检查官方或第三方服务连通性，可能不会经过 NexusAPI。先用 `/status` 确认网关地址，再发一条简短消息验证实际模型调用；不要仅凭 “offline” 判断 NexusAPI 不可用。
+**A:** Claude Code 的部分辅助功能会单独检查官方或第三方服务连通性，可能不会经过 NexusAPI。先用 `/status` 确认网关地址，再发一条简短消息验证实际模型调用；“offline” 本身不一定表示 NexusAPI 不可用。
 
 ### Q: 为什么浏览网页的 Fetch 会失败？
 
-**A:** WebFetch 可能包含独立的域名安全检查或外部网络访问，不等同于模型接口调用。请先确认普通对话能否成功；若只有网页访问失败，请按 Claude Code 的错误原文和官方说明排查，不要修改 NexusAPI Base URL。
+**A:** WebFetch 可能包含独立的域名安全检查或外部网络访问，不等同于模型接口调用。请先确认普通对话能否成功；若只有网页访问失败，请按 Claude Code 的错误原文和官方说明排查，NexusAPI Base URL 无需因此修改。
 
 ### Q: 请求总是显示 "fetch failed"？
 
@@ -184,7 +172,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 1. 在 Claude Code 中发送一句最短文本；若能正常回复，说明 NexusAPI 的模型调用本身正常，WebFetch 等独立网络功能应按 Claude Code 的原始错误和网络环境排查。
 2. 若所有模型请求都出现 `fetch failed`，运行 `claude doctor`，再用 `/status` 确认 `Anthropic base URL` 仍是 `https://nexusapi.link`。
-3. 检查本机网络、公司防火墙、DNS 或代理是否阻断了 `nexusapi.link`；只在你本来就需要代理的网络环境中使用受信任的系统或公司代理，不要为此安装来源不明的脚本。
+3. 检查本机网络、公司防火墙、DNS 或代理是否阻断了 `nexusapi.link`；只在确有需要时使用受信任的系统或公司代理。
 4. 完全关闭并重新打开终端后，用新会话再测试一次。持续失败时，保存 `claude --version`、`claude doctor` 输出、错误原文和 Request ID，再按[问题自查](/faq/self-check)提交。
 
 
@@ -194,10 +182,6 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 - 退出 Claude Code（Ctrl+C）
 - 重新运行 `claude` 命令
 - 如果问题持续，请保存 Request ID 并参考[问题自查](/faq/self-check)
-
-### Q: 网页登录错误？
-
-**A:** 尝试清除本站的 Cookie，然后重新登录。
 
 ## 相关链接
 

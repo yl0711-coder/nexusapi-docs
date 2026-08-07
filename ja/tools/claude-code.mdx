@@ -7,7 +7,7 @@ Claude Code は Anthropic のネイティブ Messages 設定を使います。Ne
 
 ## システム要件
 
-- macOS 13+、Ubuntu 20.04+、Debian 10+、または Windows 10 1809+。
+- macOS 13+、Ubuntu 20.04+、Debian 10+、Alpine Linux 3.19+、または Windows 10 1809+。
 - 4 GB 以上のメモリと x64 または ARM64 CPU。
 - NexusAPI に接続できるネットワーク。
 - Windows で Git Bash を使う場合、[Git for Windows](https://git-scm.com/install/windows)は任意です。
@@ -45,7 +45,7 @@ claude doctor
 
 ## 2. NexusAPI Key を作成する
 
-コンソールの **トークン管理 → トークンを追加** で、対象 Claude モデルを含むグループを選び、上限を設定します。モデル名だけで判断せず、マーケットプレイスまたは[対応マトリクス](/ja/developer/capability-matrix)で確認してください。
+コンソールの **トークン管理 → トークンを追加** で、Claude Code で必要なモデルを含むグループを選び、上限を設定します。マーケットプレイスまたは[対応マトリクス](/ja/developer/capability-matrix)で、モデルとプロトコルを確認してください。
 
 ### 安全な Key 設定を選ぶ
 
@@ -92,12 +92,8 @@ notepad "$env:USERPROFILE\.claude\settings.json"
 <Tip>
 **実験的なフィールドを無効にするのは、互換性エラーが出た場合だけです**
 
-エラーに `context_management` または未対応の実験的入力が明記された場合だけ、`env` に `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` を追加して再試行してください。一部のプレビュー機能を無効にする設定であり、全ユーザーの既定値ではありません。
+エラーに `context_management` または未対応の実験的入力が明記された場合だけ、`env` に `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` を追加して再試行してください。一部のプレビュー機能を無効にする設定のため、この種の互換性エラーに限って使用してください。
 </Tip>
-
-```bash
-vim ~/.claude/settings.json
-```
 
 ## 4. 起動と確認
 
@@ -111,7 +107,7 @@ cd your-project-folder
 claude
 ```
 
-`/status` で **Anthropic base URL** が `https://nexusapi.link`、認証元が `ANTHROPIC_AUTH_TOKEN` であることを確認してから、短い質問を送ります。初回起動時は、テーマ、安全性、ターミナル、作業ディレクトリの信頼設定に従います。信頼できるプロジェクトだけを許可してください。
+`/status` で **Anthropic base URL** が `https://nexusapi.link`、認証元が `ANTHROPIC_AUTH_TOKEN` であることを確認してから、短い質問を送ります。
 
 ## よくある問題
 
@@ -128,7 +124,7 @@ Unable to connect to Anthropic services
 Failed to connect to api.anthropic.com: ERR BAD REQUEST
 ```
 
-`.claude.json` の内部状態フィールドをスクリプトで上書きしないでください。バージョンで変わる可能性があり、既存のログイン状態や設定が失われるおそれがあります。
+`.claude.json` の内部状態フィールドをスクリプトで上書きしないでください。バージョンで変わる可能性があり、既存の設定が失われるおそれがあります。
 
 ### PowerShell がインストーラーをブロックする
 
@@ -138,7 +134,7 @@ Failed to connect to api.anthropic.com: ERR BAD REQUEST
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
 
-クライアントのインストールだけを目的に、コンピューター全体のポリシーを変更しないでください。
+ローカルのポリシーが原因だと確認できた場合は、現在のユーザー範囲だけを変更してください。
 
 ### `fetch failed`
 
@@ -149,19 +145,15 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 ### `offline` と表示される
 
-補助機能が別サービスを確認している場合があります。`/status` と短いモデルリクエストで実際のゲートウェイ呼び出しを確認してください。
+補助機能が別サービスを確認している場合があります。`/status` と短いモデルリクエストで実際のゲートウェイ呼び出しを確認してください。`offline` だけで NexusAPI の障害とは限りません。
 
 ### 通常のチャットは動くが WebFetch が失敗する
 
-WebFetch は別のドメイン安全性チェックや外部ネットワーク接続を使うことがあります。短いテキスト会話が成功するなら NexusAPI Base URL は変更せず、Claude Code のネットワーク規則に従って WebFetch のエラーを調べてください。
+WebFetch は別のドメイン安全性チェックや外部ネットワーク接続を使うことがあります。短いテキスト会話が成功するなら NexusAPI Base URL を変更する必要はありません。Claude Code のネットワーク規則に従って WebFetch のエラーを調べてください。
 
 ### API リクエストが失敗する
 
 現在のセッションを終了し、新しい `claude` セッションで短いリクエストを一度だけ試します。続く場合は Request ID を保存して、[自己確認](/ja/faq/self-check)を確認してください。
-
-### ブラウザでのログインに失敗する
-
-該当サイトの Cookie だけを消去してから再試行してください。ブラウザのログイン問題だけで API Key 設定が誤っているとは判断できません。
 
 ## 公式リファレンス
 

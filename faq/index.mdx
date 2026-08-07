@@ -17,7 +17,7 @@ description: "NexusAPI：常见问题"
   404 通常是地址或接口路径错误。检查是否形成 `/v1/v1/...`，以及客户端是否自动拼接请求路径；模型不可用更常表现为 `no available channel` / `503`。
 
 - **出现 `status_code=500, not implemented`？**<br />
-  若模型的 `supported_endpoint_types` 未包含当前请求所需协议，这是协议不兼容，不要重试；请改用模型标明支持的接口，详见[常见错误说明](/faq/common-errors)。
+  若模型的 `supported_endpoint_types` 未包含当前请求所需协议，说明协议不兼容。请改用模型标明支持的接口，而不是原样重试；详见[常见错误说明](/faq/common-errors)。
 
 - **API Key 创建后不能使用？**<br />
   检查 Key 状态、额度、分组、模型 ID 和 `Authorization: Bearer` 格式。
@@ -42,13 +42,13 @@ description: "NexusAPI：常见问题"
   查看[API 调用常见问题](/faq/common-errors)。
 
 - **长会话突然无法继续？**<br />
-  保存错误原文，新建会话验证；不要高频重复提交同一请求。
+  保存错误原文后，用新会话验证；为避免重复请求，请不要高频提交同一请求。
 
 - **图片生成很慢或超时？**<br />
-  图片请求为同步请求，不要立即重复提交同一任务；先保存 Request ID，并查看[图片模型使用说明](/guide/image-generation)。
+  图片请求为同步请求。请先保存 Request ID，确认结果前避免重复提交同一任务，并查看[图片模型使用说明](/guide/image-generation)。
 
 - **错误后任务又成功了？**<br />
-  不要默认认为平台会自动重试；请核对客户端是否发起了新请求及对应 Request ID。
+  请以客户端是否收到完整内容和对应 Request ID 的最终记录判断。普通调用不承诺平台级自动重试；若客户端或程序再次提交，会产生新的 Request ID。
 
 ## 快速获得帮助
 

@@ -76,7 +76,7 @@ paru -S cc-switch-bin
 
 ![CC Switch 官方 Provider 表單示例，Key 已遮蔽](/images/nexusapi/cc-switch-provider-form-official.png)
 
-> 此為 [CC Switch 官方儲存庫](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png)的示例表單。圖中的 URL、模型和 Gateway 名稱不是 NexusAPI 實際參數，請以下表為準。
+> 此為 [CC Switch 官方儲存庫](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png)的示例表單。圖中的 URL、模型和 Gateway 名稱僅為介面示例；NexusAPI 的實際參數請以下表為準。
 
 ### Claude Code
 
@@ -119,7 +119,7 @@ claude
 | Name | `NexusAPI Codex` |
 | Endpoint | `https://nexusapi.link/v1` |
 | API Key | 你的 NexusAPI Key |
-| Primary model | Key 群組可用、適合 Responses 的模型 ID |
+| Primary model | Key 群組可用，且 `supported_endpoint_types` 包含 `openai-response` 的模型 ID |
 
 最小設定示例：
 
@@ -131,7 +131,7 @@ API Key: YOUR_NEXUSAPI_KEY
 Primary Model: YOUR_CODEX_MODEL_ID
 ```
 
-Codex 使用 OpenAI 相容端點，因此需要 `/v1`。若站點有 Codex 專用群組，建議在該群組建立 Key 後再設定。切換後重開終端並執行：
+Codex 使用 Responses 協定，因此需要 `/v1`。模型必須是目前 Key 可用的模型。切換後重開終端並執行：
 
 ```bash
 codex
@@ -148,7 +148,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-回應中的 `data[].id` 就是目前 Key 實際可用的模型 ID；不要依 Provider 名稱或舊截圖猜測。
+回應中的 `data[].id` 就是目前 Key 實際可用的模型 ID。Claude Code 請選擇支援 `anthropic` 的模型；Codex 請選擇支援 `openai-response` 的模型。
 
 ## 各工具的 Endpoint 規則
 

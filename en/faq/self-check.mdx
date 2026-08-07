@@ -29,9 +29,9 @@ Do not share full API keys, passwords, private data, or complete business conten
 | 429 | Concurrency and request rate |
 | 500 / 502 / 503 | Wait 10–30 seconds, then retry only once |
 | 504 / 524 | Request size, wait time, and service status |
-| `500, not implemented` | Do not retry; check whether `/v1/responses` was used with a Claude model |
+| `500, not implemented` | Check that the model's `supported_endpoint_types` includes the protocol used by the request |
 | `no available channel` | Model ID, token group, and current model availability |
-| Image timeout | Do not resubmit the same image task; keep its Request ID |
+| Image timeout | Keep the Request ID before deciding whether to submit another task |
 
 See [API error guide](/en/faq/common-errors) for details.
 

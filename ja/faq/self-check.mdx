@@ -27,7 +27,7 @@ description: "サポートへ連絡する前に、NexusAPI エラーを最小テ
 | 429 | 同時実行数と頻度。`Retry-After` を優先。 |
 | 500 / 502 / 503 | 10～30 秒待って一度だけ再試行。 |
 | 504 / 524 | リクエスト量、待機時間、サービス状態。 |
-| `500, not implemented` | 再試行せず、Claude モデルを Responses で呼んでいないか確認。 |
+| `500, not implemented` | モデルの `supported_endpoint_types` に、リクエストで使用したプロトコルが含まれるか確認。 |
 | `no available channel` | モデル ID、グループ、現在の可用性。 |
 
 詳細は[よくある API エラー](/ja/faq/common-errors)を参照してください。

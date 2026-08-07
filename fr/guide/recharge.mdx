@@ -3,7 +3,7 @@ title: "Acheter du crédit"
 description: "Achetez du crédit NexusAPI, vérifiez son attribution et traitez un incident de paiement sans divulguer de secrets."
 ---
 
-NexusAPI déduit le crédit du compte selon l'usage réel. Avant un achat, définissez le budget et le modèle nécessaires. Une erreur isolée ne justifie pas de relancer plusieurs paiements.
+NexusAPI déduit le crédit du compte selon l'usage réel. Avant un achat, définissez le budget et le modèle nécessaires.
 
 ![Page NexusAPI de gestion du portefeuille et d’achat de crédit, données de compte masquées](/images/nexusapi/console-wallet-topup-fr.png)
 
@@ -25,8 +25,20 @@ Le crédit n'est qu'une condition parmi d'autres. Vérifiez aussi : le statut et
 
 Ne confondez pas le solde du compte, la limite d'une clé, l'accès du groupe et une erreur temporaire d'un fournisseur. Consultez les [erreurs API courantes](/fr/faq/common-errors) pour le diagnostic.
 
-## Paiement ou attribution en attente
+## Vérifier le paiement et l'attribution
 
-Attendez le délai indiqué par la page de paiement, puis actualisez la console. Si le crédit reste inchangé, envoyez au support le numéro de commande, l'heure et le fuseau, le montant, le moyen de paiement, l'identifiant du compte et une capture. Ne communiquez jamais un mot de passe, le numéro complet d'une carte ou une clé API.
+Après le paiement, actualisez le solde dans la console et vérifiez la variation de crédit. Le traitement peut prendre un court moment. Si le crédit n'est toujours pas attribué, contactez l'équipe support NexusAPI et fournissez en un seul message :
+
+- l'identifiant de compte NexusAPI ou l'ID utilisateur (jamais le mot de passe) ;
+- l'heure du paiement et le fuseau horaire ;
+- le moyen de paiement et le montant ;
+- le numéro de commande ou la référence de paiement ;
+- un justificatif ou une capture masquant les données sensibles.
+
+<Warning>
+**Protégez vos informations de paiement et de compte**
+
+Le support ne demandera jamais votre mot de passe, un code de vérification de paiement, le numéro complet de votre carte ou votre clé API complète. Ne les incluez pas dans une capture.
+</Warning>
 
 Pour suivre les dépenses, lisez [modèles, groupes et tarification](/fr/billing/models-pricing) et [usage et facturation](/fr/billing/usage-and-billing).

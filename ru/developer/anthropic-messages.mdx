@@ -6,9 +6,9 @@ description: "Вызывайте модели, у которых `supported_endp
 Используйте этот API, когда `supported_endpoint_types` в `/v1/models` текущего key содержит `anthropic`. Сначала проверьте [матрицу возможностей](/ru/developer/capability-matrix): **модель, группа key и протокол должны совпадать**.
 
 <Warning>
-**Messages не является универсальным endpoint**
+**Область применения Messages**
 
-Для OpenAI-совместимого приложения используйте [Chat Completions](/ru/developer/openai-compatible). Если `supported_endpoint_types` не содержит `anthropic`, не используйте Messages как универсальный endpoint: `not implemented` обычно означает несовместимость протокола, а не временную ошибку.
+Этот API подходит только моделям, у которых `supported_endpoint_types` содержит `anthropic`. Для OpenAI-совместимого приложения используйте [Chat Completions](/ru/developer/openai-compatible); если `anthropic` не указан, выберите протокол, который поддерживает модель. `not implemented` обычно означает несовместимость протокола, а не временную ошибку.
 </Warning>
 
 ## Endpoint и минимальный запрос

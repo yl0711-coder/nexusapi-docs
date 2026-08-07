@@ -27,7 +27,7 @@ description: "在聯絡支援前，用最小測試保留 NexusAPI 請求失敗�
 | 429 | 併發與頻率；依 `Retry-After` 等待。 |
 | 500／502／503 | 等待 10–30 秒後只重試一次。 |
 | 504／524 | 請求大小、等待時間和服務狀態。 |
-| `500, not implemented` | 不要重試；檢查是否以 Responses 呼叫 Claude 類模型。 |
+| `500, not implemented` | 檢查模型的 `supported_endpoint_types` 是否包含本次請求使用的協定。 |
 | `no available channel` | 模型 ID、Key 群組和當前模型可用性。 |
 
 完整說明請看[常見 API 錯誤](/zh-TW/faq/common-errors)。

@@ -103,7 +103,7 @@ paru -S cc-switch-bin
 > 接入 NexusAPI 时请选择「自定义配置」，并按下文填写。
 
 下面是 CC Switch 官方仓库中较完整的 Provider 表单示例。它展示了 API Key、请求地址、默认模型和
-高级协议选项的位置；图内的 `example.com`、模型名和网关名称都只是示例，**不要照抄**。
+高级协议选项的位置；图中的 URL、模型和网关名称仅为界面示例，NexusAPI 的实际参数以本页下方 Claude / Codex 配置表为准。
 
 ![CC Switch 官方 Provider 表单示例，Key 已遮掩](/images/nexusapi/cc-switch-provider-form-official.png)
 
@@ -165,7 +165,7 @@ claude
 | Name / 名称 | `NexusAPI Codex` |
 | Endpoint / Base URL | `https://nexusapi.link/v1` |
 | API Key | `sk-您的 NexusAPI 令牌` |
-| Primary Model / 主模型 | 当前令牌可用的 OpenAI 兼容模型 ID |
+| Primary Model / 主模型 | 当前令牌可用，且 `supported_endpoint_types` 包含 `openai-response` 的模型 ID |
 
 示例：
 
@@ -179,9 +179,8 @@ Primary Model: YOUR_CODEX_MODEL_ID
 
 注意：
 
-1. Codex 使用 OpenAI 兼容接口，Endpoint 需要带 `/v1`。
+1. Codex 使用 Responses 协议，Endpoint 需要带 `/v1`。
 2. 模型必须是该 API Key 分组下可用的模型。
-3. 如果当前站点设置了 Codex 专用分组，建议使用该分组创建 API Key 后再配置。
 
 验证方式：
 
@@ -206,9 +205,9 @@ curl https://nexusapi.link/v1/models \
 
 选择模型时遵循：
 
-1. Claude Code 选择 Claude 类模型。
-2. Codex 选择 OpenAI 兼容、适合编程的模型。
-3. 不要选择当前 API Key 不可用的模型。
+1. Claude Code 选择 `supported_endpoint_types` 包含 `anthropic` 的模型。
+2. Codex 选择 `supported_endpoint_types` 包含 `openai-response`、且当前 API Key 可见的模型。
+3. 仅选择当前 API Key 可用的模型。
 
 ## 7. 不同工具的 Endpoint 区别
 

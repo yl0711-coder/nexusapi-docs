@@ -8,16 +8,16 @@ Trang này áp dụng cho Claude Code, Codex CLI, Cursor, extension VS Code và 
 <Tip>
 **Chẩn đoán trước khi thử lại**
 
-Lỗi tham số, endpoint và tương thích phiên không tự hết khi lặp lại cùng yêu cầu. Chỉ thử lại một lần, với tần suất thấp, khi đã xác định có thể là dao động tạm thời.
+Lỗi tham số, endpoint và tương thích phiên không tự hết khi lặp lại cùng yêu cầu. Khi đã xác định có thể là dao động tạm thời, hãy thực hiện một lần thử lại với tần suất thấp.
 </Tip>
 
 ## `status_code=500, not implemented`
 
-Nếu lỗi có cả `status_code=500` và `not implemented`, đồng thời `supported_endpoint_types` của model đã chọn không chứa `openai-response` nhưng yêu cầu dùng `/v1/responses`, đó là **không tương thích giao thức**, không phải sự cố upstream sẽ tự hết khi chờ.
+Nếu lỗi có cả `status_code=500` và `not implemented`, trước hết hãy kiểm tra model đã chọn có hỗ trợ giao thức của endpoint hiện tại hay không. Ví dụ, `/v1/responses` yêu cầu `openai-response` trong `supported_endpoint_types`. Nếu loại này không có, đó là **không tương thích giao thức**, không phải sự cố upstream sẽ tự hết khi chờ.
 
 1. Ứng dụng tự xây dựng chọn endpoint theo `supported_endpoint_types`; khi có `openai`, dùng `/v1/chat/completions`.
 2. Với Claude Code, làm theo [hướng dẫn Claude Code](/vi/tools/claude-code) và xác nhận model hỗ trợ `anthropic`.
-3. Không gửi lại nguyên yêu cầu đó; chờ hoặc đổi mạng không sửa được lỗi này.
+3. Chọn endpoint tương thích và thực hiện một kiểm tra ngắn; chờ hoặc đổi mạng không sửa được lỗi này.
 
 Khi cần hỗ trợ, gửi ví dụ đã che thông tin, tên model và Request ID, không gửi key.
 
@@ -31,7 +31,7 @@ Khi cần hỗ trợ, gửi ví dụ đã che thông tin, tên model và Request
 4. Cập nhật client hoặc SDK cũ.
 5. Tạo phiên mới và gửi một yêu cầu văn bản ngắn.
 
-Không lặp lại yêu cầu chưa thay đổi.
+Sau khi điều chỉnh cấu hình, hãy thực hiện một kiểm tra ngắn thay vì lặp lại nhiều yêu cầu giống nhau.
 
 ## 401 Unauthorized
 
@@ -47,7 +47,7 @@ Sao chép lại key từ console và kiểm tra URL yêu cầu. Không gửi to�
 
 403 nghĩa là yêu cầu bị từ chối. Các lý do phổ biến: key không có quyền vào nhóm đã chọn, hạn chế model, IP allowlist không khớp, trạng thái tài khoản không khả dụng hoặc upstream từ chối.
 
-Kiểm tra nhóm key, hạn chế model và IP allowlist, rồi thử một yêu cầu văn bản ngắn. Nếu vẫn lỗi, cung cấp Request ID, model, thời gian và nguyên văn lỗi. Không cố vượt hạn chế bằng cách tạo key liên tục hoặc retry tần suất cao.
+Kiểm tra nhóm key, hạn chế model và IP allowlist, rồi thử một yêu cầu văn bản ngắn. Nếu vẫn lỗi, cung cấp Request ID, model, thời gian và nguyên văn lỗi. Retry tần suất cao hoặc tạo thêm key sẽ không gỡ bỏ hạn chế này.
 
 ## 404 Not Found / địa chỉ yêu cầu sai
 
@@ -78,7 +78,7 @@ Ngoài lỗi `not implemented` nêu trên, các mã này thường là lỗi x�
 | `500` / `502` / `503` | Chờ 10–30 giây rồi chỉ thử lại một lần; nếu tiếp diễn, lưu Request ID. |
 | `504` / `524` | Nếu có thể, giảm ngữ cảnh, tool call hoặc độ dài đầu ra rồi thử lại sau. |
 
-Đừng gửi liên tục một tác vụ dài khi cùng model đang lỗi lặp lại.
+Nếu một tác vụ dài tiếp tục lỗi trên cùng model, hãy rút ngắn tác vụ hoặc thử lại sau trước khi gửi lại.
 
 ## `no available channel` / model hiện không có dịch vụ khả dụng
 
@@ -106,7 +106,7 @@ Client không nhận được mảnh nội dung hoàn chỉnh cần thiết, th�
 
 ## Hết thời gian tạo ảnh hoặc không hỗ trợ khả năng
 
-Model ảnh chỉ dùng endpoint ảnh; model văn bản không dùng được endpoint tạo ảnh. Tạo ảnh hiện là yêu cầu đồng bộ và có thể mất thời gian, vì vậy không gửi cùng một tác vụ ảnh nhiều lần trước khi biết kết quả đầu tiên.
+Model ảnh chỉ dùng endpoint ảnh; model văn bản không dùng được endpoint tạo ảnh. Tạo ảnh hiện là yêu cầu đồng bộ và có thể mất thời gian; hãy chờ kết quả hoặc timeout trước khi lặp lại tác vụ.
 
 - `Image generation is not enabled` / `model not supported`: kiểm tra model, endpoint và tham số.
 - `504` / `524` / client timeout: lưu Request ID và thời gian, không tạo lại ngay.
@@ -115,7 +115,7 @@ Xem [hướng dẫn mô hình ảnh](/vi/guide/image-generation).
 
 ## Có số dư nhưng key báo không đủ hạn mức
 
-Kiểm tra credit tài khoản, hạn mức API Key, ngày hết hạn và nhóm token. Không nạp lặp lại chỉ vì một thông báo. Nếu tiếp diễn, cung cấp Request ID để kiểm tra.
+Một thông báo đơn lẻ không phải lúc nào cũng có nghĩa là thiếu credit tài khoản: nguyên nhân cũng có thể là hạn mức của chính API Key, thời hạn Key hoặc quy tắc của nhóm. Hãy kiểm tra credit tài khoản, hạn mức và thời hạn Key, cũng như nhóm của Key. Nếu thông báo vẫn lặp lại sau khi kiểm tra, hãy cung cấp Request ID cho bộ phận hỗ trợ.
 
 ## Lỗi có tự thành công sau đó không?
 

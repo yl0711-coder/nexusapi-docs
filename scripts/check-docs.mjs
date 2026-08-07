@@ -64,6 +64,7 @@ function checkFormatting(relativeFile, content) {
   const lines = content.split(/\r?\n/);
   let inCodeFence = false;
   let previousHeadingLevel = 0;
+  let firstHeadingLevel = 0;
 
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
@@ -90,6 +91,12 @@ function checkFormatting(relativeFile, content) {
     const heading = line.match(/^(#{2,6})\s+/);
     if (heading) {
       const currentHeadingLevel = heading[1].length;
+      if (!firstHeadingLevel) {
+        firstHeadingLevel = currentHeadingLevel;
+        if (currentHeadingLevel !== 2) {
+          addFailure(`${relativeFile}:${lineNumber}: the first content heading must be h2; page titles come from frontmatter.`);
+        }
+      }
       if (previousHeadingLevel && currentHeadingLevel > previousHeadingLevel + 1) {
         addFailure(`${relativeFile}:${lineNumber}: heading level jumps from h${previousHeadingLevel} to h${currentHeadingLevel}.`);
       }

@@ -7,7 +7,7 @@ description: "既存の NexusAPI ユーザー設定で、公式 Claude Code 拡�
 
 ## 1. 公式拡張をインストールする
 
-VS Code 1.94 以降を使用していることを確認し、先に [Claude Code の設定](/ja/tools/claude-code)を完了してください。拡張機能画面で **Claude Code** を検索し、発行元が **Anthropic** であることを確認します。[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)も参照できます。
+VS Code 1.98 以降を使用していることを確認し、先に [Claude Code の設定](/ja/tools/claude-code)を完了してください。拡張機能画面で **Claude Code** を検索し、発行元が **Anthropic** であることを確認します。[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)も参照できます。
 
 macOS では <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>、Windows／Linux では <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> で拡張機能画面を開けます。
 
@@ -19,7 +19,7 @@ macOS では <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>、Windows／Linux で�
 
 拡張は CLI と同じ `~/.claude/settings.json`（Windows はユーザープロファイルの対応パス）を読みます。VS Code / Cursor のワークスペース設定に Key を重複保存しないでください。
 
-ログイン画面が出る場合は、設定で `Claude Code login` を検索し、**Disable Login Prompt** を有効にしてからエディターを完全に再起動します。
+ログイン画面が出る場合は、まず拡張機能が最新か確認してください。現在のバージョンに **Disable Login Prompt** がある場合は、設定で `Claude Code login` を検索して有効にします。エディターを完全に再起動し、この設定がない場合は統合ターミナルで `claude` を実行してユーザー設定を先に確認してください。
 
 NexusAPI Key をプロジェクトの `.vscode/settings.json` に重複して保存したり、Key を含む設定を同期・スクリーンショット・コミットしたりしないでください。Key はユーザーディレクトリの `~/.claude/settings.json` だけに保存します。
 
@@ -51,7 +51,7 @@ NexusAPI Key をプロジェクトの `.vscode/settings.json` に重複して保
 
 ### CLI は動くが拡張機能が動かない
 
-`~/.claude/settings.json` がプロジェクト内ではなくユーザーディレクトリにあること、Base URL と Key が正しいことを確認します。**Disable Login Prompt** を有効にして、エディターを完全に再起動します。
+`~/.claude/settings.json` がプロジェクト内ではなくユーザーディレクトリにあること、Base URL と Key が正しいことを確認します。現在のバージョンに **Disable Login Prompt** がある場合は有効にして、エディターを完全に再起動します。
 
 ### Cursor で拡張機能が見つからない
 

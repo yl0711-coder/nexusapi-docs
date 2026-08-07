@@ -6,9 +6,9 @@ description: "使用原生 Anthropic Messages 协议调用 `supported_endpoint_t
 此接口适用于当前 Key 的 `/v1/models` 返回中，`supported_endpoint_types` 包含 `anthropic` 的模型。调用前先查看[接口与模型能力矩阵](/developer/capability-matrix)：**模型、Key 分组和协议必须同时匹配**。
 
 <Warning>
-**不要把 Messages 当成所有模型的通用接口**
+**Messages 的适用范围**
 
-OpenAI 兼容应用优先使用 [Chat Completions](/developer/openai-compatible)。若模型的 `supported_endpoint_types` 未包含 `anthropic`，不要把 Messages 当作通用接口；`not implemented` 通常表示协议不兼容，而不是可通过重试解决的临时错误。
+此接口只适用于 `supported_endpoint_types` 包含 `anthropic` 的模型。OpenAI 兼容应用优先使用 [Chat Completions](/developer/openai-compatible)；若模型未列出 `anthropic`，请改用其支持的接口。`not implemented` 通常表示协议不兼容，而不是临时错误。
 </Warning>
 
 ## 端点与最小请求
@@ -69,7 +69,7 @@ SDK 会自行补全 `/v1/messages`；不要把 `base_url` 写成 `https://nexusa
 | --- | --- |
 | Claude Code | 按[Claude Code 教程](/tools/claude-code)在 `~/.claude/settings.json` 设置 `ANTHROPIC_BASE_URL=https://nexusapi.link` 和 `ANTHROPIC_AUTH_TOKEN` |
 | Anthropic SDK / 自建原生客户端 | Base URL 填 `https://nexusapi.link`，让客户端发送 Messages 协议 |
-| 自建 OpenAI SDK 程序 | 不要混用本页配置，改用 [Chat Completions](/developer/openai-compatible) |
+| 自建 OpenAI SDK 程序 | 使用 [Chat Completions](/developer/openai-compatible) |
 
 ## 排查
 

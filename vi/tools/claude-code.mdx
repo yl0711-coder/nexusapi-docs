@@ -7,7 +7,7 @@ Claude Code dùng Anthropic Messages gốc. Base URL NexusAPI là `https://nexus
 
 ## Yêu cầu hệ thống
 
-- macOS 13+, Ubuntu 20.04+, Debian 10+ hoặc Windows 10 phiên bản 1809+;
+- macOS 13+, Ubuntu 20.04+, Debian 10+, Alpine Linux 3.19+ hoặc Windows 10 phiên bản 1809+;
 - ít nhất 4 GB bộ nhớ và CPU x64 hoặc ARM64;
 - mạng có thể kết nối NexusAPI;
 - khi dùng Git Bash trên Windows, có thể cài [Git for Windows](https://git-scm.com/install/windows).
@@ -45,7 +45,7 @@ claude doctor
 
 ## 2. Tạo NexusAPI Key
 
-Trong **Quản lý token → Thêm token**, chọn nhóm có mô hình Claude cần dùng và đặt hạn mức. Đừng chỉ dựa vào tên mô hình; xác nhận ở Chợ mô hình hoặc [ma trận khả năng](/vi/developer/capability-matrix).
+Trong **Quản lý token → Thêm token**, chọn nhóm có chứa model cần dùng cho Claude Code và đặt hạn mức. Đừng chỉ dựa vào tên mô hình; xác nhận ở Chợ mô hình hoặc [ma trận khả năng](/vi/developer/capability-matrix).
 
 ### Chọn cài đặt key an toàn
 
@@ -95,10 +95,6 @@ Lưu trong thư mục người dùng, không lưu trong kho dự án.
 Chỉ khi lỗi nói rõ về `context_management` hoặc trường thử nghiệm không được hỗ trợ, hãy thêm `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` vào `env` rồi thử lại. Cài đặt này tắt một số trường preview và không phải cấu hình mặc định cho mọi người dùng.
 </Tip>
 
-```bash
-vim ~/.claude/settings.json
-```
-
 ## 4. Khởi động và kiểm tra
 
 Mở terminal mới, chuyển vào thư mục dự án rồi chạy:
@@ -111,7 +107,7 @@ cd your-project-folder
 claude
 ```
 
-Dùng `/status` để xác nhận **Anthropic base URL** là `https://nexusapi.link` và nguồn xác thực là `ANTHROPIC_AUTH_TOKEN`, sau đó gửi một câu hỏi ngắn. Lần chạy đầu, hãy làm theo các bước chọn giao diện, an toàn, terminal và tin cậy thư mục làm việc; chỉ tin cậy dự án bạn nhận biết.
+Dùng `/status` để xác nhận **Anthropic base URL** là `https://nexusapi.link` và nguồn xác thực là `ANTHROPIC_AUTH_TOKEN`, sau đó gửi một câu hỏi ngắn. Chỉ tin cậy các thư mục dự án bạn nhận biết.
 
 ## Vấn đề thường gặp
 
@@ -158,10 +154,6 @@ WebFetch có thể dùng kiểm tra an toàn tên miền và truy cập mạng b
 ### Yêu cầu API thất bại
 
 Đóng phiên hiện tại, mở phiên `claude` mới và chỉ thử một yêu cầu ngắn. Nếu lỗi lặp lại, lưu Request ID rồi làm [tự kiểm tra](/vi/faq/self-check).
-
-### Đăng nhập bằng trình duyệt thất bại
-
-Chỉ xóa cookie của trang bị ảnh hưởng rồi thử lại. Lỗi đăng nhập trình duyệt không tự nó chứng minh cấu hình API Key sai.
 
 ## Tài liệu chính thức
 

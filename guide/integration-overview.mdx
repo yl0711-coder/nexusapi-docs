@@ -37,7 +37,7 @@ NexusAPI 支持主流 AI 客户端和 OpenAI 风格的接口调用。不同工�
 
 上表用于帮助选择接入方式。先看[接口与模型能力矩阵](/developer/capability-matrix)确认模型与协议，字段级参数与响应结构见[Chat Completions 接口](/developer/openai-compatible)，模型当前可用性仍以模型广场为准。
 
-## 先选择正确的协议
+## 按模型支持的协议选择接口
 
 同一个 Base URL 不表示所有模型都支持同一种请求格式。请按使用场景选择：
 
@@ -49,9 +49,9 @@ NexusAPI 支持主流 AI 客户端和 OpenAI 风格的接口调用。不同工�
 | 图片生成 | `/v1/images/generations` | 只适用于支持图片的模型 |
 
 <Warning>
-**不要把 Responses 当作通用替代接口**
+**Responses 的适用范围**
 
-如果模型的 `supported_endpoint_types` 未包含 `openai-response`，却通过 `/v1/responses` 收到 `status_code=500, not implemented`，这是协议不匹配。请改用该模型标明支持的接口；Claude Code 使用原生 Messages 配置。不要原样重试。
+仅当模型的 `supported_endpoint_types` 包含 `openai-response` 时，才使用 `/v1/responses`。若收到 `status_code=500, not implemented`，表示当前协议不匹配；请改用该模型标明支持的接口。Claude Code 使用原生 Messages 配置。
 </Warning>
 
 ## 地址为什么可能不同
@@ -70,7 +70,7 @@ https://nexusapi.link/v1
 如果客户端会自动补全 `/v1`，手动填写后可能形成 `/v1/v1/...` 并导致 404。遇到 404 时，先检查客户端实际请求地址。
 </Warning>
 
-## 客户端配置和通用 API 不要混用
+## 区分客户端配置与通用 API
 
 CLI 工具、编辑器插件和自建程序可能使用不同的协议及配置文件。即使模型名称相同，也不能直接把某个工具的整段配置复制到另一种工具中。
 
@@ -79,7 +79,7 @@ CLI 工具、编辑器插件和自建程序可能使用不同的协议及配置�
 - 配置 Codex CLI：阅读 Codex 教程，使用 Responses 相关配置。
 - 配置 Claude Code：阅读 Claude Code 教程，使用 Anthropic Messages 相关配置。
 - 自己写文本程序：优先从 Chat Completions 开始。
-- 调用图片：使用图片接口，不要向文本聊天接口传图片生成参数。
+- 调用图片：使用图片接口；文本聊天接口不接受图片生成参数。
 - 不确定时：先确认客户端名称和它实际发出的请求路径。
 
 ## API 参考文档
