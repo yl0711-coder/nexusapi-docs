@@ -40,16 +40,16 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copiez un ID depuis `data[].id`. Cette liste indique les modèles **visibles actuellement par cette clé**, pas tout le catalogue. Si `supported_endpoint_types` est présent, il aide à identifier le type de protocole indiqué pour le modèle.
+Copiez un ID depuis `data[].id`. Cette liste indique les modèles **visibles actuellement par cette clé**, pas tout le catalogue. `data[].supported_endpoint_types` énumère les protocoles de requête disponibles pour ce modèle. Utilisez uniquement un chemin dont le type est indiqué : `openai` pour Chat Completions, `anthropic` pour Messages, `openai-response` pour Responses et `image-generation` pour la génération d'images. Si plusieurs types sont présents, choisissez celui qui correspond à votre client.
 
 ## Choisir le bon protocole
 
 | Objectif | Chemin | Cas d'usage |
 | --- | --- | --- |
-| Texte, chat et streaming compatibles OpenAI | `POST /v1/chat/completions` | La plupart des applications, SDK OpenAI et clients génériques |
-| Anthropic natif / Claude Code | `POST /v1/messages` | Modèles libellés `anthropic` |
-| Provider Codex | `POST /v1/responses` | Seulement avec le [guide Codex CLI](/fr/tools/codex-cli) et un modèle confirmé |
-| Génération d'images | `POST /v1/images/generations` | Modèles image visibles pour le groupe actuel |
+| Texte, chat et streaming compatibles OpenAI | `POST /v1/chat/completions` | Modèles dont `supported_endpoint_types` contient `openai` ; la plupart des applications, SDK OpenAI et clients génériques |
+| Anthropic natif / Claude Code | `POST /v1/messages` | Modèles dont `supported_endpoint_types` contient `anthropic` |
+| Provider Codex | `POST /v1/responses` | Seulement avec le [guide Codex CLI](/fr/tools/codex-cli) et un modèle dont `supported_endpoint_types` contient `openai-response` |
+| Génération d'images | `POST /v1/images/generations` | Modèles image dont `supported_endpoint_types` contient `image-generation` |
 
 Un même nom de modèle n'accepte pas forcément tous les formats. Vérifiez le protocole dans la [matrice des capacités](/fr/developer/capability-matrix), puis consultez :
 

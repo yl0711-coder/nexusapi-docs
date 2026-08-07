@@ -36,13 +36,13 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 | Trường | Bắt buộc | Mục đích |
 | --- | --- | --- |
-| `model` | Có | Model ID chính xác mà key hiện tại nhìn thấy và có nhãn `openai` |
+| `model` | Có | Model ID chính xác mà key hiện tại nhìn thấy, có `supported_endpoint_types` chứa `openai` |
 | `messages` | Có | Tin nhắn hội thoại theo định dạng Chat Completions |
 | `stream` | Không | Dùng `true` để nhận sự kiện streaming chỉ khi cả model và client đều hỗ trợ |
 
 Với phản hồi thường, văn bản thường đọc từ `choices[0].message.content`; với streaming, đọc từng `choices[0].delta.content`. Hãy xác nhận model và key bằng yêu cầu tối thiểu không stream trước khi bật `stream` hoặc thêm trường tùy chọn.
 
-`temperature`, tool calls, đầu vào ảnh và đầu ra có cấu trúc không được đảm bảo cho mọi model chỉ vì API “tương thích OpenAI”. Xem [ma trận khả năng](/vi/developer/capability-matrix) và Chợ mô hình để biết khả năng model/kênh.
+`temperature`, tool calls, đầu vào ảnh và đầu ra có cấu trúc không được đảm bảo cho mọi model chỉ vì API “tương thích OpenAI”. Xem [ma trận khả năng](/vi/developer/capability-matrix) và Chợ mô hình để biết tình trạng khả dụng và khả năng hiện tại của model.
 
 ## Kiểm tra đầu tiên khi lỗi
 
@@ -53,7 +53,7 @@ Với phản hồi thường, văn bản thường đọc từ `choices[0].messa
 | 500 / 502 / 503 | Lỗi xử lý/upstream tạm thời; chờ rồi chỉ thử lại một lần. |
 | 524 | Vượt giới hạn chờ. |
 
-`status_code=500, not implemented` khi gọi kênh Claude kiểu Anthropic qua `/v1/responses` là lỗi không tương thích giao thức, không phải 500 tạm thời. Ứng dụng tự viết nên dùng Chat Completions; Claude Code dùng cấu hình Messages gốc. Lưu Request ID và làm [tự kiểm tra](/vi/faq/self-check).
+Khi gặp `status_code=500, not implemented`, không coi đây là lỗi 500 thông thường để retry tần suất cao. Thông thường model và giao thức yêu cầu không khớp. Kiểm tra `supported_endpoint_types` có chứa `openai` hay không, rồi dùng hướng dẫn tương ứng. Lưu Request ID và làm [tự kiểm tra](/vi/faq/self-check).
 
 ## API liên quan
 

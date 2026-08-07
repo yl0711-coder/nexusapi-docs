@@ -56,4 +56,4 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"接続テスト"}]}'
 ```
 
-実際の Key をソースコードに書いたりリポジトリにコミットしたりしないでください。画像生成は別 endpoint です。[画像モデルガイド](/ja/guide/image-generation)を参照してください。
+実際の Key をソースコードに書いたりリポジトリにコミットしたりしないでください。これらの Chat Completions 例は `supported_endpoint_types` に `openai` を含むモデルにのみ使えます。`openai-response` を含まない場合、`/v1/responses` を汎用の代替 endpoint として扱わないでください。画像生成は別 endpoint です。[画像モデルガイド](/ja/guide/image-generation)を参照してください。

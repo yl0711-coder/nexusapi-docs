@@ -1,14 +1,14 @@
 ---
 title: "Anthropic Messages 介面"
-description: "以原生 Anthropic Messages 協定呼叫標示為 anthropic 的模型。"
+description: "以原生 Anthropic Messages 協定呼叫 `supported_endpoint_types` 包含 anthropic 的模型。"
 ---
 
-此介面適用於模型廣場或目前 Key 模型列表中標示為 `anthropic` 的模型。呼叫前請查看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)：**模型、Key 群組與協定必須同時相符**。
+此介面適用於目前 Key 的 `/v1/models` 回應中，`supported_endpoint_types` 包含 `anthropic` 的模型。呼叫前請查看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)：**模型、Key 群組與協定必須同時相符**。
 
 <Warning>
 **不要把 Messages 當成所有模型的通用介面**
 
-OpenAI 相容應用程式應優先使用 [Chat Completions](/zh-TW/developer/openai-compatible)。目前 Anthropic 類 Claude 渠道也不要改用 `/v1/responses`；出現 `not implemented` 時通常是協定不相容，並非重試可解決的暫時錯誤。
+OpenAI 相容應用程式應優先使用 [Chat Completions](/zh-TW/developer/openai-compatible)。若模型的 `supported_endpoint_types` 未包含 `anthropic`，不要將 Messages 當成通用介面；`not implemented` 通常表示協定不相容，並非重試可解決的暫時錯誤。
 </Warning>
 
 ## 端點與最小請求
@@ -20,7 +20,7 @@ POST https://nexusapi.link/v1/messages
 ```bash
 curl 'https://nexusapi.link/v1/messages' \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'x-api-key: YOUR_API_KEY' \
   -H 'anthropic-version: 2023-06-01' \
   -d '{
     "model": "YOUR_ANTHROPIC_MODEL_ID",
@@ -31,12 +31,12 @@ curl 'https://nexusapi.link/v1/messages' \
 
 | 項目 | 是否需要 | 說明 |
 | --- | --- | --- |
-| `model` | 是 | 使用目前 Key 可見且標示為 `anthropic` 的正確模型 ID |
+| `model` | 是 | 使用目前 Key 可見，且 `supported_endpoint_types` 包含 `anthropic` 的正確模型 ID |
 | `max_tokens` | 是 | 本次最多產生的輸出 Token 數 |
 | `messages` | 是 | Anthropic Messages 格式的對話內容 |
 | `anthropic-version` | 原生協定需要 | 使用 SDK 時由 SDK 管理；手寫請求請填其相容版本 |
 
-完整欄位、工具呼叫、串流回應與回應結構請以所用 Anthropic 用戶端的協定文件為準。選填欄位是否可用，仍取決於模型與目前渠道。
+完整欄位、工具呼叫、串流回應與回應結構請以所用 Anthropic 用戶端的協定文件為準。選填欄位是否可用，仍取決於模型與目前可用能力。
 
 ## 使用 Anthropic SDK
 
@@ -72,6 +72,6 @@ SDK 會自行補齊 `/v1/messages`；不要把 `base_url` 寫成 `https://nexusa
 - `401`：檢查 Key 是否正確、啟用，且未因洩漏而重設。
 - `404`：檢查 SDK 自動補齊後是否重複加入 `/v1`。
 - `400`：先只保留 `model`、`max_tokens`、`messages` 三項驗證，再逐步加入選填欄位。
-- `500, not implemented`：確認沒有讓 Anthropic 類模型走 `/v1/responses`。
+- `500, not implemented`：確認該模型的 `supported_endpoint_types` 包含 `anthropic`，且沒有誤用不相容的介面。
 
 持續失敗時保留 Request ID 和去識別化後的請求資訊，依[問題自查](/zh-TW/faq/self-check)提交。

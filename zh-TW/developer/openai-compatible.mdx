@@ -36,13 +36,13 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 | 欄位 | 是否需要 | 用途 |
 | --- | --- | --- |
-| `model` | 是 | 使用目前 Key 可見且標示為 `openai` 的正確模型 ID |
+| `model` | 是 | 使用目前 Key 可見，且 `supported_endpoint_types` 包含 `openai` 的正確模型 ID |
 | `messages` | 是 | 以 Chat Completions 格式傳遞對話訊息 |
 | `stream` | 否 | 設為 `true` 時以串流事件消費；僅在模型與用戶端都支援時使用 |
 
 一般回應通常從 `choices[0].message.content` 讀取文字；串流回應則逐段讀取 `choices[0].delta.content`。先用非串流最小請求驗證模型與 Key，再開啟 `stream` 或加入選填欄位。
 
-`temperature`、工具呼叫、視覺輸入、結構化輸出等選填欄位，不會因為「OpenAI 相容」而自動適用所有模型；模型與渠道能力以[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)及模型廣場為準。
+`temperature`、工具呼叫、視覺輸入、結構化輸出等選填欄位，不會因為「OpenAI 相容」而自動適用所有模型；模型目前支援的能力以[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)及模型廣場為準。
 
 ## 常見結果
 
@@ -53,7 +53,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | 500／502／503 | 暫時處理或上游錯誤；低頻等待後只重試一次。 |
 | 524 | 請求超過等待上限。 |
 
-若以 `/v1/responses` 呼叫當前 Anthropic 類 Claude 渠道出現 `status_code=500, not implemented`，這是協定不相容，不是一般 500。自建程式請改用本頁的 Chat Completions；Claude Code 請使用原生 Messages 設定。
+若出現 `status_code=500, not implemented`，請勿將它視為一般 500 而高頻重試；這通常表示模型與請求協定不相容。先確認該模型的 `supported_endpoint_types` 是否包含 `openai`，再選擇相符的介面。
 
 其他錯誤請保留 Request ID，依[問題自查](/zh-TW/faq/self-check)處理，避免快速重試。
 

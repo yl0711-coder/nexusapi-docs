@@ -3,12 +3,12 @@ title: "API Responses et Codex"
 description: "Choisissez la bonne intégration pour un Provider Codex ou un modèle confirmé pour Responses."
 ---
 
-`/v1/responses` n'est pas une « nouvelle API de chat » universelle. Dans NexusAPI, il sert surtout au Provider personnalisé configuré dans le [guide Codex CLI](/fr/tools/codex-cli), ou à un modèle, groupe de clé et canal explicitement confirmés pour le protocole Responses.
+`/v1/responses` n'est pas une « nouvelle API de chat » universelle. Dans NexusAPI, il sert surtout au Provider personnalisé configuré dans le [guide Codex CLI](/fr/tools/codex-cli), ou à un modèle dont `supported_endpoint_types` dans `/v1/models` contient `openai-response`.
 
 <Warning>
-**Confirmez le modèle et le canal d'abord**
+**Confirmez d'abord le protocole pris en charge**
 
-N'utilisez pas `/v1/responses` pour les canaux Claude actuels de type Anthropic. En cas de `status_code=500, not implemented`, utilisez [Chat Completions](/fr/developer/openai-compatible), ou la configuration native [Messages](/fr/developer/anthropic-messages) de Claude Code.
+Si `supported_endpoint_types` ne contient pas `openai-response`, n'utilisez pas `/v1/responses`. En cas de `status_code=500, not implemented`, utilisez le protocole indiqué pour ce modèle au lieu de traiter l'erreur comme temporaire et de réessayer.
 </Warning>
 
 ## Endpoint et périmètre
@@ -20,13 +20,13 @@ POST https://nexusapi.link/v1/responses
 | Situation | Approche recommandée |
 | --- | --- |
 | Codex CLI | Utilisez la configuration Provider `wire_api = "responses"` du [guide Codex CLI](/fr/tools/codex-cli) |
-| Autre application avec modèle confirmé pour Responses | Utilisez son client ou schéma Responses et vérifiez d'abord une requête minimale |
+| Autre application avec modèle dont `supported_endpoint_types` contient `openai-response` | Utilisez son client ou schéma Responses et vérifiez d'abord une requête minimale |
 | Application texte OpenAI générique | Utilisez [Chat Completions](/fr/developer/openai-compatible) ; ne basculez pas uniquement parce que cette API est plus récente |
-| Claude de type Anthropic | Utilisez Messages ou Chat Completions, pas cet endpoint |
+| Modèle sans `openai-response` | Utilisez le protocole Chat Completions ou Messages indiqué dans `supported_endpoint_types`, pas cet endpoint |
 
 ## Requête minimale de vérification
 
-Uniquement après confirmation du modèle et du canal :
+Uniquement après confirmation du modèle :
 
 ```bash
 curl 'https://nexusapi.link/v1/responses' \
@@ -58,5 +58,5 @@ Conservez la clé dans la variable `NEXUSAPI_API_KEY`, jamais dans `config.toml`
 
 1. Le groupe de la clé contient le modèle et son ID correspond exactement au catalogue.
 2. Le client envoie bien `/v1/responses`, pas `/v1/v1/...`.
-3. Le modèle prend explicitement en charge Responses ; utilisez un autre protocole pour Claude Anthropic.
+3. `supported_endpoint_types` du modèle contient `openai-response` ; sinon, utilisez le protocole correspondant indiqué.
 4. Conservez le Request ID, la version du client et l'erreur complète, puis suivez l'[auto-vérification](/fr/faq/self-check).

@@ -9,7 +9,7 @@ NexusAPI 是模型网关，不是“任意模型都能使用任意接口”的�
 **先确认，再调用**
 
 1. 在模型广场确认模型是否在当前 Key 的分组中。
-2. 确认模型标注的接口类型。
+2. 确认 `/v1/models` 返回的 `supported_endpoint_types` 包含所需协议。
 3. 先用 `/v1/models` 查看该 Key 实际可见的模型，再做最小调用。
 </Info>
 
@@ -18,10 +18,10 @@ NexusAPI 是模型网关，不是“任意模型都能使用任意接口”的�
 | 目标 | 接口 / 协议 | 何时使用 | 关键限制 |
 | --- | --- | --- | --- |
 | 查看当前 Key 可用模型 | [GET /v1/models](/developer/api-basics) | 创建 Key 后、选模型前 | 返回内容随 Key 分组和模型限制变化；它不是全站模型清单 |
-| 文本、聊天、流式输出 | [POST /v1/chat/completions](/developer/openai-compatible) | OpenAI 兼容 SDK、脚本和多数文本模型 | 只使用模型广场标注为 `openai` 的模型 |
-| Claude Code / 原生 Anthropic 客户端 | [POST /v1/messages](/developer/anthropic-messages) | 模型标注为 `anthropic` 时 | Claude Code 的地址配置不要重复拼接 `/v1` |
-| Codex CLI | [POST /v1/responses](/developer/responses) | 仅按 [Codex CLI 教程](/tools/codex-cli) 配置的 Provider 使用 | 不是所有模型都支持；当前 Anthropic 类型 Claude 渠道不要使用此接口 |
-| 图片生成 | [POST /v1/images/generations](/guide/image-generation) | 模型广场明确标为支持图片生成时 | 仅传入该图片模型支持的参数；避免把图片参数发到聊天接口 |
+| 文本、聊天、流式输出 | [POST /v1/chat/completions](/developer/openai-compatible) | OpenAI 兼容 SDK、脚本和多数文本模型 | 仅使用 `supported_endpoint_types` 包含 `openai` 的模型 |
+| Claude Code / 原生 Anthropic 客户端 | [POST /v1/messages](/developer/anthropic-messages) | `supported_endpoint_types` 包含 `anthropic` 时 | Claude Code 的地址配置不要重复拼接 `/v1` |
+| Codex CLI | [POST /v1/responses](/developer/responses) | 仅按 [Codex CLI 教程](/tools/codex-cli) 配置的 Provider 使用 | 仅支持 `supported_endpoint_types` 包含 `openai-response` 的模型 |
+| 图片生成 | [POST /v1/images/generations](/guide/image-generation) | `supported_endpoint_types` 包含 `image-generation` 时 | 仅传入该图片模型支持的参数；避免把图片参数发到聊天接口 |
 
 <Warning>
 **不要把网关底层路由当成平台承诺**
@@ -36,7 +36,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-从返回的 `data[].id` 复制模型 ID。部分模型列表响应还会包含 `supported_endpoint_types`；如果出现该字段，可据此判断它是否标注为 `openai` 或 `anthropic`。
+从返回的 `data[].id` 复制模型 ID。`data[].supported_endpoint_types` 列出该模型可用的请求协议：`openai` 对应 Chat Completions、`anthropic` 对应 Messages、`openai-response` 对应 Responses、`image-generation` 对应图片生成。一个模型可能同时列出多个类型；请按客户端和字段选择，而不是按模型名称猜测。
 
 `/v1/models` 只反映这把 Key 在当前时刻可见的模型。模型广场用于查看价格、分组和说明；两者有差异时，以当前 Key 的返回和控制台实时状态为准。
 
@@ -44,10 +44,10 @@ curl 'https://nexusapi.link/v1/models' \
 
 | 你的使用方式 | 先选什么 |
 | --- | --- |
-| Python、JavaScript、cURL 或第三方 OpenAI SDK | `/v1/chat/completions` |
-| Claude Code | 按 [Claude Code 教程](/tools/claude-code) 使用 Messages 配置 |
-| Codex CLI | 按 [Codex CLI 教程](/tools/codex-cli) 使用 Responses Provider |
-| 图片模型 | [图片模型使用说明](/guide/image-generation) |
+| Python、JavaScript、cURL 或第三方 OpenAI SDK | `/v1/chat/completions`（先确认字段包含 `openai`） |
+| Claude Code | 按 [Claude Code 教程](/tools/claude-code)使用 Messages 配置（先确认字段包含 `anthropic`） |
+| Codex CLI | 按 [Codex CLI 教程](/tools/codex-cli)使用 Responses Provider（先确认字段包含 `openai-response`） |
+| 图片模型 | [图片模型使用说明](/guide/image-generation)（先确认字段包含 `image-generation`） |
 
 如果模型能在列表中看到、但调用仍失败，请先确认模型 ID、令牌分组和请求路径，再保存 Request ID 进入[问题自查](/faq/self-check)。
 
@@ -57,4 +57,4 @@ curl 'https://nexusapi.link/v1/models' \
 - [API 基础](/developer/api-basics)说明鉴权、模型查询和协议选择；[Chat Completions 接口](/developer/openai-compatible)给出最小 OpenAI 文本调用示例。
 - [Anthropic Messages](/developer/anthropic-messages)和[Responses / Codex](/developer/responses)分别说明原生 Claude 与 Codex Provider 的接入边界。
 
-模型能力和渠道会调整；如果需要某项未在本页列出的能力，请先联系支持确认，不要直接用生产任务试错。
+模型支持状态会调整；如果需要某项未在本页列出的能力，请先联系支持确认，不要直接用生产任务试错。

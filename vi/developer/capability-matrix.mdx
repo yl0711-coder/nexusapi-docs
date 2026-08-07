@@ -9,7 +9,7 @@ NexusAPI là cổng mô hình; không phải mọi mô hình đều hoạt độ
 **Kiểm tra trước khi gọi**
 
 1. Xác nhận mô hình có trong nhóm token của khóa hiện tại.
-2. Xác nhận giao thức được đánh dấu cho mô hình đó trong Chợ mô hình.
+2. Xác nhận `supported_endpoint_types` do `/v1/models` trả về có giao thức bạn cần.
 3. Dùng `/v1/models` để xem khóa thực sự nhìn thấy những mô hình nào, sau đó gửi một yêu cầu tối thiểu.
 </Info>
 
@@ -18,10 +18,10 @@ NexusAPI là cổng mô hình; không phải mọi mô hình đều hoạt độ
 | Mục tiêu | API / giao thức | Khi sử dụng | Giới hạn quan trọng |
 | --- | --- | --- | --- |
 | Liệt kê mô hình mà khóa hiện tại nhìn thấy | [GET /v1/models](/vi/developer/api-basics) | Sau khi tạo khóa và trước khi chọn mô hình | Chỉ phản ánh nhóm và giới hạn của khóa đó. |
-| Văn bản, trò chuyện và streaming | [POST /v1/chat/completions](/vi/developer/openai-compatible) | SDK tương thích OpenAI, script và hầu hết mô hình văn bản | Dùng mô hình được đánh dấu `openai`. |
-| Claude Code hoặc khách Anthropic gốc | [POST /v1/messages](/vi/developer/anthropic-messages) | Khi mô hình được đánh dấu `anthropic` | Không thêm lặp lại `/v1` vào Base URL của Claude Code. |
-| Codex CLI | [POST /v1/responses](/vi/developer/responses) | Khi cấu hình provider theo [hướng dẫn Codex](/vi/tools/codex-cli) | Không dùng chung cho mọi mô hình; không dùng với các kênh Claude kiểu Anthropic hiện tại. |
-| Tạo ảnh | [POST /v1/images/generations](/vi/guide/image-generation) | Khi Chợ mô hình nêu rõ mô hình hỗ trợ tạo ảnh | Chỉ truyền tùy chọn mà mô hình ảnh đã chọn hỗ trợ. |
+| Văn bản, trò chuyện và streaming | [POST /v1/chat/completions](/vi/developer/openai-compatible) | SDK tương thích OpenAI, script và hầu hết mô hình văn bản | Chỉ dùng mô hình có `supported_endpoint_types` chứa `openai`. |
+| Claude Code hoặc khách Anthropic gốc | [POST /v1/messages](/vi/developer/anthropic-messages) | `supported_endpoint_types` chứa `anthropic` | Không thêm lặp lại `/v1` vào Base URL của Claude Code. |
+| Codex CLI | [POST /v1/responses](/vi/developer/responses) | Khi cấu hình provider theo [hướng dẫn Codex CLI](/vi/tools/codex-cli) | Chỉ dùng mô hình có `supported_endpoint_types` chứa `openai-response`. |
+| Tạo ảnh | [POST /v1/images/generations](/vi/guide/image-generation) | `supported_endpoint_types` chứa `image-generation` | Chỉ truyền tùy chọn mà mô hình ảnh đã chọn hỗ trợ. |
 
 <Warning>
 **Không xem mọi route của New API là cam kết của NexusAPI**
@@ -36,7 +36,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Sao chép ID tại `data[].id`. Một số phản hồi có `supported_endpoint_types`; nếu có, trường này cho biết mô hình được đánh dấu `openai` hoặc `anthropic`.
+Sao chép ID tại `data[].id`. `data[].supported_endpoint_types` liệt kê các giao thức yêu cầu mà mô hình hỗ trợ: `openai` cho Chat Completions, `anthropic` cho Messages, `openai-response` cho Responses và `image-generation` cho tạo ảnh. Một mô hình có thể có nhiều loại; hãy chọn theo trường này và client của bạn, thay vì đoán theo tên model.
 
 `/v1/models` là ảnh chụp tại thời điểm hiện tại của một khóa. Chợ mô hình hiển thị thêm giá, nhóm và mô tả. Nếu khác nhau, hãy ưu tiên kết quả khóa hiện tại và trạng thái console.
 
@@ -44,10 +44,10 @@ Sao chép ID tại `data[].id`. Một số phản hồi có `supported_endpoint_
 
 | Bạn đang dùng | Bắt đầu từ |
 | --- | --- |
-| Python, JavaScript, cURL hoặc SDK tương thích OpenAI | `/v1/chat/completions` |
-| Claude Code | Cấu hình Messages trong [hướng dẫn Claude Code](/vi/tools/claude-code) |
-| Codex CLI | Provider Responses trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) |
-| Mô hình ảnh | [Hướng dẫn mô hình ảnh](/vi/guide/image-generation) |
+| Python, JavaScript, cURL hoặc SDK tương thích OpenAI | `/v1/chat/completions` (trước hết xác nhận có `openai`) |
+| Claude Code | Cấu hình Messages trong [hướng dẫn Claude Code](/vi/tools/claude-code) (trước hết xác nhận có `anthropic`) |
+| Codex CLI | Provider Responses trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) (trước hết xác nhận có `openai-response`) |
+| Mô hình ảnh | [Hướng dẫn mô hình ảnh](/vi/guide/image-generation) (trước hết xác nhận có `image-generation`) |
 
 Nếu mô hình hiển thị nhưng yêu cầu vẫn lỗi, trước hết hãy kiểm tra ID mô hình, nhóm token và đường dẫn. Lưu Request ID rồi làm theo [tự kiểm tra](/vi/faq/self-check).
 
@@ -57,4 +57,4 @@ Nếu mô hình hiển thị nhưng yêu cầu vẫn lỗi, trước hết hãy 
 - [Nền tảng API](/vi/developer/api-basics) giải thích xác thực, tìm model và chọn giao thức; [Chat Completions API](/vi/developer/openai-compatible) có ví dụ gọi văn bản tối thiểu.
 - [Anthropic Messages](/vi/developer/anthropic-messages) và [Responses / Codex](/vi/developer/responses) nêu ranh giới tích hợp cho Claude gốc và Codex Provider.
 
-Khả năng và kênh mô hình có thể thay đổi. Hãy hỏi bộ phận hỗ trợ trước khi dùng một khả năng không có trong danh sách này.
+Tình trạng khả dụng và khả năng được hỗ trợ của mô hình có thể thay đổi. Hãy hỏi bộ phận hỗ trợ trước khi dùng một khả năng không có trong danh sách này.

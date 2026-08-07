@@ -36,7 +36,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 | Champ | Obligatoire | Rôle |
 | --- | --- | --- |
-| `model` | Oui | ID exact visible par la clé actuelle et libellé `openai` |
+| `model` | Oui | ID exact visible par la clé actuelle, dont `supported_endpoint_types` contient `openai` |
 | `messages` | Oui | Messages de conversation au format Chat Completions |
 | `stream` | Non | Utilisez `true` pour consommer des événements de streaming seulement si le modèle et le client le prennent en charge |
 
@@ -53,7 +53,7 @@ Pour une réponse normale, le texte est généralement dans `choices[0].message.
 | 500 / 502 / 503 | Incident de traitement temporaire ; attendez puis réessayez une seule fois. |
 | 524 | Dépassement du délai d'attente. |
 
-`status_code=500, not implemented` avec `/v1/responses` et un canal Claude de type Anthropic est une incompatibilité de protocole, pas un 500 transitoire. Utilisez Chat Completions pour une application personnalisée ou la configuration Messages de Claude Code. Conservez le Request ID et consultez l'[auto-vérification](/fr/faq/self-check).
+En cas de `status_code=500, not implemented`, ne le traitez pas comme un 500 ordinaire à réessayer rapidement. Cela indique généralement que le modèle et le protocole de la requête ne correspondent pas. Vérifiez que `supported_endpoint_types` contient `openai`, puis utilisez le guide correspondant. Conservez le Request ID et consultez l'[auto-vérification](/fr/faq/self-check).
 
 ## API associées
 

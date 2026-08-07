@@ -3,12 +3,12 @@ title: "Responses 接口与 Codex"
 description: "为 Codex Provider 和明确支持 Responses 的模型选择正确的接入方式。"
 ---
 
-`/v1/responses` 不是通用的“更高级聊天接口”。在 NexusAPI 中，它主要用于按[Codex CLI 教程](/tools/codex-cli)配置的自定义 Provider，或模型、分组和渠道已明确支持 Responses 协议的场景。
+`/v1/responses` 不是通用的“更高级聊天接口”。在 NexusAPI 中，它主要用于按[Codex CLI 教程](/tools/codex-cli)配置的自定义 Provider，或当前 Key 的 `/v1/models` 返回中 `supported_endpoint_types` 包含 `openai-response` 的模型。
 
 <Warning>
-**先确认模型与渠道**
+**先确认模型支持的协议**
 
-当前 Anthropic 类型 Claude 渠道不要使用 `/v1/responses`。这类调用出现 `status_code=500, not implemented` 时，应改用 [Chat Completions](/developer/openai-compatible)，或让 Claude Code 使用原生 [Messages](/developer/anthropic-messages) 配置。
+若模型的 `supported_endpoint_types` 未包含 `openai-response`，不要使用 `/v1/responses`。这类调用出现 `status_code=500, not implemented` 时，应改用该模型标明支持的协议，而不是把它当作可重试的临时错误。
 </Warning>
 
 ## 端点和适用范围
@@ -22,11 +22,11 @@ POST https://nexusapi.link/v1/responses
 | Codex CLI | 使用 [Codex CLI 教程](/tools/codex-cli)中的 `wire_api = "responses"` Provider 配置 |
 | 其他程序且当前模型明确支持 Responses | 使用该程序的 Responses 客户端或 Schema，并先做最小验证 |
 | 普通 OpenAI 兼容文本程序 | 直接使用 [Chat Completions](/developer/openai-compatible)，不要为了“新接口”强行切换 |
-| Anthropic 类型 Claude | 使用 Messages 或 Chat Completions，不使用本接口 |
+| 未列出 `openai-response` 的模型 | 使用其 `supported_endpoint_types` 标明的 Chat Completions 或 Messages，不使用本接口 |
 
 ## 最小验证请求
 
-只有在模型和渠道确认支持时，才可用如下请求验证连通性：
+只有在模型确认支持时，才可用如下请求验证连通性：
 
 ```bash
 curl 'https://nexusapi.link/v1/responses' \
@@ -60,5 +60,5 @@ Key 放在 `NEXUSAPI_API_KEY` 环境变量中，不要写入 `config.toml` 或 `
 
 1. Key 所属分组是否包含该模型，模型 ID 是否与模型广场一致。
 2. 客户端是否真的发往 `/v1/responses`，而不是重复拼出 `/v1/v1/...`。
-3. 所选模型是否是当前明确支持 Responses 的类型；若是 Anthropic 类型 Claude，改用正确协议。
+3. 所选模型的 `supported_endpoint_types` 是否包含 `openai-response`；不包含时改用字段标明的正确协议。
 4. 保留 Request ID、客户端版本和完整错误原文，再按[问题自查](/faq/self-check)处理。

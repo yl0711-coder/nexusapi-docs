@@ -64,4 +64,4 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   }'
 ```
 
-Do not put an actual key in source code or commit it to a repository. Image generation uses a different endpoint; see the [image model guide](/en/guide/image-generation).
+Do not put an actual key in source code or commit it to a repository. These Chat Completions examples apply only when `supported_endpoint_types` contains `openai`; if it does not contain `openai-response`, do not treat `/v1/responses` as a general substitute. Image generation uses a different endpoint; see the [image model guide](/en/guide/image-generation).

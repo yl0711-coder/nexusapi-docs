@@ -9,7 +9,7 @@ NexusAPI はモデルゲートウェイです。すべてのモデルがすべ�
 **呼び出し前の確認**
 
 1. 対象モデルが現在のトークングループに含まれていることを確認します。
-2. モデルマーケットプレイスで、そのモデルのプロトコルを確認します。
+2. `/v1/models` が返す `supported_endpoint_types` に必要なプロトコルが含まれることを確認します。
 3. `/v1/models` でキーが実際に参照できるモデルを確認してから、最小リクエストを送信します。
 </Info>
 
@@ -18,10 +18,10 @@ NexusAPI はモデルゲートウェイです。すべてのモデルがすべ�
 | 目的 | エンドポイント／プロトコル | 利用場面 | 重要な制約 |
 | --- | --- | --- | --- |
 | 現在のキーで見えるモデルの一覧 | [GET /v1/models](/ja/developer/api-basics) | キー作成後、モデル選択前 | このキーのグループと制限だけを反映します。 |
-| テキスト、チャット、ストリーミング | [POST /v1/chat/completions](/ja/developer/openai-compatible) | OpenAI 互換 SDK、スクリプト、多くのテキストモデル | モデルマーケットプレイスで `openai` と表示されたモデルを使います。 |
-| Claude Code／Anthropic ネイティブクライアント | [POST /v1/messages](/ja/developer/anthropic-messages) | モデルが `anthropic` と表示されている場合 | Claude Code の Base URL に `/v1` を重ねて追加しないでください。 |
-| Codex CLI | [POST /v1/responses](/ja/developer/responses) | [Codex CLI ガイド](/ja/tools/codex-cli)どおりにプロバイダーを設定した場合 | 万能ではありません。現在の Anthropic 型 Claude チャネルには使えません。 |
-| 画像生成 | [POST /v1/images/generations](/ja/guide/image-generation) | モデルマーケットプレイスで画像生成対応が明示された場合 | 選択した画像モデルが対応するオプションだけを送信します。 |
+| テキスト、チャット、ストリーミング | [POST /v1/chat/completions](/ja/developer/openai-compatible) | OpenAI 互換 SDK、スクリプト、多くのテキストモデル | `supported_endpoint_types` に `openai` を含むモデルだけを使用します。 |
+| Claude Code／Anthropic ネイティブクライアント | [POST /v1/messages](/ja/developer/anthropic-messages) | `supported_endpoint_types` に `anthropic` を含む場合 | Claude Code の Base URL に `/v1` を重ねて追加しないでください。 |
+| Codex CLI | [POST /v1/responses](/ja/developer/responses) | [Codex CLI ガイド](/ja/tools/codex-cli)どおりにプロバイダーを設定した場合 | `supported_endpoint_types` に `openai-response` を含むモデルだけを使用します。 |
+| 画像生成 | [POST /v1/images/generations](/ja/guide/image-generation) | `supported_endpoint_types` に `image-generation` を含む場合 | 選択した画像モデルが対応するオプションだけを送信します。 |
 
 <Warning>
 **New API の全ルートを NexusAPI の提供保証と見なさないでください**
@@ -36,7 +36,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-`data[].id` からモデル ID をコピーします。レスポンスに `supported_endpoint_types` がある場合は、`openai` または `anthropic` の表示も確認できます。
+`data[].id` からモデル ID をコピーします。`data[].supported_endpoint_types` には、そのモデルで利用可能なリクエストプロトコルが列挙されます。`openai` は Chat Completions、`anthropic` は Messages、`openai-response` は Responses、`image-generation` は画像生成です。複数の種類があるモデルもあるため、モデル名で推測せず、このフィールドとクライアントに合わせて選んでください。
 
 `/v1/models` は一つのキーに対する時点情報です。モデルマーケットプレイスには価格、グループ、説明も表示されます。両者が異なる場合は、現在のキーの応答とコンソールの状態を優先してください。
 
@@ -44,10 +44,10 @@ curl 'https://nexusapi.link/v1/models' \
 
 | 使用するもの | 最初に確認する場所 |
 | --- | --- |
-| Python、JavaScript、cURL、OpenAI 互換 SDK | `/v1/chat/completions` |
-| Claude Code | [Claude Code ガイド](/ja/tools/claude-code)の Messages 設定 |
-| Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の Responses プロバイダー |
-| 画像モデル | [画像モデルガイド](/ja/guide/image-generation) |
+| Python、JavaScript、cURL、OpenAI 互換 SDK | `/v1/chat/completions`（先に `openai` が含まれることを確認） |
+| Claude Code | [Claude Code ガイド](/ja/tools/claude-code)の Messages 設定（先に `anthropic` が含まれることを確認） |
+| Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の Responses プロバイダー（先に `openai-response` が含まれることを確認） |
+| 画像モデル | [画像モデルガイド](/ja/guide/image-generation)（先に `image-generation` が含まれることを確認） |
 
 モデルが見えても失敗する場合は、モデル ID、トークングループ、リクエストパスを先に確認してください。Request ID を保管し、[問題の自己確認](/ja/faq/self-check)に従ってください。
 
@@ -57,4 +57,4 @@ curl 'https://nexusapi.link/v1/models' \
 - [API 基本](/ja/developer/api-basics)には認証、モデル取得、プロトコル選択があり、[Chat Completions API](/ja/developer/openai-compatible)には最小のテキスト呼び出しがあります。
 - [Anthropic Messages](/ja/developer/anthropic-messages)と[Responses / Codex](/ja/developer/responses)には、ネイティブ Claude と Codex Provider の接続範囲があります。
 
-モデル能力とチャネルは変わる場合があります。ここにない能力を使う前に、サポートへ確認してください。
+モデルの可用性と対応能力は変わる場合があります。ここにない能力を使う前に、サポートへ確認してください。

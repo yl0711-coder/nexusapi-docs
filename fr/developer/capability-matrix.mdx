@@ -9,7 +9,7 @@ NexusAPI est une passerelle de modèles : un modèle n'est pas automatiquement c
 **À vérifier avant l'appel**
 
 1. Vérifiez que le modèle est disponible dans le groupe de votre clé.
-2. Vérifiez le protocole indiqué pour ce modèle dans le catalogue.
+2. Vérifiez que `supported_endpoint_types` renvoyé par `/v1/models` contient le protocole nécessaire.
 3. Consultez `/v1/models` avec la clé concernée, puis envoyez une requête minimale.
 </Info>
 
@@ -18,10 +18,10 @@ NexusAPI est une passerelle de modèles : un modèle n'est pas automatiquement c
 | Objectif | API / protocole | Utilisation | Limite importante |
 | --- | --- | --- | --- |
 | Lister les modèles visibles par la clé | [GET /v1/models](/fr/developer/api-basics) | Après la création d'une clé et avant le choix du modèle | Reflète les groupes et restrictions de cette clé uniquement. |
-| Texte, chat et streaming | [POST /v1/chat/completions](/fr/developer/openai-compatible) | SDK OpenAI compatibles, scripts et la plupart des modèles texte | Utilisez un modèle marqué `openai`. |
-| Claude Code ou client Anthropic natif | [POST /v1/messages](/fr/developer/anthropic-messages) | Lorsque le modèle est marqué `anthropic` | N'ajoutez pas une seconde fois `/v1` à l'URL de base de Claude Code. |
-| Codex CLI | [POST /v1/responses](/fr/developer/responses) | Avec le fournisseur configuré dans le [guide Codex](/fr/tools/codex-cli) | Ce n'est pas universel, notamment pour les canaux Claude de type Anthropic. |
-| Génération d'images | [POST /v1/images/generations](/fr/guide/image-generation) | Lorsqu'un modèle est explicitement indiqué comme compatible dans le catalogue | N'envoyez que les options supportées par ce modèle. |
+| Texte, chat et streaming | [POST /v1/chat/completions](/fr/developer/openai-compatible) | SDK OpenAI compatibles, scripts et la plupart des modèles texte | Utilisez uniquement un modèle dont `supported_endpoint_types` contient `openai`. |
+| Claude Code ou client Anthropic natif | [POST /v1/messages](/fr/developer/anthropic-messages) | `supported_endpoint_types` contient `anthropic` | N'ajoutez pas une seconde fois `/v1` à l'URL de base de Claude Code. |
+| Codex CLI | [POST /v1/responses](/fr/developer/responses) | Avec le fournisseur configuré dans le [guide Codex](/fr/tools/codex-cli) | Utilisez uniquement un modèle dont `supported_endpoint_types` contient `openai-response`. |
+| Génération d'images | [POST /v1/images/generations](/fr/guide/image-generation) | `supported_endpoint_types` contient `image-generation` | N'envoyez que les options supportées par ce modèle. |
 
 <Warning>
 **Toutes les routes de New API ne sont pas des promesses NexusAPI**
@@ -36,7 +36,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copiez l'ID dans `data[].id`. Certaines réponses contiennent `supported_endpoint_types`; lorsqu'il existe, ce champ indique notamment `openai` ou `anthropic`.
+Copiez l'ID dans `data[].id`. `data[].supported_endpoint_types` énumère les protocoles disponibles pour ce modèle : `openai` pour Chat Completions, `anthropic` pour Messages, `openai-response` pour Responses et `image-generation` pour la génération d'images. Un modèle peut lister plusieurs types ; choisissez selon ce champ et votre client, pas selon son nom.
 
 `/v1/models` est une vue instantanée pour une clé. Le catalogue indique aussi prix, groupes et descriptions. En cas de différence, suivez la réponse de la clé et l'état actuel de la console.
 
@@ -44,10 +44,10 @@ Copiez l'ID dans `data[].id`. Certaines réponses contiennent `supported_endpoin
 
 | Vous utilisez | Point de départ |
 | --- | --- |
-| Python, JavaScript, cURL ou un SDK compatible OpenAI | `/v1/chat/completions` |
-| Claude Code | La configuration Messages du [guide Claude Code](/fr/tools/claude-code) |
-| Codex CLI | Le fournisseur Responses du [guide Codex CLI](/fr/tools/codex-cli) |
-| Un modèle d'image | Le [guide des modèles d'image](/fr/guide/image-generation) |
+| Python, JavaScript, cURL ou un SDK compatible OpenAI | `/v1/chat/completions` (vérifiez d'abord que le champ contient `openai`) |
+| Claude Code | La configuration Messages du [guide Claude Code](/fr/tools/claude-code) (vérifiez d'abord que le champ contient `anthropic`) |
+| Codex CLI | Le fournisseur Responses du [guide Codex CLI](/fr/tools/codex-cli) (vérifiez d'abord que le champ contient `openai-response`) |
+| Un modèle d'image | Le [guide des modèles d'image](/fr/guide/image-generation) (vérifiez d'abord que le champ contient `image-generation`) |
 
 Si le modèle est visible mais que l'appel échoue, vérifiez d'abord son ID, le groupe de jetons et le chemin. Conservez le Request ID, puis utilisez l'[auto-vérification](/fr/faq/self-check).
 

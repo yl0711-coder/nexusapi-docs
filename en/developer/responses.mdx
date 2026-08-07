@@ -3,12 +3,12 @@ title: "Responses API and Codex"
 description: "Choose the correct integration for a Codex Provider or a model confirmed to support Responses."
 ---
 
-`/v1/responses` is not a universal “newer chat API.” In NexusAPI, it is primarily for the custom Provider configured in the [Codex CLI guide](/en/tools/codex-cli), or for a model, key group, and channel that are explicitly confirmed to support the Responses protocol.
+`/v1/responses` is not a universal “newer chat API.” In NexusAPI, it is primarily for the custom Provider configured in the [Codex CLI guide](/en/tools/codex-cli), or for a model whose `supported_endpoint_types` in `/v1/models` includes `openai-response`.
 
 <Warning>
-**Confirm the model and channel first**
+**Confirm the supported protocol first**
 
-Do not use `/v1/responses` for current Anthropic-type Claude channels. If you receive `status_code=500, not implemented`, use [Chat Completions](/en/developer/openai-compatible), or let Claude Code use native [Messages](/en/developer/anthropic-messages) configuration instead.
+If `supported_endpoint_types` does not include `openai-response`, do not use `/v1/responses`. If you receive `status_code=500, not implemented`, use the protocol listed for that model instead of treating it as a temporary error to retry.
 </Warning>
 
 ## Endpoint and scope
@@ -20,13 +20,13 @@ POST https://nexusapi.link/v1/responses
 | Scenario | Recommended approach |
 | --- | --- |
 | Codex CLI | Use the `wire_api = "responses"` Provider configuration in the [Codex CLI guide](/en/tools/codex-cli) |
-| Another app with a model confirmed for Responses | Use that app's Responses client or schema and verify a minimum request first |
+| Another app with a model whose `supported_endpoint_types` includes `openai-response` | Use that app's Responses client or schema and verify a minimum request first |
 | General OpenAI-compatible text app | Use [Chat Completions](/en/developer/openai-compatible); do not switch just because this API is newer |
-| Anthropic-type Claude | Use Messages or Chat Completions, not this endpoint |
+| A model without `openai-response` | Use the Chat Completions or Messages protocol listed in `supported_endpoint_types`, not this endpoint |
 
 ## Minimum verification request
 
-Only after model and channel support have been confirmed, test connectivity with:
+Only after model support has been confirmed, test connectivity with:
 
 ```bash
 curl 'https://nexusapi.link/v1/responses' \
@@ -58,5 +58,5 @@ Keep the key in the `NEXUSAPI_API_KEY` environment variable, never in `config.to
 
 1. The key group contains the model and the model ID exactly matches the Model Marketplace.
 2. The client actually requests `/v1/responses`, not `/v1/v1/...`.
-3. The model is confirmed to support Responses; use a different protocol for Anthropic-type Claude.
+3. The model's `supported_endpoint_types` includes `openai-response`; if not, use the listed matching protocol.
 4. Keep the Request ID, client version, and complete error text, then follow the [self-check guide](/en/faq/self-check).

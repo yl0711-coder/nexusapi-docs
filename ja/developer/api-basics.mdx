@@ -40,16 +40,16 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-`data[].id` からモデル ID をコピーします。これは**その Key に現在見えている**モデルの一覧であり、プラットフォーム全体のカタログではありません。`supported_endpoint_types` が返る場合は、モデルに表示されたプロトコル種別の判断に使えます。
+`data[].id` からモデル ID をコピーします。これは**その Key に現在見えている**モデルの一覧であり、プラットフォーム全体のカタログではありません。`data[].supported_endpoint_types` には、そのモデルで現在利用可能なリクエストプロトコルが列挙されます。記載された種類に対応するパスだけを使用します。`openai` は Chat Completions、`anthropic` は Messages、`openai-response` は Responses、`image-generation` は画像生成です。複数の種類がある場合は、クライアントに合うものを選んでください。
 
 ## 正しいプロトコルを選ぶ
 
 | 目的 | パス | 利用場面 |
 | --- | --- | --- |
-| OpenAI 互換のテキスト、チャット、ストリーミング | `POST /v1/chat/completions` | 多くの自作アプリ、OpenAI SDK、汎用クライアント |
-| ネイティブ Anthropic / Claude Code | `POST /v1/messages` | `anthropic` と表示されたモデル |
-| Codex Provider | `POST /v1/responses` | [Codex CLI ガイド](/ja/tools/codex-cli)に従い、モデル対応が確認できた場合のみ |
-| 画像生成 | `POST /v1/images/generations` | 現在のグループに表示され、画像対応と示されたモデル |
+| OpenAI 互換のテキスト、チャット、ストリーミング | `POST /v1/chat/completions` | `supported_endpoint_types` に `openai` を含むモデル。多くの自作アプリ、OpenAI SDK、汎用クライアント向け |
+| ネイティブ Anthropic / Claude Code | `POST /v1/messages` | `supported_endpoint_types` に `anthropic` を含むモデル |
+| Codex Provider | `POST /v1/responses` | [Codex CLI ガイド](/ja/tools/codex-cli)に従い、`supported_endpoint_types` に `openai-response` を含むモデルの場合のみ |
+| 画像生成 | `POST /v1/images/generations` | `supported_endpoint_types` に `image-generation` を含む画像モデル |
 
 同じモデル名でも、すべてのリクエスト形式を受け付けるとは限りません。[API とモデル対応マトリクス](/ja/developer/capability-matrix)で確認してから、次を読んでください。
 

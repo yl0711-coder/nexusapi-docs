@@ -1,14 +1,14 @@
 ---
 title: "Anthropic Messages 接口"
-description: "使用原生 Anthropic Messages 协议调用标注为 anthropic 的模型。"
+description: "使用原生 Anthropic Messages 协议调用 `supported_endpoint_types` 包含 anthropic 的模型。"
 ---
 
-此接口适用于模型广场或当前 Key 模型列表中标注为 `anthropic` 的模型。调用前先查看[接口与模型能力矩阵](/developer/capability-matrix)：**模型、Key 分组和协议必须同时匹配**。
+此接口适用于当前 Key 的 `/v1/models` 返回中，`supported_endpoint_types` 包含 `anthropic` 的模型。调用前先查看[接口与模型能力矩阵](/developer/capability-matrix)：**模型、Key 分组和协议必须同时匹配**。
 
 <Warning>
 **不要把 Messages 当成所有模型的通用接口**
 
-OpenAI 兼容应用优先使用 [Chat Completions](/developer/openai-compatible)。当前 Anthropic 类型 Claude 渠道也不要改用 `/v1/responses`；出现 `not implemented` 时通常是协议不兼容，而不是可通过重试解决的临时错误。
+OpenAI 兼容应用优先使用 [Chat Completions](/developer/openai-compatible)。若模型的 `supported_endpoint_types` 未包含 `anthropic`，不要把 Messages 当作通用接口；`not implemented` 通常表示协议不兼容，而不是可通过重试解决的临时错误。
 </Warning>
 
 ## 端点与最小请求
@@ -22,7 +22,7 @@ POST https://nexusapi.link/v1/messages
 ```bash
 curl 'https://nexusapi.link/v1/messages' \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'x-api-key: YOUR_API_KEY' \
   -H 'anthropic-version: 2023-06-01' \
   -d '{
     "model": "YOUR_ANTHROPIC_MODEL_ID",
@@ -35,12 +35,12 @@ curl 'https://nexusapi.link/v1/messages' \
 
 | 项目 | 是否需要 | 说明 |
 | --- | --- | --- |
-| `model` | 是 | 使用当前 Key 可见、且标注为 `anthropic` 的准确模型 ID |
+| `model` | 是 | 使用当前 Key 可见，且 `supported_endpoint_types` 包含 `anthropic` 的准确模型 ID |
 | `max_tokens` | 是 | 本次最多生成的输出 Token 数 |
 | `messages` | 是 | Anthropic Messages 格式的会话内容 |
 | `anthropic-version` | 原生协议需要 | 使用 SDK 时由 SDK 管理；手写请求请按其兼容版本填写 |
 
-完整字段、工具调用、流式响应和响应结构请以所用 Anthropic 客户端的协议文档为准。可选字段是否可用，仍取决于具体模型和当前渠道。
+完整字段、工具调用、流式响应和响应结构请以所用 Anthropic 客户端的协议文档为准。可选字段是否可用，仍取决于具体模型和当前支持能力。
 
 ## 使用 Anthropic SDK
 
@@ -76,6 +76,6 @@ SDK 会自行补全 `/v1/messages`；不要把 `base_url` 写成 `https://nexusa
 - `401`：检查 Key 是否正确、启用且没有泄露后被重置。
 - `404`：检查 Base URL 是否被 SDK 自动补全后重复加入 `/v1`。
 - `400` 或字段校验错误：先保留 `model`、`max_tokens`、`messages` 三项，以最小请求验证，再逐步加入可选字段。
-- `500, not implemented`：确认没有把 Anthropic 类型模型改走 `/v1/responses`。
+- `500, not implemented`：确认该模型的 `supported_endpoint_types` 包含 `anthropic`，且没有误用不匹配的接口。
 
 持续失败时保存 Request ID 和脱敏后的请求信息，按[问题自查](/faq/self-check)提交。

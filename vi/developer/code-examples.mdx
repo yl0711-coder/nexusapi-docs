@@ -56,4 +56,4 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"Kiểm tra kết nối"}]}'
 ```
 
-Không ghi key thật vào mã nguồn hoặc kho lưu trữ. Tạo ảnh dùng endpoint khác; xem [hướng dẫn mô hình ảnh](/vi/guide/image-generation).
+Không ghi key thật vào mã nguồn hoặc kho lưu trữ. Các ví dụ Chat Completions này chỉ áp dụng khi `supported_endpoint_types` chứa `openai`; nếu không chứa `openai-response`, không xem `/v1/responses` là phương án thay thế chung. Tạo ảnh dùng endpoint khác; xem [hướng dẫn mô hình ảnh](/vi/guide/image-generation).

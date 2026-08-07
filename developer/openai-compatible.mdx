@@ -47,13 +47,13 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 | 字段 | 是否需要 | 用途 |
 | --- | --- | --- |
-| `model` | 是 | 使用当前 Key 可见、且标注为 `openai` 的准确模型 ID |
+| `model` | 是 | 使用当前 Key 可见，且 `supported_endpoint_types` 包含 `openai` 的准确模型 ID |
 | `messages` | 是 | 按 Chat Completions 格式传递会话消息 |
 | `stream` | 否 | `true` 时按流式事件消费；只在所选模型和客户端均支持时使用 |
 
 普通响应通常从 `choices[0].message.content` 读取文本；流式响应则逐段读取 `choices[0].delta.content`。先用本页的非流式最小请求验证模型和 Key，再开启 `stream` 或添加可选参数。
 
-`temperature`、工具调用、视觉输入、结构化输出等可选字段并不因“OpenAI 兼容”而对所有模型自动可用；模型和渠道能力仍以[接口与模型能力矩阵](/developer/capability-matrix)及模型广场为准。
+`temperature`、工具调用、视觉输入、结构化输出等可选字段并不因“OpenAI 兼容”而对所有模型自动可用；模型的当前支持能力仍以[接口与模型能力矩阵](/developer/capability-matrix)及模型广场为准。
 
 ## 常见错误
 
@@ -64,7 +64,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 | 500/502/503 | 请求处理暂时失败或服务不可用 |
 | 524 | 请求等待时间过长 |
 
-遇到 `status_code=500, not implemented` 时，不要按普通 500 重试；当请求的是当前平台 Anthropic 类型 Claude 渠道时，这通常是误用了不兼容的 `/v1/responses` 接口，详见[常见错误说明](/faq/common-errors)。
+遇到 `status_code=500, not implemented` 时，不要按普通 500 高频重试；这通常表示模型与请求协议不匹配。先核对该模型的 `supported_endpoint_types` 是否包含 `openai`，再选择对应的接口说明。
 
 遇到其他错误时请保存 Request ID，并参考[问题自查](/faq/self-check)。不要在短时间内连续高频重试。
 

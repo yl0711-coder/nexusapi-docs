@@ -9,7 +9,7 @@ NexusAPI 是模型閘道，不代表每個模型都支援每一個 API。**模�
 **呼叫前請確認**
 
 1. 目標模型已在目前令牌群組中上架。
-2. 模型廣場標示的協定符合你的用戶端。
+2. `/v1/models` 回傳的 `supported_endpoint_types` 包含你需要的協定。
 3. 先用 `/v1/models` 查看此 Key 實際可見的模型，再做最小測試請求。
 </Info>
 
@@ -18,10 +18,10 @@ NexusAPI 是模型閘道，不代表每個模型都支援每一個 API。**模�
 | 目的 | 介面／協定 | 適用情境 | 重要限制 |
 | --- | --- | --- | --- |
 | 列出目前 Key 可用模型 | [GET /v1/models](/zh-TW/developer/api-basics) | 建立 Key 後、選模型前 | 僅反映此 Key 的群組和限制。 |
-| 文字、對話與串流 | [POST /v1/chat/completions](/zh-TW/developer/openai-compatible) | OpenAI 相容 SDK、程式與多數文字模型 | 請使用模型廣場標示為 `openai` 的模型。 |
-| Claude Code／Anthropic 原生用戶端 | [POST /v1/messages](/zh-TW/developer/anthropic-messages) | 模型標示為 `anthropic` 時 | Claude Code 的 Base URL 不要再重複加上 `/v1`。 |
-| Codex CLI | [POST /v1/responses](/zh-TW/developer/responses) | 依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定 Provider 時 | 不是所有模型都可用，不能拿來呼叫目前的 Anthropic 類 Claude 渠道。 |
-| 圖片生成 | [POST /v1/images/generations](/zh-TW/guide/image-generation) | 模型廣場明確標示支援圖片生成時 | 只傳送所選圖片模型支援的參數。 |
+| 文字、對話與串流 | [POST /v1/chat/completions](/zh-TW/developer/openai-compatible) | OpenAI 相容 SDK、程式與多數文字模型 | 僅使用 `supported_endpoint_types` 包含 `openai` 的模型。 |
+| Claude Code／Anthropic 原生用戶端 | [POST /v1/messages](/zh-TW/developer/anthropic-messages) | `supported_endpoint_types` 包含 `anthropic` 時 | Claude Code 的 Base URL 不要再重複加上 `/v1`。 |
+| Codex CLI | [POST /v1/responses](/zh-TW/developer/responses) | 依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定 Provider 時 | 僅支援 `supported_endpoint_types` 包含 `openai-response` 的模型。 |
+| 圖片生成 | [POST /v1/images/generations](/zh-TW/guide/image-generation) | `supported_endpoint_types` 包含 `image-generation` 時 | 只傳送所選圖片模型支援的參數。 |
 
 <Warning>
 **不要將 New API 的全部路由視為 NexusAPI 對外承諾**
@@ -36,7 +36,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-從 `data[].id` 複製模型 ID。部分回應還會提供 `supported_endpoint_types`；若有此欄位，可用來確認模型標示為 `openai` 或 `anthropic`。
+從 `data[].id` 複製模型 ID。`data[].supported_endpoint_types` 列出模型可用的請求協定：`openai` 對應 Chat Completions、`anthropic` 對應 Messages、`openai-response` 對應 Responses、`image-generation` 對應圖片生成。一個模型可能同時列出多個類型；請依用戶端和欄位選擇，不要依模型名稱猜測。
 
 `/v1/models` 是單一 Key 的即時快照；模型廣場提供價格、群組與說明。若兩者不同，請以目前 Key 的回傳結果和控制台狀態為準。
 
@@ -44,10 +44,10 @@ curl 'https://nexusapi.link/v1/models' \
 
 | 你正在使用 | 建議從哪裡開始 |
 | --- | --- |
-| Python、JavaScript、cURL 或 OpenAI 相容 SDK | `/v1/chat/completions` |
-| Claude Code | [Claude Code 教學](/zh-TW/tools/claude-code)中的 Messages 設定 |
-| Codex CLI | [Codex CLI 教學](/zh-TW/tools/codex-cli)中的 Responses Provider |
-| 圖片模型 | [圖片模型說明](/zh-TW/guide/image-generation) |
+| Python、JavaScript、cURL 或 OpenAI 相容 SDK | `/v1/chat/completions`（先確認欄位包含 `openai`） |
+| Claude Code | [Claude Code 教學](/zh-TW/tools/claude-code)中的 Messages 設定（先確認欄位包含 `anthropic`） |
+| Codex CLI | [Codex CLI 教學](/zh-TW/tools/codex-cli)中的 Responses Provider（先確認欄位包含 `openai-response`） |
+| 圖片模型 | [圖片模型說明](/zh-TW/guide/image-generation)（先確認欄位包含 `image-generation`） |
 
 如果模型可見但請求仍失敗，先檢查模型 ID、令牌群組和請求路徑，並保留 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。
 
@@ -57,4 +57,4 @@ curl 'https://nexusapi.link/v1/models' \
 - [API 基礎](/zh-TW/developer/api-basics)說明驗證、模型查詢與協定選擇；[Chat Completions 介面](/zh-TW/developer/openai-compatible)提供最小文字請求。
 - [Anthropic Messages](/zh-TW/developer/anthropic-messages)與[Responses / Codex](/zh-TW/developer/responses)分別說明原生 Claude 與 Codex Provider 的串接邊界。
 
-模型能力與渠道可能變動。若需要本頁未列出的能力，請先向支援團隊確認。
+模型支援狀態可能變動。若需要本頁未列出的能力，請先向支援團隊確認。

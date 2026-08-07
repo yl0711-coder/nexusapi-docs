@@ -40,16 +40,16 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-從回應的 `data[].id` 複製模型 ID。模型列表只代表**這把 Key 目前可見**的模型，不代表全站模型；若回應包含 `supported_endpoint_types`，可用它輔助判斷標示的協定類型。
+從回應的 `data[].id` 複製模型 ID。模型列表只代表**這把 Key 目前可見**的模型，不代表全站模型；`data[].supported_endpoint_types` 列出該模型目前可用的請求協定。只呼叫包含目標類型的路徑：`openai` 對應 Chat Completions、`anthropic` 對應 Messages、`openai-response` 對應 Responses、`image-generation` 對應圖片生成。若列出多個類型，可依所用用戶端選擇相符的一種。
 
 ## 選擇正確協定
 
 | 目標 | 路徑 | 適用情境 |
 | --- | --- | --- |
-| OpenAI 相容文字、聊天、串流輸出 | `POST /v1/chat/completions` | 多數自建程式、OpenAI SDK 與通用用戶端 |
-| 原生 Anthropic / Claude Code | `POST /v1/messages` | 模型標示為 `anthropic` 時 |
-| Codex Provider | `POST /v1/responses` | 僅依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定且模型明確支援時 |
-| 圖片生成 | `POST /v1/images/generations` | 目前群組可見且標示支援圖片的模型 |
+| OpenAI 相容文字、聊天、串流輸出 | `POST /v1/chat/completions` | `supported_endpoint_types` 包含 `openai` 的模型；適用多數自建程式、OpenAI SDK 與通用用戶端 |
+| 原生 Anthropic / Claude Code | `POST /v1/messages` | `supported_endpoint_types` 包含 `anthropic` 的模型 |
+| Codex Provider | `POST /v1/responses` | 僅依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定，且 `supported_endpoint_types` 包含 `openai-response` 的模型 |
+| 圖片生成 | `POST /v1/images/generations` | `supported_endpoint_types` 包含 `image-generation` 的圖片模型 |
 
 模型名稱相同，不代表可接受任何請求格式。先在[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)確認協定，再閱讀：
 

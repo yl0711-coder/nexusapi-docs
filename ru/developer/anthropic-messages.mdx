@@ -1,14 +1,14 @@
 ---
 title: "API Anthropic Messages"
-description: "Вызывайте модели с меткой anthropic по нативному протоколу Anthropic Messages."
+description: "Вызывайте модели, у которых `supported_endpoint_types` содержит anthropic, по нативному протоколу Anthropic Messages."
 ---
 
-Используйте этот API для моделей с меткой `anthropic` в каталоге или списке моделей текущего key. Сначала проверьте [матрицу возможностей](/ru/developer/capability-matrix): **модель, группа key и протокол должны совпадать**.
+Используйте этот API, когда `supported_endpoint_types` в `/v1/models` текущего key содержит `anthropic`. Сначала проверьте [матрицу возможностей](/ru/developer/capability-matrix): **модель, группа key и протокол должны совпадать**.
 
 <Warning>
 **Messages не является универсальным endpoint**
 
-Для OpenAI-совместимого приложения используйте [Chat Completions](/ru/developer/openai-compatible). Не переводите текущий Anthropic-тип Claude на `/v1/responses`: `not implemented` обычно означает несовместимость протокола, а не временную ошибку.
+Для OpenAI-совместимого приложения используйте [Chat Completions](/ru/developer/openai-compatible). Если `supported_endpoint_types` не содержит `anthropic`, не используйте Messages как универсальный endpoint: `not implemented` обычно означает несовместимость протокола, а не временную ошибку.
 </Warning>
 
 ## Endpoint и минимальный запрос
@@ -20,7 +20,7 @@ POST https://nexusapi.link/v1/messages
 ```bash
 curl 'https://nexusapi.link/v1/messages' \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'x-api-key: YOUR_API_KEY' \
   -H 'anthropic-version: 2023-06-01' \
   -d '{
     "model": "YOUR_ANTHROPIC_MODEL_ID",
@@ -31,12 +31,12 @@ curl 'https://nexusapi.link/v1/messages' \
 
 | Элемент | Нужен | Примечание |
 | --- | --- | --- |
-| `model` | Да | Точный ID, видимый текущему key и отмеченный `anthropic` |
+| `model` | Да | Точный ID, видимый текущему key, у которого `supported_endpoint_types` содержит `anthropic` |
 | `max_tokens` | Да | Максимум выходных токенов этого запроса |
 | `messages` | Да | Диалог в формате Anthropic Messages |
 | `anthropic-version` | Нужен нативному протоколу | SDK управляет им сам; при ручном вызове укажите совместимую версию |
 
-Полные поля, tools, streaming и Schema ответа смотрите в документации используемого клиента Anthropic. Поддержка необязательных полей зависит от модели и канала.
+Полные поля, tools, streaming и Schema ответа смотрите в документации используемого клиента Anthropic. Поддержка необязательных полей зависит от модели и её текущих возможностей.
 
 ## Использование Anthropic SDK
 
@@ -72,6 +72,6 @@ SDK добавляет `/v1/messages`. Не задавайте `https://nexusapi
 - `401`: проверьте key, его активность и отсутствие сброса после утечки.
 - `404`: проверьте, не добавил ли SDK второй `/v1`.
 - `400`: сначала проверьте только `model`, `max_tokens`, `messages`, затем добавляйте поля постепенно.
-- `500, not implemented`: убедитесь, что Anthropic-модель не отправляется через `/v1/responses`.
+- `500, not implemented`: убедитесь, что `supported_endpoint_types` содержит `anthropic` и запрос использует соответствующий endpoint.
 
 При постоянной ошибке сохраните Request ID и обезличенный запрос, затем выполните [самопроверку](/ru/faq/self-check).

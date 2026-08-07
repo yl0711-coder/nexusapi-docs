@@ -40,16 +40,16 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Sao chép model ID từ `data[].id`. Đây là danh sách mô hình **hiện nhìn thấy bởi key đó**, không phải toàn bộ danh mục. Nếu phản hồi có `supported_endpoint_types`, trường này giúp nhận biết loại giao thức được ghi cho mô hình.
+Sao chép model ID từ `data[].id`. Đây là danh sách mô hình **hiện nhìn thấy bởi key đó**, không phải toàn bộ danh mục. `data[].supported_endpoint_types` liệt kê các giao thức yêu cầu hiện có cho mô hình đó. Chỉ dùng đường dẫn có loại tương ứng: `openai` cho Chat Completions, `anthropic` cho Messages, `openai-response` cho Responses và `image-generation` cho tạo ảnh. Nếu có nhiều loại, hãy chọn loại phù hợp với client của bạn.
 
 ## Chọn đúng giao thức
 
 | Mục tiêu | Đường dẫn | Dùng cho |
 | --- | --- | --- |
-| Văn bản, chat, stream tương thích OpenAI | `POST /v1/chat/completions` | Hầu hết ứng dụng tự viết, OpenAI SDK và client phổ biến |
-| Anthropic gốc / Claude Code | `POST /v1/messages` | Mô hình có nhãn `anthropic` |
-| Codex Provider | `POST /v1/responses` | Chỉ dùng theo [hướng dẫn Codex CLI](/vi/tools/codex-cli) và mô hình đã được xác nhận |
-| Tạo ảnh | `POST /v1/images/generations` | Mô hình tạo ảnh hiển thị với nhóm hiện tại |
+| Văn bản, chat, stream tương thích OpenAI | `POST /v1/chat/completions` | Mô hình có `supported_endpoint_types` chứa `openai`; phù hợp với hầu hết ứng dụng tự viết, OpenAI SDK và client phổ biến |
+| Anthropic gốc / Claude Code | `POST /v1/messages` | Mô hình có `supported_endpoint_types` chứa `anthropic` |
+| Codex Provider | `POST /v1/responses` | Chỉ dùng theo [hướng dẫn Codex CLI](/vi/tools/codex-cli) và mô hình có `supported_endpoint_types` chứa `openai-response` |
+| Tạo ảnh | `POST /v1/images/generations` | Mô hình ảnh có `supported_endpoint_types` chứa `image-generation` |
 
 Cùng một tên mô hình không có nghĩa là mọi định dạng yêu cầu đều được chấp nhận. Xác nhận trong [ma trận khả năng](/vi/developer/capability-matrix), sau đó đọc:
 

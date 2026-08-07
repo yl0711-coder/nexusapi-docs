@@ -3,12 +3,12 @@ title: "Responses API と Codex"
 description: "Codex Provider または Responses 対応が確認されたモデルに適切な接続方法を選びます。"
 ---
 
-`/v1/responses` は汎用の「新しいチャット API」ではありません。NexusAPI では主に [Codex CLI ガイド](/ja/tools/codex-cli)で設定するカスタム Provider、またはモデル、Key グループ、チャネルが Responses プロトコル対応と明確に確認された場合に使用します。
+`/v1/responses` は汎用の「新しいチャット API」ではありません。NexusAPI では主に [Codex CLI ガイド](/ja/tools/codex-cli)で設定するカスタム Provider、または現在の Key の `/v1/models` 応答で `supported_endpoint_types` に `openai-response` を含むモデルに使用します。
 
 <Warning>
-**最初にモデルとチャネルを確認してください**
+**最初に対応プロトコルを確認してください**
 
-現在の Anthropic 型 Claude チャネルでは `/v1/responses` を使わないでください。`status_code=500, not implemented` が出る場合は、[Chat Completions](/ja/developer/openai-compatible) を使うか、Claude Code をネイティブ [Messages](/ja/developer/anthropic-messages) 設定にしてください。
+`supported_endpoint_types` に `openai-response` が含まれない場合は、`/v1/responses` を使わないでください。`status_code=500, not implemented` が出る場合は、一時エラーとして再試行せず、そのモデルで示されたプロトコルを使用してください。
 </Warning>
 
 ## エンドポイントと適用範囲
@@ -20,13 +20,13 @@ POST https://nexusapi.link/v1/responses
 | 場面 | 推奨方法 |
 | --- | --- |
 | Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の `wire_api = "responses"` Provider 設定を使用 |
-| Responses 対応が確認された別のアプリ | そのアプリの Responses クライアント/Schema を使い、最小リクエストから検証 |
+| `supported_endpoint_types` に `openai-response` を含むモデルを使う別のアプリ | そのアプリの Responses クライアント/Schema を使い、最小リクエストから検証 |
 | 一般的な OpenAI 互換テキストアプリ | [Chat Completions](/ja/developer/openai-compatible)を使用。新しい API だからという理由だけで切り替えない |
-| Anthropic 型 Claude | Messages または Chat Completions を使用し、このエンドポイントは使わない |
+| `openai-response` を含まないモデル | `supported_endpoint_types` に示された Chat Completions または Messages を使用し、この endpoint は使わない |
 
 ## 最小検証リクエスト
 
-モデルとチャネルの対応を確認した場合のみ、次で接続を確認します。
+モデルの対応を確認した場合のみ、次で接続を確認します。
 
 ```bash
 curl 'https://nexusapi.link/v1/responses' \
@@ -58,5 +58,5 @@ Key は `NEXUSAPI_API_KEY` 環境変数に置き、`config.toml` や `auth.json`
 
 1. Key グループにモデルがあり、モデル ID がモデルマーケットプレイスと完全に一致すること。
 2. クライアントが `/v1/responses` を送っており、`/v1/v1/...` ではないこと。
-3. モデルが Responses 対応と確認されていること。Anthropic 型 Claude では別のプロトコルを使うこと。
+3. モデルの `supported_endpoint_types` に `openai-response` が含まれること。含まれない場合は、示された対応プロトコルを使うこと。
 4. Request ID、クライアントバージョン、エラー全文を保存し、[自己確認](/ja/faq/self-check)に従うこと。

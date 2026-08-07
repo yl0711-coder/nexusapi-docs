@@ -77,6 +77,6 @@ curl "https://nexusapi.link/v1/chat/completions" \
   }'
 ```
 
-将 `YOUR_MODEL_ID` 替换为模型广场中、当前 API Key 分组可见的准确模型 ID。若使用当前平台的 Anthropic 类型 Claude 渠道，不要将 `/v1/responses` 当作通用替代接口；请先阅读[接入方式总览](/guide/integration-overview)。
+将 `YOUR_MODEL_ID` 替换为模型广场中、当前 API Key 分组可见的准确模型 ID。本页示例仅适用于该模型的 `supported_endpoint_types` 包含 `openai` 时；若未包含 `openai-response`，不要把 `/v1/responses` 当作通用替代接口。请先阅读[接入方式总览](/guide/integration-overview)。
 
 图片生成不使用本页的 Chat Completions 格式，请阅读[图片模型使用说明](/guide/image-generation)。

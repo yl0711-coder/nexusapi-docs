@@ -40,16 +40,16 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Скопируйте ID из `data[].id`. Это модели, **видимые сейчас данному key**, а не весь каталог. Если в ответе есть `supported_endpoint_types`, поле помогает определить указанный тип протокола.
+Скопируйте ID из `data[].id`. Это модели, **видимые сейчас данному key**, а не весь каталог. `data[].supported_endpoint_types` перечисляет протоколы запросов, доступные для этой модели. Используйте только путь с указанным типом: `openai` для Chat Completions, `anthropic` для Messages, `openai-response` для Responses и `image-generation` для генерации изображений. Если указано несколько типов, выберите подходящий вашему клиенту.
 
 ## Выбрать правильный протокол
 
 | Цель | Путь | Когда использовать |
 | --- | --- | --- |
-| Текст, чат и streaming в стиле OpenAI | `POST /v1/chat/completions` | Большинство собственных приложений, OpenAI SDK и обычных клиентов |
-| Нативный Anthropic / Claude Code | `POST /v1/messages` | Модели с меткой `anthropic` |
-| Provider Codex | `POST /v1/responses` | Только по [руководству Codex CLI](/ru/tools/codex-cli) и для подтверждённой модели |
-| Генерация изображений | `POST /v1/images/generations` | Модель изображений, доступная текущей группе |
+| Текст, чат и streaming в стиле OpenAI | `POST /v1/chat/completions` | Модели, у которых `supported_endpoint_types` содержит `openai`; большинство собственных приложений, OpenAI SDK и обычных клиентов |
+| Нативный Anthropic / Claude Code | `POST /v1/messages` | Модели, у которых `supported_endpoint_types` содержит `anthropic` |
+| Provider Codex | `POST /v1/responses` | Только по [руководству Codex CLI](/ru/tools/codex-cli) и для модели, у которой `supported_endpoint_types` содержит `openai-response` |
+| Генерация изображений | `POST /v1/images/generations` | Модели изображений, у которых `supported_endpoint_types` содержит `image-generation` |
 
 Одинаковое имя модели не означает поддержку любого формата запроса. Подтвердите протокол в [матрице возможностей](/ru/developer/capability-matrix), затем прочитайте:
 

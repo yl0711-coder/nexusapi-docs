@@ -42,13 +42,13 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 | Field | Required | Purpose |
 | --- | --- | --- |
-| `model` | Yes | Exact model ID visible to the current key and labelled `openai` |
+| `model` | Yes | Exact model ID visible to the current key whose `supported_endpoint_types` includes `openai` |
 | `messages` | Yes | Conversation messages in Chat Completions format |
 | `stream` | No | Use `true` to consume streaming events only when both the model and client support it |
 
 For a normal response, text is usually read from `choices[0].message.content`; for a streamed response, read each `choices[0].delta.content`. Verify the model and key with the non-streaming minimum request before enabling `stream` or adding optional fields.
 
-Optional fields such as `temperature`, tool calls, vision input, and structured output are not guaranteed for every model merely because an API is “OpenAI-compatible.” Use the [API and model capability matrix](/en/developer/capability-matrix) plus Model Marketplace for model and channel availability.
+Optional fields such as `temperature`, tool calls, vision input, and structured output are not guaranteed for every model merely because an API is “OpenAI-compatible.” Use the [API and model capability matrix](/en/developer/capability-matrix) plus Model Marketplace for current model availability and supported capabilities.
 
 ## Common failures
 
@@ -59,7 +59,7 @@ Optional fields such as `temperature`, tool calls, vision input, and structured 
 | 500 / 502 / 503 | A temporary processing or upstream failure. |
 | 524 | The request exceeded a waiting limit. |
 
-If you see `status_code=500, not implemented` while calling a current Anthropic-type Claude channel through `/v1/responses`, do not retry it as a normal 500. Use `/v1/chat/completions` for a custom OpenAI-style application, or use Claude Code's native Messages configuration.
+If you see `status_code=500, not implemented`, do not retry it as a normal 500 at high frequency. It usually means that the model and request protocol do not match. Check whether `supported_endpoint_types` includes `openai`, then use the matching guide.
 
 For any other error, keep the Request ID and use the [self-check guide](/en/faq/self-check). Avoid rapid retries.
 

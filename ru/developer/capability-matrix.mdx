@@ -9,7 +9,7 @@ NexusAPI — это шлюз моделей: не каждая модель ра
 **Проверьте до вызова**
 
 1. Убедитесь, что модель доступна в группе вашего токена.
-2. Проверьте протокол, указанный для модели в каталоге.
+2. Проверьте, что `supported_endpoint_types` в ответе `/v1/models` содержит нужный протокол.
 3. Выполните `/v1/models` с этой ключевой парой, затем отправьте минимальный запрос.
 </Info>
 
@@ -18,10 +18,10 @@ NexusAPI — это шлюз моделей: не каждая модель ра
 | Цель | API / протокол | Когда использовать | Важное ограничение |
 | --- | --- | --- | --- |
 | Список моделей, доступных текущему ключу | [GET /v1/models](/ru/developer/api-basics) | После создания ключа и до выбора модели | Отражает только группу и ограничения этого ключа. |
-| Текст, чат и потоковая передача | [POST /v1/chat/completions](/ru/developer/openai-compatible) | OpenAI-совместимые SDK, скрипты и большинство текстовых моделей | Используйте модель с пометкой `openai`. |
-| Claude Code или нативный Anthropic-клиент | [POST /v1/messages](/ru/developer/anthropic-messages) | Если модель помечена как `anthropic` | Не добавляйте `/v1` повторно в Base URL Claude Code. |
-| Codex CLI | [POST /v1/responses](/ru/developer/responses) | При настройке провайдера по [руководству Codex](/ru/tools/codex-cli) | Это не универсальный маршрут; не используйте его для текущих Claude-каналов Anthropic. |
-| Генерация изображений | [POST /v1/images/generations](/ru/guide/image-generation) | Когда каталог явно указывает поддержку изображений | Передавайте только параметры, поддерживаемые выбранной моделью. |
+| Текст, чат и потоковая передача | [POST /v1/chat/completions](/ru/developer/openai-compatible) | OpenAI-совместимые SDK, скрипты и большинство текстовых моделей | Используйте только модель, у которой `supported_endpoint_types` содержит `openai`. |
+| Claude Code или нативный Anthropic-клиент | [POST /v1/messages](/ru/developer/anthropic-messages) | `supported_endpoint_types` содержит `anthropic` | Не добавляйте `/v1` повторно в Base URL Claude Code. |
+| Codex CLI | [POST /v1/responses](/ru/developer/responses) | При настройке провайдера по [руководству Codex](/ru/tools/codex-cli) | Используйте только модель, у которой `supported_endpoint_types` содержит `openai-response`. |
+| Генерация изображений | [POST /v1/images/generations](/ru/guide/image-generation) | `supported_endpoint_types` содержит `image-generation` | Передавайте только параметры, поддерживаемые выбранной моделью. |
 
 <Warning>
 **Не считайте все маршруты New API обещанием NexusAPI**
@@ -36,7 +36,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Скопируйте ID из `data[].id`. В некоторых ответах есть `supported_endpoint_types`; при наличии это поле показывает, например, `openai` или `anthropic`.
+Скопируйте ID из `data[].id`. `data[].supported_endpoint_types` перечисляет доступные для модели протоколы запросов: `openai` для Chat Completions, `anthropic` для Messages, `openai-response` для Responses и `image-generation` для генерации изображений. У модели может быть несколько типов; выбирайте по этому полю и вашему клиенту, а не по имени модели.
 
 `/v1/models` — моментальный снимок для одного ключа. В каталоге также указаны цены, группы и описания. При расхождении следуйте ответу текущего ключа и состоянию консоли.
 
@@ -44,10 +44,10 @@ curl 'https://nexusapi.link/v1/models' \
 
 | Вы используете | С чего начать |
 | --- | --- |
-| Python, JavaScript, cURL или OpenAI-совместимый SDK | `/v1/chat/completions` |
-| Claude Code | Настройка Messages в [руководстве Claude Code](/ru/tools/claude-code) |
-| Codex CLI | Провайдер Responses в [руководстве Codex CLI](/ru/tools/codex-cli) |
-| Модель изображений | [Руководство по моделям изображений](/ru/guide/image-generation) |
+| Python, JavaScript, cURL или OpenAI-совместимый SDK | `/v1/chat/completions` (сначала подтвердите наличие `openai`) |
+| Claude Code | Настройка Messages в [руководстве Claude Code](/ru/tools/claude-code) (сначала подтвердите наличие `anthropic`) |
+| Codex CLI | Провайдер Responses в [руководстве Codex CLI](/ru/tools/codex-cli) (сначала подтвердите наличие `openai-response`) |
+| Модель изображений | [Руководство по моделям изображений](/ru/guide/image-generation) (сначала подтвердите наличие `image-generation`) |
 
 Если модель видна, но запрос не проходит, сначала проверьте ID модели, группу токена и путь запроса. Сохраните Request ID и пройдите [самопроверку](/ru/faq/self-check).
 
@@ -57,4 +57,4 @@ curl 'https://nexusapi.link/v1/models' \
 - [Основы API](/ru/developer/api-basics) описывают аутентификацию, модели и выбор протокола; [Chat Completions API](/ru/developer/openai-compatible) содержит минимальный текстовый запрос.
 - [Anthropic Messages](/ru/developer/anthropic-messages) и [Responses / Codex](/ru/developer/responses) определяют границы интеграции нативного Claude и Provider Codex.
 
-Возможности моделей и каналы могут меняться. Перед использованием неуказанной возможности обратитесь в поддержку.
+Доступность моделей и поддерживаемые возможности могут меняться. Перед использованием неуказанной возможности обратитесь в поддержку.

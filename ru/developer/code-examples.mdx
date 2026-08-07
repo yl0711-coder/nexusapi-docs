@@ -56,4 +56,4 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"Проверка подключения"}]}'
 ```
 
-Не помещайте настоящий ключ в исходный код и репозиторий. Для изображений используется другой endpoint — см. [руководство по изображениям](/ru/guide/image-generation).
+Не помещайте настоящий ключ в исходный код и репозиторий. Эти примеры Chat Completions применимы только если `supported_endpoint_types` содержит `openai`; если он не содержит `openai-response`, не считайте `/v1/responses` универсальной заменой. Для изображений используется другой endpoint — см. [руководство по изображениям](/ru/guide/image-generation).

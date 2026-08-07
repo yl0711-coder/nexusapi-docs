@@ -1,14 +1,14 @@
 ---
 title: "API Anthropic Messages"
-description: "Gọi mô hình có nhãn anthropic bằng giao thức Anthropic Messages gốc."
+description: "Gọi mô hình có `supported_endpoint_types` chứa anthropic bằng giao thức Anthropic Messages gốc."
 ---
 
-Dùng API này cho mô hình có nhãn `anthropic` trong Chợ mô hình hoặc danh sách mô hình của key hiện tại. Hãy xem [ma trận khả năng](/vi/developer/capability-matrix) trước: **mô hình, nhóm key và giao thức phải cùng khớp**.
+Dùng API này khi `supported_endpoint_types` trong `/v1/models` của key hiện tại chứa `anthropic`. Hãy xem [ma trận khả năng](/vi/developer/capability-matrix) trước: **mô hình, nhóm key và giao thức phải cùng khớp**.
 
 <Warning>
 **Messages không phải endpoint chung cho mọi mô hình**
 
-Ứng dụng tương thích OpenAI nên dùng [Chat Completions](/vi/developer/openai-compatible). Không chuyển kênh Claude kiểu Anthropic hiện tại sang `/v1/responses`; `not implemented` thường là không tương thích giao thức, không phải lỗi tạm thời có thể giải quyết bằng retry.
+Ứng dụng tương thích OpenAI nên dùng [Chat Completions](/vi/developer/openai-compatible). Nếu `supported_endpoint_types` không chứa `anthropic`, không xem Messages là endpoint chung; `not implemented` thường là không tương thích giao thức, không phải lỗi tạm thời có thể giải quyết bằng retry.
 </Warning>
 
 ## Endpoint và yêu cầu tối thiểu
@@ -20,7 +20,7 @@ POST https://nexusapi.link/v1/messages
 ```bash
 curl 'https://nexusapi.link/v1/messages' \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'x-api-key: YOUR_API_KEY' \
   -H 'anthropic-version: 2023-06-01' \
   -d '{
     "model": "YOUR_ANTHROPIC_MODEL_ID",
@@ -31,12 +31,12 @@ curl 'https://nexusapi.link/v1/messages' \
 
 | Mục | Bắt buộc | Ghi chú |
 | --- | --- | --- |
-| `model` | Có | Model ID chính xác mà key hiện tại nhìn thấy và có nhãn `anthropic` |
+| `model` | Có | Model ID chính xác mà key hiện tại nhìn thấy, có `supported_endpoint_types` chứa `anthropic` |
 | `max_tokens` | Có | Số token đầu ra tối đa cho yêu cầu này |
 | `messages` | Có | Hội thoại theo định dạng Anthropic Messages |
 | `anthropic-version` | Giao thức gốc yêu cầu | SDK tự quản lý; khi gọi thủ công dùng phiên bản tương thích |
 
-Xem tài liệu giao thức của client Anthropic đang dùng để biết toàn bộ trường, tools, streaming và schema phản hồi. Khả năng của trường tùy chọn vẫn phụ thuộc model và kênh.
+Xem tài liệu giao thức của client Anthropic đang dùng để biết toàn bộ trường, tools, streaming và schema phản hồi. Khả năng của trường tùy chọn vẫn phụ thuộc model và khả năng hiện tại của nó.
 
 ## Dùng Anthropic SDK
 
@@ -72,6 +72,6 @@ SDK tự thêm `/v1/messages`. Không đặt `base_url` là `https://nexusapi.li
 - `401`: kiểm tra key đúng, đang hoạt động và chưa bị reset sau khi lộ.
 - `404`: kiểm tra SDK có tự thêm `/v1` lần thứ hai hay không.
 - `400`: kiểm tra chỉ với `model`, `max_tokens`, `messages` trước rồi thêm dần trường tùy chọn.
-- `500, not implemented`: đảm bảo mô hình Anthropic không đi qua `/v1/responses`.
+- `500, not implemented`: xác nhận `supported_endpoint_types` chứa `anthropic` và yêu cầu dùng đúng endpoint tương ứng.
 
 Nếu lỗi kéo dài, lưu Request ID và yêu cầu đã che thông tin, sau đó làm theo [tự kiểm tra](/vi/faq/self-check).

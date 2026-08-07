@@ -40,16 +40,16 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copy a model ID from `data[].id`. This is the set **currently visible to that key**, not a full platform catalog. If a response includes `supported_endpoint_types`, it can help identify the protocol type shown for the model.
+Copy a model ID from `data[].id`. This is the set **currently visible to that key**, not a full platform catalog. `data[].supported_endpoint_types` lists the request protocols currently available for that model. Use only a path whose type is listed: `openai` for Chat Completions, `anthropic` for Messages, `openai-response` for Responses, and `image-generation` for image generation. If more than one type is listed, choose the matching one for your client.
 
 ## Select the right protocol
 
 | Goal | Path | Use it for |
 | --- | --- | --- |
-| OpenAI-compatible text, chat, and streaming | `POST /v1/chat/completions` | Most custom apps, OpenAI SDKs, and generic clients |
-| Native Anthropic / Claude Code | `POST /v1/messages` | Models labelled `anthropic` |
-| Codex Provider | `POST /v1/responses` | Only with the [Codex CLI guide](/en/tools/codex-cli) and a confirmed model |
-| Image generation | `POST /v1/images/generations` | Image-capable models visible to the current group |
+| OpenAI-compatible text, chat, and streaming | `POST /v1/chat/completions` | Models whose `supported_endpoint_types` includes `openai`; most custom apps, OpenAI SDKs, and generic clients |
+| Native Anthropic / Claude Code | `POST /v1/messages` | Models whose `supported_endpoint_types` includes `anthropic` |
+| Codex Provider | `POST /v1/responses` | Only with the [Codex CLI guide](/en/tools/codex-cli) and a model whose `supported_endpoint_types` includes `openai-response` |
+| Image generation | `POST /v1/images/generations` | Image models whose `supported_endpoint_types` includes `image-generation` |
 
 The same model name does not mean every request format is accepted. Confirm the protocol in the [API and model capability matrix](/en/developer/capability-matrix), then read:
 
