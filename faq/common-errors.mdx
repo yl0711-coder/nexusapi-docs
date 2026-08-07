@@ -108,7 +108,7 @@ Authorization: Bearer YOUR_API_KEY
 
 ### `Content block not found`
 
-客户端没有收到预期的完整内容片段，常见于长会话、工具调用或流式响应中断。请先新建会话、缩短输入并发送简单测试。详见 [Content block not found](/faq/content-block-not-found)。
+客户端没有收到预期的完整内容片段，常见于长会话、工具调用或流式响应中断。若**仅 Claude 模型**出现此错误，优先检查渠道配置：使用 Anthropic 协议的 Claude 渠道，类型应选择 **Anthropic Claude**，而不是 **OpenAI**。保存渠道后，请用新会话和简单请求重新测试；若仍然异常，再缩短上下文、暂时关闭工具调用，并向支持提供 Request ID、发生时间、模型和错误原文。
 
 ## 图片生成超时或能力不支持
 

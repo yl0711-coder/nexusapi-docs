@@ -102,7 +102,7 @@ Le client tente de reprendre une réponse sur un mode de connexion non pris en c
 
 ### `Content block not found`
 
-Le client n’a pas reçu un fragment de contenu attendu, souvent pendant une longue conversation, un appel d’outil ou un flux interrompu. Créez une session, raccourcissez l’entrée et faites un test simple. Voir [Content block not found](/fr/faq/content-block-not-found).
+Le client n’a pas reçu un fragment de contenu attendu, souvent pendant une longue conversation, un appel d’outil ou un flux interrompu. Si cela se produit **uniquement avec les modèles Claude**, vérifiez d’abord le canal : un canal Claude utilisant le protocole Anthropic doit être de type **Anthropic Claude**, et non **OpenAI**. Enregistrez le canal, puis réessayez avec une nouvelle session et une requête simple. Si le problème persiste, réduisez le contexte, désactivez temporairement les appels d’outils et transmettez au support le Request ID, l’heure, le modèle et l’erreur d’origine.
 
 ## Délai d’image ou capacité non prise en charge
 
