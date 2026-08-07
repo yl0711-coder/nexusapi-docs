@@ -53,5 +53,6 @@ node scripts/check-docs.mjs
 
 ## 品牌标识
 
-站点左上角的品牌区由三处共同维护：`docs.json` 负责目标地址、`brand.css`
-显示 `NexusAPI` 文字标识、`brand-link.js` 将品牌链接固定为在新窗口打开官网。
+站点左上角与页脚的品牌区由三处共同维护：`docs.json` 负责目标地址、`brand.css`
+显示 `NexusAPI` 文字标识、`brand-link.js` 将品牌链接固定为在新窗口打开官网。页脚不再
+重复显示无文字的官网图标。
