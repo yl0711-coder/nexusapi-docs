@@ -44,14 +44,14 @@ The same domain does not mean that every model accepts every request format.
 | Your goal | Recommended endpoint | Use it when |
 | --- | --- | --- |
 | General text, chat, or streaming | `/v1/chat/completions` | The model is available through the OpenAI-compatible route. |
-| Codex CLI and a matching provider | `/v1/responses` | The client and selected model are configured for Responses. |
-| Claude Code or a native Anthropic client | `/v1/messages` | The model is available through the Anthropic route. |
+| Codex CLI and a matching provider | `/v1/responses` | Use only when `supported_endpoint_types` includes `openai-response`. |
+| Claude Code or a native Anthropic client | `/v1/messages` | Use only when `supported_endpoint_types` includes `anthropic`. |
 | Image generation | `/v1/images/generations` | The model is explicitly marked as image-capable. |
 
 <Warning>
-**Do not use Responses as a universal replacement for Claude**
+**Do not use Responses as a universal replacement endpoint**
 
-If a current Anthropic-type Claude channel returns `status_code=500, not implemented` through `/v1/responses`, switch a custom application to `/v1/chat/completions`, or keep Claude Code on its native Messages configuration. Repeating the same request will not make this protocol mismatch recover.
+If a model's `supported_endpoint_types` does not include `openai-response` and `/v1/responses` returns `status_code=500, not implemented`, the protocol does not match. Switch to an endpoint listed for that model; keep Claude Code on its native Messages configuration. Repeating the same request will not make this protocol mismatch recover.
 </Warning>
 
 ## Why URLs can look different

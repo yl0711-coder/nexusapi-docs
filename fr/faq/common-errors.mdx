@@ -13,10 +13,10 @@ Les problèmes de paramètres, d’endpoint et de compatibilité de session ne d
 
 ## `status_code=500, not implemented`
 
-Si le message contient `status_code=500` et `not implemented`, et que `/v1/responses` appelle un **canal Claude de type Anthropic**, il s’agit d’une **incompatibilité de protocole**, pas d’une indisponibilité temporaire. La route existe dans new-api rc4, mais les canaux Anthropic ne convertissent pas les requêtes Responses.
+Si le message contient `status_code=500` et `not implemented`, que `supported_endpoint_types` du modèle sélectionné ne contient pas `openai-response` et que la requête utilise `/v1/responses`, il s’agit d’une **incompatibilité de protocole**, pas d’une indisponibilité temporaire.
 
-1. Dans une application maison, utilisez `/v1/chat/completions`.
-2. Dans Claude Code, suivez le [guide Claude Code](/fr/tools/claude-code) et conservez Messages natif.
+1. Dans une application maison, choisissez l’endpoint selon `supported_endpoint_types` ; utilisez `/v1/chat/completions` lorsqu’il contient `openai`.
+2. Dans Claude Code, suivez le [guide Claude Code](/fr/tools/claude-code) et vérifiez que le modèle prend en charge `anthropic`.
 3. Ne répétez pas la même requête : attendre ou changer de réseau ne corrige pas ce problème.
 
 Pour le support, fournissez un exemple expurgé, le modèle et le Request ID, jamais la clé.
@@ -59,7 +59,7 @@ Vérifiez en priorité :
 
 Les règles diffèrent par outil : consultez le [guide de l’outil](/fr/tools/).
 
-Un modèle indisponible n’est généralement pas une 404. Avec new-api rc4, un modèle absent du groupe, un canal désactivé ou non routable produit plus souvent `503` / `no available channel`.
+Un modèle indisponible n’est généralement pas une 404. Un modèle absent du groupe, temporairement indisponible ou sans service disponible produit plus souvent `503` / `no available channel`.
 
 ## 429 Too Many Requests
 
@@ -82,7 +82,7 @@ N’envoyez pas en continu une longue tâche qui échoue avec le même modèle.
 
 ## `no available channel` / aucun service actuel pour ce modèle
 
-new-api rc4 ne trouve aucun canal activé et routable pour ce modèle dans le groupe de la clé. Un ID mal saisi, un modèle non proposé dans ce groupe, un canal désactivé ou une indisponibilité temporaire peuvent produire ce message.
+Le groupe de la clé actuelle n’a temporairement aucun service disponible pour ce modèle. Un ID mal saisi, un modèle non proposé dans ce groupe, une indisponibilité temporaire ou une maintenance peuvent produire ce message.
 
 Réessayez plus tard ou choisissez un autre modèle visible pour ce groupe. Si cela persiste, envoyez le nom du modèle, le Request ID et l’heure ; il n’est pas nécessaire de recharger le compte ou de recréer la clé.
 
@@ -102,7 +102,7 @@ Le client tente de reprendre une réponse sur un mode de connexion non pris en c
 
 ### `Content block not found`
 
-Le client n’a pas reçu un fragment de contenu attendu, souvent pendant une longue conversation, un appel d’outil ou un flux interrompu. Ouvrez une nouvelle session, raccourcissez l’entrée et effectuez d’abord un test simple. Si le problème persiste, désactivez temporairement les appels d’outils non indispensables et transmettez au support le Request ID, l’heure, le modèle et l’erreur d’origine. Nous utiliserons ces éléments pour examiner la configuration des canaux et services côté plateforme.
+Le client n’a pas reçu un fragment de contenu attendu, souvent pendant une longue conversation, un appel d’outil ou un flux interrompu. Ouvrez une nouvelle session, raccourcissez l’entrée et effectuez d’abord un test simple. Si le problème persiste, désactivez temporairement les appels d’outils non indispensables et transmettez au support le Request ID, l’heure, le modèle et l’erreur d’origine. Nous utiliserons ces éléments pour vérifier l’état du service.
 
 ## Délai d’image ou capacité non prise en charge
 

@@ -13,10 +13,10 @@ description: "診斷 NexusAPI 常見的用戶端、協定、請求與計費錯�
 
 ## `status_code=500, not implemented`
 
-若錯誤同時包含 `status_code=500` 和 `not implemented`，且你使用 `/v1/responses` 呼叫目前的 **Anthropic 類型 Claude 渠道**，這是**協定不相容**，不是等待即可恢復的上游故障。new-api rc4 雖有該路由，但 Anthropic 渠道沒有 Responses 請求轉換實作。
+若錯誤同時包含 `status_code=500` 和 `not implemented`，且所選模型的 `supported_endpoint_types` 未包含 `openai-response`、請求卻使用 `/v1/responses`，這是**協定不相容**，不是等待即可恢復的上游故障。
 
-1. 自建程式請改用 OpenAI Chat Completions：`/v1/chat/completions`。
-2. Claude Code 請依[Claude Code 教學](/zh-TW/tools/claude-code)設定，勿直接對 Claude 模型發送 Responses 請求。
+1. 自建程式請依 `supported_endpoint_types` 選擇介面；包含 `openai` 時使用 Chat Completions：`/v1/chat/completions`。
+2. Claude Code 請依[Claude Code 教學](/zh-TW/tools/claude-code)設定，並確認模型支援 `anthropic`。
 3. 不要原樣重試；等待或換網路都不會修正協定不相容。
 
 需要協助時，請提供已遮蔽的請求範例、模型名稱與 Request ID，勿提供 API Key。
@@ -59,7 +59,7 @@ Authorization: Bearer YOUR_API_KEY
 
 不同工具的位址規則不同，請用對應的[工具教學](/zh-TW/tools/)。
 
-模型不可用通常不是 404。在 new-api rc4 中，模型不在目前 Key 群組、渠道停用或沒有可路由渠道時，更常見 `503`／`no available channel`。
+模型不可用通常不是 404。模型不在目前 Key 群組、目前不可用或暫時沒有可用服務時，更常見 `503`／`no available channel`。
 
 ## 429 Too Many Requests
 
@@ -82,7 +82,7 @@ Authorization: Bearer YOUR_API_KEY
 
 ## `no available channel`／目前模型沒有可用服務
 
-這表示 new-api rc4 在目前 Key 使用的群組中，找不到已啟用且承載該模型的可路由渠道。模型 ID 拼錯、模型未在群組上架、渠道停用或暫時不可用都可能造成。
+這表示目前 Key 使用的群組下暫時沒有可用於該模型的服務。模型 ID 拼錯、模型未在群組提供、模型暫時不可用或服務維護都可能造成。
 
 可稍後重試，或改用模型廣場中目前群組可見的其他模型。若持續出現，提交模型名、Request ID 與時間即可，不需要重複儲值或重建 Key。
 
@@ -102,7 +102,7 @@ Authorization: Bearer YOUR_API_KEY
 
 ### `Content block not found`
 
-用戶端未收到預期的完整內容片段，常見於長會話、工具呼叫或串流中斷。請先新建會話、縮短輸入並發送簡單測試；若仍有異常，再暫時關閉非必要的工具呼叫，並向支援提供 Request ID、發生時間、模型與錯誤原文。我們會據此排查平台側的渠道與服務設定。
+用戶端未收到預期的完整內容片段，常見於長會話、工具呼叫或串流中斷。請先新建會話、縮短輸入並發送簡單測試；若仍有異常，再暫時關閉非必要的工具呼叫，並向支援提供 Request ID、發生時間、模型與錯誤原文。我們會據此核查服務狀態。
 
 ## 圖片生成超時或能力不支援
 

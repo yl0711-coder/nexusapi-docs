@@ -30,7 +30,7 @@ description: "NexusAPI：问题自查"
 | 500 / 502 / 503 | 等待 10～30 秒后重试一次 |
 | 504 / 524 | 请求内容、等待时间和服务状态 |
 | `500, not implemented` | 不要重试；检查是否用 `/v1/responses` 调用了 Claude 模型 |
-| `no available channel` / 503 | 模型 ID、Key 分组、该模型是否有启用渠道 |
+| `no available channel` / 503 | 模型 ID、Key 分组和当前模型可用性 |
 | 图片生成超时 | 不要重复提交同一任务，保存 Request ID 和发生时间 |
 | 余额不足 | 控制台余额、Key 额度和分组 |
 

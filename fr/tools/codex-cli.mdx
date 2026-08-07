@@ -36,7 +36,7 @@ codex --version
 
 ## 2. Créer une clé compatible
 
-Dans **Gestion des jetons → Ajouter un jeton**, choisissez un groupe contenant le modèle destiné à Codex / Responses. Consultez la [matrice des capacités](/fr/developer/capability-matrix) : un canal Claude de type Anthropic n'est pas automatiquement compatible Responses.
+Dans **Gestion des jetons → Ajouter un jeton**, choisissez un groupe contenant le modèle voulu. Consultez ensuite `/v1/models` et la [matrice des capacités](/fr/developer/capability-matrix) pour confirmer que `supported_endpoint_types` contient `openai-response`.
 
 ## 3. Ajouter le fournisseur
 

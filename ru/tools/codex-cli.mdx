@@ -36,7 +36,7 @@ codex --version
 
 ## 2. Создайте совместимый ключ
 
-В **Управлении токенами → Добавить токен** выберите группу с моделью для Codex / Responses. См. [матрицу возможностей](/ru/developer/capability-matrix): канал Claude типа Anthropic не следует считать совместимым с Responses.
+В **Управлении токенами → Добавить токен** выберите группу с нужной моделью. Затем проверьте `/v1/models` и [матрицу возможностей](/ru/developer/capability-matrix): `supported_endpoint_types` должен содержать `openai-response`.
 
 ## 3. Настройте custom provider
 

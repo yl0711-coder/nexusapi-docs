@@ -44,14 +44,14 @@ NexusAPI 支持主流 AI 客户端和 OpenAI 风格的接口调用。不同工�
 | 你要做什么 | 推荐接口 | 说明 |
 | --- | --- | --- |
 | 通用文本、聊天、流式输出 | `/v1/chat/completions` | 大多数 OpenAI 兼容 SDK 和自建程序的首选 |
-| Codex CLI 等明确要求 Responses 的工具 | `/v1/responses` | 仅在模型与渠道明确支持时使用 |
-| Claude Code 或原生 Anthropic 客户端 | `/v1/messages` | 客户端会根据其配置补全路径 |
+| Codex CLI 等明确要求 Responses 的工具 | `/v1/responses` | 仅在 `supported_endpoint_types` 包含 `openai-response` 时使用 |
+| Claude Code 或原生 Anthropic 客户端 | `/v1/messages` | 仅在 `supported_endpoint_types` 包含 `anthropic` 时使用；客户端会根据其配置补全路径 |
 | 图片生成 | `/v1/images/generations` | 只适用于支持图片的模型 |
 
 <Warning>
-**当前 Anthropic 类型 Claude 渠道不要直接使用 Responses**
+**不要把 Responses 当作通用替代接口**
 
-如果用 `/v1/responses` 调用当前平台的 Anthropic 类型 Claude 渠道并收到 `status_code=500, not implemented`，请改用 `/v1/chat/completions`；使用 Claude Code 时则保持其原生 Messages 配置。不要原样重试。
+如果模型的 `supported_endpoint_types` 未包含 `openai-response`，却通过 `/v1/responses` 收到 `status_code=500, not implemented`，这是协议不匹配。请改用该模型标明支持的接口；Claude Code 使用原生 Messages 配置。不要原样重试。
 </Warning>
 
 ## 地址为什么可能不同

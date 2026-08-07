@@ -44,14 +44,14 @@ Base URL が同じでも、すべてのモデルが同じリクエスト形式�
 | 目的 | 推奨エンドポイント | 利用する条件 |
 | --- | --- | --- |
 | 一般的なテキスト、チャット、ストリーミング | `/v1/chat/completions` | OpenAI 互換ルートでモデルを利用できる場合。 |
-| Codex CLI と対応する Provider | `/v1/responses` | クライアントと選択モデルが Responses 用に設定されている場合。 |
-| Claude Code またはネイティブ Anthropic クライアント | `/v1/messages` | Anthropic ルートでモデルを利用できる場合。 |
+| Codex CLI と対応する Provider | `/v1/responses` | `supported_endpoint_types` に `openai-response` を含む場合。 |
+| Claude Code またはネイティブ Anthropic クライアント | `/v1/messages` | `supported_endpoint_types` に `anthropic` を含む場合。 |
 | 画像生成 | `/v1/images/generations` | モデルが画像生成対応と明記されている場合。 |
 
 <Warning>
-**Responses を Claude の汎用的な代替として使用しないでください**
+**Responses を汎用的な代替 endpoint として使用しないでください**
 
-現在の Anthropic 系 Claude チャンネルを `/v1/responses` で呼び出して `status_code=500, not implemented` が返る場合は、自作アプリを `/v1/chat/completions` に切り替えるか、Claude Code ではネイティブの Messages 設定を維持してください。同じリクエストを再送しても、プロトコルの不一致は解消されません。
+モデルの `supported_endpoint_types` に `openai-response` が含まれないのに `/v1/responses` で `status_code=500, not implemented` が返る場合は、プロトコル不一致です。そのモデルで示された endpoint を使用し、Claude Code ではネイティブの Messages 設定を維持してください。同じリクエストを再送しても、プロトコルの不一致は解消されません。
 </Warning>
 
 ## URL が異なって見える理由

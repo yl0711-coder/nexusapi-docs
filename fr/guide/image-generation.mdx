@@ -41,7 +41,7 @@ Les résultats sont généralement renvoyés dans le tableau `data`. Le résulta
 
 ## Temps d'attente et délais d'expiration
 
-`/v1/images/generations` est un **endpoint HTTP synchrone** : le client doit attendre le résultat de cette requête. new-api rc4 ne fournit pas un identifiant de tâche et une interface de sondage unifiés pour la génération d'images générique ; le format réel peut encore varier selon le fournisseur amont.
+`/v1/images/generations` est un **endpoint HTTP synchrone** : le client doit attendre le résultat de cette requête. Cet endpoint public ne fournit pas un identifiant de tâche et une interface de sondage unifiés pour la génération d'images générique ; le format réel peut encore varier selon le fournisseur amont.
 
 - Une génération peut prendre plusieurs dizaines de secondes, voire davantage. Un délai trop court dans le client, le proxy d'entreprise ou l'extension de navigateur peut expirer avant la réponse.
 - Ne soumettez pas plusieurs fois la même tâche avant d'en connaître le résultat : cela peut générer des images et des frais en double.

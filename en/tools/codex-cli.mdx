@@ -35,7 +35,7 @@ codex --version
 
 ## 2. Create a compatible key
 
-In **NexusAPI console → Token Management → Add token**, select a group containing the exact Codex-compatible model you need. Use a recognizable name and a suitable project limit. Check the [capability matrix](/en/developer/capability-matrix) rather than assuming a Claude-type channel works with Responses.
+In **NexusAPI console → Token Management → Add token**, select a group containing the exact model you need. Use a recognizable name and a suitable project limit. Then check `/v1/models` and the [capability matrix](/en/developer/capability-matrix) to confirm that `supported_endpoint_types` includes `openai-response`.
 
 ## 3. Configure a custom provider
 

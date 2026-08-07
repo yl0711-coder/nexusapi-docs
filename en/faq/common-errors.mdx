@@ -13,10 +13,10 @@ Parameter, endpoint, and session-compatibility issues do not resolve through rep
 
 ## `status_code=500, not implemented`
 
-If the error includes both `status_code=500` and `not implemented`, and the request uses `/v1/responses` for a current **Anthropic-type Claude channel**, it is a **protocol incompatibility**, not an upstream failure that will recover by waiting. The new-api rc4 route exists, but Anthropic channels do not implement a Responses request conversion.
+If the error includes both `status_code=500` and `not implemented`, and the selected model's `supported_endpoint_types` does not include `openai-response` while the request uses `/v1/responses`, it is a **protocol incompatibility**, not an upstream failure that will recover by waiting.
 
-1. For a custom application, switch to OpenAI Chat Completions: `/v1/chat/completions`.
-2. For Claude Code, follow the [Claude Code guide](/en/tools/claude-code); do not send a Responses request directly to a Claude model.
+1. For a custom application, select the endpoint from `supported_endpoint_types`; use Chat Completions, `/v1/chat/completions`, when it includes `openai`.
+2. For Claude Code, follow the [Claude Code guide](/en/tools/claude-code) and confirm that the model supports `anthropic`.
 3. Do not retry the same request unchanged. Waiting or changing networks will not fix this mismatch.
 
 When asking for help, provide a redacted request example, model name, and Request ID—never the API key.
@@ -61,7 +61,7 @@ Check these points first:
 
 URL rules differ by tool; use the relevant [tool guide](/en/tools/).
 
-An unavailable model is not normally a 404. In new-api rc4, a model outside the key’s group, a disabled channel, or no routable channel is more often reported as `503` / `no available channel`.
+An unavailable model is not normally a 404. A model outside the key’s group, a currently unavailable model, or no available service is more often reported as `503` / `no available channel`.
 
 ## 429 Too Many Requests
 
@@ -84,7 +84,7 @@ When the same model fails repeatedly, do not keep resubmitting a long task. Pres
 
 ## `no available channel` / no current service for this model
 
-This means new-api rc4 could not find an enabled, routable channel carrying that model inside the group used by the current key. A mistyped model ID, a model not offered in the group, a disabled channel, or temporary channel unavailability can all cause it.
+This means that the current key's group temporarily has no available service for that model. A mistyped model ID, a model not offered in the group, temporary model unavailability, or service maintenance can all cause it.
 
 Try later or choose another model currently visible for the group in the Model Marketplace. If it persists, submit the model name, Request ID, and time. You do not need to top up again or create new keys to resolve this message.
 
@@ -104,7 +104,7 @@ The client is continuing a prior response over an unsupported connection method.
 
 ### `Content block not found`
 
-The client did not receive an expected complete content fragment, often during a long conversation, tool call, or interrupted stream. Start a new session, shorten the input, and send a simple test first. If it persists, temporarily disable nonessential tool calls and send support the Request ID, time, model, and original error. We will use those details to investigate the platform-side channel and service configuration.
+The client did not receive an expected complete content fragment, often during a long conversation, tool call, or interrupted stream. Start a new session, shorten the input, and send a simple test first. If it persists, temporarily disable nonessential tool calls and send support the Request ID, time, model, and original error. We will use those details to check service status.
 
 ## Image-generation timeout or unsupported capability
 

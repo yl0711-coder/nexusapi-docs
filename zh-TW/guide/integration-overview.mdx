@@ -44,14 +44,14 @@ NexusAPI 支援常用 AI 用戶端與 OpenAI 風格 API。不同工具可能會�
 | 你要做什麼 | 建議端點 | 使用時機 |
 | --- | --- | --- |
 | 一般文字、聊天或串流輸出 | `/v1/chat/completions` | 模型可透過 OpenAI 相容路由使用時。 |
-| Codex CLI 和相符的 Provider | `/v1/responses` | 用戶端與所選模型均已設定為 Responses 時。 |
-| Claude Code 或原生 Anthropic 用戶端 | `/v1/messages` | 模型可透過 Anthropic 路由使用時。 |
+| Codex CLI 和相符的 Provider | `/v1/responses` | `supported_endpoint_types` 包含 `openai-response` 時。 |
+| Claude Code 或原生 Anthropic 用戶端 | `/v1/messages` | `supported_endpoint_types` 包含 `anthropic` 時。 |
 | 圖片生成 | `/v1/images/generations` | 模型明確標示支援圖片生成時。 |
 
 <Warning>
-**不要把 Responses 當成 Claude 的通用替代方案**
+**不要把 Responses 當成通用替代介面**
 
-若目前 Anthropic 類型 Claude 渠道透過 `/v1/responses` 回傳 `status_code=500, not implemented`，自建程式請改用 `/v1/chat/completions`；Claude Code 則維持原生 Messages 設定。重送相同請求不會修正協定不相容的問題。
+若模型的 `supported_endpoint_types` 未包含 `openai-response`，卻透過 `/v1/responses` 回傳 `status_code=500, not implemented`，這是協定不相容。請改用該模型標示支援的介面；Claude Code 維持原生 Messages 設定。重送相同請求不會修正協定不相容的問題。
 </Warning>
 
 ## 為什麼位址看起來可能不同

@@ -36,7 +36,7 @@ codex --version
 
 ## 2. Tạo key tương thích
 
-Trong **Quản lý token → Thêm token**, chọn nhóm có mô hình dùng cho Codex / Responses. Đọc [ma trận khả năng](/vi/developer/capability-matrix): không được giả định kênh Claude kiểu Anthropic hỗ trợ Responses.
+Trong **Quản lý token → Thêm token**, chọn nhóm có model cần dùng. Sau đó kiểm tra `/v1/models` và [ma trận khả năng](/vi/developer/capability-matrix) để xác nhận `supported_endpoint_types` chứa `openai-response`.
 
 ## 3. Cấu hình custom provider
 

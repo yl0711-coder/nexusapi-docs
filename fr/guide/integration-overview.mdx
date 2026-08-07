@@ -44,14 +44,14 @@ Un même Base URL ne signifie pas que chaque modèle accepte tous les formats de
 | Objectif | Point de terminaison recommandé | Quand l’utiliser |
 | --- | --- | --- |
 | Texte, conversation ou streaming | `/v1/chat/completions` | Le modèle est disponible par la route compatible OpenAI. |
-| Codex CLI et Provider correspondant | `/v1/responses` | Le client et le modèle sélectionné sont configurés pour Responses. |
-| Claude Code ou client Anthropic natif | `/v1/messages` | Le modèle est disponible par la route Anthropic. |
+| Codex CLI et Provider correspondant | `/v1/responses` | Utilisez-le seulement si `supported_endpoint_types` contient `openai-response`. |
+| Claude Code ou client Anthropic natif | `/v1/messages` | Utilisez-le seulement si `supported_endpoint_types` contient `anthropic`. |
 | Génération d’images | `/v1/images/generations` | Le modèle est explicitement compatible avec la génération d’images. |
 
 <Warning>
-**N’utilisez pas Responses comme remplacement universel de Claude**
+**N’utilisez pas Responses comme endpoint de remplacement universel**
 
-Si un canal Claude de type Anthropic renvoie `status_code=500, not implemented` via `/v1/responses`, passez votre application personnalisée à `/v1/chat/completions` ou conservez la configuration Messages native de Claude Code. Réessayer la même requête ne corrige pas une incompatibilité de protocole.
+Si `supported_endpoint_types` d’un modèle ne contient pas `openai-response` et que `/v1/responses` renvoie `status_code=500, not implemented`, le protocole ne correspond pas. Utilisez un endpoint indiqué pour ce modèle ; conservez la configuration Messages native de Claude Code. Réessayer la même requête ne corrige pas une incompatibilité de protocole.
 </Warning>
 
 ## Pourquoi les URL peuvent être différentes

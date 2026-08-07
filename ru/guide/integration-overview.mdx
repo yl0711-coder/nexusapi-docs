@@ -44,14 +44,14 @@ NexusAPI поддерживает популярные AI-клиенты и API 
 | Цель | Рекомендуемый endpoint | Когда использовать |
 | --- | --- | --- |
 | Обычный текст, чат или streaming | `/v1/chat/completions` | Модель доступна через OpenAI-совместимый маршрут. |
-| Codex CLI и соответствующий Provider | `/v1/responses` | Клиент и выбранная модель настроены для Responses. |
-| Claude Code или нативный Anthropic-клиент | `/v1/messages` | Модель доступна через маршрут Anthropic. |
+| Codex CLI и соответствующий Provider | `/v1/responses` | Используйте только если `supported_endpoint_types` содержит `openai-response`. |
+| Claude Code или нативный Anthropic-клиент | `/v1/messages` | Используйте только если `supported_endpoint_types` содержит `anthropic`. |
 | Генерация изображений | `/v1/images/generations` | У модели явно заявлена поддержка изображений. |
 
 <Warning>
-**Не используйте Responses как универсальную замену Claude**
+**Не используйте Responses как универсальную альтернативу**
 
-Если текущий Claude-канал типа Anthropic возвращает `status_code=500, not implemented` при вызове через `/v1/responses`, переключите собственное приложение на `/v1/chat/completions` либо оставьте для Claude Code нативную настройку Messages. Повторная отправка того же запроса не исправит несовместимость протокола.
+Если `supported_endpoint_types` модели не содержит `openai-response` и `/v1/responses` возвращает `status_code=500, not implemented`, протокол не совпадает. Используйте endpoint, указанный для модели; в Claude Code сохраните нативную настройку Messages. Повторная отправка того же запроса не устранит несовместимость протокола.
 </Warning>
 
 ## Почему URL могут выглядеть по-разному

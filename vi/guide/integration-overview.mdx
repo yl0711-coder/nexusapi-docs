@@ -44,14 +44,14 @@ Cùng một Base URL không có nghĩa mọi mô hình đều chấp nhận cùn
 | Mục tiêu | Endpoint khuyến nghị | Dùng khi |
 | --- | --- | --- |
 | Văn bản, hội thoại hoặc streaming thông thường | `/v1/chat/completions` | Mô hình dùng được qua tuyến tương thích OpenAI. |
-| Codex CLI và Provider tương ứng | `/v1/responses` | Client và mô hình đã chọn được cấu hình cho Responses. |
-| Claude Code hoặc client Anthropic gốc | `/v1/messages` | Mô hình dùng được qua tuyến Anthropic. |
+| Codex CLI và Provider tương ứng | `/v1/responses` | Chỉ dùng khi `supported_endpoint_types` chứa `openai-response`. |
+| Claude Code hoặc client Anthropic gốc | `/v1/messages` | Chỉ dùng khi `supported_endpoint_types` chứa `anthropic`. |
 | Tạo ảnh | `/v1/images/generations` | Mô hình được ghi rõ là hỗ trợ tạo ảnh. |
 
 <Warning>
-**Không dùng Responses như phương án thay thế chung cho Claude**
+**Không dùng Responses như endpoint thay thế chung**
 
-Nếu kênh Claude kiểu Anthropic hiện tại trả về `status_code=500, not implemented` qua `/v1/responses`, hãy đổi ứng dụng tự xây dựng sang `/v1/chat/completions`, hoặc giữ cấu hình Messages gốc của Claude Code. Gửi lại đúng yêu cầu đó sẽ không khắc phục sự không tương thích giao thức.
+Nếu `supported_endpoint_types` của model không chứa `openai-response` nhưng `/v1/responses` trả `status_code=500, not implemented`, giao thức không khớp. Hãy dùng endpoint được nêu cho model đó; Claude Code giữ cấu hình Messages gốc. Gửi lại đúng yêu cầu đó không khắc phục sự không tương thích giao thức.
 </Warning>
 
 ## Vì sao URL có thể trông khác nhau

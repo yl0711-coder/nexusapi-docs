@@ -36,7 +36,7 @@ codex --version
 
 ## 2. 対応する Key を作成する
 
-**トークン管理 → トークンを追加**で、Codex / Responses 用モデルを含むグループを選びます。[対応マトリクス](/ja/developer/capability-matrix)を確認し、Anthropic 型 Claude チャネルが Responses に対応すると仮定しないでください。
+**トークン管理 → トークンを追加**で、目的のモデルを含むグループを選びます。作成後に `/v1/models` と[対応マトリクス](/ja/developer/capability-matrix)を確認し、`supported_endpoint_types` に `openai-response` が含まれることを確認してください。
 
 ## 3. カスタム Provider を設定する
 

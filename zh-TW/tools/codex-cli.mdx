@@ -36,7 +36,7 @@ codex --version
 
 ## 2. 建立相容的 Key
 
-在控制台 **令牌管理 → 新增令牌** 選擇包含目標 Codex／Responses 模型的群組，設定名稱和專案額度。請先看[能力矩陣](/zh-TW/developer/capability-matrix)，不要假設 Anthropic 類 Claude 渠道可使用 Responses。
+在控制台 **令牌管理 → 新增令牌** 選擇包含目標模型的群組，設定名稱和專案額度。建立後請看[能力矩陣](/zh-TW/developer/capability-matrix)，並以 `/v1/models` 確認 `supported_endpoint_types` 包含 `openai-response`。
 
 ## 3. 設定自訂 Provider
 

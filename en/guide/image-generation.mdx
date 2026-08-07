@@ -41,7 +41,7 @@ Image results are usually returned in the `data` array. Whether a result is a UR
 
 ## Waiting time and timeouts
 
-The public `/v1/images/generations` endpoint is a **synchronous HTTP request path**: the client should wait for the result of this request. new-api rc4 does not provide a unified task-ID and polling API for generic image generation, and response formats can still differ by upstream provider.
+The public `/v1/images/generations` endpoint is a **synchronous HTTP request path**: the client should wait for the result of this request. This public endpoint does not provide a unified task-ID and polling API for generic image generation, and response formats can still differ by upstream provider.
 
 - Image generation can take tens of seconds or longer. A short timeout in a client, corporate proxy, or browser extension can fail before the upstream responds.
 - Do not submit the same image task repeatedly before confirming the outcome; this can cause duplicate images and duplicate charges.

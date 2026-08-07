@@ -13,10 +13,10 @@ Lỗi tham số, endpoint và tương thích phiên không tự hết khi lặp 
 
 ## `status_code=500, not implemented`
 
-Nếu lỗi có cả `status_code=500` và `not implemented`, đồng thời `/v1/responses` đang gọi **kênh Claude kiểu Anthropic**, đó là **không tương thích giao thức**, không phải sự cố upstream sẽ tự hết khi chờ. new-api rc4 có route này nhưng kênh Anthropic không có triển khai chuyển đổi yêu cầu Responses.
+Nếu lỗi có cả `status_code=500` và `not implemented`, đồng thời `supported_endpoint_types` của model đã chọn không chứa `openai-response` nhưng yêu cầu dùng `/v1/responses`, đó là **không tương thích giao thức**, không phải sự cố upstream sẽ tự hết khi chờ.
 
-1. Với ứng dụng tự xây dựng, chuyển sang `/v1/chat/completions`.
-2. Với Claude Code, làm theo [hướng dẫn Claude Code](/vi/tools/claude-code) và giữ cấu hình Messages gốc.
+1. Ứng dụng tự xây dựng chọn endpoint theo `supported_endpoint_types`; khi có `openai`, dùng `/v1/chat/completions`.
+2. Với Claude Code, làm theo [hướng dẫn Claude Code](/vi/tools/claude-code) và xác nhận model hỗ trợ `anthropic`.
 3. Không gửi lại nguyên yêu cầu đó; chờ hoặc đổi mạng không sửa được lỗi này.
 
 Khi cần hỗ trợ, gửi ví dụ đã che thông tin, tên model và Request ID, không gửi key.
@@ -59,7 +59,7 @@ Hãy kiểm tra trước:
 
 Quy tắc URL tùy công cụ; dùng [hướng dẫn công cụ](/vi/tools/) tương ứng.
 
-Model không khả dụng thường không phải 404. Trong new-api rc4, model ngoài nhóm key, channel bị tắt hoặc không thể định tuyến thường trả `503` / `no available channel`.
+Model không khả dụng thường không phải 404. Model không thuộc nhóm key, tạm thời không khả dụng hoặc không có dịch vụ khả dụng thường trả `503` / `no available channel`.
 
 ## 429 Too Many Requests
 
@@ -82,7 +82,7 @@ Ngoài lỗi `not implemented` nêu trên, các mã này thường là lỗi x�
 
 ## `no available channel` / model hiện không có dịch vụ khả dụng
 
-new-api rc4 không tìm được channel đang bật và có thể định tuyến cho model đó trong nhóm của key hiện tại. Model ID sai, model chưa có trong nhóm, channel bị tắt hoặc tạm thời không khả dụng đều có thể gây lỗi này.
+Điều này nghĩa là nhóm của Key hiện tại tạm thời không có dịch vụ khả dụng cho model đó. ID sai, model không có trong nhóm, model tạm thời không khả dụng hoặc đang bảo trì đều có thể gây ra.
 
 Hãy thử lại sau hoặc chọn model khác đang hiển thị cho nhóm trong Chợ mô hình. Nếu lỗi tiếp diễn, gửi tên model, Request ID và thời gian; không cần nạp lại tiền hoặc tạo key mới.
 
@@ -102,7 +102,7 @@ Client đang tiếp tục phản hồi cũ qua cách kết nối không được
 
 ### `Content block not found`
 
-Client không nhận được mảnh nội dung hoàn chỉnh cần thiết, thường trong hội thoại dài, tool call hoặc stream bị ngắt. Hãy tạo phiên mới, rút ngắn đầu vào và thử một yêu cầu đơn giản trước. Nếu vẫn xảy ra, hãy tạm tắt tool call không cần thiết và gửi hỗ trợ Request ID, thời điểm, mô hình cùng lỗi gốc. Chúng tôi sẽ dùng các thông tin này để kiểm tra cấu hình kênh và dịch vụ ở phía nền tảng.
+Client không nhận được mảnh nội dung hoàn chỉnh cần thiết, thường trong hội thoại dài, tool call hoặc stream bị ngắt. Hãy tạo phiên mới, rút ngắn đầu vào và thử một yêu cầu đơn giản trước. Nếu vẫn xảy ra, hãy tạm tắt tool call không cần thiết và gửi hỗ trợ Request ID, thời điểm, mô hình cùng lỗi gốc. Chúng tôi sẽ dùng các thông tin này để kiểm tra trạng thái dịch vụ.
 
 ## Hết thời gian tạo ảnh hoặc không hỗ trợ khả năng
 

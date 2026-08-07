@@ -46,6 +46,73 @@ function structuralMetrics(content) {
   };
 }
 
+function isChinesePage(relativeFile) {
+  return !/^(?:en|fr|ja|ru|vi|zh-TW)\//.test(relativeFile) || relativeFile.startsWith('zh-TW/');
+}
+
+function visibleProse(line) {
+  return line
+    .replace(/`[^`]*`/g, '')
+    .replace(/!?\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/https?:\/\/\S+/g, '');
+}
+
+// Keep the formatting checks deliberately small and deterministic. Mintlify owns
+// the rendered font size, line height, and responsive spacing; this guard focuses
+// on source-level rules that otherwise regress silently across translations.
+function checkFormatting(relativeFile, content) {
+  const lines = content.split(/\r?\n/);
+  let inCodeFence = false;
+  let previousHeadingLevel = 0;
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const lineNumber = index + 1;
+
+    if (/^```/.test(line)) {
+      inCodeFence = !inCodeFence;
+      continue;
+    }
+    if (inCodeFence) continue;
+
+    if (/[ \t]+$/.test(line)) {
+      addFailure(`${relativeFile}:${lineNumber}: trailing whitespace is not allowed; use an explicit <br /> when a line break is intentional.`);
+    }
+    if (/\t/.test(line)) {
+      addFailure(`${relativeFile}:${lineNumber}: use spaces instead of tab indentation.`);
+    }
+
+    const listIndent = line.match(/^( +)(?:[-+*] |\d+[.)] )/);
+    if (listIndent && listIndent[1].length % 2 !== 0) {
+      addFailure(`${relativeFile}:${lineNumber}: nested list indentation must use multiples of two spaces.`);
+    }
+
+    const heading = line.match(/^(#{2,6})\s+/);
+    if (heading) {
+      const currentHeadingLevel = heading[1].length;
+      if (previousHeadingLevel && currentHeadingLevel > previousHeadingLevel + 1) {
+        addFailure(`${relativeFile}:${lineNumber}: heading level jumps from h${previousHeadingLevel} to h${currentHeadingLevel}.`);
+      }
+      if (index > 0 && lines[index - 1].trim() && lines[index - 1].trim() !== '---') {
+        addFailure(`${relativeFile}:${lineNumber}: leave one blank line before a heading.`);
+      }
+      previousHeadingLevel = currentHeadingLevel;
+    }
+
+    if (isChinesePage(relativeFile)) {
+      const prose = visibleProse(line);
+      if (/[\u3400-\u9fff][A-Za-z0-9]|[A-Za-z0-9][\u3400-\u9fff]/.test(prose)) {
+        addFailure(`${relativeFile}:${lineNumber}: add a space between Chinese and Latin text outside code.`);
+      }
+      if (/[\u3400-\u9fff][,;:!?]|[,;:!?][\u3400-\u9fff]/.test(prose)) {
+        addFailure(`${relativeFile}:${lineNumber}: use full-width Chinese punctuation in Chinese prose.`);
+      }
+    }
+  }
+
+  if (inCodeFence) addFailure(`${relativeFile}: unclosed code fence.`);
+}
+
 const languages = docsConfig.navigation?.languages || [];
 const defaultLanguage = languages.find((language) => language.default);
 
@@ -93,6 +160,8 @@ for (const file of mdxFiles) {
   const relativeFile = path.relative(root, file);
   const page = relativeFile.replace(/\.mdx$/, '');
   const content = fs.readFileSync(file, 'utf8');
+
+  checkFormatting(relativeFile, content);
 
   if (!documentedPages.has(page)) {
     addFailure(`${relativeFile}: the page is not included in docs.json navigation.`);

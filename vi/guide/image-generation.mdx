@@ -41,7 +41,7 @@ Kết quả ảnh thường được trả về trong mảng `data`. Kết quả
 
 ## Thời gian chờ và hết thời gian
 
-`/v1/images/generations` là **đường dẫn HTTP đồng bộ**: client cần chờ kết quả của yêu cầu này. new-api rc4 không cung cấp task ID và API polling thống nhất cho tạo ảnh chung; định dạng phản hồi thực tế vẫn có thể khác nhau theo nhà cung cấp phía trên.
+`/v1/images/generations` là **đường dẫn HTTP đồng bộ**: client cần chờ kết quả của yêu cầu này. Endpoint công khai này không cung cấp task ID và API polling thống nhất cho tạo ảnh chung; định dạng phản hồi thực tế vẫn có thể khác nhau theo nhà cung cấp phía trên.
 
 - Tạo ảnh có thể mất vài chục giây hoặc lâu hơn. Timeout quá ngắn ở client, proxy công ty hoặc tiện ích trình duyệt có thể hết hạn trước khi có phản hồi.
 - Không gửi liên tiếp cùng một tác vụ ảnh khi chưa xác nhận kết quả; điều này có thể tạo ảnh và phát sinh chi phí trùng lặp.
