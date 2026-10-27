@@ -76,6 +76,23 @@ function checkFormatting(relativeFile, content) {
     }
     if (inCodeFence) continue;
 
+    for (const match of line.matchAll(/!?\[[^\]\n]*\]\(\s*(\/[^)\n]*)\)/g)) {
+      if (!/^\/\S+(?:\s+["'][^"']*["'])?\s*$/.test(match[1])) {
+        addFailure(`${relativeFile}:${lineNumber}: malformed local Markdown URL; do not translate paths or insert spaces in them.`);
+      }
+    }
+
+    if (/^(?:en|fr|ru|vi)\//.test(relativeFile) && /[，。；：！？、]/.test(visibleProse(line))) {
+      addFailure(`${relativeFile}:${lineNumber}: use the locale's punctuation, not Chinese full-width punctuation, in translated prose.`);
+    }
+
+    if (/^##\s+/.test(line)) {
+      const nextContent = lines.slice(index + 1).find((value) => value.trim());
+      if (!nextContent || /^#{1,2}\s+/.test(nextContent)) {
+        addFailure(`${relativeFile}:${lineNumber}: empty section; restore the missing content or remove the heading.`);
+      }
+    }
+
     if (/[ \t]+$/.test(line)) {
       addFailure(`${relativeFile}:${lineNumber}: trailing whitespace is not allowed; use an explicit <br /> when a line break is intentional.`);
     }
@@ -170,6 +187,15 @@ for (const file of mdxFiles) {
 
   checkFormatting(relativeFile, content);
 
+  // Customer setup examples must be copyable JSON, not almost-valid snippets.
+  for (const match of content.matchAll(/^```json\r?\n([\s\S]*?)^```/gm)) {
+    try {
+      JSON.parse(match[1]);
+    } catch (error) {
+      addFailure(`${relativeFile}: JSON example cannot be parsed: ${error.message}`);
+    }
+  }
+
   if (!documentedPages.has(page)) {
     addFailure(`${relativeFile}: the page is not included in docs.json navigation.`);
   }
@@ -221,6 +247,12 @@ if (defaultLanguage) {
       if (!fs.existsSync(localizedPath)) continue;
 
       const localizedMetrics = structuralMetrics(fs.readFileSync(localizedPath, 'utf8'));
+      if (route === 'faq/index') {
+        const questionCount = (p) => (fs.readFileSync(p, 'utf8').match(/^- \*\*/gm) || []).length;
+        if (questionCount(localizedPath) < questionCount(sourcePath)) {
+          addFailure(`${language.language}: FAQ answers are missing compared with the default-language source.`);
+        }
+      }
       for (const [metric, sourceValue] of Object.entries(sourceMetrics)) {
         if (localizedMetrics[metric] < sourceValue) {
           addFailure(

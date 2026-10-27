@@ -3,29 +3,54 @@ title: "Câu hỏi thường gặp"
 description: "Tìm nhanh hướng dẫn NexusAPI về tích hợp, mô hình, chi phí và lỗi."
 ---
 
-Hãy chọn hiện tượng gần nhất. Khi lỗi xảy ra, trước hết lưu toàn bộ nội dung lỗi và Request ID rồi mới thay đổi cấu hình hoặc thử lại.
+Tìm câu hỏi của bạn và làm theo câu trả lời. Nếu chưa rõ, gửi ảnh lỗi cho hỗ trợ, che toàn bộ khóa.
 
 ## Tích hợp và cấu hình
 
-- **Bắt đầu từ đâu?** Xem [bắt đầu nhanh](/vi/guide/quick-start).
-- **Dùng Base URL nào?** Tùy client; xem [tổng quan tích hợp](/vi/guide/integration-overview).
-- **Vì sao 404?** Kiểm tra URL có thành `/v1/v1/...` hay client tự nối đường dẫn hay không.
-- **Vì sao API Key mới không dùng được?** Kiểm tra trạng thái key, credit, nhóm, model ID và định dạng `Authorization: Bearer`.
+- **Bắt đầu từ đâu?**<br />
+  Mở [bắt đầu nhanh](/vi/guide/quick-start) và làm từ bước đầu.
+
+- **Dùng Base URL nào?**<br />
+  Sao chép địa chỉ trong [hướng dẫn ứng dụng](/vi/tools). Không tự thêm `/v1`.
+
+- **Vì sao 404?**<br />
+  Sao chép lại địa chỉ trong [hướng dẫn](/vi/tools). Nếu vẫn lỗi, gửi ảnh cho hỗ trợ.
+
+- **Vì sao có lỗi `status_code=500, not implemented`?**<br />
+  Không thử lại liên tục. Gửi ứng dụng, mô hình, nhóm và lỗi để hỗ trợ kiểm tra mô hình có dùng được với ứng dụng không.
+
+- **Vì sao khóa API mới không dùng được?**<br />
+  Sao chép lại khóa đầy đủ ở [Khóa API](https://nexusapi.link/keys), dán rồi mở lại ứng dụng. Không chép phần có dấu sao.
 
 ## Mô hình và chi phí
 
-- **Làm sao biết nhóm dùng được mô hình?** Lọc [Chợ mô hình](https://nexusapi.link/pricing) theo nhóm hoặc gọi `/v1/models` bằng key.
-- **Một yêu cầu tốn bao nhiêu?** Xem nhật ký console và [sử dụng và thanh toán](/vi/billing/usage-and-billing).
-- **Lỗi có thể bị tính phí không?** Có thể, tùy upstream đã xử lý hay client gửi lại. Hãy đối chiếu Request ID.
-- **Có số dư nhưng key bị từ chối?** Kiểm tra cả hạn mức key, ngày hết hạn và nhóm.
+- **Làm sao biết nhóm dùng được mô hình?**<br />
+  Chọn nhóm của khóa trong [Quảng trường mô hình](https://nexusapi.link/pricing), rồi sao chép tên mô hình. Không thấy thì hỏi hỗ trợ.
+
+- **Một yêu cầu tốn bao nhiêu?**<br />
+  Tìm yêu cầu trong [nhật ký](https://nexusapi.link/usage-logs/common), xem chi phí. Xem [ví dụ giảm giá](/vi/billing/multipliers-and-discounts) để hiểu chi phí CNY.
+
+- **Yêu cầu lỗi có bị tính phí không?**<br />
+  Không thể kết luận chỉ từ lỗi. Kiểm tra chi phí trong bản ghi tương ứng; chưa rõ thì gửi ảnh nhật ký cho hỗ trợ.
+
+- **Có số dư nhưng khóa bị từ chối?**<br />
+  Kiểm tra số dư, hạn mức và ngày hết hạn khóa. Hỏi hỗ trợ trước khi nạp thêm nếu chưa rõ.
 
 ## Lỗi API và công cụ
 
-- **400, 401, 429, 500, 502, 503, 504, 524 nghĩa là gì?** Xem [lỗi API thường gặp](/vi/faq/common-errors).
-- **Hội thoại dài không tiếp tục được?** Lưu lỗi, mở phiên mới, không gửi lặp nhanh cùng nội dung.
-- **Tạo ảnh timeout?** Không gửi lại ngay tác vụ đó; lưu Request ID và xem [hướng dẫn ảnh](/vi/guide/image-generation).
-- **`fetch failed` trong Claude Code?** Trước hết thử một tin nhắn ngắn thông thường rồi làm theo [hướng dẫn Claude Code](/vi/tools/claude-code).
+- **Các mã 400, 401, 429, 500, 502, 503, 504 hoặc 524 có nghĩa gì?**<br />
+  Tìm đúng thông báo trong [hướng dẫn lỗi](/vi/faq/common-errors) rồi làm theo.
 
-## Trước khi liên hệ hỗ trợ
+- **Không thể tiếp tục hội thoại dài?**<br />
+  Lưu nội dung quan trọng, mở hội thoại mới và thử một tin nhắn ngắn. Không thử liên tục; lượt thử có thể dùng credit.
 
-Làm [tự kiểm tra](/vi/faq/self-check), sau đó gửi cùng lúc Request ID, thời gian/múi giờ, client và phiên bản, mô hình, endpoint, toàn bộ lỗi và tình trạng xảy ra ngắt quãng hay liên tục. Không gửi key đầy đủ, mật khẩu hoặc nội dung riêng tư.
+- **Yêu cầu báo lỗi rồi lại thành công?**<br />
+  Kiểm tra ứng dụng đã nhận đủ câu trả lời chưa, rồi đối chiếu nhật ký và phí. Chưa rõ thì hỏi hỗ trợ.
+
+## Gửi gì cho hỗ trợ
+
+- Tên ứng dụng.
+- Thời gian, mô hình và nhóm.
+- Nội dung hoặc ảnh lỗi; Request ID nếu có.
+
+**Không biết thì để trống, không cần tự đoán nguyên nhân. Không gửi mật khẩu, mã xác minh hoặc khóa đầy đủ.**

@@ -1,49 +1,55 @@
 ---
-title: "Thiết lập Codex CLI"
-description: "Cài Codex CLI và cấu hình NexusAPI thành custom provider Responses."
+title: "Cài và cấu hình Codex CLI"
+description: "Cài Codex, lưu địa chỉ và mô hình, đặt khóa rồi thử."
 ---
 
-Các lệnh và trường `config.toml` dựa trên [kho Codex chính thức](https://github.com/openai/codex) và [tài liệu custom provider](https://learn.chatgpt.com/docs/config-file/config-advanced). NexusAPI chỉ cung cấp URL, API Key và model ID.
+Dùng khóa NexusAPI, không dùng mật khẩu ChatGPT.
 
-## 1. Cài đặt
+## 1. Cài Codex
 
-Chọn một cách chính thức:
+Windows mở PowerShell, Mac mở Terminal. Chỉ dùng lệnh đúng hệ điều hành. Đã cài thì bỏ qua.
 
-### Windows PowerShell
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
-
-### macOS, Linux hoặc WSL
-
+</Tab>
+<Tab title="macOS / Linux / WSL">
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
+</Tab>
+</Tabs>
 
-### Khi đã cài Node.js
-
-```bash
-npm install -g @openai/codex
-codex --version
-```
-
-Sau khi cài, hãy kiểm tra riêng phiên bản trong terminal mới:
+Mở lại terminal và xem phiên bản. Không tìm thấy lệnh thì xử lý cài đặt trước.
 
 ```bash
 codex --version
 ```
 
-## 2. Tạo key tương thích
+## 2. Lưu địa chỉ và mô hình
 
-Trong **Quản lý token → Thêm token**, chọn nhóm có model cần dùng. Sau đó kiểm tra `/v1/models` và [ma trận khả năng](/vi/developer/capability-matrix) để xác nhận `supported_endpoint_types` chứa `openai-response`.
+[Tạo khóa](/vi/guide/api-key), chọn cùng nhóm trong [Quảng trường mô hình](https://nexusapi.link/pricing), sao chép tên dùng cho Codex / Responses. Mở cấu hình người dùng:
 
-## 3. Cấu hình custom provider
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex" | Out-Null
+notepad "$env:USERPROFILE\.codex\config.toml"
+```
+</Tab>
+<Tab title="macOS / Linux / WSL">
+```bash
+mkdir -p ~/.codex
+nano ~/.codex/config.toml
+```
+</Tab>
+</Tabs>
 
-| Hệ thống | Tệp |
-| --- | --- |
-| Windows | `%USERPROFILE%\\.codex\\config.toml` |
-| macOS / Linux | `~/.codex/config.toml` |
+Nano dùng `Ctrl + O`, Enter để lưu, `Ctrl + X` để thoát. Notepad dùng `Ctrl + S`. Tên phải là `config.toml`, không thêm `.txt`.
+
+Dán vào file trống, chỉ thay `YOUR_MODEL_ID`:
 
 ```toml
 model_provider = "nexusapi"
@@ -56,53 +62,60 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-Lưu NexusAPI Key trong biến môi trường, không lưu trong tệp này. `~/.codex/auth.json` có thể chứa trạng thái thông tin xác thực của Codex; không cần thêm NexusAPI Key vào đó.
+Sao lưu cấu hình cũ. Đặt `model`, `model_provider` ở đầu file, thêm hoặc sửa một phần `[model_providers.nexusapi]`, không trùng phần. Có thể dùng [CC Switch](/vi/tools/cc-switch). Không điền khóa vào file này.
 
-## 4. Đặt biến môi trường
+## 3. Đặt và lưu khóa API
 
-### Windows PowerShell
+Chỉ thay `YOUR_API_KEY`. Lệnh Windows đặt cả terminal hiện tại lẫn biến người dùng lâu dài.
 
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
-setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
+$env:NEXUSAPI_API_KEY = "YOUR_API_KEY"
+[Environment]::SetEnvironmentVariable("NEXUSAPI_API_KEY", $env:NEXUSAPI_API_KEY, "User")
+```
+</Tab>
+<Tab title="macOS (Zsh)">
+```bash
+touch ~/.zshrc
+nano ~/.zshrc
 ```
 
-### macOS, Linux hoặc WSL
+Thêm dòng sau ở cuối file; đã có biến cùng tên thì thay giá trị cũ, không thêm trùng. Lưu rồi mở lại terminal.
 
 ```bash
-export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+```
+</Tab>
+<Tab title="Linux / WSL (Bash)">
+```bash
+nano ~/.bashrc
 ```
 
-Sau `setx` phải mở terminal mới. `export` chỉ hiệu lực trong shell hiện tại. Với lưu lâu dài, hãy dùng kho thông tin xác thực hoặc biến môi trường được quản lý, không dùng repository.
-
-## 5. Kiểm tra
-
-Trong thư mục dự án, chạy:
+Thêm dòng sau ở cuối file; đã có biến cùng tên thì thay giá trị cũ, không thêm trùng. Lưu rồi mở lại terminal.
 
 ```bash
-cd your-project-folder
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+```
+</Tab>
+</Tabs>
+
+Ví dụ dùng Zsh mặc định trên Mac và Bash trên Linux. Shell khác dùng file khởi động tương ứng; chưa rõ thì hỏi hỗ trợ. Không đưa khóa vào dự án hay ảnh.
+
+## 4. Khởi động kiểm tra
+
+Mở terminal trong dự án của bạn và chạy:
+
+```bash
 codex
 ```
 
-Với lần đầu, hãy dùng tác vụ chỉ đọc:
+Dùng `/status` xem đúng mô hình và nhà cung cấp NexusAPI. Gửi “Chỉ trả lời: kết nối thành công. Không sửa file.” Nhận đủ câu trả lời và có [nhật ký](https://nexusapi.link/usage-logs/common) là được. Lượt thử này tiêu thụ một lượng nhỏ số dư.
 
-```text
-Giải thích cấu trúc repository, không sửa tệp.
-```
+## 5. Lỗi hay gặp
 
-Sau đó kiểm tra nhật ký sử dụng của console. Nếu lỗi, kiểm tra terminal mới, key, nhóm và model ID, lưu Request ID rồi làm [tự kiểm tra](/vi/faq/self-check).
+`Missing environment variable`: làm lại bước 3. Mô hình không dùng được: sao chép lại tên hỗ trợ Codex trong nhóm. Lỗi khác xem [tự kiểm tra](/vi/faq/self-check).
 
-## Khắc phục sự cố
+Trên Mac, mở trình soạn thảo từ Dock có thể không nhận biến terminal. Thử CLI trước; dùng tiện ích Codex thì mở từ terminal đã cấu hình bằng `code .` hoặc `cursor .`. Không đưa khóa vào cài đặt dự án.
 
-1. Dùng terminal được mở sau khi đặt `NEXUSAPI_API_KEY`.
-2. Xác nhận key đang bật, tài khoản có credit và nhóm chứa mô hình đã chọn.
-3. Sao chép lại model ID chính xác từ Chợ mô hình hoặc `/v1/models`.
-4. Lưu nguyên văn lỗi và Request ID, rồi làm [tự kiểm tra](/vi/faq/self-check).
-
-## VS Code / Cursor
-
-Có thể cài [tiện ích Codex do OpenAI phát hành](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt) từ marketplace. Tiện ích dùng chung cấu hình Codex cấp người dùng; không thêm các thiết lập cũ `chatgpt.apiBase` hoặc `chatgpt.config` vào VS Code.
-
-## Nguồn chính thức
-
-- [Cài đặt OpenAI Codex CLI](https://github.com/openai/codex)
-- [Cấu hình custom provider OpenAI Codex](https://learn.chatgpt.com/docs/config-file/config-advanced)
+Cài đặt và cấu hình chính thức: [Codex CLI](https://learn.chatgpt.com/docs/cli) · [Custom providers](https://learn.chatgpt.com/docs/config-file/config-advanced#custom-model-providers).

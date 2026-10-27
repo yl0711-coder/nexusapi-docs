@@ -3,12 +3,12 @@ title: "Anthropic Messages API"
 description: "`supported_endpoint_types` に anthropic を含むモデルをネイティブ Anthropic Messages プロトコルで呼び出します。"
 ---
 
-この API は、現在の Key の `/v1/models` 応答で `supported_endpoint_types` に `anthropic` を含むモデルに使用します。先に[API とモデル対応マトリクス](/ja/developer/capability-matrix)を確認してください。**モデル、Key グループ、プロトコルのすべてが一致している必要があります。**
+この API は、現在のキーの `/v1/models` 応答で `supported_endpoint_types` に `anthropic` を含むモデルに使用します。先に[API とモデル対応マトリクス](/ja/developer/capability-matrix)を確認してください。**モデル、キーのグループ、プロトコルのすべてが一致している必要があります。**
 
 <Warning>
 **Messages を使用する条件**
 
-この endpoint は `supported_endpoint_types` に `anthropic` を含むモデルだけに使用します。OpenAI 互換アプリでは [Chat Completions](/ja/developer/openai-compatible) を使用してください。モデルに `anthropic` がない場合は、そのモデルに対応する endpoint を選びます。`not implemented` は通常、一時的なエラーではなくプロトコル不一致です。
+このエンドポイントは `supported_endpoint_types` に `anthropic` を含むモデルだけに使用します。OpenAI 互換アプリでは [Chat Completions](/ja/developer/openai-compatible) を使用してください。モデルに `anthropic` がない場合は、そのモデルに対応するエンドポイントを選びます。`not implemented` は通常、一時的なエラーではなくプロトコル不一致です。
 </Warning>
 
 ## エンドポイントと最小リクエスト
@@ -31,16 +31,16 @@ curl 'https://nexusapi.link/v1/messages' \
 
 | 項目 | 必須 | 説明 |
 | --- | --- | --- |
-| `model` | はい | 現在の Key に見え、`supported_endpoint_types` に `anthropic` を含む正確なモデル ID |
-| `max_tokens` | はい | このリクエストの最大出力 Token 数 |
+| `model` | はい | 現在のキーで見え、`supported_endpoint_types` に `anthropic` を含む正確なモデル ID |
+| `max_tokens` | はい | このリクエストの最大出力トークン数 |
 | `messages` | はい | Anthropic Messages 形式の会話 |
 | `anthropic-version` | ネイティブプロトコルで必要 | SDK では自動管理。手動リクエストでは互換バージョンを指定 |
 
-全フィールド、ツール、ストリーミング、レスポンス Schema は使用する Anthropic クライアントのプロトコル文書を参照してください。オプションの可用性はモデルと現在の対応状況によって異なります。
+全フィールド、ツール、ストリーミング、レスポンススキーマは使用する Anthropic クライアントのプロトコル文書を参照してください。オプションの可用性はモデルと現在の対応状況によって異なります。
 
 ## Anthropic SDK を使う
 
-ネイティブ SDK は必要なプロトコルヘッダーを管理します。NexusAPI Key を渡し、Base URL を**`/v1` なし**に設定します。
+ネイティブ SDK は必要なプロトコルヘッダーを管理します。NexusAPIキーを渡し、Base URL を**`/v1` なし**に設定します。
 
 ```python
 from anthropic import Anthropic
@@ -69,9 +69,9 @@ SDK が `/v1/messages` を追加します。`base_url` に `https://nexusapi.lin
 
 ## トラブルシューティング
 
-- `401`：Key が正しく有効で、漏えい後に再発行されていないか確認します。
+- `401`：キーが正しく有効で、漏えい後に再発行されていないか確認します。
 - `404`：SDK が 2 回目の `/v1` を追加していないか確認します。
 - `400`：`model`、`max_tokens`、`messages` だけで検証してから、オプションを段階的に追加します。
-- `500, not implemented`：`supported_endpoint_types` に `anthropic` が含まれ、対応する endpoint を使用していることを確認します。
+- `500, not implemented`：`supported_endpoint_types` に `anthropic` が含まれ、対応するエンドポイントを使用していることを確認します。
 
-解決しない場合は Request ID とマスク済みリクエストを保存し、[自己確認](/ja/faq/self-check)を行ってください。
+解決しない場合は Request ID とマスク済みリクエストを保存し、[セルフチェック](/ja/faq/self-check)を行ってください。

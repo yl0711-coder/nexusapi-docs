@@ -1,59 +1,145 @@
 ---
-title: "Exemples de code"
-description: "Appelez NexusAPI depuis Python, JavaScript ou cURL avec Chat Completions."
+title: "Copier et lancer un premier appel"
+description: "Choisissez Python, JavaScript ou une commande et vérifiez la réponse."
 ---
 
-Les exemples utilisent OpenAI Chat Completions. Vérifiez d'abord le modèle et le protocole dans la [matrice des capacités](/fr/developer/capability-matrix), puis copiez l'ID exact disponible à votre clé.
+Vous utilisez Claude Code, Codex ou CC Switch ? Suivez le [guide du logiciel](/fr/tools).
 
-## Paramètres de base
+## 1. Préparer clé et modèle
 
-- Base URL : `https://nexusapi.link/v1`
-- Clé : créée dans la [console NexusAPI](https://nexusapi.link) ; elle commence généralement par `sk-`
-- Modèle : ID exact du catalogue ou de `/v1/models`
+[Créez une clé](/fr/guide/api-key). Dans la [Place des modèles](https://nexusapi.link/pricing), sélectionnez le même groupe et copiez un modèle compatible Chat Completions. Demandez au support si nécessaire.
 
-## Python
+Ouvrez un terminal. Remplacez uniquement `YOUR_API_KEY` et `YOUR_MODEL_ID`. Gardez ce terminal pour les commandes suivantes ; après fermeture, redéfinissez les valeurs.
+
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+$env:NEXUSAPI_API_KEY = "YOUR_API_KEY"
+$env:NEXUSAPI_MODEL = "YOUR_MODEL_ID"
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+export NEXUSAPI_MODEL='YOUR_MODEL_ID'
+```
+</Tab>
+</Tabs>
+
+## 2. Exécuter un exemple
+
+Choisissez une seule option. Enregistrez les fichiers dans votre dossier de test, sans les nommer `openai.py` ou `openai.mjs`.
+
+<Tabs>
+<Tab title="Python">
+Installez [Python 3](https://www.python.org/downloads/). Ouvrez le terminal dans le dossier de test et installez la dépendance avec les commandes de votre système.
+
+<Tabs>
+<Tab title="Windows">
+```powershell
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install openai
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install openai
+```
+</Tab>
+</Tabs>
+
+Créez `demo.py`, collez tout le code et enregistrez :
 
 ```python
+import os
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="YOUR_API_KEY",
+    api_key=os.environ["NEXUSAPI_API_KEY"],
     base_url="https://nexusapi.link/v1",
 )
-
 response = client.chat.completions.create(
-    model="YOUR_MODEL_ID",
-    messages=[{"role": "user", "content": "Présente-toi brièvement."}],
+    model=os.environ["NEXUSAPI_MODEL"],
+    messages=[{"role": "user", "content": "Reply only: connection successful"}],
 )
-
 print(response.choices[0].message.content)
 ```
 
-## JavaScript
+Dans le même terminal :
+
+<Tabs>
+<Tab title="Windows">
+```powershell
+.\.venv\Scripts\python.exe demo.py
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+.venv/bin/python demo.py
+```
+</Tab>
+</Tabs>
+</Tab>
+<Tab title="JavaScript">
+Installez [Node.js LTS](https://nodejs.org/en/download), rouvrez le terminal et redéfinissez les deux variables ci-dessus, puis exécutez :
+
+```bash
+npm install openai
+```
+
+Créez `demo.mjs` (pas `.txt`), collez et enregistrez :
 
 ```js
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: "YOUR_API_KEY",
+  apiKey: process.env.NEXUSAPI_API_KEY,
   baseURL: "https://nexusapi.link/v1",
 });
-
 const response = await client.chat.completions.create({
-  model: "YOUR_MODEL_ID",
-  messages: [{ role: "user", content: "Présente-toi brièvement." }],
+  model: process.env.NEXUSAPI_MODEL,
+  messages: [{role: "user", content: "Reply only: connection successful"}],
 });
-
 console.log(response.choices[0].message.content);
 ```
 
-## cURL
+Exécutez :
 
 ```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"Tester la connexion"}]}'
+node demo.mjs
 ```
+</Tab>
+<Tab title="HTTP / cURL">
+Aucun SDK nécessaire. Choisissez la commande de votre système :
 
-Ne mettez jamais une vraie clé dans le code source. Ces exemples Chat Completions ne s'appliquent que si `supported_endpoint_types` contient `openai`. Utilisez [Responses et Codex](/fr/developer/responses) uniquement lorsque `openai-response` est présent. La génération d'images utilise un autre endpoint : consultez le [guide des images](/fr/guide/image-generation). Vérifiez la disponibilité des options dans le Catalogue de modèles.
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+$body = @{
+  model = $env:NEXUSAPI_MODEL
+  messages = @(@{role = "user"; content = "Reply only: connection successful"})
+} | ConvertTo-Json -Depth 5
+$result = Invoke-RestMethod -Method Post -Uri "https://nexusapi.link/v1/chat/completions" -Headers @{Authorization = "Bearer $env:NEXUSAPI_API_KEY"} -ContentType "application/json" -Body $body
+$result.choices[0].message.content
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H "Authorization: Bearer $NEXUSAPI_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d "{\"model\":\"$NEXUSAPI_MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply only: connection successful\"}]}"
+```
+</Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+## 3. Vérifier le résultat
+
+Une réponse complète comme `connection successful` confirme la connexion. Vérifiez l'appel dans les [journaux](https://nexusapi.link/usage-logs/common). Le test consomme un peu de crédit.
+
+En cas d'erreur, vérifiez les valeurs remplacées, la clé sans astérisques et le modèle du bon groupe. Envoyez au support l'erreur et l'heure, pas la clé.
+
+Installation du SDK : [OpenAI SDK](https://developers.openai.com/api/docs/libraries).

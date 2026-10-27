@@ -1,60 +1,39 @@
 ---
-title: "Auto-vérification"
-description: "Conservez les informations minimales et isolez une erreur NexusAPI avant de contacter le support."
+title: "Que faire en cas d’erreur"
+description: "Conservez l’erreur, vérifiez la configuration et contactez le support si nécessaire."
 ---
 
-La plupart des erreurs de configuration ou incidents temporaires peuvent être circonscrits en quelques minutes. Préservez d'abord les preuves, puis faites un seul test minimal à faible fréquence.
+**Faites d’abord une capture. Suivez ces vérifications ou contactez directement le support en cas de doute.**
 
-## 1. Conserver les preuves
+## 1. Conserver l’erreur
 
-Avant de fermer le client ou de réessayer, notez :
+Gardez le nom de l’application, l’heure, le modèle, le groupe et une capture. Copiez le Request ID s’il est disponible. Masquez la clé complète, les mots de passe et les données privées.
 
-- le texte complet de l'erreur et le Request ID ;
-- l'heure et le fuseau horaire ;
-- l'ID du modèle, l'endpoint et l'usage ou non du streaming ;
-- le client / SDK et sa version.
+## 2. Suivre le message
 
-Ne partagez pas une clé complète, un mot de passe, des données privées ou le contenu complet d'une demande métier.
-
-## 2. Identifier la catégorie
-
-| Symptôme | À vérifier en premier |
+| Message | Action |
 | --- | --- |
-| 401 | Clé, préfixe `Bearer` et URL. |
-| 403 | Groupe, restriction de modèle, liste d'IP, compte ou refus en amont. |
-| 404 | Base URL, chemin, `/v1` absent ou dupliqué. |
-| 400 | Modèle, protocole, paramètres ou état de session. |
-| 429 | Concurrence et fréquence ; respectez `Retry-After`. |
-| 500 / 502 / 503 | Attendez 10 à 30 secondes puis réessayez une seule fois. |
-| 504 / 524 | Taille de demande, délai et état de service. |
-| `500, not implemented` | Vérifiez que `supported_endpoint_types` du modèle contient le protocole utilisé par la requête. |
-| `no available channel` | ID de modèle, groupe de jetons et disponibilité actuelle. |
+| Clé / 401 | Recopier la clé complète, puis redémarrer l’application |
+| 403 | Faire vérifier le modèle et le groupe par le support |
+| 404 | Recopier l’adresse du [guide de l’application](/fr/tools) |
+| 400 / not implemented | Faire confirmer la compatibilité du modèle avec l’application |
+| 429 / limite simultanée | Attendre la fin des requêtes, réduire les tâches simultanées et essayer une fois |
+| 500 / 502 / 503 / délai dépassé | Attendre 10–30 secondes, essayer une fois, puis contacter le support |
+| no available channel | Vérifier le modèle du groupe ; contacter le support, sans recharger pour cette erreur |
+| Crédit insuffisant | Vérifier solde, limite et expiration de la clé |
 
-Voir les [erreurs API courantes](/fr/faq/common-errors) pour le détail.
+## 3. Tester un seul message court
 
-## 3. Faire un test minimal
+Sauvegardez le contenu important, ouvrez une nouvelle conversation et envoyez « Réponds : bonjour ». Utilisez-la si la réponse est complète ; sinon, contactez le support. **Le test peut consommer des crédits. Ne réessayez pas en boucle et ne supprimez pas le dossier de configuration.**
 
-1. Confirmez le solde et le statut de la clé dans la console.
-2. Copiez à nouveau l'ID du modèle depuis le catalogue.
-3. Ouvrez une nouvelle session et envoyez un court texte.
-4. Réessayez au plus une fois en gardant le nouveau Request ID.
-5. Vérifiez l'entrée correspondante dans le journal.
-
-Si une session neuve fonctionne, l'état ou le contenu de la conversation initiale est probablement impliqué. Si le test minimal échoue aussi, envoyez les preuves ci-dessus.
-
-## Contacter le support
-
-Envoyez ces éléments dans un même message :
+## 4. Copier ce message au support
 
 ```text
-Heure (avec fuseau) :
-Request ID :
-Client et version :
-Modèle :
-Endpoint :
-Erreur complète :
-Intermittent ou permanent :
-Testé dans une nouvelle session :
+Application :
+Heure :
+Modèle et groupe :
+Erreur ou capture :
+Request ID (si disponible) :
 ```
 
-Si l'identification d'une clé est nécessaire, ne donnez que ses six derniers caractères.
+Laissez les champs inconnus vides. N’envoyez ni clé complète, ni mot de passe, ni code de vérification.

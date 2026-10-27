@@ -1,0 +1,31 @@
+---
+title: "Sign-in and account safety"
+description: "Sign in, change a password, and deal with unfamiliar devices or exposed keys."
+---
+
+## 1. Sign in
+
+Open [Sign In](https://nexusapi.link/sign-in) and enter your own account and password. Contact support if you need an account or cannot recover your password.
+
+## 2. Change your password or check devices
+
+1. Open [Profile](https://nexusapi.link/profile).
+2. To change your password, click **Change Password**, fill in the form and save.
+3. Scroll to **Login Sessions**. Revoke unfamiliar sessions, or select **Sign out other sessions** to sign out other devices.
+
+![Profile and security settings](/images/nexusapi/console-profile-security-en.png)
+
+![Login Sessions: check devices and sign out unfamiliar sessions if needed. Device details are hidden.](/images/nexusapi/account-sessions-en.png)
+
+Login Sessions: check devices and sign out unfamiliar sessions if needed. Device details are hidden.
+
+**Model apps use the key from [API Keys](/en/guide/api-key). You do not need to create or enter the access token in Profile.**
+
+## 3. If an account or key may be exposed
+
+| Situation | Do this now |
+| --- | --- |
+| Exposed password or unfamiliar sign-in | Change your password and revoke unfamiliar sessions |
+| Exposed API key | Disable or delete the old key, create a new one, and replace it in your app |
+
+**Signing out of the website does not disable API keys.** Never share passwords, verification codes or complete keys.

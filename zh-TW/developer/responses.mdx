@@ -56,7 +56,7 @@ Key 請放在 `NEXUSAPI_API_KEY` 環境變數中，不要寫入 `config.toml` �
 
 ## 失敗時先檢查
 
-1. Key 群組是否包含該模型，模型 ID 是否與模型廣場一致。
+1. Key 分組是否包含該模型，模型 ID 是否與模型廣場一致。
 2. 用戶端是否真的請求 `/v1/responses`，而非重複拼出 `/v1/v1/...`。
 3. 模型的 `supported_endpoint_types` 是否包含 `openai-response`；若未包含，請改用欄位標明的正確協定。
 4. 保留 Request ID、用戶端版本與完整錯誤原文，再依[問題自查](/zh-TW/faq/self-check)處理。

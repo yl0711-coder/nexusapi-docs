@@ -4,16 +4,22 @@ on:
   pull_request:
     paths:
       - "**/*.mdx"
+      - "images/**"
       - "docs.json"
-      - "scripts/check-docs.mjs"
+      - "scripts/**"
+      - "brand-link.js"
+      - "brand.css"
       - ".github/workflows/docs-quality.yml"
   push:
     branches:
       - main
     paths:
       - "**/*.mdx"
+      - "images/**"
       - "docs.json"
-      - "scripts/check-docs.mjs"
+      - "scripts/**"
+      - "brand-link.js"
+      - "brand.css"
       - ".github/workflows/docs-quality.yml"
 
 permissions:
@@ -33,7 +39,14 @@ jobs:
           node-version: 22
 
       - name: Validate routes, locales, frontmatter, and internal links
-        run: node scripts/check-docs.mjs
+        run: |
+          node scripts/check-docs.mjs
+          node --test scripts/check-docs.test.mjs scripts/check-links.test.mjs
+          node scripts/check-links.mjs
+          node --check brand-link.js
 
       - name: Run Mintlify broken-link check
-        run: npx --yes mint@latest broken-links
+        run: npx --yes mint@4.2.1141 broken-links
+
+      - name: Run strict Mintlify validation and build
+        run: npx --yes mint@4.2.1141 validate -t false

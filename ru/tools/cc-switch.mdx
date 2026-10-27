@@ -1,180 +1,64 @@
 ---
-title: "Настройка CC Switch"
-description: "Добавьте NexusAPI-провайдеры Claude Code и Codex в CC Switch."
+title: "Настройка NexusAPI в CC Switch"
+description: "Установка, добавление провайдера, заполнение и включение."
 ---
 
-CC Switch управляет локальными конфигурациями AI CLI. Добавьте NexusAPI вручную, выберите этот provider, затем откройте соответствующий CLI в новом терминале.
+CC Switch управляет настройками. **Сначала установите [Claude Code](/ru/tools/claude-code) или [Codex CLI](/ru/tools/codex-cli), выполнив только установку, затем вернитесь сюда.** Отдельно менять их файлы не нужно.
 
-## Подготовка
+## 1. Установите CC Switch
 
-Нужны активный ключ, точный ID модели из его группы и endpoints:
+Выберите пакет на [официальной странице](https://github.com/farion1231/cc-switch/releases/latest):
 
-| Назначение | Endpoint |
-| --- | --- |
-| Claude Code | `https://nexusapi.link` |
-| Codex | `https://nexusapi.link/v1` |
+- Windows: Windows `.msi`, для ARM — вариант `arm64`.
+- macOS: откройте macOS `.dmg` и установите.
+- Linux: подходящий `.deb` или `.AppImage`.
 
-Соответствие модели и протокола проверьте в [матрице возможностей](/ru/developer/capability-matrix).
+## 2. Добавьте своего провайдера
 
-```text
-Консоль NexusAPI
-→ Управление токенами
-→ Создать или скопировать API-ключ
-```
+Слева выберите **Claude Code** или **Codex**, справа вверху **+ / Add provider**, затем пользовательскую конфигурацию. Не выбирайте Claude Desktop или шаблон другого сайта.
 
-## Установка CC Switch
+![CC Switch 4.0.21: пользовательская конфигурация (китайский интерфейс)](/images/nexusapi/cc-switch-custom-entry-zh.png)
 
-### macOS
+## 3. Заполните поля
 
-```bash
-brew install --cask cc-switch
-```
+[Создайте ключ](/ru/guide/api-key), выберите его группу в [Витрине моделей](https://nexusapi.link/pricing), скопируйте модель для инструмента. Укажите значения NexusAPI из таблицы ниже:
 
-После установки откройте CC Switch из Applications.
+| Поле | Claude Code | Codex |
+| --- | --- | --- |
+| Название | NexusAPI Claude | NexusAPI Codex |
+| Адрес | `https://nexusapi.link` | `https://nexusapi.link/v1` |
+| API Key | Ваш полный ключ NexusAPI | Ваш полный ключ NexusAPI |
+| Основная модель | Скопированная модель Claude Code / Messages | Скопированная модель Codex / Responses |
 
-### Windows
+Claude Code: откройте дополнительные настройки. В «默认兜底模型» (модель по умолчанию) вставьте скопированное имя основной модели. Для Haiku укажите в поле фактически вызываемой модели вспомогательную модель, подтверждённую поддержкой. Замените заполнители на снимках.
 
-Скачайте `.msi` или portable `.zip` с [официальных releases](https://github.com/farion1231/cc-switch/releases).
+Codex: укажите модель из таблицы; настройки моделей Claude Code не нужны. Настройте только нужное приложение, выберите Direct, остальные параметры оставьте по умолчанию и нажмите Add / Save.
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+![Пример формы Claude Code. Замените заполнители; черновик не сохранён, подключение не проверено.](/images/nexusapi/cc-switch-claude-form-zh.png)
 
-### Linux
+Пример формы Claude Code. Замените заполнители; черновик не сохранён, подключение не проверено.
 
-Скачайте `.deb` или `.AppImage` с [официальных releases](https://github.com/farion1231/cc-switch/releases). В Arch Linux доступен поддерживаемый сообществом AUR-пакет:
+![Пример настройки моделей Claude Code (китайский интерфейс)](/images/nexusapi/cc-switch-claude-models-zh.png)
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+## 4. Включите и проверьте
 
-```bash
-paru -S cc-switch-bin
-```
+Нажмите **Switch / Включить** для этого провайдера NexusAPI. Одного сохранения недостаточно. Заново откройте терминал и запустите нужный инструмент:
 
-<Warning>
-Используйте только [официальный репозиторий CC Switch](https://github.com/farion1231/cc-switch) и его releases. Не используйте сторонние страницы, которые просят оплату или учётные данные NexusAPI.
-</Warning>
-
-## Добавление provider
-
-В **Управлении provider → Добавить** выберите приложение, введите endpoint, ключ и модель, сохраните и активируйте provider.
-
-```text
-Открыть CC Switch
-→ Добавить provider
-→ Выбрать настраиваемое приложение
-→ Указать NexusAPI endpoint, API-ключ и ID модели
-→ Сохранить provider
-→ Переключиться на него
-→ Запустить соответствующий CLI в новом терминале
-```
-
-![Официальный экран CC Switch для добавления provider; для NexusAPI выберите custom configuration](/images/nexusapi/cc-switch-add-provider-official.png)
-
-![Официальный пример формы Provider CC Switch с замаскированным ключом](/images/nexusapi/cc-switch-provider-form-official.png)
-
-> Изображения из [официального репозитория CC Switch](https://github.com/farion1231/cc-switch). URL, модель и имя gateway во втором примере не являются значениями NexusAPI.
-
-### Claude Code
-
-| Поле | Значение |
-| --- | --- |
-| App | `Claude Code` |
-| Name | `NexusAPI Claude` |
-| Endpoint | `https://nexusapi.link` |
-| API Key | Ваш NexusAPI ключ |
-| Primary model | Совместимый Claude ID из группы ключа |
-
-Необязательные поля Haiku, Sonnet и Opus можно оставить пустыми или заполнить доступными моделями. Минимальная конфигурация:
-
-```text
-App: Claude Code
-Name: NexusAPI Claude
-Endpoint: https://nexusapi.link
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CLAUDE_MODEL_ID
-Sonnet Model: YOUR_CLAUDE_MODEL_ID
-```
-
-В новых версиях выбирайте `Claude Code`; в старом UI он может называться `Claude`. Выбирайте Provider Claude Code, а не Claude Desktop, и не добавляйте `/v1`. После переключения откройте новый терминал:
-
+<Tabs>
+<Tab title="Claude Code">
 ```bash
 claude
 ```
-
-Проверьте `/status` и короткий запрос.
-
-```text
-Представься одним предложением.
-```
-
-### Codex
-
-| Поле | Значение |
-| --- | --- |
-| App | `Codex` |
-| Name | `NexusAPI Codex` |
-| Endpoint | `https://nexusapi.link/v1` |
-| API Key | Ваш NexusAPI ключ |
-| Primary model | ID модели Responses из группы |
-
-Минимальная конфигурация:
-
-```text
-App: Codex
-Name: NexusAPI Codex
-Endpoint: https://nexusapi.link/v1
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CODEX_MODEL_ID
-```
-
-Codex использует протокол Responses, поэтому endpoint должен содержать `/v1`. После переключения выполните:
-
+</Tab>
+<Tab title="Codex">
 ```bash
 codex
 ```
+</Tab>
+</Tabs>
 
-Сначала сделайте read-only тест.
+Отправьте «Ответь только: подключение успешно. Не меняй файлы». Проверьте полный ответ, модель и группу в [журнале](https://nexusapi.link/usage-logs/common). Тест расходует немного кредитов.
 
-## Проверка моделей текущего ключа
+Команда не найдена: установите CLI. Остался официальный сервис: проверьте Enable и перезапустите. Нет модели: скопируйте из своей группы. Если ошибка указывает вспомогательную модель, уточните доступные Haiku / Sonnet / Opus. Ключ на скриншотах для поддержки скрывайте.
 
-Проверить текущий список моделей можно так:
-
-```bash
-curl 'https://nexusapi.link/v1/models' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
-```
-
-Значения `data[].id` — это ID моделей, доступных именно этому ключу. Не угадывайте их по имени Provider или старому скриншоту.
-
-## Правила endpoint для инструментов
-
-| Инструмент | Endpoint |
-| --- | --- |
-| Claude Code | `https://nexusapi.link` |
-| Codex | `https://nexusapi.link/v1` |
-
-## Устранение проблем
-
-### После переключения всё ещё вызывается официальный адрес
-
-Проверьте, что в CC Switch активен NexusAPI provider, откройте терминал заново и убедитесь, что локальная конфигурация целевого CLI не переопределяет настройки CC Switch.
-
-### API-ключ недействителен
-
-Проверьте, что ключ создан в NexusAPI Token Management, включён, не истёк, имеет достаточный кредит и не заблокирован ограничением моделей. Копируйте ключ полностью, не добавляя и не угадывая префикс.
-
-### Модель недоступна
-
-Проверьте группу, модельные ограничения и `/v1/models` для того же ключа. Если модели нет в ответе, не редактируйте CC Switch снова и снова: используйте видимую модель или обратитесь в поддержку с именем модели и Request ID.
-
-### Claude Code предлагает выполнить `/login`
-
-Для NexusAPI provider не входите в официальный аккаунт Claude. Вернитесь к NexusAPI provider в CC Switch и перезапустите терминал.
-
-## Рекомендуемый порядок
-
-1. Добавьте provider вручную.
-2. Проверьте доступные модели через `/v1/models`.
-3. До сложной задачи выполните короткий тестовый запрос.
+Официальный проект: [CC Switch](https://github.com/farion1231/cc-switch). Названия кнопок могут отличаться в зависимости от версии.

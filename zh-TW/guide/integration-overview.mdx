@@ -1,95 +1,28 @@
 ---
-title: "接入方式總覽"
-description: "依照用戶端與模型能力，選擇正確的 NexusAPI 位址與協定。"
+title: "選擇串接方式"
+description: "找到使用的軟體，開啟對應教學。"
 ---
 
-NexusAPI 支援常用 AI 用戶端與 OpenAI 風格 API。不同工具可能會自行補上路徑，因此請依實際使用方式填寫位址；不要把某一個工具的整段設定直接複製到另一個工具。
+## 1. 找到你在用的軟體
 
-## 開始前準備
-
-不論採用哪一種接入方式，請先確認：
-
-1. 已在控制台建立 API Key。
-2. 該 API Key 所屬群組包含目標模型。
-3. 已從模型廣場複製正確的模型 ID。
-4. 已確認目標模型支援的介面類型，並以 HTTPS 位址發出請求。
-
-## 常見使用方式
-
-| 使用方式 | 建議閱讀 |
+| 你要做什麼 | 照這篇操作 |
 | --- | --- |
-| 自建程式或指令碼 | [5 分鐘快速開始](/zh-TW/guide/quick-start) |
-| Claude Code | [Claude Code 設定教學](/zh-TW/tools/claude-code) |
-| Codex CLI | [Codex CLI 設定教學](/zh-TW/tools/codex-cli) |
-| CC Switch | [CC Switch 設定教學](/zh-TW/tools/cc-switch) |
-| VS Code / Cursor | [編輯器外掛教學](/zh-TW/tools/cursor-vscode) |
-| 圖片生成 | [圖片模型使用說明](/zh-TW/guide/image-generation) |
+| 使用 Claude Code | [Claude Code 教學](/zh-TW/tools/claude-code) |
+| 使用 Codex CLI | [Codex CLI 教學](/zh-TW/tools/codex-cli) |
+| 用 CC Switch 切換服務 | [CC Switch 教學](/zh-TW/tools/cc-switch) |
+| 在 VS Code / Cursor 中使用 | [編輯器教學](/zh-TW/tools/cursor-vscode) |
+| 自己寫程式 | [程式碼範例](/zh-TW/developer/code-examples) |
 
-## 位址與協定對照
+## 2. 準備三項資訊
 
-| 情境 | 填寫位址 | 主要協定 | 注意事項 |
-| --- | --- | --- | --- |
-| OpenAI SDK／一般文字程式 | `https://nexusapi.link/v1` | Chat Completions | 請求路徑由 SDK 或程式補上。 |
-| Codex CLI | `https://nexusapi.link/v1` | Responses | 使用 Codex 教學中的 Provider 設定。 |
-| Claude Code | `https://nexusapi.link` | Anthropic Messages | 請勿在設定位址後重複加上 `/v1`。 |
-| CC Switch | 依 Provider 類型填寫 | 取決於目標工具 | Claude 與 Codex 的位址規則不同。 |
-| 圖片模型 | `https://nexusapi.link/v1` | Images | 僅使用模型廣場標示支援圖片生成的模型。 |
+| 要填什麼 | 去哪裡找 |
+| --- | --- |
+| API Key | 在 [API 金鑰](https://nexusapi.link/keys)頁建立並複製 |
+| 模型名稱 | [模型廣場](https://nexusapi.link/pricing)選金鑰分組，再複製名稱 |
+| 介面位址 | 從上面對應教學複製，不要自行拼接 |
 
-此表用於協助選擇接入方式。請先查看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)確認模型和協定；欄位級參數與回應格式請看 [Chat Completions 介面](/zh-TW/developer/openai-compatible)。特定 Key 與模型的即時可用性仍以模型廣場為準。
+Claude Code 通常填 `https://nexusapi.link`；Codex CLI 和 OpenAI SDK 通常填 `https://nexusapi.link/v1`。**以使用的軟體教學為準。**
 
-## 先選擇正確的協定
+## 3. 確認能用
 
-相同 Base URL 不代表所有模型都接受同一種請求格式。請依使用情境選擇：
-
-| 你要做什麼 | 建議端點 | 使用時機 |
-| --- | --- | --- |
-| 一般文字、聊天或串流輸出 | `/v1/chat/completions` | 模型可透過 OpenAI 相容路由使用時。 |
-| Codex CLI 和相符的 Provider | `/v1/responses` | `supported_endpoint_types` 包含 `openai-response` 時。 |
-| Claude Code 或原生 Anthropic 用戶端 | `/v1/messages` | `supported_endpoint_types` 包含 `anthropic` 時。 |
-| 圖片生成 | `/v1/images/generations` | 模型明確標示支援圖片生成時。 |
-
-<Warning>
-**不要把 Responses 當成通用替代介面**
-
-若模型的 `supported_endpoint_types` 未包含 `openai-response`，卻透過 `/v1/responses` 回傳 `status_code=500, not implemented`，這是協定不相容。請改用該模型標示支援的介面；Claude Code 維持原生 Messages 設定。重送相同請求不會修正協定不相容的問題。
-</Warning>
-
-## 為什麼位址看起來可能不同
-
-通用 OpenAI 風格請求通常使用：
-
-```text
-https://nexusapi.link/v1
-```
-
-有些用戶端要求填寫不含 `/v1` 的站點位址，或會自行補上 `/chat/completions`、`/responses`、`/messages` 等路徑。請以相應工具教學為準；圖片模型則依照[圖片模型使用說明](/zh-TW/guide/image-generation)呼叫。
-
-<Warning>
-**避免重複路徑**
-
-如果用戶端本身會補上 `/v1`，手動填入後可能形成 `/v1/v1/...` 並造成 404。遇到 404 時，先檢查用戶端實際送出的請求位址。
-</Warning>
-
-## 不要混用用戶端設定與通用 API
-
-CLI 工具、編輯器外掛與自建程式可能使用不同協定和設定檔。即使模型名稱相同，也不要把某個工具的整段設定直接套用到另一個工具。
-
-- **設定 Codex CLI：**請閱讀 Codex 教學，使用 Responses 相關設定。
-- **設定 Claude Code：**請閱讀 Claude Code 教學，使用 Anthropic Messages 相關設定。
-- **自行開發文字程式：**除非 SDK 明確要求其他協定，否則先從 Chat Completions 開始。
-- **呼叫圖片：**使用圖片端點，不要把圖片生成參數傳給文字聊天端點。
-- **不確定時：**先確認用戶端名稱，並檢查其實際送出的請求路徑。
-
-## API 參考文件
-
-先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)，確認目標模型應使用的協定；Chat Completions 的最小請求見[Chat Completions 介面](/zh-TW/developer/openai-compatible)。
-
-本說明中心負責解釋「如何選擇與設定」，並提供可直接驗證的最小請求。選用欄位仍須依使用的用戶端協定及模型廣場目前顯示的能力決定。
-
-## 如何確認設定成功
-
-- 用戶端可正常取得完整回應。
-- 控制台使用紀錄出現對應請求。
-- 紀錄中的模型、群組與扣費符合預期。
-
-若呼叫失敗，請保留錯誤原文與 Request ID，接著進入[問題自查](/zh-TW/faq/self-check)。
+傳送「請回覆：連線成功」。收到完整回覆即可；沒有成功，先看[問題自查](/zh-TW/faq/self-check)，或把錯誤截圖傳給客服。截圖不要出現完整 API Key。

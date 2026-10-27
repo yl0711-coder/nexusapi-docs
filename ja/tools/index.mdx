@@ -1,52 +1,22 @@
 ---
-title: "クライアントツールを選ぶ"
-description: "プロトコル、URL、資格情報を混在させず、NexusAPI 用の適切なツールを選びます。"
+title: "使うアプリを選ぶ"
+description: "アプリを選んで対応する設定手順を開きます。"
 ---
 
-作業方法に合うツールを選び、そのガイドに従ってください。Chat Completions、ネイティブ Messages、Responses は別物です。別のツールの Base URL や設定ファイルをそのまま流用しないでください。
+## 1. アプリを選ぶ
 
-## クイック選択
+| 使うもの | 手順 |
+| --- | --- |
+| Claude Code | [設定手順](/ja/tools/claude-code) |
+| Codex CLI | [設定手順](/ja/tools/codex-cli) |
+| CC Switch | [設定手順](/ja/tools/cc-switch) |
+| VS Code / Cursor | [設定手順](/ja/tools/cursor-vscode) |
+| 自作プログラム | [設定手順](/ja/developer/code-examples) |
 
-| 目的 | ガイド | 向いている場面 |
-| --- | --- | --- |
-| ターミナルのコーディングエージェント | [Claude Code](/ja/tools/claude-code) | Claude ワークフロー |
-| ターミナルの Codex | [Codex CLI](/ja/tools/codex-cli) | Responses / Codex ワークフロー |
-| 複数のローカル Provider を管理 | [CC Switch](/ja/tools/cc-switch) | CLI 設定の切り替え |
-| エディターで Claude Code | [VS Code / Cursor](/ja/tools/cursor-vscode) | エディター中心の作業 |
-| アプリやスクリプト | [接続方法の概要](/ja/guide/integration-overview) | SDK / 自動化 |
+## 2. 始める前に
 
-## ローカル設定の変更前
+1. 自分の[APIキー](/ja/guide/api-key)を用意します。
+2. 対応する手順からアドレスとモデル名をコピーします。他のアプリの設定を混ぜないでください。
+3. 既存の設定を先にバックアップします。設定フォルダー全体を削除しないでください。
 
-1. API Key を作成して上限を設定します。
-2. Key のグループと対象モデルを確認します。
-3. マーケットプレイスまたは `/v1/models` から正確な ID をコピーします。
-4. 既存の設定ファイルをバックアップします。
-5. 小さな読み取り専用テストを一度だけ送り、ログを確認します。
-
-<Warning>
-**信頼できる提供元のインストールスクリプトを使用してください**
-
-インストールや設定用のスクリプトは、ローカル設定の変更、資格情報の保存、第三者コードの導入を行う可能性があります。提供元を確認し、内容を読み、既存設定をバックアップしてから実行してください。
-</Warning>
-
-## ツールごとに URL が違う理由
-
-`/v1` を含む API URL を必要とするツール、自動でパスを追加するツール、ネイティブの Messages または Responses を使うツールがあります。
-
-各ガイドに示した URL を使用し、Claude Code、Codex CLI、汎用 OpenAI SDK の設定を相互にコピーしないでください。詳しくは[接続方法の概要](/ja/guide/integration-overview)を確認してください。
-
-## プロトコルと URL の早見表
-
-| クライアント | 一般的な Base URL | プロトコル |
-| --- | --- | --- |
-| OpenAI 互換 SDK / アプリ | `https://nexusapi.link/v1` | Chat Completions |
-| Claude Code | `https://nexusapi.link` | Messages |
-| Codex CLI | `https://nexusapi.link/v1` | Responses Provider |
-
-実際の対応はモデルとグループに依存します。[対応マトリクス](/ja/developer/capability-matrix)を確認してください。
-
-## 利用したいツールが一覧にない場合
-
-そのクライアントがカスタム OpenAI 互換 Base URL をサポートするなら、まず[5 分で始める](/ja/guide/quick-start)と公式ドキュメントを確認してください。
-
-設定前に、`/v1` を自動追加するか、どのプロトコルを送るか、任意のモデル ID を入力できるかを確認します。未検証のクライアントは、公式ドキュメントと本ページを使って最小テストを行ってください。設定が検証できれば、正式ガイドへの追加を検討します。
+使っているアプリが一覧にありませんか？アプリ名と設定画面をサポートへ送ってください。キーは隠してください。

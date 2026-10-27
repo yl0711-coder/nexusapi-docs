@@ -1,49 +1,55 @@
 ---
-title: "Codex CLI の設定"
-description: "Codex CLI をインストールし、NexusAPI をカスタム Responses Provider として設定します。"
+title: "Codex CLIのインストールと設定"
+description: "アドレス、モデル、キーを設定して動作を確認します。"
 ---
 
-コマンドと `config.toml` の項目は [OpenAI Codex 公式リポジトリ](https://github.com/openai/codex)と[カスタム Provider リファレンス](https://learn.chatgpt.com/docs/config-file/config-advanced)に基づきます。NexusAPI は URL、API Key、モデル ID を提供します。
+NexusAPIキーでCodex CLIを設定します。ChatGPTのパスワードは使いません。
 
-## 1. インストール
+## 1. Codexを入れる
 
-公式の方法を一つ選びます。
+WindowsはPowerShell、Macはターミナルを開き、OS別のコマンドだけを実行。インストール済みなら飛ばします。
 
-### Windows PowerShell
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
-
-### macOS、Linux、WSL
-
+</Tab>
+<Tab title="macOS / Linux / WSL">
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
+</Tab>
+</Tabs>
 
-### Node.js がすでにある場合
-
-```bash
-npm install -g @openai/codex
-codex --version
-```
-
-インストール後は新しいターミナルでバージョンを個別に確認できます。
+ターミナルを開き直し、バージョンを確認。コマンドがなければ先にインストールを直してください。
 
 ```bash
 codex --version
 ```
 
-## 2. 対応する Key を作成する
+## 2. アドレスとモデルを保存
 
-**トークン管理 → トークンを追加**で、目的のモデルを含むグループを選びます。作成後に `/v1/models` と[対応マトリクス](/ja/developer/capability-matrix)を確認し、`supported_endpoint_types` に `openai-response` が含まれることを確認してください。
+[キーを作成](/ja/guide/api-key)し、[モデル広場](https://nexusapi.link/pricing)で同じグループからCodex / Responses対応名をコピーして、ユーザー設定を開きます：
 
-## 3. カスタム Provider を設定する
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex" | Out-Null
+notepad "$env:USERPROFILE\.codex\config.toml"
+```
+</Tab>
+<Tab title="macOS / Linux / WSL">
+```bash
+mkdir -p ~/.codex
+nano ~/.codex/config.toml
+```
+</Tab>
+</Tabs>
 
-| OS | ファイル |
-| --- | --- |
-| Windows | `%USERPROFILE%\\.codex\\config.toml` |
-| macOS / Linux | `~/.codex/config.toml` |
+nanoは `Ctrl + O`、Enterで保存、`Ctrl + X` で終了。メモ帳は `Ctrl + S`。名前は `config.toml` で `.txt` を付けません。
+
+空のファイルに貼り付け、`YOUR_MODEL_ID` だけを置き換えます：
 
 ```toml
 model_provider = "nexusapi"
@@ -56,53 +62,60 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-実際の Key はこのファイルに保存しないでください。この設定は `env_key` を通じて `NEXUSAPI_API_KEY` から Key を読み取ります。`auth.json` には Codex の認証状態が含まれる場合がありますが、NexusAPI Key を書き込む必要はありません。実際の Key を含むファイルを共有・コミットしないでください。
+既存設定はバックアップし、`model` と `model_provider` を最上部に置き、`[model_providers.nexusapi]` を一つだけ追加・更新します。[CC Switch](/ja/tools/cc-switch)も使えます。このファイルにキーは書きません。
 
-## 4. 環境変数を設定する
+## 3. APIキーを設定・保存
 
-### Windows PowerShell
+`YOUR_API_KEY` だけをキーの全文に置き換えます。Windowsは現在の端末とユーザー環境変数の両方に保存します。
 
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
-setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
+$env:NEXUSAPI_API_KEY = "YOUR_API_KEY"
+[Environment]::SetEnvironmentVariable("NEXUSAPI_API_KEY", $env:NEXUSAPI_API_KEY, "User")
+```
+</Tab>
+<Tab title="macOS (Zsh)">
+```bash
+touch ~/.zshrc
+nano ~/.zshrc
 ```
 
-### macOS、Linux、WSL
+次の行をファイル末尾に追加します。同じ変数があれば重複させず置き換えます。保存後ターミナルを開き直してください。
 
 ```bash
-export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+```
+</Tab>
+<Tab title="Linux / WSL (Bash)">
+```bash
+nano ~/.bashrc
 ```
 
-`setx` 後は新しいターミナルが必要です。`export` は現在の Shell だけに有効です。長期保管には OS の資格情報または管理された環境変数を使い、リポジトリに書かないでください。
-
-## 5. 確認
-
-プロジェクトディレクトリで次を実行します。
+次の行をファイル末尾に追加します。同じ変数があれば重複させず置き換えます。保存後ターミナルを開き直してください。
 
 ```bash
-cd your-project-folder
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+```
+</Tab>
+</Tabs>
+
+Macの標準Zsh、LinuxのBashの例です。別のシェルでは対応する起動ファイルを使い、不明ならサポートへ。キーをプロジェクトや画像に載せないでください。
+
+## 4. 起動して確認
+
+自分のプロジェクトのターミナルで実行：
+
+```bash
 codex
 ```
 
-最初はファイルを変更しないタスクを送ります。
+`/status` でモデルとNexusAPIプロバイダーを確認。「接続成功、とだけ返信し、ファイルを変更しないでください」と送り、返信と[利用履歴](https://nexusapi.link/usage-logs/common)を確認します。テストは少量のクレジットを使います。
 
-```text
-リポジトリの構成を説明し、ファイルは変更しないでください。
-```
+## 5. よくあるつまずき
 
-その後、コンソールの利用ログを確認します。失敗時は Key、グループ、モデル ID、新しいターミナルを確認し、Request ID を保存して[自己確認](/ja/faq/self-check)を行います。
+`Missing environment variable` は手順3へ。モデルがない場合は自分のグループのCodex対応名を再コピー。ほかは[エラー対処](/ja/faq/self-check)。
 
-## トラブルシューティング
+MacのDockから開いたエディターは変数を引き継がない場合があります。CLIを先に確認し、Codex拡張機能は設定済み端末から `code .` や `cursor .` で起動してください。プロジェクトにキーを保存しないでください。
 
-1. `NEXUSAPI_API_KEY` を設定した後に開いた新しいターミナルを使用します。
-2. Key が有効で、アカウントのクレジットがあり、グループに選択モデルがあることを確認します。
-3. モデルマーケットプレイスまたは `/v1/models` から正確な ID をコピーし直します。
-4. エラー本文と Request ID を保存して、[自己確認](/ja/faq/self-check)を確認します。
-
-## VS Code / Cursor
-
-拡張機能マーケットプレイスから [OpenAI 公開の Codex 拡張機能](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)をインストールできます。ユーザーレベルの Codex 設定を共用するため、VS Code に旧式の `chatgpt.apiBase` や `chatgpt.config` を追加しないでください。
-
-## 公式ソース
-
-- [OpenAI Codex CLI のインストール](https://github.com/openai/codex)
-- [OpenAI Codex のカスタム Provider 設定](https://learn.chatgpt.com/docs/config-file/config-advanced)
+公式インストール・設定：[Codex CLI](https://learn.chatgpt.com/docs/cli) · [Custom providers](https://learn.chatgpt.com/docs/config-file/config-advanced#custom-model-providers)。

@@ -1,139 +1,174 @@
 ---
 title: "Lỗi API thường gặp"
-description: "Chẩn đoán các lỗi client, giao thức, yêu cầu và thanh toán phổ biến của NexusAPI."
+description: "Chẩn đoán các lỗi ứng dụng khách, giao thức, yêu cầu và thanh toán phổ biến của NexusAPI."
 ---
 
-Trang này áp dụng cho Claude Code, Codex CLI, Cursor, extension VS Code và ứng dụng tự xây dựng. Trước khi thử lại, hãy lưu **nguyên văn lỗi, Request ID, thời điểm, mô hình và endpoint yêu cầu**. Không gửi API Key đầy đủ.
-
-<Tip>
-**Chẩn đoán trước khi thử lại**
-
-Lỗi tham số, endpoint và tương thích phiên không tự hết khi lặp lại cùng yêu cầu. Khi đã xác định có thể là dao động tạm thời, hãy thực hiện một lần thử lại với tần suất thấp.
-</Tip>
+Tìm lỗi giống của bạn và làm các bước đầu. Chưa rõ thì gửi ứng dụng, thời gian, mô hình, nhóm và ảnh cho hỗ trợ. **Che khóa đầy đủ, không thử lại liên tục.**
 
 ## `status_code=500, not implemented`
 
-Nếu lỗi có cả `status_code=500` và `not implemented`, trước hết hãy kiểm tra model đã chọn có hỗ trợ giao thức của endpoint hiện tại hay không. Ví dụ, `/v1/responses` yêu cầu `openai-response` trong `supported_endpoint_types`. Nếu loại này không có, đó là **không tương thích giao thức**, không phải sự cố upstream sẽ tự hết khi chờ.
+Không thử liên tục. Hỏi hỗ trợ mô hình có dùng được với ứng dụng không. Phần kỹ thuật bên dưới dành cho chương trình tự viết.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
+Nếu lỗi có cả `status_code=500` và `not implemented`, trước hết hãy kiểm tra mô hình đã chọn có hỗ trợ giao thức của endpoint hiện tại hay không. Ví dụ, `/v1/responses` yêu cầu `openai-response` trong `supported_endpoint_types`. Nếu loại này không có, đó là **không tương thích giao thức**, không phải sự cố upstream sẽ tự hết khi chờ.
 
 1. Ứng dụng tự xây dựng chọn endpoint theo `supported_endpoint_types`; khi có `openai`, dùng `/v1/chat/completions`.
-2. Với Claude Code, làm theo [hướng dẫn Claude Code](/vi/tools/claude-code) và xác nhận model hỗ trợ `anthropic`.
+2. Với Claude Code, làm theo [hướng dẫn Claude Code](/vi/tools/claude-code) và xác nhận mô hình hỗ trợ `anthropic`.
 3. Chọn endpoint tương thích và thực hiện một kiểm tra ngắn; chờ hoặc đổi mạng không sửa được lỗi này.
 
-Khi cần hỗ trợ, gửi ví dụ đã che thông tin, tên model và Request ID, không gửi key.
+Khi cần hỗ trợ, gửi ví dụ đã che thông tin, tên mô hình và Request ID, không gửi khóa.
+
+</Accordion>
 
 ## 400 Bad Request / tham số không tương thích
 
+Lưu nội dung quan trọng rồi thử một tin nhắn ngắn trong hội thoại mới. Vẫn lỗi thì gửi ứng dụng, mô hình và ảnh cho hỗ trợ.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
 400 thường nghĩa là định dạng yêu cầu, tham số hoặc trạng thái phiên không đúng với endpoint hiện tại.
 
-1. Sao chép chính xác model ID từ Chợ mô hình.
-2. Xác nhận endpoint, model và client khớp trong [tổng quan tích hợp](/vi/guide/integration-overview).
-3. Kiểm tra model có hỗ trợ tham số ảnh, tool call, reasoning hoặc tiếp tục phiên hay không.
-4. Cập nhật client hoặc SDK cũ.
+1. Sao chép chính xác ID mô hình từ Quảng trường mô hình.
+2. Xác nhận endpoint, mô hình và ứng dụng khách khớp trong [tổng quan tích hợp](/vi/guide/integration-overview).
+3. Kiểm tra mô hình có hỗ trợ tham số ảnh, tool call, reasoning hoặc tiếp tục phiên hay không.
+4. Cập nhật ứng dụng khách hoặc SDK cũ.
 5. Tạo phiên mới và gửi một yêu cầu văn bản ngắn.
 
 Sau khi điều chỉnh cấu hình, hãy thực hiện một kiểm tra ngắn thay vì lặp lại nhiều yêu cầu giống nhau.
 
+</Accordion>
+
 ## 401 Unauthorized
 
-Nguyên nhân thường là key thiếu, sai, bị vô hiệu hóa/hết hạn hoặc header xác thực sai định dạng.
+Sao chép lại khóa đầy đủ rồi mở lại ứng dụng. Kiểm tra khóa đang bật và chưa hết hạn. Không gửi khóa cho hỗ trợ.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
+Nguyên nhân thường là khóa thiếu, sai, bị vô hiệu hóa/hết hạn hoặc header xác thực sai định dạng.
 
 ```http
 Authorization: Bearer YOUR_API_KEY
 ```
 
-Sao chép lại key từ console và kiểm tra URL yêu cầu. Không gửi toàn bộ key cho hỗ trợ. Nếu nghi lộ key, vô hiệu hóa key cũ, tạo key mới và cập nhật ứng dụng.
+Sao chép lại khóa từ console và kiểm tra URL yêu cầu. Không gửi toàn bộ khóa cho hỗ trợ. Nếu nghi lộ khóa, vô hiệu hóa khóa cũ, tạo khóa mới và cập nhật ứng dụng.
+
+</Accordion>
 
 ## 403 Forbidden
 
-403 nghĩa là yêu cầu bị từ chối. Các lý do phổ biến: key không có quyền vào nhóm đã chọn, hạn chế model, IP allowlist không khớp, trạng thái tài khoản không khả dụng hoặc upstream từ chối.
+Nhờ hỗ trợ kiểm tra quyền mô hình và nhóm, không thay khóa liên tục.
 
-Kiểm tra nhóm key, hạn chế model và IP allowlist, rồi thử một yêu cầu văn bản ngắn. Nếu vẫn lỗi, cung cấp Request ID, model, thời gian và nguyên văn lỗi. Retry tần suất cao hoặc tạo thêm key sẽ không gỡ bỏ hạn chế này.
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
+403 nghĩa là yêu cầu bị từ chối. Các lý do phổ biến: khóa không có quyền vào nhóm đã chọn, hạn chế mô hình, IP allowlist không khớp, trạng thái tài khoản không khả dụng hoặc upstream từ chối.
+
+Kiểm tra nhóm của khóa, hạn chế mô hình và IP allowlist, rồi thử một yêu cầu văn bản ngắn. Nếu vẫn lỗi, cung cấp Request ID, mô hình, thời gian và nguyên văn lỗi. Retry tần suất cao hoặc tạo thêm khóa sẽ không gỡ bỏ hạn chế này.
+
+</Accordion>
 
 ## 404 Not Found / địa chỉ yêu cầu sai
+
+Sao chép địa chỉ từ [hướng dẫn ứng dụng](/vi/tools), không tự thêm đường dẫn.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
 
 Hãy kiểm tra trước:
 
 - Base URL có bị ghép thành `/v1/v1/...` không;
-- client có tự thêm `/v1` hoặc đường dẫn endpoint không;
-- bạn có dùng đúng `/v1/chat/completions`, `/v1/responses`, `/v1/messages` hoặc `/v1/images/generations` không.
+- ứng dụng khách có tự thêm `/v1` hoặc đường dẫn endpoint không;
 
 Quy tắc URL tùy công cụ; dùng [hướng dẫn công cụ](/vi/tools/) tương ứng.
 
-Model không khả dụng thường không phải 404. Model không thuộc nhóm key, tạm thời không khả dụng hoặc không có dịch vụ khả dụng thường trả `503` / `no available channel`.
+Mô hình không khả dụng thường không phải 404. Mô hình không thuộc nhóm của khóa, tạm thời không khả dụng hoặc không có dịch vụ khả dụng thường trả `503` / `no available channel`.
+
+</Accordion>
 
 ## 429 Too Many Requests
 
-429 có thể do giới hạn tốc độ của nền tảng hoặc giới hạn ngắn hạn của model. `Concurrency limit exceeded for user` thường là giới hạn đồng thời của upstream hoặc client; không chỉ dựa vào mã trạng thái để kết luận key có lỗi.
+Chờ yêu cầu hiện tại xong, giảm tác vụ đồng thời rồi thử một lần. Vẫn lỗi thì liên hệ hỗ trợ.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
+429 có thể do giới hạn tốc độ của nền tảng hoặc giới hạn ngắn hạn của mô hình. `Concurrency limit exceeded for user` thường là giới hạn đồng thời của upstream hoặc ứng dụng khách; không chỉ dựa vào mã trạng thái để kết luận khóa có lỗi.
 
 - Giảm đồng thời; ưu tiên tuân theo `Retry-After`, nếu không có thì dùng exponential backoff kèm jitter ngẫu nhiên.
-- Không để nhiều chương trình retry nhanh bằng cùng key.
+- Không để nhiều chương trình retry nhanh bằng cùng khóa.
 - Nếu vẫn xuất hiện khi gọi thưa, gửi Request ID để kiểm tra khả dụng dịch vụ.
+
+</Accordion>
 
 ## 500, 502, 503, 504 hoặc 524
 
-Ngoài lỗi `not implemented` nêu trên, các mã này thường là lỗi xử lý, ngắt kết nối, quá tải hoặc timeout, không nhất thiết do key hay prompt sai.
+Lưu lỗi, chờ 10–30 giây rồi thử một lần. Vẫn lỗi thì hỏi hỗ trợ. Nếu có `not implemented`, xem mục đầu trang.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
+Ngoài lỗi `not implemented` nêu trên, các mã này thường là lỗi xử lý, ngắt kết nối, quá tải hoặc timeout, không nhất thiết do khóa hay prompt sai.
 
 | Mã | Cách xử lý khuyến nghị |
 | --- | --- |
 | `500` / `502` / `503` | Chờ 10–30 giây rồi chỉ thử lại một lần; nếu tiếp diễn, lưu Request ID. |
 | `504` / `524` | Nếu có thể, giảm ngữ cảnh, tool call hoặc độ dài đầu ra rồi thử lại sau. |
 
-Nếu một tác vụ dài tiếp tục lỗi trên cùng model, hãy rút ngắn tác vụ hoặc thử lại sau trước khi gửi lại.
+Nếu một tác vụ dài tiếp tục lỗi trên cùng mô hình, hãy rút ngắn tác vụ hoặc thử lại sau trước khi gửi lại.
 
-## `no available channel` / model hiện không có dịch vụ khả dụng
+</Accordion>
 
-Điều này nghĩa là nhóm của Key hiện tại tạm thời không có dịch vụ khả dụng cho model đó. ID sai, model không có trong nhóm, model tạm thời không khả dụng hoặc đang bảo trì đều có thể gây ra.
+## `no available channel` / mô hình hiện không có dịch vụ khả dụng
 
-Hãy thử lại sau hoặc chọn model khác đang hiển thị cho nhóm trong Chợ mô hình. Nếu lỗi tiếp diễn, gửi tên model, Request ID và thời gian; không cần nạp lại tiền hoặc tạo key mới.
+Kiểm tra nhóm có mô hình đó. Nếu vẫn lỗi, hỏi hỗ trợ; không nạp thêm hoặc tạo khóa chỉ vì lỗi này.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
+Điều này nghĩa là nhóm của khóa hiện tại tạm thời không có dịch vụ khả dụng cho mô hình đó. ID sai, mô hình không có trong nhóm, mô hình tạm thời không khả dụng hoặc đang bảo trì đều có thể gây ra.
+
+Hãy thử lại sau hoặc chọn mô hình khác đang hiển thị cho nhóm trong Quảng trường mô hình. Nếu lỗi tiếp diễn, gửi tên mô hình, Request ID và thời gian; không cần nạp lại tiền hoặc tạo khóa mới.
+
+</Accordion>
 
 ## `Concurrency limit exceeded for user`
 
-Số yêu cầu đang hoạt động của tài khoản đã đạt giới hạn. Chờ yêu cầu đang chạy kết thúc rồi giảm đồng thời. Không cần vô hiệu hóa hay tạo lại API Key vì lỗi này.
+Chờ yêu cầu hiện tại kết thúc và giảm tác vụ đồng thời trước khi thử. Thường không cần tạo khóa mới.
+
+<Accordion title="Chi tiết kỹ thuật (có thể bỏ qua)">
+
+Số yêu cầu đang hoạt động của tài khoản đã đạt giới hạn. Chờ yêu cầu đang chạy kết thúc rồi giảm đồng thời. Không cần vô hiệu hóa hay tạo lại khóa API vì lỗi này.
+
+</Accordion>
 
 ## Lỗi hội thoại dài hoặc tool call
 
 ### `Invalid signature in thinking block`
 
-Nội dung reasoning đã lưu trong phiên hiện tại không còn xác thực được; điều này hay xảy ra khi tiếp tục phiên dài, trạng thái client thay đổi hoặc khả năng tương thích thay đổi. Hãy tạo phiên mới, cập nhật client và tránh tiếp tục cùng một phiên trên nhiều thiết bị.
+Nội dung reasoning đã lưu trong phiên hiện tại không còn xác thực được; điều này hay xảy ra khi tiếp tục phiên dài, trạng thái ứng dụng khách thay đổi hoặc khả năng tương thích thay đổi. Hãy tạo phiên mới, cập nhật ứng dụng khách và tránh tiếp tục cùng một phiên trên nhiều thiết bị.
 
 ### `previous_response_id is only supported on Responses WebSocket v2`
 
-Client đang tiếp tục phản hồi cũ qua cách kết nối không được hỗ trợ. Hãy tạo phiên mới, tắt tính năng tiếp tục/tái sử dụng phản hồi thử nghiệm hoặc cập nhật client.
+Ứng dụng khách đang tiếp tục phản hồi cũ qua cách kết nối không được hỗ trợ. Hãy tạo phiên mới, tắt tính năng tiếp tục/tái sử dụng phản hồi thử nghiệm hoặc cập nhật ứng dụng khách.
 
 ### `Content block not found`
 
-Client không nhận được mảnh nội dung hoàn chỉnh cần thiết, thường trong hội thoại dài, tool call hoặc stream bị ngắt. Hãy tạo phiên mới, rút ngắn đầu vào và thử một yêu cầu đơn giản trước. Nếu vẫn xảy ra, hãy tạm tắt tool call không cần thiết và gửi hỗ trợ Request ID, thời điểm, mô hình cùng lỗi gốc. Chúng tôi sẽ dùng các thông tin này để kiểm tra trạng thái dịch vụ.
+Ứng dụng khách không nhận được mảnh nội dung hoàn chỉnh cần thiết, thường trong hội thoại dài, tool call hoặc stream bị ngắt. Hãy tạo phiên mới, rút ngắn đầu vào và thử một yêu cầu đơn giản trước. Nếu vẫn xảy ra, hãy tạm tắt tool call không cần thiết và gửi hỗ trợ Request ID, thời điểm, mô hình cùng lỗi gốc. Chúng tôi sẽ dùng các thông tin này để kiểm tra trạng thái dịch vụ.
 
-## Hết thời gian tạo ảnh hoặc không hỗ trợ khả năng
+## Có số dư nhưng khóa báo không đủ hạn mức
 
-Model ảnh chỉ dùng endpoint ảnh; model văn bản không dùng được endpoint tạo ảnh. Tạo ảnh hiện là yêu cầu đồng bộ và có thể mất thời gian; hãy chờ kết quả hoặc timeout trước khi lặp lại tác vụ.
-
-- `Image generation is not enabled` / `model not supported`: kiểm tra model, endpoint và tham số.
-- `504` / `524` / client timeout: lưu Request ID và thời gian, không tạo lại ngay.
-
-Xem [hướng dẫn mô hình ảnh](/vi/guide/image-generation).
-
-## Có số dư nhưng key báo không đủ hạn mức
-
-Một thông báo đơn lẻ không phải lúc nào cũng có nghĩa là thiếu credit tài khoản: nguyên nhân cũng có thể là hạn mức của chính API Key, thời hạn Key hoặc quy tắc của nhóm. Hãy kiểm tra credit tài khoản, hạn mức và thời hạn Key, cũng như nhóm của Key. Nếu thông báo vẫn lặp lại sau khi kiểm tra, hãy cung cấp Request ID cho bộ phận hỗ trợ.
+Một thông báo đơn lẻ không phải lúc nào cũng có nghĩa là thiếu số dư tài khoản: nguyên nhân cũng có thể là hạn mức của chính khóa API, thời hạn khóa hoặc quy tắc của nhóm. Hãy kiểm tra số dư tài khoản, hạn mức và thời hạn khóa, cũng như nhóm của khóa. Nếu thông báo vẫn lặp lại sau khi kiểm tra, hãy cung cấp Request ID cho bộ phận hỗ trợ.
 
 ## Lỗi có tự thành công sau đó không?
 
-Đừng cho rằng nền tảng sẽ tự hoàn tất yêu cầu bị lỗi về sau. Các yêu cầu thông thường không có cam kết retry tự động ở cấp nền tảng. Nếu client hoặc ứng dụng gửi lại, thường sẽ tạo Request ID mới.
+Đừng cho rằng nền tảng sẽ tự hoàn tất yêu cầu bị lỗi về sau. Các yêu cầu thông thường không có cam kết retry tự động ở cấp nền tảng. Nếu ứng dụng khách hoặc ứng dụng gửi lại, thường sẽ tạo Request ID mới.
 
-Xác định kết quả bằng bản ghi cuối của Request ID tương ứng và việc client có nhận nội dung đầy đủ hay không. Nếu nghi bị trừ phí trùng, cung cấp các Request ID và thời gian liên quan.
+Xác định kết quả bằng bản ghi cuối của Request ID tương ứng và việc ứng dụng khách có nhận nội dung đầy đủ hay không. Nếu nghi bị trừ phí trùng, cung cấp các Request ID và thời gian liên quan.
 
 ## Thông tin cần gửi hỗ trợ
 
 ```text
-Thời điểm, bao gồm múi giờ:
-Request ID:
-Mô hình:
-Endpoint yêu cầu:
-Phiên bản client hoặc SDK:
-Streaming / ảnh / tool call:
-Nguyên văn lỗi hoặc ảnh chụp:
-Lỗi ngẫu nhiên hay liên tục:
+Tên ứng dụng:
+Thời gian:
+Mô hình và nhóm:
+Nội dung hoặc ảnh lỗi:
+Request ID (nếu có):
 ```
 
-Không gửi API Key đầy đủ, mật khẩu, dữ liệu riêng tư hoặc toàn bộ nội dung công việc. Nếu cần nhận diện key, chỉ cung cấp tối đa sáu ký tự cuối.
+Không biết thì để trống. Không gửi khóa đầy đủ, mật khẩu hoặc mã xác minh.

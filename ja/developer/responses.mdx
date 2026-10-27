@@ -1,9 +1,9 @@
 ---
 title: "Responses API と Codex"
-description: "Codex Provider または Responses 対応が確認されたモデルに適切な接続方法を選びます。"
+description: "Codex プロバイダーまたは Responses 対応が確認されたモデルに適切な接続方法を選びます。"
 ---
 
-NexusAPI では、`/v1/responses` は [Codex CLI ガイド](/ja/tools/codex-cli)で設定するカスタム Provider、または現在の Key の `/v1/models` 応答で `supported_endpoint_types` に `openai-response` を含むモデルに使用します。
+NexusAPI では、`/v1/responses` は [Codex CLI ガイド](/ja/tools/codex-cli)で設定するカスタムプロバイダー、または現在のキーの `/v1/models` 応答で `supported_endpoint_types` に `openai-response` を含むモデルに使用します。
 
 <Warning>
 **Responses を使用する条件**
@@ -19,10 +19,10 @@ POST https://nexusapi.link/v1/responses
 
 | 場面 | 推奨方法 |
 | --- | --- |
-| Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の `wire_api = "responses"` Provider 設定を使用 |
-| `supported_endpoint_types` に `openai-response` を含むモデルを使う別のアプリ | そのアプリの Responses クライアント/Schema を使い、最小リクエストから検証 |
+| Codex CLI | [Codex CLI ガイド](/ja/tools/codex-cli)の `wire_api = "responses"` プロバイダー設定を使用 |
+| `supported_endpoint_types` に `openai-response` を含むモデルを使う別のアプリ | そのアプリの Responses クライアント/スキーマを使い、最小リクエストから検証 |
 | 一般的な OpenAI 互換テキストアプリ | [Chat Completions](/ja/developer/openai-compatible)を優先 |
-| `openai-response` を含まないモデル | `supported_endpoint_types` に示された Chat Completions または Messages を使用し、この endpoint は使わない |
+| `openai-response` を含まないモデル | `supported_endpoint_types` に示された Chat Completions または Messages を使用し、このエンドポイントは使わない |
 
 ## 最小検証リクエスト
 
@@ -38,7 +38,7 @@ curl 'https://nexusapi.link/v1/responses' \
   }'
 ```
 
-`input` は Chat Completions の `messages` と別のフィールドで、レスポンスを `choices[0].message` として解析してはいけません。全フィールド、ストリーミングイベント、結果構造はクライアントの公式 Schema を参照してください。
+`input` は Chat Completions の `messages` と別のフィールドで、レスポンスを `choices[0].message` として解析してはいけません。全フィールド、ストリーミングイベント、結果構造はクライアントの公式スキーマを参照してください。
 
 ## Codex CLI 設定の要点
 
@@ -52,11 +52,11 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-Key は `NEXUSAPI_API_KEY` 環境変数に置き、`config.toml` や `auth.json` に書かないでください。インストール、OS 別環境変数、検証は[Codex CLI ガイド](/ja/tools/codex-cli)を参照してください。
+キーは `NEXUSAPI_API_KEY` 環境変数に置き、`config.toml` や `auth.json` に書かないでください。インストール、OS 別環境変数、検証は[Codex CLI ガイド](/ja/tools/codex-cli)を参照してください。
 
 ## 最初に確認すること
 
-1. Key グループにモデルがあり、モデル ID がモデルマーケットプレイスと完全に一致すること。
+1. キーのグループにモデルがあり、モデル ID がモデル広場と完全に一致すること。
 2. クライアントが `/v1/responses` を送っており、`/v1/v1/...` ではないこと。
 3. モデルの `supported_endpoint_types` に `openai-response` が含まれること。含まれない場合は、示された対応プロトコルを使うこと。
-4. Request ID、クライアントバージョン、エラー全文を保存し、[自己確認](/ja/faq/self-check)に従うこと。
+4. Request ID、クライアントバージョン、エラー全文を保存し、[セルフチェック](/ja/faq/self-check)に従うこと。

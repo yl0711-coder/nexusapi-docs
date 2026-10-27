@@ -1,59 +1,39 @@
 ---
-title: NexusAPI Documentation
-description: Get from creating an API key to your first NexusAPI request quickly.
+title: "NexusAPI Help"
+description: "Set up your app, add funds and check charges."
 mode: wide
 ---
 
-<Info>
-NexusAPI provides a unified model gateway. Your token group, model availability, and pricing are determined by the **Model Marketplace** in the console.
-</Info>
+**New here? Follow Quick start. Already have a key? Open the guide for your app.**
 
 <Columns cols={3}>
-  <Card title="Make your first request in 5 minutes" icon="rocket" href="/en/guide/quick-start" arrow>
-    Create a key, choose a model, and send a test request.
+  <Card title="Quick start" icon="rocket" href="/en/guide/quick-start" arrow>
+    Sign in, create a key and set up your app.
   </Card>
-  <Card title="Configure Claude Code / Codex" icon="terminal" href="/en/tools" arrow>
-    Choose the setup guide for the client you use.
+  <Card title="Set up my app" icon="terminal" href="/en/tools" arrow>
+    Claude Code, Codex, CC Switch and more.
   </Card>
-  <Card title="Confirm API and model capability" icon="braces" href="/en/developer/capability-matrix" arrow>
-    Check that the model, token group, and protocol match before calling.
-  </Card>
-</Columns>
-
-## The three things you need to connect
-
-| Item | Where to get it | Purpose |
-| --- | --- | --- |
-| Base URL | This documentation | Sends requests to NexusAPI |
-| API Key | Console → Token Management | Identifies the caller and available groups |
-| Model ID | Console → Model Marketplace | Selects the model to call |
-
-<Warning>
-Do not expose an API key in chats, screenshots, frontend repositories, or public configuration. If you suspect exposure, delete or reset the key in the console immediately.
-</Warning>
-
-## Start with your goal
-
-<Columns cols={2}>
-  <Card title="I am writing an application or script" icon="code-2" href="/en/guide/quick-start" arrow>
-    Start with the OpenAI-compatible API.
-  </Card>
-  <Card title="I use Claude Code" icon="bot" href="/en/tools/claude-code" arrow>
-    Configure the native Messages protocol.
-  </Card>
-  <Card title="I use Codex CLI" icon="terminal-square" href="/en/tools/codex-cli" arrow>
-    Configure a custom provider and model.
-  </Card>
-  <Card title="A request failed" icon="circle-help" href="/en/faq/self-check" arrow>
-    Follow the self-check flow and collect the required details.
+  <Card title="Prices and discounts" icon="badge-dollar-sign" href="/en/billing/multipliers-and-discounts" arrow>
+    See examples of what you pay.
   </Card>
 </Columns>
 
-## Include these details when requesting support
+## Common tasks
 
-- Time of the issue and time zone
-- Model ID, endpoint, and whether streaming was enabled
-- Full error message and Request ID
-- The smallest reproduction you have already tried
+| I want to | Open this |
+| --- | --- |
+| Create or copy an API key | [Key guide](/en/guide/api-key) |
+| Add funds or check a payment | [Payment guide](/en/guide/recharge) |
+| Find a model and its price | [Models and prices](/en/billing/models-pricing) |
+| Check requests and charges | [Usage and charges](/en/billing/usage-and-billing) |
+| Change my password or remove devices | [Account safety](/en/guide/account-security) |
 
-This prevents repeated follow-up questions and speeds up troubleshooting.
+## Need help?
+
+Send support:
+
+- The app you use.
+- The time, model and group.
+- The error text or screenshot, plus a Request ID if available.
+
+**Hide complete API keys in screenshots. Never send passwords or verification codes.** Do not guess missing details; start with the error you can see.

@@ -1,74 +1,41 @@
 ---
-title: "5 分で始めるクイックスタート"
-description: "NexusAPI で最初のモデル呼び出しを行います。"
+title: "5分で始める"
+description: "ログイン、キー作成、アプリ設定の順に進めます。"
 ---
 
-このページでは、最初のリクエストを送るまでを案内します。必要なのは NexusAPI アカウントと利用可能な残高だけです。
+**次の4ステップで設定します。済んでいる手順は飛ばしてください。**
 
-<Info>
-**最短の流れ**
+## 1. ログインして残高を確認
 
-残高を購入 → API キーを作成 → モデルマーケットプレイスからモデル ID をコピー → テストリクエストを送信
-</Info>
+[ログイン画面](https://nexusapi.link/sign-in)を開きます。アカウントがない場合はサポートに連絡してください。
 
-## 1. 残高を購入する
+[ウォレット](https://nexusapi.link/wallet)を開きます。利用できる残高やプランがあれば次へ。なければ[チャージ](/ja/guide/recharge)してください。
 
-コンソールにログインし、**ウォレット管理**からオンラインでチャージします。
+## 2. APIキーを作成してコピー
 
-![NexusAPI のウォレット管理とオンラインチャージ画面](/images/nexusapi/console-wallet-topup-ja.png)
+1. [APIキー](https://nexusapi.link/keys)で「APIキーを作成」をクリック。
+2. 名前を入力し、サポートに案内されたグループを選択。個数は `1`、特別な指定がなければ他は初期設定のまま。
+3. 保存ボタンをクリック。
+4. 一覧に戻り、作成したキーのコピーボタンをクリック。
 
-## 2. API キーを作成する
+迷ったら[画像付き手順](/ja/guide/api-key)を確認してください。**キーの全文を他人に渡さないでください。**
 
-1. コンソールで **トークン管理** を開きます。
-2. **トークンを追加** をクリックします。
-3. `codex-work` など、識別しやすい名前を入力します。
-4. 使用するモデルを含むグループを選びます。
-5. 用途に応じた上限を設定して送信します。
+## 3. 使うアプリの手順を開く
 
-![キーとアカウント情報をマスクした NexusAPI のトークン管理画面](/images/nexusapi/console-token-management-ja.png)
-
-![NexusAPI のトークン作成画面](/images/nexusapi/console-create-token-ja.png)
-
-<Warning>
-**API キーを安全に保管してください**
-
-API キーは認証専用です。公開リポジトリ、スクリーンショット、チャット履歴に含めないでください。プロジェクトごとに別のキーを使うことを推奨します。
-</Warning>
-
-## 3. API を設定する
-
-以下の 3 つを準備します。
-
-| 項目 | 内容 |
+| 使うもの | 設定手順 |
 | --- | --- |
-| Base URL | `https://nexusapi.link/v1` |
-| API キー | コンソールで生成します。通常は `sk-` で始まります |
-| モデル ID | [モデルマーケットプレイス](https://nexusapi.link/pricing)から正確な名称をコピーします |
+| Claude Code | [Claude Code](/ja/tools/claude-code) |
+| Codex CLI | [Codex CLI](/ja/tools/codex-cli) |
+| CC Switch | [CC Switch](/ja/tools/cc-switch) |
+| VS Code / Cursor | [エディター設定](/ja/tools/cursor-vscode) |
+| 自作プログラム | [コピーできるコード例](/ja/developer/code-examples) |
 
-## 4. テストリクエストを送る
+**アドレスとモデル名は対応する手順からコピーし、APIキーは自分のものを入力します。アプリごとにアドレスが違う場合があります。**
 
-次の例は OpenAI Chat Completions 形式です。`YOUR_API_KEY` と `YOUR_MODEL_ID` を置き換えてください。
+## 4. 一言送って確認
 
-```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{
-    "model": "YOUR_MODEL_ID",
-    "messages": [{"role": "user", "content": "返信してください：接続に成功しました"}]
-  }'
-```
+**「接続成功、と返信してください」**と送信します。
 
-JSON の応答に `choices` とモデルの返答が含まれれば、基本的な接続は成功です。
+最後まで返信が届けば使い始められます。[利用履歴](https://nexusapi.link/usage-logs/common)で今回の呼び出しと料金を確認できます。
 
-<Tip>
-**クライアントによって URL が異なる場合があります**
-
-一部のクライアントは `/v1` やリクエストパスを自動で補完します。[Claude Code](/ja/tools/claude-code)、[Codex CLI](/ja/tools/codex-cli)、[CC Switch](/ja/tools/cc-switch)、[VS Code / Cursor](/ja/tools/cursor-vscode)を設定する際は、それぞれのガイドに示す URL を使用してください。
-</Tip>
-
-## 次に読むもの
-
-- [接続方法の違いを確認する](/ja/guide/integration-overview)
-- [モデル、グループ、請求を確認する](/ja/billing/models-pricing)
-- [問題が起きた場合に自己診断を始める](/ja/faq/self-check)
+失敗したら、**アプリ名、エラー画面、発生時刻、モデル、グループ**をサポートへ。画面にキーの全文が写らないようにしてください。

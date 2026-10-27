@@ -1,162 +1,84 @@
 ---
-title: "Настройка Claude Code"
-description: "Установите Claude Code и подключите его к NexusAPI через нативную конфигурацию Anthropic."
+title: "Установка и настройка Claude Code"
+description: "Установите, задайте ключ и модель, затем проверьте сообщение."
 ---
 
-Claude Code использует нативный Anthropic Messages. Base URL NexusAPI — `https://nexusapi.link`; **не добавляйте `/v1`**.
+Запросы используют ключ NexusAPI. Вход в официальный аккаунт Claude для этой настройки не нужен.
 
-## Системные требования
+## 1. Подготовка и установка
 
-- macOS 13+, Ubuntu 20.04+, Debian 10+, Alpine Linux 3.19+ или Windows 10 версии 1809+;
-- не менее 4 ГБ памяти и процессор x64 или ARM64;
-- сеть с доступом к NexusAPI;
-- при работе в Git Bash на Windows можно дополнительно установить [Git for Windows](https://git-scm.com/install/windows).
+[Создайте ключ](/ru/guide/api-key), выберите его группу в [Витрине моделей](https://nexusapi.link/pricing), скопируйте модель для Claude Code / Messages. Windows: найдите `PowerShell` в Пуске. Mac: `Command + Space`, затем Terminal.
 
-## 1. Установка Claude Code
+Выполните команду только своей системы. Установленный Claude Code можно не переустанавливать.
 
-Используйте официальный установщик:
-
-```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
-
-Также доступны `winget install Anthropic.ClaudeCode` для Windows и `brew install --cask claude-code` для macOS. Проверьте установку:
-
-### Windows WinGet
-
-```powershell
-winget install Anthropic.ClaudeCode
-```
-
-### macOS Homebrew
-
+</Tab>
+<Tab title="macOS / Linux / WSL">
 ```bash
-brew install --cask claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+</Tab>
+</Tabs>
+
+Откройте новый терминал и проверьте версию. Если команда не найдена, перезапустите терминал; при повторной ошибке отправьте ошибку установки поддержке.
 
 ```bash
 claude --version
-claude doctor
 ```
 
-## 2. Создайте ключ NexusAPI
+## 2. Откройте файл конфигурации
 
-В **Управлении токенами → Добавить токен** выберите группу, содержащую модель, нужную для Claude Code, и задайте лимит. Не судите по одному названию модели: проверьте каталог или [матрицу возможностей](/ru/developer/capability-matrix).
+Откройте пользовательский файл командой своей системы:
 
-### Выберите безопасные параметры ключа
-
-Используйте понятное проектное имя и подходящий лимит. Ограничение модели и IP allowlist включайте только при понимании последствий; для временных тестовых ключей задавайте срок действия.
-
-## 3. Создайте пользовательскую конфигурацию
-
-### Найдите каталог конфигурации
-
-| Система | Путь |
-| --- | --- |
-| macOS / Linux / WSL | `~/.claude/settings.json` |
-| Windows | `%USERPROFILE%\\.claude\\settings.json` |
-
-macOS, Linux, WSL и Git Bash:
-
-```bash
-mkdir -p ~/.claude
-touch ~/.claude/settings.json
-```
-
-В Windows PowerShell сначала создайте каталог, затем откройте файл настроек:
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude" | Out-Null
 notepad "$env:USERPROFILE\.claude\settings.json"
 ```
+</Tab>
+<Tab title="macOS / Linux / WSL">
+```bash
+mkdir -p ~/.claude
+nano ~/.claude/settings.json
+```
+</Tab>
+</Tabs>
 
-### Задайте переменные окружения
+В nano: `Ctrl + O`, Enter для сохранения, `Ctrl + X` для выхода. В Блокноте Windows: `Ctrl + S`. Имя должно быть `settings.json`, не `.json.txt`.
 
-Объедините эти значения с существующим `env`, не затирая MCP и разрешения:
+## 3. Укажите ключ и модель
+
+В пустой файл вставьте блок ниже. Замените `YOUR_API_KEY` полным ключом, `YOUR_MODEL_ID` — скопированным именем модели. Кавычки и запятые оставьте.
 
 ```json
 {
+  "model": "YOUR_MODEL_ID",
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "YOUR_NEXUSAPI_KEY",
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
     "ANTHROPIC_BASE_URL": "https://nexusapi.link"
   }
 }
 ```
 
-Сохраняйте это в каталоге пользователя, а не в репозитории проекта.
+Сначала сохраните копию существующего файла, затем объедините только `model` и `env`, не стирая остальное. Можно использовать [CC Switch](/ru/tools/cc-switch). Не помещайте ключ в проект или скриншот.
 
-<Tip>
-**Отключайте экспериментальные поля только при явной ошибке совместимости**
+## 4. Запустите и проверьте
 
-Если текст ошибки прямо упоминает `context_management` или неподдерживаемые экспериментальные входные поля, добавьте в `env` значение `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` и проверьте снова. Оно отключает часть preview-полей и не является настройкой по умолчанию.
-</Tip>
-
-## 4. Запуск и проверка
-
-Откройте новый терминал, перейдите в каталог проекта и выполните:
-
-```bash
-cd your-project-folder
-```
+Сохраните, заново откройте терминал в своём проекте и запустите:
 
 ```bash
 claude
 ```
 
-Затем выполните `/status`. Убедитесь, что **Anthropic base URL** — `https://nexusapi.link`, а источником аутентификации указан `ANTHROPIC_AUTH_TOKEN`, и отправьте короткий вопрос. Доверяйте только знакомым рабочим каталогам.
+Введите `/status`: адрес `Anthropic base URL` должен быть `https://nexusapi.link`, источник ключа — `ANTHROPIC_AUTH_TOKEN`, модель — выбранная вами.
 
-## Частые проблемы
+Отправьте «Ответь только: подключение успешно. Не меняй файлы». Полный ответ и запись в [журнале](https://nexusapi.link/usage-logs/common) подтверждают настройку. Тест расходует немного кредитов.
 
-### `Invalid API Key · Please run /login`
+При `/login` или ошибке ключа проверьте пользовательский файл и заменённые значения, перезапустите. См. [проверку ошибок](/ru/faq/self-check). Не удаляйте весь каталог `.claude`.
 
-Проверьте обе переменные, состояние ключа и перезапуск терминала. Не исправляйте это прямым редактированием внутренних файлов состояния входа Claude.
-
-### Не удаётся подключиться к сервисам Anthropic
-
-Выполните `claude doctor`, проверьте JSON в `settings.json` и две переменные окружения, затем откройте терминал заново. Если ошибка остаётся, сохраните её текст, `claude --version` и вывод `claude doctor`.
-
-```text
-Unable to connect to Anthropic services
-Failed to connect to api.anthropic.com: ERR BAD REQUEST
-```
-
-Не перезаписывайте скриптом внутренние поля `.claude.json`. Они могут меняться между версиями, а перезапись способна удалить состояние входа или другие настройки.
-
-### PowerShell блокирует установщик
-
-Сначала используйте WinGet или официальный установщик из Windows CMD. Если вы подтвердили, что проблема только в локальной политике выполнения, измените её лишь для текущего пользователя:
-
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
-
-Не меняйте глобальную политику компьютера только для установки клиента.
-
-### `fetch failed`
-
-1. Отправьте обычный короткий запрос. Если он работает, проблема, вероятно, в WebFetch или другой отдельной сетевой функции.
-2. Если не работает ни один вызов модели, выполните `claude doctor` и проверьте Base URL через `/status`.
-3. Проверьте DNS, firewall, корпоративную сеть или доверенный прокси для `nexusapi.link`.
-4. Откройте новый терминал и проверьте один раз. При постоянной ошибке сохраните версию, вывод doctor, текст ошибки и Request ID, затем пройдите [самопроверку](/ru/faq/self-check).
-
-### Статус `offline`
-
-Вспомогательные функции могут проверять отдельные сервисы. Подтвердите реальный вызов через `/status` и короткий запрос к модели, прежде чем считать gateway недоступным.
-
-### WebFetch не работает, но обычный чат работает
-
-WebFetch может использовать отдельные проверки безопасности доменов и внешний сетевой доступ. Если короткий текстовый запрос успешен, не меняйте Base URL NexusAPI и разбирайте ошибку WebFetch по сетевым правилам Claude Code.
-
-### API-запрос не выполняется
-
-Завершите текущую сессию, откройте новую сессию `claude` и выполните одну короткую проверку. При повторении ошибки сохраните Request ID и пройдите [самопроверку](/ru/faq/self-check).
-
-## Официальные материалы
-
-- [Официальная установка](https://code.claude.com/docs/en/installation)
-- [Переменные окружения](https://code.claude.com/docs/en/env-vars)
-- [Настройка gateway](https://code.claude.com/docs/en/llm-gateway)
+Официальный проект: [Claude Code](https://github.com/anthropics/claude-code).

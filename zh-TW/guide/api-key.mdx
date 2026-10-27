@@ -1,52 +1,46 @@
 ---
-title: "建立與保護 API Key"
-description: "建立可控額度的 NexusAPI Key，並以安全方式保存與輪替。"
+title: "建立和使用 API 金鑰"
+description: "照著填寫，建立金鑰，再複製到使用的軟體。"
 ---
 
-API Key 用於識別呼叫者並決定可用模型群組。請依專案或環境分開建立 Key，這樣較容易限制額度、核對用量與撤銷風險。
+API 金鑰就是軟體連接 NexusAPI 時要填的 Key。
 
-## 建立 Key
+## 1. 建立金鑰
 
-1. 登入 [NexusAPI 控制台](https://nexusapi.link)。
-2. 前往 **令牌管理**，選擇 **新增令牌**。
-3. 填入可辨識名稱，例如 `production-api` 或 `local-codex`。
-4. 選擇包含目標模型的令牌群組。
-5. 按用途設定額度上限與有效期，再儲存。
+1. 開啟 [API 金鑰](https://nexusapi.link/keys)。
+2. 點右上角「建立 API 金鑰」。
+3. 按下表填寫。
+4. 點「儲存變更」。
 
-建立後立即複製 Key。完整值通常只會顯示一次。
-
-## 建立前請確認
-
-| 項目 | 為什麼重要 |
+| 項目 | 怎麼填 |
 | --- | --- |
-| 令牌群組 | 決定 Key 看得到的模型、可呼叫能力與存取規則。 |
-| 額度上限 | 限制單一專案或測試的最大風險。 |
-| 到期日 | 適合臨時合作、測試或短期任務。 |
-| 模型限制／IP 白名單 | 只在確實需要時啟用，避免誤擋正式請求。 |
+| 名稱 | 自己能辨識即可，例如 `我的電腦` |
+| 分組 | 選客服提供的分組；不知道選哪個，先問客服 |
+| 建立數量 | 填 `1` |
+| 過期時間 | 第一次使用可保持預設 |
+| 配額、進階設定 | 沒有特殊需求，保持預設 |
 
-## 安全保存
+![建立 API 金鑰](/images/nexusapi/console-create-token-zh-TW.png)
 
-- 優先使用環境變數、作業系統憑證管理或受控的密鑰服務。
-- 不要把 Key 放在前端程式、公開儲存庫、聊天記錄、截圖或 URL。
-- 不要在團隊共用同一個 Key；按人員或服務拆分才能追查異常。
-- 懷疑洩漏時，立刻停用或刪除舊 Key，建立新 Key 並更新部署環境。
+「無限配額」不代表免費，呼叫仍會扣除帳戶餘額或方案額度。
 
-## 使用前測試
+## 2. 複製到軟體
 
-```bash
-curl 'https://nexusapi.link/v1/models' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
-```
+1. 回到金鑰清單，找到剛建立的金鑰。
+2. 點複製按鈕，複製完整 Key，不要手動抄含星號的文字。
+3. 貼到軟體的「API Key」欄位。
+4. 位址和模型名稱，照[對應軟體教學](/zh-TW/tools)填寫。
 
-這個請求能確認 Key 是否有效，以及目前能看見哪些模型。實際模型與協定的選擇請看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)。
+![API 金鑰清單](/images/nexusapi/console-token-management-zh-TW.png)
 
-若收到 401、403 或模型不可用，先確認 Key 狀態、群組、額度、IP 限制與 `Authorization: Bearer ...` 格式；保留 Request ID 後再依[問題自查](/zh-TW/faq/self-check)處理。
+![複製完整 Key：按框出的複製按鈕；圖中的 Key 是佔位符。](/images/nexusapi/key-copy-zh-TW.png)
 
-## API Key 與其他憑證
+複製完整 Key：按框出的複製按鈕；圖中的 Key 是佔位符。
 
-| 憑證 | 用途 |
-| --- | --- |
-| API Key | 呼叫 Chat Completions、Responses、Messages、Images 與 `/v1/models` 等模型 API。 |
-| 控制台登入狀態／Cookie | 僅供瀏覽器登入控制台，不能作為模型 API 的呼叫憑證。 |
+**用這裡建立的 Key，不要用「個人資料」裡的存取權杖。**
 
-請勿把任何憑證放進 URL 查詢參數，也不要向客服傳送完整憑證。
+## 3. 金鑰外洩怎麼辦
+
+立即在清單停用或刪除舊 Key，重新建立，再替換軟體裡的 Key。
+
+不要把完整 Key 放到群組聊天、截圖或公開程式碼。客服也不需要你的完整 Key。

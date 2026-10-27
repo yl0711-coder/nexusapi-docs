@@ -1,14 +1,14 @@
 ---
 title: "API Responses và Codex"
-description: "Chọn cách tích hợp đúng cho Codex Provider hoặc model đã xác nhận hỗ trợ Responses."
+description: "Chọn cách tích hợp đúng cho nhà cung cấp Codex hoặc mô hình đã xác nhận hỗ trợ Responses."
 ---
 
-Trong NexusAPI, `/v1/responses` dành cho custom provider trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) và cho model có `supported_endpoint_types` trong `/v1/models` chứa `openai-response`.
+Trong NexusAPI, `/v1/responses` dành cho nhà cung cấp tùy chỉnh trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) và cho mô hình có `supported_endpoint_types` trong `/v1/models` chứa `openai-response`.
 
 <Warning>
 **Xác nhận giao thức được hỗ trợ trước**
 
-Trước khi dùng `/v1/responses`, hãy xác nhận `supported_endpoint_types` có `openai-response`. Nếu gặp `status_code=500, not implemented`, chuyển sang giao thức được liệt kê cho model đó và thực hiện một kiểm tra ngắn.
+Trước khi dùng `/v1/responses`, hãy xác nhận `supported_endpoint_types` có `openai-response`. Nếu gặp `status_code=500, not implemented`, chuyển sang giao thức được liệt kê cho mô hình đó và thực hiện một kiểm tra ngắn.
 </Warning>
 
 ## Endpoint và phạm vi
@@ -19,14 +19,14 @@ POST https://nexusapi.link/v1/responses
 
 | Tình huống | Cách nên dùng |
 | --- | --- |
-| Codex CLI | Dùng cấu hình Provider `wire_api = "responses"` trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) |
-| Ứng dụng khác có model mà `supported_endpoint_types` chứa `openai-response` | Dùng Responses client/schema của ứng dụng và kiểm tra yêu cầu tối thiểu trước |
+| Codex CLI | Dùng cấu hình nhà cung cấp `wire_api = "responses"` trong [hướng dẫn Codex CLI](/vi/tools/codex-cli) |
+| Ứng dụng khác có mô hình mà `supported_endpoint_types` chứa `openai-response` | Dùng Responses ứng dụng khách/schema của ứng dụng và kiểm tra yêu cầu tối thiểu trước |
 | Ứng dụng văn bản tương thích OpenAI thông thường | Dùng [Chat Completions](/vi/developer/openai-compatible); không chuyển chỉ vì API này mới hơn |
-| Model không có `openai-response` | Dùng Chat Completions hoặc Messages được nêu trong `supported_endpoint_types`, không dùng endpoint này |
+| Mô hình không có `openai-response` | Dùng Chat Completions hoặc Messages được nêu trong `supported_endpoint_types`, không dùng endpoint này |
 
 ## Yêu cầu kiểm tra tối thiểu
 
-Chỉ sau khi xác nhận model hỗ trợ, kiểm tra kết nối bằng:
+Chỉ sau khi xác nhận mô hình hỗ trợ, kiểm tra kết nối bằng:
 
 ```bash
 curl 'https://nexusapi.link/v1/responses' \
@@ -38,7 +38,7 @@ curl 'https://nexusapi.link/v1/responses' \
   }'
 ```
 
-`input` không giống `messages` của Chat Completions và phản hồi không nên được đọc là `choices[0].message`. Xem schema chính thức của client để biết đầy đủ trường, sự kiện streaming và cấu trúc kết quả.
+`input` không giống `messages` của Chat Completions và phản hồi không nên được đọc là `choices[0].message`. Xem schema chính thức của ứng dụng khách để biết đầy đủ trường, sự kiện streaming và cấu trúc kết quả.
 
 ## Điểm chính khi cấu hình Codex CLI
 
@@ -52,11 +52,11 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-Để key trong biến môi trường `NEXUSAPI_API_KEY`, không ghi vào `config.toml` hoặc `auth.json`. Xem [hướng dẫn Codex CLI](/vi/tools/codex-cli) để cài đặt, biến môi trường từng hệ điều hành và kiểm tra.
+Để khóa trong biến môi trường `NEXUSAPI_API_KEY`, không ghi vào `config.toml` hoặc `auth.json`. Xem [hướng dẫn Codex CLI](/vi/tools/codex-cli) để cài đặt, biến môi trường từng hệ điều hành và kiểm tra.
 
 ## Kiểm tra đầu tiên
 
-1. Nhóm key chứa model và model ID khớp chính xác với Chợ mô hình.
-2. Client thực sự gọi `/v1/responses`, không phải `/v1/v1/...`.
-3. `supported_endpoint_types` của model chứa `openai-response`; nếu không, dùng giao thức tương ứng được liệt kê.
-4. Lưu Request ID, phiên bản client và toàn bộ lỗi, sau đó làm theo [tự kiểm tra](/vi/faq/self-check).
+1. Nhóm khóa chứa mô hình và ID mô hình khớp chính xác với Quảng trường mô hình.
+2. Ứng dụng khách thực sự gọi `/v1/responses`, không phải `/v1/v1/...`.
+3. `supported_endpoint_types` của mô hình chứa `openai-response`; nếu không, dùng giao thức tương ứng được liệt kê.
+4. Lưu Request ID, phiên bản ứng dụng khách và toàn bộ lỗi, sau đó làm theo [tự kiểm tra](/vi/faq/self-check).

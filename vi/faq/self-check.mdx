@@ -1,60 +1,39 @@
 ---
-title: "Tự kiểm tra"
-description: "Lưu thông tin cần thiết và khoanh vùng lỗi NexusAPI trước khi liên hệ hỗ trợ."
+title: "Làm gì khi gặp lỗi"
+description: "Lưu lỗi, kiểm tra cấu hình và liên hệ hỗ trợ nếu vẫn thất bại."
 ---
 
-Phần lớn lỗi cấu hình hoặc sự cố tạm thời có thể được khoanh vùng trong vài phút. Hãy lưu bằng chứng trước, sau đó chỉ thực hiện một kiểm tra tối thiểu với tần suất thấp.
+**Chụp ảnh lỗi trước. Làm theo bên dưới, hoặc hỏi hỗ trợ ngay nếu chưa rõ.**
 
-## 1. Lưu bằng chứng
+## 1. Lưu lỗi
 
-Trước khi đóng client hoặc thử lại, lưu:
+Ghi ứng dụng, thời gian, mô hình, nhóm và giữ ảnh lỗi. Có Request ID thì sao chép; không biết thì không đoán. Che khóa đầy đủ, mật khẩu và dữ liệu riêng.
 
-- toàn bộ lỗi và Request ID;
-- thời gian và múi giờ;
-- model ID, endpoint, có streaming hay không;
-- client / SDK và phiên bản.
+## 2. Làm theo thông báo
 
-Không gửi API Key đầy đủ, mật khẩu, dữ liệu riêng tư hoặc toàn bộ nội dung nghiệp vụ.
-
-## 2. Xác định loại lỗi
-
-| Hiện tượng | Kiểm tra trước |
+| Thông báo | Cách làm |
 | --- | --- |
-| 401 | Key, tiền tố `Bearer`, URL. |
-| 403 | Nhóm, giới hạn mô hình, danh sách IP, tài khoản, từ chối upstream. |
-| 404 | Base URL, đường dẫn, `/v1` bị lặp hoặc thiếu. |
-| 400 | Mô hình, giao thức, tham số, trạng thái phiên. |
-| 429 | Đồng thời và tần suất; theo `Retry-After`. |
-| 500 / 502 / 503 | Chờ 10–30 giây rồi chỉ thử lại một lần. |
-| 504 / 524 | Kích thước yêu cầu, thời gian chờ, trạng thái dịch vụ. |
-| `500, not implemented` | Kiểm tra xem `supported_endpoint_types` của model có chứa giao thức đang dùng trong yêu cầu hay không. |
-| `no available channel` | Model ID, nhóm token, khả năng hiện tại. |
+| Lỗi khóa / 401 | Sao chép lại khóa đầy đủ rồi mở lại ứng dụng |
+| 403 | Nhờ hỗ trợ kiểm tra mô hình và nhóm |
+| 404 | Sao chép địa chỉ từ [hướng dẫn ứng dụng](/vi/tools) |
+| 400 / not implemented | Hỏi hỗ trợ mô hình có dùng được với ứng dụng không |
+| 429 / quá số yêu cầu đồng thời | Chờ yêu cầu hiện tại xong, giảm tác vụ đồng thời rồi thử một lần |
+| 500 / 502 / 503 / hết thời gian | Chờ 10–30 giây, thử một lần rồi hỏi hỗ trợ nếu vẫn lỗi |
+| no available channel | Kiểm tra mô hình trong nhóm; không nạp thêm chỉ vì lỗi này |
+| Thiếu số dư | Kiểm tra số dư, hạn mức và ngày hết hạn khóa |
 
-Xem chi tiết tại [lỗi API thường gặp](/vi/faq/common-errors).
+## 3. Chỉ thử một tin nhắn ngắn
 
-## 3. Làm kiểm tra tối thiểu
+Lưu nội dung quan trọng, mở hội thoại mới và gửi “Chỉ trả lời: xin chào”. Nhận đủ trả lời thì dùng hội thoại mới; vẫn lỗi thì hỏi hỗ trợ. **Lượt thử có thể dùng credit. Không thử liên tục hoặc xóa cả thư mục cấu hình.**
 
-1. Xác nhận số dư và trạng thái key trong console.
-2. Sao chép lại model ID từ Chợ mô hình.
-3. Mở phiên mới và gửi văn bản ngắn.
-4. Chỉ thử lại tối đa một lần và lưu Request ID mới.
-5. Kiểm tra bản ghi tương ứng trong nhật ký.
-
-Nếu phiên mới thành công, lỗi có thể nằm ở lịch sử hoặc nội dung ban đầu. Nếu kiểm tra tối thiểu vẫn thất bại, gửi thông tin:
-
-## Liên hệ hỗ trợ
-
-Hãy gửi các thông tin sau trong cùng một tin nhắn:
+## 4. Sao chép gửi hỗ trợ
 
 ```text
-Thời gian (kèm múi giờ):
-Request ID:
-Client và phiên bản:
-Mô hình:
-Endpoint:
-Toàn bộ lỗi:
-Ngắt quãng hay liên tục:
-Đã thử trong phiên mới:
+Tên ứng dụng:
+Thời gian:
+Mô hình và nhóm:
+Nội dung hoặc ảnh lỗi:
+Request ID (nếu có):
 ```
 
-Nếu cần nhận diện key, chỉ cung cấp tối đa sáu ký tự cuối.
+Không biết thì để trống. Không gửi khóa đầy đủ, mật khẩu hoặc mã xác minh.

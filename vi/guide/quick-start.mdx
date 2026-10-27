@@ -1,74 +1,41 @@
 ---
-title: "Bắt đầu nhanh trong 5 phút"
-description: "Thực hiện yêu cầu mô hình đầu tiên với NexusAPI."
+title: "Bắt đầu trong 5 phút"
+description: "Đăng nhập, tạo khóa và cấu hình phần mềm để dùng lần đầu."
 ---
 
-Trang này hướng dẫn bạn gửi yêu cầu đầu tiên. Bạn chỉ cần có tài khoản NexusAPI và số dư khả dụng.
+**Làm theo 4 bước dưới đây. Bỏ qua bước đã hoàn thành.**
 
-<Info>
-**Quy trình ngắn nhất**
+## 1. Đăng nhập và kiểm tra số dư
 
-Nạp tiền → Tạo API Key → Sao chép Model ID từ Chợ mô hình → Gửi yêu cầu kiểm thử
-</Info>
+Mở [trang đăng nhập](https://nexusapi.link/sign-in). Chưa có tài khoản thì liên hệ hỗ trợ.
 
-## 1. Nạp tiền
+Mở [Ví](https://nexusapi.link/wallet). Có số dư hoặc gói còn dùng được thì tiếp tục; nếu chưa có, hãy [nạp tiền](/vi/guide/recharge).
 
-Đăng nhập vào bảng điều khiển, sau đó dùng **Quản lý ví** để nạp tiền trực tuyến.
+## 2. Tạo và sao chép khóa API
 
-![Trang quản lý ví và nạp tiền trực tuyến của NexusAPI](/images/nexusapi/console-wallet-topup-vi.png)
+1. Mở [Khóa API](https://nexusapi.link/keys), chọn **Tạo Khóa API**.
+2. Điền tên, chọn nhóm do hỗ trợ cung cấp, số lượng là `1`. Không có yêu cầu riêng thì giữ mặc định các mục còn lại.
+3. Chọn **Lưu thay đổi**.
+4. Trở lại danh sách và bấm nút sao chép khóa vừa tạo.
 
-## 2. Tạo API Key
+Cần xem hình? Mở [hướng dẫn tạo khóa](/vi/guide/api-key). **Không gửi khóa đầy đủ cho người khác.**
 
-1. Mở **Quản lý token** trong bảng điều khiển.
-2. Chọn **Thêm token**.
-3. Nhập tên dễ nhận biết, ví dụ `codex-work`.
-4. Chọn nhóm có chứa mô hình bạn muốn sử dụng.
-5. Đặt hạn mức phù hợp với mục đích sử dụng rồi gửi.
+## 3. Cấu hình phần mềm đang dùng
 
-![Trang quản lý token NexusAPI với khóa và dữ liệu tài khoản đã được che](/images/nexusapi/console-token-management-vi.png)
-
-![Bảng tạo token NexusAPI](/images/nexusapi/console-create-token-vi.png)
-
-<Warning>
-**Bảo vệ API Key của bạn**
-
-API Key chỉ được dùng để xác thực. Không đưa nó vào kho mã công khai, ảnh chụp màn hình hoặc lịch sử trò chuyện. Nên dùng một key riêng cho mỗi dự án.
-</Warning>
-
-## 3. Cấu hình API
-
-Chuẩn bị ba thông tin sau:
-
-| Tham số | Giá trị |
+| Bạn dùng gì | Hướng dẫn |
 | --- | --- |
-| Base URL | `https://nexusapi.link/v1` |
-| API Key | Tạo trong bảng điều khiển, thường bắt đầu bằng `sk-` |
-| Model ID | Sao chép tên chính xác từ [Chợ mô hình](https://nexusapi.link/pricing) |
+| Claude Code | [Cấu hình Claude Code](/vi/tools/claude-code) |
+| Codex CLI | [Cấu hình Codex CLI](/vi/tools/codex-cli) |
+| CC Switch | [Cấu hình CC Switch](/vi/tools/cc-switch) |
+| VS Code / Cursor | [Cấu hình trình soạn thảo](/vi/tools/cursor-vscode) |
+| Chương trình tự viết | [Mã mẫu có thể sao chép](/vi/developer/code-examples) |
 
-## 4. Gửi yêu cầu kiểm thử
+**Lấy địa chỉ và tên mô hình từ đúng hướng dẫn, rồi điền khóa của bạn. Mỗi phần mềm có thể cần địa chỉ khác nhau.**
 
-Ví dụ dưới đây sử dụng định dạng OpenAI Chat Completions. Hãy thay `YOUR_API_KEY` và `YOUR_MODEL_ID`:
+## 4. Gửi một câu thử
 
-```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{
-    "model": "YOUR_MODEL_ID",
-    "messages": [{"role": "user", "content": "Hãy trả lời: kết nối thành công"}]
-  }'
-```
+Gửi: **“Hãy trả lời: kết nối thành công.”**
 
-Nếu phản hồi JSON có `choices` và nội dung trả lời của mô hình, kết nối cơ bản đã hoạt động.
+Nhận được câu trả lời đầy đủ là có thể dùng. Xem lượt gọi và chi phí trong [Nhật ký sử dụng](https://nexusapi.link/usage-logs/common).
 
-<Tip>
-**Địa chỉ URL có thể khác theo từng client**
-
-Một số client tự thêm `/v1` hoặc đường dẫn yêu cầu. Với [Claude Code](/vi/tools/claude-code), [Codex CLI](/vi/tools/codex-cli), [CC Switch](/vi/tools/cc-switch) và [VS Code / Cursor](/vi/tools/cursor-vscode), hãy dùng đúng hướng dẫn tương ứng thay vì sao chép máy móc URL trên trang này.
-</Tip>
-
-## Bước tiếp theo
-
-- [Tìm hiểu các cách tích hợp](/vi/guide/integration-overview)
-- [Xem mô hình, nhóm và thanh toán](/vi/billing/models-pricing)
-- [Bắt đầu tự kiểm tra khi gặp sự cố](/vi/faq/self-check)
+Nếu lỗi, gửi hỗ trợ **tên phần mềm, ảnh lỗi, thời gian, mô hình và nhóm**. Che khóa đầy đủ trong ảnh.

@@ -1,50 +1,22 @@
 ---
-title: "Chọn công cụ client"
-description: "Chọn đúng công cụ NexusAPI và không trộn lẫn giao thức, URL hoặc thông tin xác thực."
+title: "Chọn phần mềm đang dùng"
+description: "Tìm phần mềm và làm theo hướng dẫn cấu hình."
 ---
 
-Hãy chọn công cụ theo cách làm việc rồi theo đúng hướng dẫn của nó. Chat Completions, Messages gốc và Responses là các giao thức khác nhau; không chuyển nguyên Base URL hoặc tệp cấu hình giữa các công cụ.
+## 1. Chọn phần mềm
 
-## Chọn nhanh
+| Bạn dùng | Hướng dẫn |
+| --- | --- |
+| Claude Code | [Cấu hình](/vi/tools/claude-code) |
+| Codex CLI | [Cấu hình](/vi/tools/codex-cli) |
+| CC Switch | [Cấu hình](/vi/tools/cc-switch) |
+| VS Code / Cursor | [Cấu hình](/vi/tools/cursor-vscode) |
+| Chương trình tự viết | [Cấu hình](/vi/developer/code-examples) |
 
-| Mục tiêu | Hướng dẫn | Phù hợp với |
-| --- | --- | --- |
-| Agent lập trình trong terminal | [Claude Code](/vi/tools/claude-code) | Luồng làm việc Claude |
-| Codex trong terminal | [Codex CLI](/vi/tools/codex-cli) | Luồng Responses / Codex |
-| Nhiều provider cục bộ | [CC Switch](/vi/tools/cc-switch) | Chuyển cấu hình CLI |
-| Claude Code trong editor | [VS Code / Cursor](/vi/tools/cursor-vscode) | Làm việc trong editor |
-| Ứng dụng hoặc script | [Tổng quan tích hợp](/vi/guide/integration-overview) | SDK / tự động hóa |
+## 2. Trước khi bắt đầu
 
-## Trước khi sửa cấu hình cục bộ
+1. Chuẩn bị [khóa API](/vi/guide/api-key) của bạn.
+2. Sao chép địa chỉ và mô hình từ đúng hướng dẫn. Không trộn cấu hình của các phần mềm.
+3. Sao lưu cấu hình cũ trước. Không xóa cả thư mục cấu hình.
 
-1. Tạo key có hạn mức phù hợp.
-2. Xác nhận nhóm của key và mô hình mục tiêu.
-3. Sao chép model ID chính xác từ Chợ mô hình hoặc `/v1/models`.
-4. Sao lưu tệp cấu hình hiện có.
-5. Chỉ test một yêu cầu nhỏ, không sửa file, rồi kiểm tra nhật ký.
-
-<Warning>
-Trước khi chạy script cài đặt, hãy xác nhận script đến từ nguồn chính thức. Đọc mục đích của script và không dán key vào mã không đáng tin.
-</Warning>
-
-## Vì sao URL của từng công cụ khác nhau
-
-Một số công cụ cần địa chỉ API có `/v1`, một số tự nối đường dẫn, và một số dùng giao thức Messages hoặc Responses gốc.
-
-Hãy dùng địa chỉ trong hướng dẫn của từng công cụ; không sao chép cấu hình giữa Claude Code, Codex CLI và SDK OpenAI chung. Xem [tổng quan tích hợp](/vi/guide/integration-overview) để biết nguyên tắc chi tiết.
-
-## Tra nhanh giao thức và URL
-
-| Loại client | Base URL thường dùng | Giao thức |
-| --- | --- | --- |
-| SDK / ứng dụng tương thích OpenAI | `https://nexusapi.link/v1` | Chat Completions |
-| Claude Code | `https://nexusapi.link` | Messages |
-| Codex CLI | `https://nexusapi.link/v1` | Provider Responses |
-
-Khả năng thực tế vẫn phụ thuộc mô hình và nhóm; đọc [ma trận khả năng](/vi/developer/capability-matrix) trước.
-
-## Công cụ của bạn không có trong danh sách
-
-Nếu client hỗ trợ Base URL tùy chỉnh tương thích OpenAI, trước hết hãy xem [bắt đầu nhanh](/vi/guide/quick-start) và tài liệu chính thức của client đó.
-
-Trước khi cấu hình, xác nhận client có tự thêm `/v1` không, gửi giao thức nào và có cho phép nhập model ID tùy chỉnh không. Hướng dẫn cho client chưa được kiểm chứng sẽ không được đưa vào chỉ để làm dài danh sách.
+Không thấy phần mềm bạn đang dùng trong danh sách? Gửi tên và ảnh cài đặt cho hỗ trợ, nhớ che khóa.

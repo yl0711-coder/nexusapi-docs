@@ -19,3 +19,30 @@
   line-height: 1;
   white-space: nowrap;
 }
+
+/* The four-row customer price example must fit a phone without side-scrolling.
+ * Mintlify's default 150px-per-cell minimum is useful for large API tables,
+ * so override it only for this explicitly marked, three-column example. */
+.nexusapi-discount-example table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.nexusapi-discount-example th,
+.nexusapi-discount-example td {
+  min-width: 0 !important;
+  overflow-wrap: anywhere;
+  padding-inline: 0.5rem;
+  white-space: normal;
+}
+
+/* Keep navigation labels intact when the next-page card uses the remaining
+ * flex width. CJK text otherwise breaks between characters as Prev shrinks. */
+#pagination [data-component-part="pagination-prev"] {
+  flex-shrink: 0;
+}
+
+#pagination [data-component-part="pagination-label"] {
+  flex-shrink: 0;
+  white-space: nowrap;
+}

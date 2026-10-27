@@ -8,7 +8,7 @@ description: "在呼叫前確認 Base URL、API Key、模型 ID 與介面協定�
 <Info>
 **先確認能力**
 
-可用模型會隨 API Key 群組、模型限制與即時狀態變化。請勿把模型廣場的全站列表當成某一把 Key 一定可呼叫的清單。
+可用模型會隨 API Key 分組、模型限制與即時狀態變化。請勿把模型廣場的全站列表當成某一把 Key 一定可呼叫的清單。
 </Info>
 
 ## 三項必要資訊
@@ -16,7 +16,7 @@ description: "在呼叫前確認 Base URL、API Key、模型 ID 與介面協定�
 | 資訊 | 取得位置 | 用途 |
 | --- | --- | --- |
 | Base URL | 本頁 | 讓 SDK 或用戶端把請求送到 NexusAPI |
-| API Key | 控制台 → 令牌管理 | 識別呼叫身分與可用群組 |
+| API Key | 控制台 → API 金鑰 | 識別呼叫身分與可用分組 |
 | 模型 ID | 模型廣場或 `/v1/models` | 指定本次實際呼叫的模型 |
 
 一般 OpenAI 風格用戶端使用：
@@ -31,7 +31,7 @@ https://nexusapi.link/v1
 Authorization: Bearer YOUR_API_KEY
 ```
 
-不要把完整 Key 寫進前端、截圖、聊天記錄或 Git 儲存庫。不同用戶端是否需要填 `/v1` 不完全相同：Claude Code 使用不含 `/v1` 的站點地址，Codex CLI 則依 Provider 設定。請依對應的[用戶端工具教學](/zh-TW/tools/index)操作。
+不要把完整 Key 寫進前端、截圖、聊天記錄或 Git 儲存庫。不同用戶端是否需要填 `/v1` 不完全相同：Claude Code 使用不含 `/v1` 的站點位址，Codex CLI 則依 Provider 設定。請依對應的[用戶端工具教學](/zh-TW/tools/index)操作。
 
 ## 以目前 Key 列出模型
 
@@ -40,7 +40,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-從回應的 `data[].id` 複製模型 ID。模型列表只代表**這把 Key 目前可見**的模型，不代表全站模型；`data[].supported_endpoint_types` 列出該模型目前可用的請求協定。只呼叫包含目標類型的路徑：`openai` 對應 Chat Completions、`anthropic` 對應 Messages、`openai-response` 對應 Responses、`image-generation` 對應圖片生成。若列出多個類型，可依所用用戶端選擇相符的一種。
+從回應的 `data[].id` 複製模型 ID。模型列表只代表**這把 Key 目前可見**的模型，不代表全站模型；`data[].supported_endpoint_types` 列出該模型目前可用的請求協定。只呼叫包含目標類型的路徑：`openai` 對應 Chat Completions、`anthropic` 對應 Messages、`openai-response` 對應 Responses。若列出多個類型，可依所用用戶端選擇相符的一種。
 
 ## 選擇正確協定
 
@@ -49,19 +49,17 @@ curl 'https://nexusapi.link/v1/models' \
 | OpenAI 相容文字、聊天、串流輸出 | `POST /v1/chat/completions` | `supported_endpoint_types` 包含 `openai` 的模型；適用多數自建程式、OpenAI SDK 與通用用戶端 |
 | 原生 Anthropic / Claude Code | `POST /v1/messages` | `supported_endpoint_types` 包含 `anthropic` 的模型 |
 | Codex Provider | `POST /v1/responses` | 僅依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定，且 `supported_endpoint_types` 包含 `openai-response` 的模型 |
-| 圖片生成 | `POST /v1/images/generations` | `supported_endpoint_types` 包含 `image-generation` 的圖片模型 |
 
 模型名稱相同，不代表可接受任何請求格式。先在[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)確認協定，再閱讀：
 
 - [Chat Completions](/zh-TW/developer/openai-compatible)
 - [Anthropic Messages](/zh-TW/developer/anthropic-messages)
 - [Responses / Codex](/zh-TW/developer/responses)
-- [圖片模型使用說明](/zh-TW/guide/image-generation)
 
 ## 最小驗證與重試原則
 
-1. 先列模型，再送出一條短文字或最小圖片請求。
-2. 確認模型 ID、Key 群組與路徑正確後，才加入選填參數、串流或批次任務。
+1. 先列模型，再送出一條短文字請求。
+2. 確認模型 ID、Key 分組與路徑正確後，才加入選填參數、串流或批次任務。
 3. 出錯時保留錯誤原文、發生時間與 Request ID；未確認結果前，不要高頻重送同一請求。
 
 `401` 通常先檢查 Key；`404` 先檢查 `/v1` 是否重複或缺少；`400` 先檢查模型、協定與欄位。更多方式見[問題自查](/zh-TW/faq/self-check)。

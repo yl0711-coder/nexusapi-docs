@@ -1,60 +1,58 @@
 ---
-title: "Claude Code trong VS Code hoặc Cursor"
-description: "Dùng extension Claude Code chính thức với cấu hình NexusAPI cấp người dùng hiện có."
+title: "Dùng Claude Code trong VS Code / Cursor"
+description: "Cài tiện ích, điền khóa trong cài đặt người dùng và thử tin nhắn."
 ---
 
-Extension Claude Code chính thức có chat, xem trước diff, tham chiếu tệp và lời nhắc quyền. VS Code và Cursor dùng chung cấu hình cấp người dùng của Claude Code.
+**Trang này cấu hình tiện ích Claude Code, không phải AI chat tích hợp của Cursor.** [Tạo khóa](/vi/guide/api-key), chọn cùng nhóm trong [Quảng trường mô hình](https://nexusapi.link/pricing) và sao chép mô hình dùng được với Claude Code.
 
-## 1. Cài extension chính thức
+## 1. Cài tiện ích
 
-Trước tiên, hãy bảo đảm bạn dùng VS Code 1.98 trở lên và hoàn thành [thiết lập Claude Code](/vi/tools/claude-code). Trong Extensions, tìm **Claude Code** và xác nhận publisher là **Anthropic**. Có thể xem thêm [hướng dẫn VS Code chính thức](https://code.claude.com/docs/en/vs-code).
+Nhấn `Ctrl + Shift + X` (Mac: `Command + Shift + X`), tìm `Claude Code`, xác nhận nhà phát hành **Anthropic**, rồi cài.
 
-Mở Extensions bằng <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> trên macOS hoặc <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> trên Windows và Linux.
+![Marketplace chính thức: Claude Code for VS Code, nhà phát hành Anthropic](/images/nexusapi/claude-extension-marketplace.png)
 
-<Warning>
-Có thể có extension bên thứ ba giống tên. Chỉ dùng extension do Anthropic phát hành và không dán key vào bảng cài đặt của bên thứ ba.
-</Warning>
+Dùng trang chính thức trong ảnh để kiểm tra tên và nhà phát hành, rồi cài đúng tiện ích đó trong trình soạn thảo.
 
-## 2. Dùng chung cấu hình NexusAPI
+## 2. Mở cài đặt người dùng
 
-Extension đọc cùng `~/.claude/settings.json` như CLI (hoặc đường dẫn tương ứng trong hồ sơ Windows). Không lưu lặp key trong cài đặt workspace của VS Code hay Cursor.
+Nhấn `Ctrl + Shift + P` (Mac: `Command + Shift + P`), chọn **Preferences: Open User Settings (JSON)**. Phải là cài đặt người dùng, không phải workspace, mặc định hay `.vscode/settings.json` của dự án.
 
-Nếu editor vẫn yêu cầu đăng nhập và phiên bản hiện tại có cài đặt **Disable Login Prompt**, mở Settings, tìm `Claude Code login`, bật cài đặt đó rồi khởi động lại hoàn toàn editor.
+## 3. Điền cấu hình NexusAPI
 
-Không lưu lặp key NexusAPI trong `.vscode/settings.json` của dự án, không đồng bộ, chụp ảnh hay commit cấu hình có key. Chỉ lưu key trong `~/.claude/settings.json` cấp người dùng.
+Thay `YOUR_API_KEY` bằng khóa đầy đủ, `YOUR_MODEL_ID` bằng tên mô hình đã sao chép. Giữ nguyên phần còn lại.
 
-Nếu bản Cursor hiện tại không cài được extension, hãy chạy `claude` trong terminal tích hợp của Cursor với cùng cấu hình cấp người dùng.
-
-## 3. Mở Claude Code
-
-Mở Claude Code từ biểu tượng, Activity Bar, Command Palette hoặc status bar. Nếu không thấy biểu tượng ở góc trên phải, hãy mở một tệp mã trước.
-
-## 4. Kiểm tra an toàn
-
-![Extension Claude Code chính thức hiển thị trong VS Code](/images/nexusapi/claude-code-vscode-official.jpg)
-
-> Ví dụ giao diện lấy từ [tài liệu VS Code chính thức của Claude Code](https://code.claude.com/docs/en/vs-code). Vị trí nút có thể thay đổi theo phiên bản extension.
-
-Gửi thử một yêu cầu chỉ đọc:
-
-```text
-Giải thích tệp đang mở dùng để làm gì, không sửa mã.
+```json
+{
+  "claudeCode.disableLoginPrompt": true,
+  "claudeCode.environmentVariables": [
+    {
+      "name": "ANTHROPIC_BASE_URL",
+      "value": "https://nexusapi.link"
+    },
+    {
+      "name": "ANTHROPIC_AUTH_TOKEN",
+      "value": "YOUR_API_KEY"
+    },
+    {
+      "name": "ANTHROPIC_MODEL",
+      "value": "YOUR_MODEL_ID"
+    }
+  ]
+}
 ```
 
-Sau đó chạy `/status`, xác nhận **Anthropic base URL** là `https://nexusapi.link`, rồi kiểm tra bản ghi tương ứng trong nhật ký NexusAPI.
+Sao lưu cài đặt cũ rồi gộp các mục `claudeCode`, không xóa các mục khác. Nếu file chỉ có `{}`, có thể thay toàn bộ.
 
-## Khắc phục sự cố
+Lưu lại, không cần đăng nhập tài khoản chính thức cho các lượt gọi này. Cấu hình có khóa cá nhân: không đưa vào dự án, chia sẻ hay đồng bộ cho người khác.
 
-### Extension không xuất hiện sau khi cài
+![Ví dụ cài đặt người dùng: chỉ cần hai mục `claudeCode`. Không cần sao chép các cài đặt giao diện và cửa sổ demo phía dưới. Thay giá trị giữ chỗ; ảnh này không chứng minh đã kết nối thành công.](/images/nexusapi/vscode-user-settings-demo.png)
 
-Chạy **Developer: Reload Window** trong Command Palette hoặc khởi động lại hoàn toàn editor.
+Ví dụ cài đặt người dùng: chỉ cần hai mục `claudeCode`. Không cần sao chép các cài đặt giao diện và cửa sổ demo phía dưới. Thay giá trị giữ chỗ; ảnh này không chứng minh đã kết nối thành công.
 
-### CLI dùng được nhưng extension không dùng được
+## 4. Khởi động lại và thử
 
-Xác nhận `~/.claude/settings.json` nằm trong thư mục người dùng, không phải thư mục dự án, và Base URL/key chính xác. Nếu phiên bản hiện tại có **Disable Login Prompt**, hãy bật nó rồi khởi động lại hoàn toàn editor.
+Thoát hẳn và mở lại trình soạn thảo. Trong Claude Code, tạo hội thoại và gửi “Chỉ trả lời: kết nối thành công. Không sửa file.” Kiểm tra đủ câu trả lời và [nhật ký](https://nexusapi.link/usage-logs/common). Lượt thử này tiêu thụ một lượng nhỏ số dư.
 
-### Cursor không tìm thấy extension
+Vẫn thấy đăng nhập chính thức? Kiểm tra cài đặt người dùng và đã thay giá trị mẫu, cập nhật rồi mở lại. Với VS Code, cài từ [chợ tiện ích chính thức](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code). Nếu Cursor không tìm thấy tiện ích, dùng terminal theo [hướng dẫn CLI](/vi/tools/claude-code).
 
-Hãy dùng điểm cài cho Cursor trong [hướng dẫn VS Code chính thức](https://code.claude.com/docs/en/vs-code). Nếu phiên bản hiện tại không hỗ trợ extension, hãy dùng `claude` trong terminal tích hợp của Cursor.
-
-Nếu sự cố tiếp diễn, lưu phiên bản editor, extension và Claude Code, nguyên văn lỗi và Request ID, rồi làm [tự kiểm tra](/vi/faq/self-check). Không gửi key đầy đủ, secret của workspace hoặc mã nguồn riêng tư.
+Liên kết chính thức: [dự án Claude Code](https://github.com/anthropics/claude-code) · [tiện ích VS Code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code).

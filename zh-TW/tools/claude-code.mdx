@@ -1,166 +1,84 @@
 ---
 title: "Claude Code 安裝與設定"
-description: "安裝 Claude Code，並以 Anthropic 原生設定連接 NexusAPI。"
+description: "按系統安裝，填 Key 和模型，再傳訊息驗證。"
 ---
 
-Claude Code 使用 Anthropic 的原生 Messages 設定，因此 NexusAPI Base URL 為 `https://nexusapi.link`；**不要加上 `/v1`**。
+本流程使用 NexusAPI Key，不必登入 Claude 官方帳號。
 
-## 系統需求
+## 1. 準備並安裝
 
-- macOS 13+、Ubuntu 20.04+、Debian 10+、Alpine Linux 3.19+ 或 Windows 10 1809+。
-- 至少 4 GB 記憶體，以及 x64 或 ARM64 處理器。
-- 可正常連到 NexusAPI 的網路。
-- Windows 使用 Git Bash 時，可選擇安裝 [Git for Windows](https://git-scm.com/install/windows)。
+先[建立 API Key](/zh-TW/guide/api-key)。到[模型廣場](https://nexusapi.link/pricing)選同一分組，複製支援 Claude Code / Messages 的模型名稱。Windows 在開始選單找 `PowerShell`；Mac 按 `Command + 空白鍵` 找「終端機」。
 
-## 1. 安裝 Claude Code
+只執行自己的系統指令。已安裝 Claude Code 可跳過。
 
-請優先使用官方安裝方式。
-
-### macOS、Linux 或 WSL
-
-```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
-### Windows PowerShell
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
-
-Windows 亦可使用 `winget install Anthropic.ClaudeCode`，macOS 可使用 `brew install --cask claude-code`。安裝後先檢查：
-
-### Windows WinGet
-
-```powershell
-winget install Anthropic.ClaudeCode
-```
-
-### macOS Homebrew
-
+</Tab>
+<Tab title="macOS / Linux / WSL">
 ```bash
-brew install --cask claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+</Tab>
+</Tabs>
+
+安裝後重開終端機，執行下方指令，看到版本號再繼續。找不到指令先重開終端機；仍失敗，把安裝錯誤傳給客服。
 
 ```bash
 claude --version
-claude doctor
 ```
 
-## 2. 建立 NexusAPI Key
+## 2. 開啟設定檔
 
-在控制台的 **令牌管理 → 新增令牌** 建立 Key，選取包含 Claude Code 所需模型的群組並設定合理上限。請以模型廣場或[能力矩陣](/zh-TW/developer/capability-matrix)確認模型與協定。
+按系統執行指令，開啟使用者設定檔：
 
-### 選擇安全的 Key 設定
-
-使用可辨識專案用途的名稱與合理額度。模型限制、IP 白名單只在了解影響時啟用；短期測試 Key 建議設定到期日。
-
-## 3. 設定使用者層級設定檔
-
-### 找到設定目錄
-
-| 系統 | 路徑 |
-| --- | --- |
-| macOS／Linux／WSL | `~/.claude/settings.json` |
-| Windows | `%USERPROFILE%\\.claude\\settings.json` |
-
-macOS、Linux、WSL 或 Git Bash 建立檔案：
-
-```bash
-mkdir -p ~/.claude
-touch ~/.claude/settings.json
-```
-
-Windows PowerShell 可先建立資料夾，再以記事本開啟設定檔：
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude" | Out-Null
 notepad "$env:USERPROFILE\.claude\settings.json"
 ```
+</Tab>
+<Tab title="macOS / Linux / WSL">
+```bash
+mkdir -p ~/.claude
+nano ~/.claude/settings.json
+```
+</Tab>
+</Tabs>
 
-### 設定環境變數
+macOS / Linux 用 nano：貼上後按 `Ctrl + O`、Enter 儲存，再按 `Ctrl + X` 離開。Windows 記事本按 `Ctrl + S`，檔名必須是 `settings.json`，不能成為 `.json.txt`。
 
-將下列 `env` 合併進現有設定，不要覆蓋既有 MCP 或權限設定：
+## 3. 填入 Key 和模型
+
+空檔案可直接貼下方內容。將 `YOUR_API_KEY` 換成完整 Key，`YOUR_MODEL_ID` 換成模型名稱，保留英文引號與逗號。
 
 ```json
 {
+  "model": "YOUR_MODEL_ID",
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "YOUR_NEXUSAPI_KEY",
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
     "ANTHROPIC_BASE_URL": "https://nexusapi.link"
   }
 }
 ```
 
-請放在使用者目錄，不要寫入專案儲存庫、截圖或聊天內容。
+已有內容請先備份，只合併 `model` 和 `env`，不要清空。可改用 [CC Switch](/zh-TW/tools/cc-switch) 管理設定。不要將 Key 放入專案或截圖。
 
-<Tip>
-**只在相容性錯誤時停用實驗欄位**
+## 4. 啟動並確認成功
 
-如果錯誤明確提到不支援 `context_management` 或實驗欄位，才在 `env` 中加入 `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` 後測試。此設定會關閉部分預發布欄位，僅在這類相容性錯誤出現時使用即可。
-</Tip>
-
-## 4. 啟動並驗證
-
-重新開啟終端，在專案目錄執行：
-
-```bash
-cd your-project-folder
-```
+儲存後重開終端機，進入自己的專案資料夾，執行：
 
 ```bash
 claude
 ```
 
-進入後使用 `/status` 確認 **Anthropic base URL** 為 `https://nexusapi.link`，且認證來源為 `ANTHROPIC_AUTH_TOKEN`，再送出一條短文字。
+輸入 `/status`，確認 `Anthropic base URL` 是 `https://nexusapi.link`、認證來源是 `ANTHROPIC_AUTH_TOKEN`、模型與剛填寫的一致。
 
-## 常見問題
+傳送「請只回覆：連線成功，不要修改檔案」。收到完整回覆並在[使用日誌](https://nexusapi.link/usage-logs/common)看到紀錄即完成。測試消耗少量額度。
 
-### `Invalid API Key · Please run /login`
+出現 `/login` 或 Key 錯誤，確認檔案在使用者目錄、預留文字已替換，再重啟。其他錯誤見[問題自查](/zh-TW/faq/self-check)。不要刪除整個 `.claude` 目錄。
 
-確認兩個環境變數已儲存、Key 已啟用，並重新開啟終端。不要為此直接修改 Claude 的內部登入狀態檔。
-
-### 無法連線至 Anthropic 服務
-
-先執行 `claude doctor`，檢查 `settings.json` 的 JSON 格式與兩個環境變數，然後重新開啟終端。問題持續時，保留錯誤原文、`claude --version` 與 `claude doctor` 輸出。
-
-```text
-Unable to connect to Anthropic services
-Failed to connect to api.anthropic.com: ERR BAD REQUEST
-```
-
-不要用腳本強制覆寫 `.claude.json` 的內部狀態欄位。這些欄位可能隨版本變動，覆寫也可能遺失既有設定。
-
-### PowerShell 被執行原則阻擋
-
-請先改用 WinGet 或 Windows CMD 的官方安裝方式。若已確認只是本機目前使用者的執行原則造成問題，可僅調整目前使用者：
-
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
-
-確認是本機原則造成問題後，僅調整目前使用者範圍即可。
-
-### `fetch failed`
-
-1. 先送一條普通短訊息。若成功，通常是 WebFetch 等獨立網路功能，而非 NexusAPI 模型呼叫。
-2. 若所有模型呼叫都失敗，執行 `claude doctor` 並用 `/status` 確認 Base URL。
-3. 檢查 DNS、防火牆、公司網路或既有可信代理是否阻擋 `nexusapi.link`。
-4. 重新開啟終端後僅測試一次。持續失敗時，保存版本、doctor 輸出、完整錯誤與 Request ID，依[問題自查](/zh-TW/faq/self-check)提交。
-
-### 顯示 `offline`
-
-部分輔助功能會單獨檢查官方或第三方服務。先以 `/status` 和短文字測試確認實際模型呼叫；`offline` 本身不一定表示閘道故障。
-
-### WebFetch 失敗但一般對話正常
-
-WebFetch 可能有獨立的網域安全檢查和外部網路存取規則。若短文字對話正常，NexusAPI Base URL 無須因此修改；請依 Claude Code 的原始錯誤及網路說明排查 WebFetch。
-
-### API 請求失敗
-
-結束目前工作階段，重新執行 `claude` 後只測試一條短請求。若持續失敗，保留 Request ID 並依[問題自查](/zh-TW/faq/self-check)處理。
-
-## 官方文件
-
-- [Claude Code 安裝](https://code.claude.com/docs/en/installation)
-- [環境變數](https://code.claude.com/docs/en/env-vars)
-- [Gateway 設定](https://code.claude.com/docs/en/llm-gateway)
+官方專案：[Claude Code](https://github.com/anthropics/claude-code)。

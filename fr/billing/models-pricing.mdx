@@ -1,42 +1,34 @@
 ---
-title: "Modèles, groupes et tarification"
-description: "Comprenez le catalogue de modèles NexusAPI, les groupes de jetons et les prix en vigueur."
+title: "Choisir un modèle et voir son prix"
+description: "Sélectionnez votre groupe, copiez le modèle et consultez son prix."
 ---
 
-NexusAPI facture l'usage réel, sans abonnement mensuel fixe. Les modèles, prix, groupes disponibles et protocoles peuvent évoluer : le **catalogue de modèles** de la console et le résultat de votre clé sont toujours plus fiables qu'une ancienne liste de prix.
+## 1. Sélectionner votre groupe
 
-## Les quatre informations à vérifier dans le catalogue
+1. Dans [Clés API](https://nexusapi.link/keys), trouvez votre clé et notez son **Groupe**.
+2. Ouvrez la [Place des modèles](https://nexusapi.link/pricing).
+3. Sélectionnez ce même groupe à gauche.
 
-1. L'**ID exact** du modèle.
-2. Les **groupes de jetons** autorisés à l'utiliser.
-3. Son **prix** et son unité de facturation.
-4. Le **protocole / endpoint** approprié : `openai`, `anthropic` ou génération d'images.
+**Ne vous fiez pas seulement à Tous les groupes. Sélectionnez votre groupe pour voir ses prix.**
 
-![Catalogue NexusAPI filtrable par fournisseur et groupe de jetons](/images/nexusapi/model-marketplace-fr.png)
+![Place des modèles](/images/nexusapi/model-marketplace-fr.png)
 
-## Pourquoi un modèle peut apparaître dans plusieurs groupes
+## 2. Copier le nom du modèle
 
-Le groupe détermine les canaux, modèles et règles de prix accessibles à la clé. Un même modèle peut être proposé dans plusieurs groupes. Ne déduisez pas son accès du seul nom du groupe : filtrez le catalogue par groupe et vérifiez la fiche du modèle.
+Recherchez votre modèle, cliquez pour copier son nom, puis collez-le dans le champ **Modèle** du logiciel. Ne le saisissez pas de mémoire.
 
-Bonnes pratiques : utilisez des clés distinctes pour la production et les tests, nommez-les clairement, et fixez des limites adaptées. Avant un déploiement, utilisez `/v1/models` pour voir les modèles réellement accessibles à la clé.
+Modèle introuvable ? Envoyez au support le **logiciel, le modèle souhaité et le groupe actuel** pour confirmer le groupe à utiliser.
 
-![Choix d’un groupe de jetons lors de la création d’un jeton NexusAPI](/images/nexusapi/console-create-token-fr.png)
+![Sélectionnez votre groupe, puis cliquez sur le bouton de copie en haut à droite du modèle. Le groupe et les tarifs illustrés sont des exemples ; vérifiez la page actuelle.](/images/nexusapi/model-selection-fr.png)
 
-## Composition d'un coût
+Sélectionnez votre groupe, puis cliquez sur le bouton de copie en haut à droite du modèle. Le groupe et les tarifs illustrés sont des exemples ; vérifiez la page actuelle.
 
-Selon le modèle, le prix peut distinguer tokens d'entrée, tokens de sortie, lecture de cache ou d'autres unités clairement indiquées. Le montant final est celui du journal d'utilisation, appliqué selon les règles actuelles du catalogue.
+## 3. Lire le prix
 
-| À ne pas utiliser seul | À privilégier |
-| --- | --- |
-| Ancienne capture ou liste partagée | Fiche actuelle du catalogue |
-| Liste complète visible sur le site | Réponse `/v1/models` de la clé concernée |
-| État « réussi » du client | Journal avec Request ID, tokens et coût |
+- **Standard :** crédit débité lors d'un appel.
+- **Recharger :** estimation du coût selon les réglages du site ; vos remises et forfaits peuvent différer.
+- **`/1M` :** pour un million de tokens. **`/1K` :** pour mille tokens. Comparez avec la même unité.
 
-La disponibilité dépend aussi du protocole. Les SDK généraux utilisent souvent Chat Completions, Claude Code utilise Messages et Codex CLI utilise Responses. Consultez d'abord la [matrice des capacités](/fr/developer/capability-matrix).
+Ce que vous envoyez est l'entrée ; la réponse est la sortie. Pour le cache ou d'autres frais, ouvrez **Détails**.
 
-## Consulter l’usage
-
-- Chaque requête et son coût peuvent être consultés dans le journal d’utilisation de la console.
-- Les champs de tokens, de cache et des enregistrements d’erreur sont expliqués dans [usage et facturation](/fr/billing/usage-and-billing).
-
-Pour les champs de chaque appel, voir [usage et facturation](/fr/billing/usage-and-billing).
+**Le prix inclut déjà le multiplicateur du groupe : ne le multipliez pas à nouveau.** Voir les [remises](/fr/billing/multipliers-and-discounts) ou les [débits réels](/fr/billing/usage-and-billing).

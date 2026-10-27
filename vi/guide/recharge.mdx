@@ -1,42 +1,46 @@
 ---
-title: "Mua số dư"
-description: "Mua credit NexusAPI, kiểm tra ghi có và xử lý vấn đề thanh toán một cách an toàn."
+title: "Nạp tiền và kiểm tra số dư"
+description: "Chọn số tiền, thanh toán và xác nhận số dư đã tăng."
 ---
 
-NexusAPI trừ credit tài khoản theo mức sử dụng thực tế. Trước khi mua, hãy xác định ngân sách và mô hình cần dùng.
+## 1. Nạp tiền
 
-![Trang Quản lý ví và mua credit của NexusAPI, thông tin tài khoản đã được che](/images/nexusapi/console-wallet-topup-vi.png)
+1. Mở [Ví](https://nexusapi.link/wallet).
+2. Trong **Thêm Tiền**, chọn số tiền hoặc nhập số tiền khác.
+3. Kiểm tra số tiền cần trả và số dư nhận được, rồi chọn cách thanh toán.
+4. Làm theo hướng dẫn trên trang thanh toán.
+5. Quay lại Ví, tải lại trang và kiểm tra số dư.
 
-## Quy trình mua online
+![Trang nạp tiền](/images/nexusapi/console-wallet-topup-vi.png)
 
-1. Đăng nhập [console NexusAPI](https://nexusapi.link).
-2. Mở **Quản lý ví** hoặc trang credit.
-3. Chọn số tiền và phương thức thanh toán có sẵn.
-4. Hoàn thành thanh toán theo trang hướng dẫn.
-5. Quay lại console để kiểm tra số dư và trạng thái đơn hàng.
+Số dư `---
+title: "Nạp tiền và kiểm tra số dư"
+description: "Chọn số tiền, thanh toán và xác nhận số dư đã tăng."
+---
 
-<Tip>
-Lưu mã đơn, thời gian và múi giờ, số tiền và phương thức thanh toán. Các thông tin này giúp đối soát chính xác hơn ảnh chụp đơn lẻ.
-</Tip>
+## 1. Nạp tiền
 
-## Có số dư nhưng vẫn không gọi được
+1. Mở [Ví](https://nexusapi.link/wallet).
+2. Trong **Thêm Tiền**, chọn số tiền hoặc nhập số tiền khác.
+3. Kiểm tra số tiền cần trả và số dư nhận được, rồi chọn cách thanh toán.
+4. Làm theo hướng dẫn trên trang thanh toán.
+5. Quay lại Ví, tải lại trang và kiểm tra số dư.
 
-Credit chỉ là một điều kiện. Hãy kiểm tra thêm trạng thái, hạn mức và hạn sử dụng của key; nhóm token; model ID; và giao thức yêu cầu.
+![Trang nạp tiền](/images/nexusapi/console-wallet-topup-vi.png)
 
-Đừng nhầm lẫn thiếu số dư, hạn mức key, hạn chế nhóm và lỗi upstream tạm thời. Xem [lỗi API thường gặp](/vi/faq/common-errors) để chẩn đoán theo thứ tự.
+ là số dư quy đổi để sử dụng dịch vụ, không phải số nhân dân tệ đã trả. Xem [ví dụ hệ số và giá](/vi/billing/multipliers-and-discounts).
 
-## Kiểm tra thanh toán và ghi có
+## 2. Mã quy đổi và gói đăng ký
 
-Chờ thời gian xử lý ghi trên trang thanh toán rồi làm mới console. Nếu số dư chưa đổi, hãy liên hệ hỗ trợ và cung cấp:
+- **Mã quy đổi:** dán vào ô mã trong Ví và bấm **Đổi**.
+- **Gói đăng ký:** nếu có hiển thị, kiểm tra thời hạn, hạn mức và nhóm sử dụng trước khi mua. Gói khác với số dư nạp tiền. Chưa rõ có phù hợp không thì hỏi hỗ trợ trước.
 
-- ID người dùng hoặc ID tài khoản (không cần mật khẩu);
-- thời gian thanh toán và múi giờ;
-- kênh thanh toán và số tiền;
-- mã đơn hàng hoặc mã giao dịch thanh toán;
-- khi cần, ảnh chụp đã che thông tin cá nhân.
+## 3. Đã trả tiền nhưng chưa nhận số dư
 
-<Warning>
-Hỗ trợ sẽ không bao giờ yêu cầu mật khẩu, mã xác nhận thanh toán, toàn bộ số thẻ ngân hàng hoặc toàn bộ API Key.
-</Warning>
+Tải lại Ví rồi xem **Lịch sử đơn hàng**. Nếu vẫn thiếu, gửi hỗ trợ:
 
-Theo dõi chi phí tại [mô hình, nhóm và giá](/vi/billing/models-pricing) và [sử dụng và thanh toán](/vi/billing/usage-and-billing).
+- Tài khoản đăng nhập.
+- Thời gian, số tiền và cách thanh toán.
+- Mã đơn hàng, ảnh thanh toán.
+
+Che thông tin nhạy cảm. **Không gửi mật khẩu, mã xác minh hoặc khóa API đầy đủ.**

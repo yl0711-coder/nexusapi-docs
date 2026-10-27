@@ -1,50 +1,36 @@
 ---
-title: "Sử dụng và thanh toán"
-description: "Đọc nhật ký NexusAPI, token, Request ID và chi phí của từng yêu cầu."
+title: "Xem sử dụng và phí đã trừ"
+description: "Tìm bản ghi, kiểm tra chi phí và gửi hỗ trợ khi cần."
 ---
 
-Tổng quan và nhật ký trong console dùng để đối soát yêu cầu, chi phí và sự cố. Bản ghi mới có thể xuất hiện sau một khoảng trễ ngắn; không gửi lại tác vụ chỉ để kiểm tra nhật ký.
+## 1. Tìm bản ghi lượt gọi
 
-## Các trường thường gặp
+1. Mở [Nhật ký sử dụng](https://nexusapi.link/usage-logs/common).
+2. Chọn ngày gọi và bấm **Tìm kiếm**.
+3. Nếu có nhiều bản ghi, lọc theo mô hình hoặc nhóm.
+4. Bấm chi phí hoặc phần chi tiết của bản ghi cần xem.
 
-| Trường | Ý nghĩa |
+![Nhật ký sử dụng](/images/nexusapi/console-usage-logs-vi.png)
+
+Bản ghi mới có thể xuất hiện chậm một chút. Chờ rồi tải lại, không gọi lặp chỉ để xem nhật ký.
+
+## 2. Xem các mục chính
+
+| Mục | Kiểm tra gì |
 | --- | --- |
-| Thời gian | Thời điểm yêu cầu hoặc ghi nhận; khi đối soát cần lưu múi giờ. |
-| Mô hình / nhóm / tên token | Tuyến thực tế đã sử dụng. |
-| Token đầu vào | Prompt, lịch sử và một phần dữ liệu công cụ. |
-| Token đầu ra | Nội dung do mô hình tạo. |
-| Đọc cache | Mức dùng cache ngữ cảnh; có thể có giá khác. |
-| Byte đầu tiên / tổng thời gian | Chỉ số độ trễ và timeout. |
-| Chi phí | Số tiền được ghi cho yêu cầu. |
-| Request ID | Mã duy nhất để tìm đúng yêu cầu. |
+| Thời gian, mô hình, nhóm | Có đúng lượt gọi của bạn không |
+| Tokens | Lượng sử dụng; chi tiết có thể tách đầu vào, đầu ra, bộ nhớ đệm |
+| Chi phí | Số dư đã bị trừ |
+| Thời gian xử lý | Lượt gọi mất bao lâu |
 
-## Đầu vào, đầu ra và cache
+**Phí `$0.10` không phải lúc nào cũng là 0,10 nhân dân tệ thực trả.** Xem [ví dụ chi phí](/vi/billing/multipliers-and-discounts).
 
-- **Token đầu vào** gồm prompt, ngữ cảnh hội thoại và một phần thông tin công cụ.
-- **Token đầu ra** là nội dung do mô hình tạo.
-- **Đọc cache** là token đọc từ cache ngữ cảnh; giá có thể khác token đầu vào thông thường.
+## 3. Có thắc mắc về phí
 
-Khả năng hỗ trợ cache và cách tính giá tùy theo mô hình. Hãy xem thông tin mới nhất trong [Chợ mô hình](https://nexusapi.link/pricing).
+Nếu lỗi, không nhận đủ câu trả lời hoặc nghi bị trừ lặp, gửi hỗ trợ:
 
-## Vì sao nhật ký có thể xuất hiện chậm
+- Thời gian, mô hình và nhóm.
+- Nguyên văn lỗi và có nhận đủ câu trả lời hay không.
+- Ảnh nhật ký; nếu chi tiết có Request ID thì sao chép kèm theo.
 
-Có thể có một khoảng trễ ngắn giữa lúc yêu cầu hoàn tất, hệ thống ghi nhận chi phí và console trả kết quả. Nếu một yêu cầu đã xong chưa hiện ngay, hãy làm mới sau; không gửi lại tác vụ chỉ để tạo thêm một bản ghi.
-
-## Yêu cầu lỗi có luôn miễn phí không?
-
-Không. Lỗi không tạo kết quả tính phí thường là 0, nhưng upstream có thể đã xử lý, stream có thể bị ngắt, hoặc client có thể gửi một yêu cầu mới. Luôn đối chiếu **cùng Request ID, thời điểm và bản ghi cuối cùng**; không chỉ dựa vào màn hình client có nhận được nội dung hay không.
-
-## Cách đối soát
-
-1. Giới hạn theo ngày hoặc tuần và lưu múi giờ.
-2. Ghép Request ID từ client, hỗ trợ và console.
-3. So sánh mô hình, nhóm, token vào/ra và chi phí.
-4. Giữ dữ liệu gốc và khoảng thời gian truy vấn trước khi tổng hợp.
-
-Nếu nghi ngờ bị trừ phí bất thường, cung cấp Request ID, thời gian/múi giờ, mô hình, kết quả cuối cùng từ client và lỗi gốc. Không cung cấp key đầy đủ hoặc toàn bộ hội thoại riêng tư.
-
-## Xem hoặc xuất mức sử dụng
-
-- Dùng phần tổng quan và nhật ký của console để kiểm tra hằng ngày.
-- Lọc chi tiết theo thời gian, mô hình và nhóm trước khi xuất hoặc tổng hợp.
-- Giữ Request ID trong dữ liệu xuất để có thể truy vết bản ghi bất thường sau này.
+**Không gửi khóa API đầy đủ.** Giữ bản ghi và tránh thử lại nhiều lần làm phát sinh thêm lượt gọi.

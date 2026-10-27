@@ -1,53 +1,46 @@
 ---
-title: "Create and protect an API key"
-description: "Create a NexusAPI key with the right group, limits, and safety settings."
+title: "Create and use an API key"
+description: "Create a key with these settings, then copy it into your app."
 ---
 
-An API key identifies your model requests to NexusAPI.
+An API key is the credential your app needs to connect to NexusAPI.
 
-## Create a key
+## 1. Create a key
 
-1. Sign in to the NexusAPI console.
-2. Open **Token Management** or **API Key Management**.
-3. Select **Add token**.
-4. Give the token a recognizable name.
-5. Choose a token group.
-6. Set an appropriate limit or restriction for its purpose.
-7. Submit, then copy the generated API key.
+1. Open [API Keys](https://nexusapi.link/keys).
+2. Click **Create API Key** at the top right.
+3. Fill in the settings below.
+4. Click **Save changes**.
 
-## Recommended settings
-
-| Setting | Recommendation |
+| Setting | What to enter |
 | --- | --- |
-| Name | Use a project or client name, such as `codex-work`. |
-| Token group | Choose the group that contains the target model. |
-| Limit | Set a sensible upper limit for the project. |
-| Model restriction | Enable it only when you need to restrict the key to specified models. |
-| IP allowlist | Use it only when your server has a stable outbound IP address. |
-| Expiry | Set an expiry date for temporary test keys. |
+| Name | Something you recognize, such as `My computer` |
+| Group | The group provided by support; ask if unsure |
+| Quantity | `1` |
+| Expiration time | Keep the default for a first setup |
+| Quota, Advanced Settings | Keep defaults unless you have a specific need |
 
-## Use the key
+![Create API Key](/images/nexusapi/console-create-token-en.png)
 
-Send the key in the `Authorization` header:
+Unlimited quota does not mean free usage. Requests still use your balance or plan allowance.
 
-```http
-Authorization: Bearer YOUR_API_KEY
-```
+## 2. Copy it into your app
 
-## Keep it safe
+1. Return to the key list and find your new key.
+2. Click its copy button. Do not manually copy the masked text containing asterisks.
+3. Paste the complete key into your app's **API Key** field.
+4. Follow [your app's guide](/en/tools) for the address and model name.
 
-- Never commit an API key to a public repository.
-- Do not share a full key in screenshots, support tickets, or chat logs.
-- Use a separate key for each project, person, and environment.
-- In production, load it from environment variables or a secret manager instead of source code.
-- Review usage logs regularly. Disable a key immediately if you see unexpected use.
-- If a key may be exposed, disable or delete it first, create a replacement, and update the affected applications.
+![API Keys list](/images/nexusapi/console-token-management-en.png)
 
-## API key and other credentials
+![Copy the full key using the outlined button. The key shown is a placeholder.](/images/nexusapi/key-copy-en.png)
 
-| Credential | Purpose |
-| --- | --- |
-| API key | Calls model APIs such as Chat Completions, Responses, Messages, Images, and `/v1/models`. |
-| Console session / cookie | Signs you in through a browser. It cannot be used as a model API credential. |
+Copy the full key using the outlined button. The key shown is a placeholder.
 
-Do not put a credential in a URL query string or send it in full to support.
+**Use the key created here, not the access token in Profile.**
+
+## 3. If a key is exposed
+
+Disable or delete the old key immediately, create a new one, and replace it in your app.
+
+Do not post complete keys in chats, screenshots or public code. Support does not need your complete key.

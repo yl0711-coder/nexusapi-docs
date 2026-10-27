@@ -1,14 +1,14 @@
 ---
 title: "API and model capability matrix"
-description: "Confirm the model, token group, and protocol before calling NexusAPI."
+description: "Confirm the model, key group, and protocol before calling NexusAPI."
 ---
 
-The model, token group, and protocol used with NexusAPI must all match. Use the Model Marketplace and the result returned by your current key as the live source of truth.
+The model, key group, and protocol used with NexusAPI must all match. Use the Model Square and the result returned by your current key as the live source of truth.
 
 <Info>
 **Confirm before you call**
 
-1. Confirm that the model is in your key's token group in the Model Marketplace.
+1. Confirm that the model is in your key's key group in the Model Square.
 2. Confirm that `supported_endpoint_types` returned by `/v1/models` includes the protocol you need.
 3. Use `/v1/models` to see what the key can actually access, then send a minimal request.
 </Info>
@@ -21,12 +21,9 @@ The model, token group, and protocol used with NexusAPI must all match. Use the 
 | Text, chat, and streaming | [POST /v1/chat/completions](/en/developer/openai-compatible) | OpenAI-compatible SDKs, scripts, and most text models | Use only a model whose `supported_endpoint_types` includes `openai`. |
 | Claude Code or a native Anthropic client | [POST /v1/messages](/en/developer/anthropic-messages) | `supported_endpoint_types` includes `anthropic` | Do not append `/v1` again in the Claude Code base URL. |
 | Codex CLI | [POST /v1/responses](/en/developer/responses) | The provider is configured as described in the [Codex guide](/en/tools/codex-cli) | Use only a model whose `supported_endpoint_types` includes `openai-response`. |
-| Image generation | [POST /v1/images/generations](/en/guide/image-generation) | `supported_endpoint_types` includes `image-generation` | Pass only options supported by the selected image model. |
 
 <Warning>
-**Use the documented public capability scope**
-
-Use the capabilities listed on this page, in the Model Marketplace, or in an official guide. Image edits and variations, embeddings, audio, rerank, and native Gemini are not currently documented as general public NexusAPI capabilities; contact support before using any of them in production.
+Image-generation models are not currently offered. Ask support before using any capability not listed here.
 </Warning>
 
 ## Check models with the current key
@@ -36,9 +33,9 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copy a model ID from `data[].id`. `data[].supported_endpoint_types` lists the request protocols available for that model: `openai` for Chat Completions, `anthropic` for Messages, `openai-response` for Responses, and `image-generation` for image generation. A model can list more than one type; choose from that field for your client rather than guessing from a model name.
+Copy a model ID from `data[].id`. `data[].supported_endpoint_types` lists the request protocols available for that model: `openai` for Chat Completions, `anthropic` for Messages, `openai-response` for Responses. A model can list more than one type; choose from that field for your client rather than guessing from a model name.
 
-`/v1/models` is a point-in-time view for one key. The Model Marketplace shows prices, groups, and descriptions. If they differ, follow the current key result and console state.
+`/v1/models` is a point-in-time view for one key. The Model Square shows prices, groups, and descriptions. If they differ, follow the current key result and console state.
 
 ## A simple protocol rule
 
@@ -47,9 +44,8 @@ Copy a model ID from `data[].id`. `data[].supported_endpoint_types` lists the re
 | Python, JavaScript, cURL, or an OpenAI-compatible SDK | `/v1/chat/completions` (first confirm that the field includes `openai`) |
 | Claude Code | The Messages configuration in the [Claude Code guide](/en/tools/claude-code) (first confirm that the field includes `anthropic`) |
 | Codex CLI | The Responses provider in the [Codex CLI guide](/en/tools/codex-cli) (first confirm that the field includes `openai-response`) |
-| An image model | The [image model guide](/en/guide/image-generation) (first confirm that the field includes `image-generation`) |
 
-If a model is visible but the call still fails, check its ID, your token group, and the request path first. Keep the Request ID and use the [self-check guide](/en/faq/self-check).
+If a model is visible but the call still fails, check its ID, your key group, and the request path first. Keep the Request ID and use the [self-check guide](/en/faq/self-check).
 
 ## Where to find details
 

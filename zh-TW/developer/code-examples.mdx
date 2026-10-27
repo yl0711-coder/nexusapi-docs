@@ -1,59 +1,145 @@
 ---
-title: "程式碼範例"
-description: "使用 Python、JavaScript 或 cURL 透過 Chat Completions 呼叫 NexusAPI。"
+title: "複製程式碼，完成第一次呼叫"
+description: "選 Python、JavaScript 或指令列，安裝後執行並查看回覆。"
 ---
 
-以下範例使用 OpenAI Chat Completions。先在[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)確認模型與協定，並從模型廣場複製目前 Key 可用的模型 ID。
+使用 Claude Code、Codex 或 CC Switch，直接看[軟體教學](/zh-TW/tools)，不必操作本頁。
 
-## 基本設定
+## 1. 準備 Key 和模型
 
-- Base URL：`https://nexusapi.link/v1`
-- API Key：在 [NexusAPI 控制台](https://nexusapi.link)的令牌管理建立，通常以 `sk-` 開頭
-- Model ID：從模型廣場或 `/v1/models` 複製準確值
+先[建立 API Key](/zh-TW/guide/api-key)，再到[模型廣場](https://nexusapi.link/pricing)選同一分組，複製支援 Chat Completions 的模型名稱。不確定時請客服確認。
 
-## Python
+開啟終端機，只替換 `YOUR_API_KEY` 和 `YOUR_MODEL_ID`，其他照抄。後續指令在同一終端機執行；關閉後需重新設定。
+
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+$env:NEXUSAPI_API_KEY = "YOUR_API_KEY"
+$env:NEXUSAPI_MODEL = "YOUR_MODEL_ID"
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+export NEXUSAPI_MODEL='YOUR_MODEL_ID'
+```
+</Tab>
+</Tabs>
+
+## 2. 選一種方式執行
+
+只選使用的一種方式，不必全部操作。檔案放在自己的測試資料夾，不要命名為 `openai.py` 或 `openai.mjs`。
+
+<Tabs>
+<Tab title="Python">
+先安裝 [Python 3](https://www.python.org/downloads/)。在測試資料夾開終端機，按系統執行下面指令安裝套件。
+
+<Tabs>
+<Tab title="Windows">
+```powershell
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install openai
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install openai
+```
+</Tab>
+</Tabs>
+
+建立 `demo.py`，完整複製以下程式碼並儲存：
 
 ```python
+import os
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="YOUR_API_KEY",
+    api_key=os.environ["NEXUSAPI_API_KEY"],
     base_url="https://nexusapi.link/v1",
 )
-
 response = client.chat.completions.create(
-    model="YOUR_MODEL_ID",
-    messages=[{"role": "user", "content": "請簡短自我介紹。"}],
+    model=os.environ["NEXUSAPI_MODEL"],
+    messages=[{"role": "user", "content": "Reply only: connection successful"}],
 )
-
 print(response.choices[0].message.content)
 ```
 
-## JavaScript
+在同一終端機執行：
+
+<Tabs>
+<Tab title="Windows">
+```powershell
+.\.venv\Scripts\python.exe demo.py
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+.venv/bin/python demo.py
+```
+</Tab>
+</Tabs>
+</Tab>
+<Tab title="JavaScript">
+先安裝 [Node.js LTS](https://nodejs.org/en/download)，重開終端機並重新設定上方兩個變數，再執行：
+
+```bash
+npm install openai
+```
+
+建立 `demo.mjs`（不是 `.txt`），複製並儲存：
 
 ```js
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: "YOUR_API_KEY",
+  apiKey: process.env.NEXUSAPI_API_KEY,
   baseURL: "https://nexusapi.link/v1",
 });
-
 const response = await client.chat.completions.create({
-  model: "YOUR_MODEL_ID",
-  messages: [{ role: "user", content: "請簡短自我介紹。" }],
+  model: process.env.NEXUSAPI_MODEL,
+  messages: [{role: "user", content: "Reply only: connection successful"}],
 });
-
 console.log(response.choices[0].message.content);
 ```
 
-## cURL
+執行：
 
 ```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"測試連線"}]}'
+node demo.mjs
 ```
+</Tab>
+<Tab title="HTTP / cURL">
+不用安裝 SDK；按系統複製下面指令：
 
-請不要把真實 Key 寫入程式碼或提交到儲存庫。本頁範例僅適用於該模型的 `supported_endpoint_types` 包含 `openai` 時；僅在包含 `openai-response` 時使用 [Responses 介面與 Codex](/zh-TW/developer/responses)。圖片生成使用不同端點，請看[圖片模型說明](/zh-TW/guide/image-generation)；可選參數是否可用以模型廣場為準。
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+$body = @{
+  model = $env:NEXUSAPI_MODEL
+  messages = @(@{role = "user"; content = "Reply only: connection successful"})
+} | ConvertTo-Json -Depth 5
+$result = Invoke-RestMethod -Method Post -Uri "https://nexusapi.link/v1/chat/completions" -Headers @{Authorization = "Bearer $env:NEXUSAPI_API_KEY"} -ContentType "application/json" -Body $body
+$result.choices[0].message.content
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H "Authorization: Bearer $NEXUSAPI_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d "{\"model\":\"$NEXUSAPI_MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply only: connection successful\"}]}"
+```
+</Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+## 3. 確認成功
+
+終端機顯示 `connection successful` 或同義完整回覆，即基礎連線成功。[使用日誌](https://nexusapi.link/usage-logs/common)可核對紀錄。測試會消耗少量額度。
+
+有錯誤先確認預留文字已替換、Key 沒有星號、模型來自自己的分組。仍失敗請傳錯誤原文和時間給客服，不要傳 Key。
+
+SDK 安裝參考：[OpenAI SDK](https://developers.openai.com/api/docs/libraries)。

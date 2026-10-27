@@ -3,10 +3,10 @@ title: "API Chat Completions"
 description: "Gọi mô hình văn bản NexusAPI theo định dạng OpenAI Chat Completions."
 ---
 
-Trang này chỉ nói về **OpenAI Chat Completions**. Trước khi gọi, hãy xác nhận mô hình, nhóm token và giao thức khớp nhau trong [ma trận khả năng](/vi/developer/capability-matrix).
+Trang này chỉ nói về **OpenAI Chat Completions**. Trước khi gọi, hãy xác nhận mô hình, nhóm của khóa và giao thức khớp nhau trong [ma trận khả năng](/vi/developer/capability-matrix).
 
 <Tip>
-Chợ mô hình và ma trận cho biết khả năng hiện tại.
+Quảng trường mô hình và ma trận cho biết khả năng hiện tại.
 </Tip>
 
 ## Endpoint
@@ -36,28 +36,27 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 | Trường | Bắt buộc | Mục đích |
 | --- | --- | --- |
-| `model` | Có | Model ID chính xác mà key hiện tại nhìn thấy, có `supported_endpoint_types` chứa `openai` |
+| `model` | Có | ID mô hình chính xác mà khóa hiện tại nhìn thấy, có `supported_endpoint_types` chứa `openai` |
 | `messages` | Có | Tin nhắn hội thoại theo định dạng Chat Completions |
-| `stream` | Không | Dùng `true` để nhận sự kiện streaming chỉ khi cả model và client đều hỗ trợ |
+| `stream` | Không | Dùng `true` để nhận sự kiện streaming chỉ khi cả mô hình và ứng dụng khách đều hỗ trợ |
 
-Với phản hồi thường, văn bản thường đọc từ `choices[0].message.content`; với streaming, đọc từng `choices[0].delta.content`. Hãy xác nhận model và key bằng yêu cầu tối thiểu không stream trước khi bật `stream` hoặc thêm trường tùy chọn.
+Với phản hồi thường, văn bản thường đọc từ `choices[0].message.content`; với streaming, đọc từng `choices[0].delta.content`. Hãy xác nhận mô hình và khóa bằng yêu cầu tối thiểu không stream trước khi bật `stream` hoặc thêm trường tùy chọn.
 
-`temperature`, tool calls, đầu vào ảnh và đầu ra có cấu trúc không được đảm bảo cho mọi model chỉ vì API “tương thích OpenAI”. Xem [ma trận khả năng](/vi/developer/capability-matrix) và Chợ mô hình để biết tình trạng khả dụng và khả năng hiện tại của model.
+`temperature`, tool calls, đầu vào ảnh và đầu ra có cấu trúc không được đảm bảo cho mọi mô hình chỉ vì API “tương thích OpenAI”. Xem [ma trận khả năng](/vi/developer/capability-matrix) và Quảng trường mô hình để biết tình trạng khả dụng và các tính năng hiện được mô hình hỗ trợ.
 
 ## Kiểm tra đầu tiên khi lỗi
 
 | Kết quả | Hãy kiểm tra |
 | --- | --- |
-| 401 | Key bị thiếu, sai, hết hạn hoặc bị vô hiệu. |
+| 401 | khóa bị thiếu, sai, hết hạn hoặc bị vô hiệu. |
 | 429 | Tần suất, đồng thời hoặc giới hạn upstream tạm thời. |
 | 500 / 502 / 503 | Lỗi xử lý/upstream tạm thời; chờ rồi chỉ thử lại một lần. |
 | 524 | Vượt giới hạn chờ. |
 
-Khi gặp `status_code=500, not implemented`, không coi đây là lỗi 500 thông thường để retry tần suất cao. Thông thường model và giao thức yêu cầu không khớp. Kiểm tra `supported_endpoint_types` có chứa `openai` hay không, rồi dùng hướng dẫn tương ứng. Lưu Request ID và làm [tự kiểm tra](/vi/faq/self-check).
+Khi gặp `status_code=500, not implemented`, không coi đây là lỗi 500 thông thường để retry tần suất cao. Thông thường mô hình và giao thức yêu cầu không khớp. Kiểm tra `supported_endpoint_types` có chứa `openai` hay không, rồi dùng hướng dẫn tương ứng. Lưu Request ID và làm [tự kiểm tra](/vi/faq/self-check).
 
 ## API liên quan
 
-- Liệt kê model key hiện tại nhìn thấy và chọn giao thức: [nền tảng API](/vi/developer/api-basics)
-- Client Claude / Anthropic gốc: [Anthropic Messages](/vi/developer/anthropic-messages)
-- Codex Provider: [API Responses và Codex](/vi/developer/responses)
-- Tạo ảnh: [Hướng dẫn mô hình hình ảnh](/vi/guide/image-generation)
+- Liệt kê mô hình khóa hiện tại nhìn thấy và chọn giao thức: [nền tảng API](/vi/developer/api-basics)
+- Ứng dụng khách Claude / Anthropic gốc: [Anthropic Messages](/vi/developer/anthropic-messages)
+- nhà cung cấp Codex: [API Responses và Codex](/vi/developer/responses)

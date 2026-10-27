@@ -3,7 +3,7 @@ title: "Anthropic Messages 介面"
 description: "以原生 Anthropic Messages 協定呼叫 `supported_endpoint_types` 包含 anthropic 的模型。"
 ---
 
-此介面適用於目前 Key 的 `/v1/models` 回應中，`supported_endpoint_types` 包含 `anthropic` 的模型。呼叫前請查看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)：**模型、Key 群組與協定必須同時相符**。
+此介面適用於目前 Key 的 `/v1/models` 回應中，`supported_endpoint_types` 包含 `anthropic` 的模型。呼叫前請查看[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)：**模型、Key 分組與協定必須同時相符**。
 
 <Warning>
 **Messages 的適用範圍**
@@ -40,7 +40,7 @@ curl 'https://nexusapi.link/v1/messages' \
 
 ## 使用 Anthropic SDK
 
-原生 Anthropic SDK 會管理所需的協定請求頭。將 NexusAPI Key 傳給 SDK，並把 Base URL 設為**不含 `/v1`**的地址：
+原生 Anthropic SDK 會管理所需的協定請求標頭。將 NexusAPI Key 傳給 SDK，並把 Base URL 設為**不含 `/v1`**的位址：
 
 ```python
 from anthropic import Anthropic

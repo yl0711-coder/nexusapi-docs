@@ -1,60 +1,58 @@
 ---
-title: "VS Code / Cursor で Claude Code を使う"
-description: "既存の NexusAPI ユーザー設定で、公式 Claude Code 拡張を使用します。"
+title: "VS Code / CursorでClaude Codeを使う"
+description: "拡張機能を入れ、ユーザー設定にキーを入力して確認します。"
 ---
 
-公式 Claude Code 拡張は、チャット、差分プレビュー、ファイル参照、権限確認を提供します。VS Code と Cursor は Claude Code のユーザー設定を共有します。
+**Claude Code拡張機能の設定です。Cursor内蔵AIチャットではありません。** [キーを作成](/ja/guide/api-key)し、[モデル広場](https://nexusapi.link/pricing)で同じグループからClaude Code対応モデル名をコピーします。
 
-## 1. 公式拡張をインストールする
+## 1. 拡張機能を入れる
 
-VS Code 1.98 以降を使用していることを確認し、先に [Claude Code の設定](/ja/tools/claude-code)を完了してください。拡張機能画面で **Claude Code** を検索し、発行元が **Anthropic** であることを確認します。[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)も参照できます。
+`Ctrl + Shift + X`（Mac：`Command + Shift + X`）で拡張機能を開き、`Claude Code` を検索。発行元 **Anthropic** を確認して入れます。
 
-macOS では <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>、Windows／Linux では <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> で拡張機能画面を開けます。
+![公式Marketplace：Claude Code for VS Code、発行元Anthropic](/images/nexusapi/claude-extension-marketplace.png)
 
-<Warning>
-類似する第三者拡張がある場合があります。Anthropic が公開したものだけを使い、第三者設定画面に Key を貼り付けないでください。
-</Warning>
+公式Marketplaceの画像で名前と発行元を確認し、エディターの拡張機能一覧から同じものをインストールしてください。
 
-## 2. NexusAPI 設定を共有する
+## 2. ユーザー設定を開く
 
-拡張は CLI と同じ `~/.claude/settings.json`（Windows はユーザープロファイルの対応パス）を読みます。VS Code / Cursor のワークスペース設定に Key を重複保存しないでください。
+`Ctrl + Shift + P`（Mac：`Command + Shift + P`）から **Preferences: Open User Settings (JSON)** を選択。ワークスペース、既定値、プロジェクトの設定ではなくユーザー設定です。
 
-ログイン画面が出る場合は、まず拡張機能が最新か確認してください。現在のバージョンに **Disable Login Prompt** がある場合は、設定で `Claude Code login` を検索して有効にします。エディターを完全に再起動し、この設定がない場合は統合ターミナルで `claude` を実行してユーザー設定を先に確認してください。
+## 3. NexusAPIを設定
 
-NexusAPI Key をプロジェクトの `.vscode/settings.json` に重複して保存したり、Key を含む設定を同期・スクリーンショット・コミットしたりしないでください。Key はユーザーディレクトリの `~/.claude/settings.json` だけに保存します。
+`YOUR_API_KEY` を自分のキーの全文、`YOUR_MODEL_ID` をコピーしたモデル名に置き換えます。ほかは変えません。
 
-現在の Cursor が拡張機能をインストールできない場合は、Cursor の統合ターミナルで `claude` を実行し、同じユーザーレベル設定を使います。
-
-## 3. Claude Code を開く
-
-アイコン、アクティビティバー、コマンドパレット、ステータスバーから Claude Code を開きます。右上のアイコンが見えない場合は、まずコードファイルを開いてください。
-
-## 4. 安全に確認する
-
-![VS Code に表示された公式 Claude Code 拡張機能](/images/nexusapi/claude-code-vscode-official.jpg)
-
-> この画面例は [Claude Code 公式 VS Code ドキュメント](https://code.claude.com/docs/en/vs-code)のものです。ボタンの位置は拡張機能の更新で変わることがあります。
-
-読み取り専用のテストを送信します。
-
-```text
-現在開いているファイルの役割を説明し、コードは変更しないでください。
+```json
+{
+  "claudeCode.disableLoginPrompt": true,
+  "claudeCode.environmentVariables": [
+    {
+      "name": "ANTHROPIC_BASE_URL",
+      "value": "https://nexusapi.link"
+    },
+    {
+      "name": "ANTHROPIC_AUTH_TOKEN",
+      "value": "YOUR_API_KEY"
+    },
+    {
+      "name": "ANTHROPIC_MODEL",
+      "value": "YOUR_MODEL_ID"
+    }
+  ]
+}
 ```
 
-次に `/status` で **Anthropic base URL** が `https://nexusapi.link` であることを確認し、NexusAPI の利用ログで対応するリクエストを確認します。
+既存設定は先にバックアップし、`claudeCode` の項目だけを追加・変更します。ほかの設定を消さないでください。空の `{}` だけなら置き換えられます。
 
-## トラブルシューティング
+保存後、この接続に公式アカウントへのログインは不要です。キーを含む設定をプロジェクトに入れたり、他人と共有・同期しないでください。
 
-### インストール後に拡張機能が表示されない
+![ユーザー設定例：必要なのは2つの `claudeCode` 項目だけです。下の外観・デモ用ウィンドウ設定はコピー不要です。仮の値は置き換えてください。接続成功を示す画像ではありません。](/images/nexusapi/vscode-user-settings-demo.png)
 
-コマンドパレットで **Developer: Reload Window** を実行するか、エディターを完全に再起動します。
+ユーザー設定例：必要なのは2つの `claudeCode` 項目だけです。下の外観・デモ用ウィンドウ設定はコピー不要です。仮の値は置き換えてください。接続成功を示す画像ではありません。
 
-### CLI は動くが拡張機能が動かない
+## 4. 再起動して確認
 
-`~/.claude/settings.json` がプロジェクト内ではなくユーザーディレクトリにあること、Base URL と Key が正しいことを確認します。現在のバージョンに **Disable Login Prompt** がある場合は有効にして、エディターを完全に再起動します。
+エディターを完全に終了して開き直し、Claude Codeで新規会話を作ります。「接続成功、とだけ返信し、ファイルを変更しないでください」と送り、完全な返信と[利用履歴](https://nexusapi.link/usage-logs/common)を確認。テストは少量のクレジットを使います。
 
-### Cursor で拡張機能が見つからない
+公式ログインが出る場合はユーザー設定と置き換えた値を確認し、拡張機能を更新・再起動してください。VS Code は[公式拡張機能マーケット](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)からインストールできます。Cursorで見つからない場合は、ターミナルで[CLI手順](/ja/tools/claude-code)を使ってください。
 
-[公式 VS Code ガイド](https://code.claude.com/docs/en/vs-code)の Cursor 用導線を使用してください。現在のバージョンで未対応の場合は、Cursor の統合ターミナルで `claude` を使います。
-
-継続する問題では、エディター、拡張機能、Claude Code のバージョン、エラー本文、Request ID を保存して[自己確認](/ja/faq/self-check)を行います。完全な Key、ワークスペースのシークレット、機密ソースコードを送らないでください。
+公式リンク：[Claude Code プロジェクト](https://github.com/anthropics/claude-code) · [VS Code 拡張機能](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)。

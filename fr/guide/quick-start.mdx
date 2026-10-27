@@ -1,74 +1,41 @@
 ---
-title: "Démarrage rapide en 5 minutes"
-description: "Effectuez votre premier appel de modèle avec NexusAPI."
+title: "Démarrer en 5 minutes"
+description: "Connectez-vous, créez une clé et configurez votre logiciel."
 ---
 
-Cette page vous guide pour votre premier appel. Il vous suffit d’avoir un compte NexusAPI et un solde disponible.
+**Suivez ces 4 étapes. Passez celles que vous avez déjà terminées.**
 
-<Info>
-**Le chemin le plus court**
+## 1. Se connecter et vérifier le crédit
 
-Acheter du crédit → Créer une clé API → Copier l’ID d’un modèle depuis le catalogue → Envoyer une requête de test
-</Info>
+[Connectez-vous](https://nexusapi.link/sign-in). Contactez le support si vous n'avez pas de compte.
 
-## 1. Acheter du crédit
+Ouvrez le [Portefeuille](https://nexusapi.link/wallet). Si vous avez du crédit utilisable ou un forfait, continuez. Sinon, [ajoutez des fonds](/fr/guide/recharge).
 
-Connectez-vous à la console, puis utilisez **Gestion du portefeuille** pour recharger votre compte en ligne.
+## 2. Créer et copier une clé API
 
-![Page NexusAPI de gestion du portefeuille et de recharge en ligne](/images/nexusapi/console-wallet-topup-fr.png)
+1. Ouvrez [Clés API](https://nexusapi.link/keys), puis **Créer une clé API**.
+2. Donnez un nom, choisissez le groupe fourni par le support et indiquez `1` pour la quantité. Gardez les autres réglages par défaut, sauf besoin particulier.
+3. Cliquez sur **Enregistrer les modifications**.
+4. Dans la liste, cliquez sur le bouton de copie de la nouvelle clé.
 
-## 2. Créer une clé API
+Besoin d'images ? Voir le [guide des clés](/fr/guide/api-key). **Ne partagez pas votre clé complète.**
 
-1. Ouvrez **Gestion des jetons** dans la console.
-2. Cliquez sur **Ajouter un jeton**.
-3. Saisissez un nom facile à reconnaître, par exemple `codex-work`.
-4. Sélectionnez un groupe contenant le modèle visé.
-5. Définissez une limite adaptée à votre usage, puis validez.
+## 3. Configurer votre logiciel
 
-![Page NexusAPI de gestion des jetons, avec les clés et les données de compte masquées](/images/nexusapi/console-token-management-fr.png)
-
-![Panneau de création d’un jeton NexusAPI](/images/nexusapi/console-create-token-fr.png)
-
-<Warning>
-**Protégez votre clé API**
-
-La clé API sert uniquement à l’authentification. Ne la publiez pas dans un dépôt public, une capture d’écran ou un historique de discussion. Utilisez une clé distincte par projet.
-</Warning>
-
-## 3. Configurer l’API
-
-Préparez les trois informations suivantes :
-
-| Paramètre | Valeur |
+| Votre logiciel | Guide à suivre |
 | --- | --- |
-| URL de base | `https://nexusapi.link/v1` |
-| Clé API | Générée dans la console ; elle commence généralement par `sk-` |
-| ID du modèle | Copiez le nom exact depuis le [catalogue de modèles](https://nexusapi.link/pricing) |
+| Claude Code | [Configuration Claude Code](/fr/tools/claude-code) |
+| Codex CLI | [Configuration Codex CLI](/fr/tools/codex-cli) |
+| CC Switch | [Configuration CC Switch](/fr/tools/cc-switch) |
+| VS Code / Cursor | [Configuration de l'éditeur](/fr/tools/cursor-vscode) |
+| Votre propre programme | [Exemples à copier](/fr/developer/code-examples) |
 
-## 4. Envoyer une requête de test
+**Recopiez l'adresse et le modèle du guide correspondant, puis votre propre clé API. L'adresse peut varier selon le logiciel.**
 
-L’exemple suivant utilise le format OpenAI Chat Completions. Remplacez `YOUR_API_KEY` et `YOUR_MODEL_ID` :
+## 4. Envoyer un message de test
 
-```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{
-    "model": "YOUR_MODEL_ID",
-    "messages": [{"role": "user", "content": "Répondez : connexion réussie"}]
-  }'
-```
+Envoyez : **« Réponds : connexion réussie. »**
 
-Si la réponse JSON contient `choices` et une réponse du modèle, l’intégration de base fonctionne.
+Une réponse complète indique que vous pouvez commencer. Consultez l'appel et son coût dans les [journaux d'utilisation](https://nexusapi.link/usage-logs/common).
 
-<Tip>
-**L’URL peut différer selon le client**
-
-Certains clients ajoutent automatiquement `/v1` ou un chemin de requête. Pour [Claude Code](/fr/tools/claude-code), [Codex CLI](/fr/tools/codex-cli), [CC Switch](/fr/tools/cc-switch) ou [VS Code / Cursor](/fr/tools/cursor-vscode), suivez le guide concerné plutôt que de recopier mécaniquement cette adresse.
-</Tip>
-
-## Étapes suivantes
-
-- [Comprendre les modes d’intégration](/fr/guide/integration-overview)
-- [Consulter les modèles, groupes et la facturation](/fr/billing/models-pricing)
-- [Commencer le diagnostic en cas de problème](/fr/faq/self-check)
+En cas d'échec, envoyez au support le **nom du logiciel, une capture de l'erreur, l'heure, le modèle et le groupe**. Masquez la clé complète.

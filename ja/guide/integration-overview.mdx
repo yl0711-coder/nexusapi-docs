@@ -1,95 +1,28 @@
 ---
-title: "接続方法の概要"
-description: "利用するクライアントとモデルの機能に合わせて、NexusAPI の URL とプロトコルを選択します。"
+title: "接続方法を選ぶ"
+description: "使うアプリを選んで、対応する手順を開きます。"
 ---
 
-NexusAPI は主要な AI クライアントと OpenAI 互換 API をサポートします。ツールごとにリクエストパスを自動補完する場合があるため、利用方法に対応するアドレスを入力してください。あるツールの設定全体を別のツールへそのままコピーしないでください。
+## 1. 使うアプリを選ぶ
 
-## 事前準備
-
-接続方法にかかわらず、次を確認してください。
-
-1. コンソールで API Key を作成していること。
-2. その API Key のグループで対象モデルを利用できること。
-3. モデルマーケットから正確なモデル ID をコピーしていること。
-4. 対象モデルが対応する API 形式を確認し、HTTPS でリクエストすること。
-
-## よくある利用方法
-
-| 利用方法 | 参照するガイド |
+| やりたいこと | 手順 |
 | --- | --- |
-| 自作アプリケーションまたはスクリプト | [5 分で始める](/ja/guide/quick-start) |
-| Claude Code | [Claude Code 設定ガイド](/ja/tools/claude-code) |
-| Codex CLI | [Codex CLI 設定ガイド](/ja/tools/codex-cli) |
-| CC Switch | [CC Switch 設定ガイド](/ja/tools/cc-switch) |
-| VS Code / Cursor | [エディタ拡張機能ガイド](/ja/tools/cursor-vscode) |
-| 画像生成 | [画像モデルの使い方](/ja/guide/image-generation) |
+| Claude Codeを使う | [Claude Code](/ja/tools/claude-code) |
+| Codex CLIを使う | [Codex CLI](/ja/tools/codex-cli) |
+| CC Switchでサービスを切り替える | [CC Switch](/ja/tools/cc-switch) |
+| VS Code / Cursorで使う | [エディター設定](/ja/tools/cursor-vscode) |
+| 自作プログラム | [コード例](/ja/developer/code-examples) |
 
-## URL とプロトコルの対応
+## 2. 3つの情報を用意
 
-| 場面 | 入力する URL | 主なプロトコル | 注意点 |
-| --- | --- | --- | --- |
-| OpenAI SDK／汎用テキストアプリ | `https://nexusapi.link/v1` | Chat Completions | SDK またはアプリがリクエストパスを補完します。 |
-| Codex CLI | `https://nexusapi.link/v1` | Responses | Codex ガイドの Provider 設定を使用します。 |
-| Claude Code | `https://nexusapi.link` | Anthropic Messages | 設定 URL に `/v1` を重ねて追加しないでください。 |
-| CC Switch | Provider の種類に応じて入力 | 対象ツールによる | Claude と Codex では URL のルールが異なります。 |
-| 画像モデル | `https://nexusapi.link/v1` | Images | モデルマーケットで画像生成対応と明記されたモデルだけを使用します。 |
+| 入力するもの | 入手先 |
+| --- | --- |
+| APIキー | [APIキー](https://nexusapi.link/keys)で作成してコピー |
+| モデル名 | [モデル広場](https://nexusapi.link/pricing)でキーと同じグループを選び、名前をコピー |
+| APIアドレス | 上の対応する手順からコピー。自分で組み立てない |
 
-この表は接続方法を選ぶためのものです。まず[API とモデル機能の対応表](/ja/developer/capability-matrix)でモデルとプロトコルを確認し、パラメーターとレスポンス構造は [Chat Completions](/ja/developer/openai-compatible) を参照してください。特定の Key とモデルでの実際の利用可否は、モデルマーケットの表示が基準です。
+Claude Codeは通常 `https://nexusapi.link`、Codex CLIとOpenAI SDKは通常 `https://nexusapi.link/v1` を使います。**アプリ別の手順を優先してください。**
 
-## 先に正しいプロトコルを選ぶ
+## 3. 動作を確認
 
-Base URL が同じでも、すべてのモデルが同じリクエスト形式を受け付けるわけではありません。
-
-| 目的 | 推奨エンドポイント | 利用する条件 |
-| --- | --- | --- |
-| 一般的なテキスト、チャット、ストリーミング | `/v1/chat/completions` | OpenAI 互換ルートでモデルを利用できる場合。 |
-| Codex CLI と対応する Provider | `/v1/responses` | `supported_endpoint_types` に `openai-response` を含む場合。 |
-| Claude Code またはネイティブ Anthropic クライアント | `/v1/messages` | `supported_endpoint_types` に `anthropic` を含む場合。 |
-| 画像生成 | `/v1/images/generations` | モデルが画像生成対応と明記されている場合。 |
-
-<Warning>
-**Responses を汎用的な代替 endpoint として使用しないでください**
-
-モデルの `supported_endpoint_types` に `openai-response` が含まれないのに `/v1/responses` で `status_code=500, not implemented` が返る場合は、プロトコル不一致です。そのモデルで示された endpoint を使用し、Claude Code ではネイティブの Messages 設定を維持してください。同じリクエストを再送しても、プロトコルの不一致は解消されません。
-</Warning>
-
-## URL が異なって見える理由
-
-汎用的な OpenAI 形式のリクエストでは、通常次を使用します。
-
-```text
-https://nexusapi.link/v1
-```
-
-一部のクライアントは `/v1` を含まないサイト URL を要求したり、`/chat/completions`、`/responses`、`/messages` を自動で追加したりします。必ず対象ツールのガイドに従ってください。画像モデルについては[画像モデルの使い方](/ja/guide/image-generation)を参照します。
-
-<Warning>
-**パスの重複を避けてください**
-
-クライアント側がすでに `/v1` を追加する場合、手動で入力すると `/v1/v1/...` となり、404 エラーにつながることがあります。404 が発生したときは、まずクライアントが実際に送信した URL を確認してください。
-</Warning>
-
-## クライアント設定と汎用 API を混用しない
-
-CLI ツール、エディタ拡張機能、自作アプリケーションでは、使用するプロトコルや設定ファイルが異なります。モデル名が同じでも、あるツールの設定を別のツールに丸ごと適用しないでください。
-
-- **Codex CLI：**[Codex CLI ガイド](/ja/tools/codex-cli)に従い、Responses 用の設定を使用します。
-- **Claude Code：**[Claude Code ガイド](/ja/tools/claude-code)に従い、ネイティブ Anthropic Messages 設定を使用します。
-- **自作テキストアプリ：**SDK が別のプロトコルを明示的に要求しない限り、Chat Completions から始めます。
-- **画像生成：**画像エンドポイントを使い、画像生成用のパラメーターをテキストチャットのエンドポイントに渡さないでください。
-- **判断できない場合：**設定を変更する前に、正確なクライアント名と実際のリクエストパスを確認します。
-
-## API リファレンス
-
-対象モデルに適したプロトコルは[API とモデル機能の対応表](/ja/developer/capability-matrix)で確認できます。最小の Chat Completions リクエストは [Chat Completions](/ja/developer/openai-compatible) にあります。
-
-このヘルプセンターでは、統合方法の選択と設定、検証可能な最小リクエストを説明します。任意パラメーターは、クライアントのプロトコルとモデルマーケットに現在表示されている機能に従って選択してください。
-
-## 設定成功を確認する
-
-- クライアントが完全なレスポンスを返す。
-- コンソールの利用ログに対応するリクエストが表示される。
-- ログのモデル、グループ、課金額が想定どおりである。
-
-失敗した場合は、エラー本文と Request ID を保存し、[トラブルシューティング](/ja/faq/self-check)を確認してください。
+「接続成功、と返信してください」と送ります。最後まで返答があれば完了です。失敗したら[トラブル対処](/ja/faq/self-check)を確認するか、エラー画面をサポートへ送ってください。キーの全文は隠してください。

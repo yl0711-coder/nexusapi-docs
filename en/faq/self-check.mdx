@@ -1,61 +1,39 @@
 ---
-title: "Self-check before contacting support"
-description: "Collect the minimum evidence needed to diagnose a NexusAPI request failure."
+title: "What to do when an error appears"
+description: "Save the error, check your setup and contact support if it still fails."
 ---
 
-Most setup mistakes and transient failures can be narrowed down in a few minutes.
+**Take a screenshot first. Follow the checks below, or contact support directly if unsure.**
 
-## 1. Preserve the evidence
+## 1. Save the error
 
-Before closing the client or retrying, save:
+Keep the app name, time, model, group and error screenshot. Copy a Request ID if available; do not guess. Hide full keys, passwords and private business content.
 
-- Complete error text
-- Request ID
-- Time and time zone
-- Model ID
-- Client and version
-- Request endpoint, such as `/v1/responses`
+## 2. Check the message
 
-Do not share full API keys, passwords, private data, or complete business content.
-
-## 2. Identify the category
-
-| Symptom | Check first |
+| Message | What to do |
 | --- | --- |
-| 401 | API key, `Bearer` prefix, and request address |
-| 403 | Token group, model restriction, IP allowlist, account status, or upstream refusal |
-| 404 | Base URL and accidental duplicate or missing `/v1` |
-| 400 | Model, endpoint, parameters, or session state |
-| 429 | Concurrency and request rate |
-| 500 / 502 / 503 | Wait 10–30 seconds, then retry only once |
-| 504 / 524 | Request size, wait time, and service status |
-| `500, not implemented` | Check that the model's `supported_endpoint_types` includes the protocol used by the request |
-| `no available channel` | Model ID, token group, and current model availability |
-| Image timeout | Keep the Request ID before deciding whether to submit another task |
+| Key error / 401 | Copy the full key again, paste it and restart the app |
+| 403 | Ask support to check the model and group |
+| 404 | Copy the address from [your app guide](/en/tools) |
+| 400 / not implemented | Ask support whether this model works with your app |
+| 429 / concurrency limit | Wait for current requests to finish, reduce simultaneous tasks and try once |
+| 500 / 502 / 503 / timeout | Wait 10–30 seconds and try once; then contact support if needed |
+| no available channel | Check the model in your group; contact support rather than topping up again |
+| Insufficient credit | Check wallet credit, key limit and expiry |
 
-See [API error guide](/en/faq/common-errors) for details.
+## 3. Try one short message
 
-## 3. Run one minimal test
+Save important content, start a new conversation and send “Reply: hello”. If a complete reply arrives, use the new conversation. If not, contact support. **The test may use credit. Do not retry repeatedly or delete the entire configuration folder.**
 
-1. Confirm console credit and API-key status.
-2. Copy the model ID again from the Model Marketplace.
-3. Start a new session and send a short text request.
-4. Retry only once and save the new Request ID.
-5. Check whether the matching request appears in the usage log.
-
-If a new short session works, the original conversation state or request content is likely involved. If it still fails, submit the evidence.
-
-## What to send support
+## 4. Copy this to support
 
 ```text
-Time (with time zone):
-Request ID:
-Client and version:
-Model:
-Endpoint:
-Full error text:
-Intermittent or persistent:
-Tested with a new session:
+App name:
+Time:
+Model and group:
+Error text or screenshot:
+Request ID (if available):
 ```
 
-If an API key is necessary for identification, provide no more than its last six characters.
+Leave unknown fields blank. Never send full keys, passwords or verification codes.

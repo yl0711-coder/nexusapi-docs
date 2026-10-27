@@ -1,52 +1,46 @@
 ---
-title: "Créer et protéger une clé API"
-description: "Créez une clé NexusAPI limitée, stockez-la correctement et renouvelez-la en cas de risque."
+title: "Créer et utiliser une clé API"
+description: "Créez une clé, puis copiez-la dans votre logiciel."
 ---
 
-Une clé API identifie l'appelant et détermine les groupes de modèles accessibles. Créez une clé par projet ou environnement afin de limiter les dépenses, rapprocher l'usage et révoquer un accès sans interrompre tous les services.
+La clé API est la clé à saisir dans votre logiciel pour accéder à NexusAPI.
 
-## Créer une clé
+## 1. Créer une clé
 
-1. Connectez-vous à la [console NexusAPI](https://nexusapi.link).
-2. Ouvrez **Gestion des jetons**, puis **Ajouter un jeton**.
-3. Donnez-lui un nom clair, par exemple `production-api` ou `codex-local`.
-4. Sélectionnez le groupe qui contient le modèle souhaité.
-5. Définissez une limite et, si nécessaire, une date d'expiration, puis enregistrez.
+1. Ouvrez [Clés API](https://nexusapi.link/keys).
+2. Cliquez sur **Créer une clé API**, en haut à droite.
+3. Remplissez les champs ci-dessous.
+4. Cliquez sur **Enregistrer les modifications**.
 
-Copiez la clé immédiatement : sa valeur complète peut n'être affichée qu'une seule fois.
-
-## À décider avant la création
-
-| Élément | Rôle |
+| Champ | Quoi saisir |
 | --- | --- |
-| Groupe de jetons | Détermine les modèles, canaux et règles accessibles. |
-| Limite de crédit | Réduit l'exposition d'un projet ou d'un test. |
-| Expiration | Utile pour un accès temporaire. |
-| Restriction de modèle / liste d'IP | À activer seulement si votre cas l'exige. |
+| Nom | Un nom reconnaissable, par exemple `Mon ordinateur` |
+| Groupe | Celui fourni par le support ; demandez si vous hésitez |
+| Quantité | `1` |
+| Expiration | Gardez la valeur par défaut pour commencer |
+| Quota, paramètres avancés | Gardez les valeurs par défaut, sauf besoin particulier |
 
-## Protéger la clé
+![Création d'une clé API](/images/nexusapi/console-create-token-fr.png)
 
-- Utilisez une variable d'environnement, un gestionnaire de secrets ou le coffre du système.
-- Ne la mettez jamais dans le front-end, un dépôt public, une capture, un chat ou une URL.
-- Ne partagez pas une clé entre équipes ou services sans raison ; des clés séparées facilitent l'audit.
-- En cas de fuite présumée, désactivez ou supprimez l'ancienne clé, créez-en une autre et mettez à jour les déploiements.
+Un quota illimité ne signifie pas gratuit : les appels consomment le solde ou le forfait.
 
-## Tester avant d'intégrer
+## 2. Copier la clé dans le logiciel
 
-```bash
-curl 'https://nexusapi.link/v1/models' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
-```
+1. Revenez à la liste et trouvez votre nouvelle clé.
+2. Cliquez sur le bouton de copie. Ne recopiez pas le texte masqué avec des astérisques.
+3. Collez la clé complète dans le champ **API Key** du logiciel.
+4. Pour l'adresse et le modèle, suivez le [guide du logiciel](/fr/tools).
 
-Ce test confirme que la clé est reconnue et montre les modèles visibles. Pour choisir l'API correcte, consultez la [matrice des capacités](/fr/developer/capability-matrix).
+![Liste des clés API](/images/nexusapi/console-token-management-fr.png)
 
-Pour une erreur 401, 403 ou de modèle indisponible, vérifiez l'état de la clé, le groupe, le crédit, les restrictions IP et le préfixe `Bearer`, puis conservez le Request ID.
+![Copiez la clé complète avec le bouton encadré. La clé affichée est un exemple fictif.](/images/nexusapi/key-copy-fr.png)
 
-## Clé API et autres identifiants
+Copiez la clé complète avec le bouton encadré. La clé affichée est un exemple fictif.
 
-| Identifiant | Usage |
-| --- | --- |
-| Clé API | Appelle les API de modèles : Chat Completions, Responses, Messages, Images et `/v1/models`. |
-| Session / cookie de console | Sert uniquement à ouvrir la console dans le navigateur ; ce n’est pas un identifiant d’API de modèle. |
+**Utilisez cette clé, pas le jeton d'accès de la page Profil.**
 
-Ne placez jamais un identifiant dans les paramètres de l’URL et ne transmettez jamais sa valeur complète au support.
+## 3. Si la clé a été divulguée
+
+Désactivez ou supprimez immédiatement l'ancienne clé, créez-en une nouvelle et remplacez-la dans le logiciel.
+
+Ne publiez jamais la clé complète dans une discussion, une capture ou du code public. Le support n'en a pas besoin.

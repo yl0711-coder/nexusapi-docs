@@ -1,0 +1,41 @@
+---
+title: "Comprendre les multiplicateurs et remises"
+description: "Trouvez votre groupe, consultez un exemple et vérifiez le coût."
+---
+
+**Un multiplicateur n’est pas un taux de réduction.** Par exemple, `1.3x` ne signifie pas payer 13 % du tarif officiel. Consultez le tableau.
+
+## 1. Lire un exemple de remise
+
+**Exemple uniquement : 100 CNY donnent `$100` de crédits ; pour le même modèle, le prix unitaire `1x` est identique au tarif officiel ; 1 USD vaut ici environ 7,3 CNY.**
+
+Pour un usage facturé 100 CNY au tarif officiel :
+
+<div className="nexusapi-discount-example">
+
+| Multiplicateur | Part du prix | Coût |
+| --- | --- | --- |
+| `0.7x` | 10 % | 10 yuans |
+| `1.2x` | 16 % | 16 yuans |
+| `1.3x` | 18 % | 18 yuans |
+| `5.6x` | 77 % | 77 yuans |
+
+</div>
+
+Un autre taux de recharge, forfait ou prix de modèle change le résultat. Demandez au support de confirmer votre réduction avec le modèle et le groupe.
+
+## 2. Trouver votre groupe
+
+Dans [Clés API](https://nexusapi.link/keys), vérifiez le **Groupe** de la clé utilisée.
+
+Ouvrez la [Place des modèles](https://nexusapi.link/pricing), sélectionnez ce même groupe et consultez le prix.
+
+**Le prix du groupe inclut déjà son multiplicateur. Ne le multipliez pas à nouveau.**
+
+## 3. Voir le coût d'un appel
+
+Dans les [journaux d'utilisation](https://nexusapi.link/usage-logs/common), retrouvez l'appel et son **Coût**.
+
+Si **100 yuans ont acheté `$100` de crédit**, un débit de **`$0.10`** coûte environ **0,10 yuan**.
+
+Si votre recharge était différente ou si vous utilisez un forfait, transmettez le journal et la commande au support. **Pas besoin de calculer des formules.** Masquez les clés et données de paiement sensibles.

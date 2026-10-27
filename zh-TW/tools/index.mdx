@@ -1,52 +1,22 @@
 ---
-title: "選擇適合的工具"
-description: "選擇正確的 NexusAPI 用戶端，避免混用協定、位址與憑證。"
+title: "選擇使用的軟體"
+description: "找到軟體，開啟對應教學設定。"
 ---
 
-先依工作方式選擇工具，再使用對應教學。不同用戶端會使用 OpenAI Chat Completions、原生 Messages 或 Responses；不要直接複製其他工具的 Base URL 或設定檔。
+## 1. 選你的軟體
 
-## 快速選擇
+| 你在用什麼 | 開啟教學 |
+| --- | --- |
+| Claude Code | [設定教學](/zh-TW/tools/claude-code) |
+| Codex CLI | [設定教學](/zh-TW/tools/codex-cli) |
+| CC Switch | [設定教學](/zh-TW/tools/cc-switch) |
+| VS Code / Cursor | [設定教學](/zh-TW/tools/cursor-vscode) |
+| 自己寫程式 | [設定教學](/zh-TW/developer/code-examples) |
 
-| 需求 | 建議入口 | 適合情境 |
-| --- | --- | --- |
-| 在終端使用 AI 程式設計助理 | [Claude Code](/zh-TW/tools/claude-code) | Claude 工作流 |
-| 在終端使用 Codex | [Codex CLI](/zh-TW/tools/codex-cli) | Responses／Codex 工作流 |
-| 切換多個本機 Provider | [CC Switch](/zh-TW/tools/cc-switch) | 多組 CLI 設定 |
-| 在 VS Code 或 Cursor 使用 Claude Code | [VS Code / Cursor](/zh-TW/tools/cursor-vscode) | 編輯器優先流程 |
-| 自建程式或自動化腳本 | [接入方式總覽](/zh-TW/guide/integration-overview) | SDK 和應用開發 |
+## 2. 開始前
 
-## 修改本機設定前
+1. 準備自己的 [API Key](/zh-TW/guide/api-key)。
+2. 按對應教學複製位址和模型名稱，不要混用不同軟體設定。
+3. 已有設定請先備份，不要刪除整個設定目錄。
 
-1. 建立 API Key 並設定適當額度。
-2. 確認令牌群組包含目標模型。
-3. 從模型廣場或 `/v1/models` 複製準確 ID。
-4. 編輯前備份現有設定檔。
-5. 用一條短、唯讀請求測試，再查看使用紀錄。
-
-<Warning>
-**使用可信來源的安裝腳本**
-
-這類腳本可能改寫本機設定、寫入憑證或安裝第三方程式。請在確認來源、閱讀內容並備份既有設定後再執行。
-</Warning>
-
-## 為什麼每個工具的位址不同
-
-有些工具需要含 `/v1` 的 API 位址，有些會自行補上路徑，另一些使用原生 Messages 或 Responses 協定。
-
-請使用各教學提供的位址；不要把 Claude Code、Codex CLI 與一般 OpenAI SDK 的設定互相複製。詳細原理請見[接入方式總覽](/zh-TW/guide/integration-overview)。
-
-## 協定與位址速查
-
-| 用戶端類型 | 常用 Base URL | 起始協定 |
-| --- | --- | --- |
-| OpenAI 相容 SDK／自建程式 | `https://nexusapi.link/v1` | Chat Completions |
-| Claude Code | `https://nexusapi.link` | 原生 Messages |
-| Codex CLI | `https://nexusapi.link/v1` | Responses Provider |
-
-實際可用協定仍由模型與令牌群組決定；請先閱讀[介面與模型能力矩陣](/zh-TW/developer/capability-matrix)。
-
-## 教學裡沒有你的工具
-
-若某個用戶端支援自訂 OpenAI 相容 Base URL，可先參考[5 分鐘快速開始](/zh-TW/guide/quick-start)與該用戶端的官方文件。
-
-設定前請確認它是否支援自訂 Base URL、使用 Chat Completions 還是 Responses、會否自動補上 `/v1`，以及能否手動填寫模型 ID。尚未驗證的用戶端可先結合官方文件做最小測試；設定穩定後再考慮補上正式教學。
+沒有你的軟體？把名稱和設定畫面截圖傳給客服，請遮住 Key。

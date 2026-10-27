@@ -1,64 +1,58 @@
 ---
-title: "在 VS Code 或 Cursor 使用 Claude Code"
-description: "以既有的 NexusAPI 使用者設定，在官方 Claude Code 編輯器擴充套件中工作。"
+title: "在 VS Code / Cursor 使用 Claude Code"
+description: "安裝正確擴充套件，在使用者設定填入 Key 和位址，再測試。"
 ---
 
-官方 Claude Code 擴充套件提供聊天、差異預覽、檔案參考和權限提示；VS Code 和 Cursor 共用 Claude Code 的使用者層級設定。
+**本頁設定 Claude Code 擴充套件，不是 Cursor 內建 AI 聊天。** 先[建立 Key](/zh-TW/guide/api-key)，到[模型廣場](https://nexusapi.link/pricing)選同一分組，複製支援 Claude Code 的模型名稱。
 
-## 1. 安裝官方擴充套件
+## 1. 安裝擴充套件
 
-請先確認 VS Code 為 1.98 或更新版本，並完成 [Claude Code 設定](/zh-TW/tools/claude-code)。在編輯器擴充套件搜尋 **Claude Code**，並確認發佈者為 **Anthropic**；也可查看[官方 VS Code 教學](https://code.claude.com/docs/en/vs-code)。
+Windows / Linux 按 `Ctrl + Shift + X`；Mac 按 `Command + Shift + X`。搜尋 `Claude Code`，確認發行者是 **Anthropic**，再安裝。
 
-macOS 可按 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>，Windows／Linux 可按 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> 開啟擴充套件市集。
+![官方擴充套件市場：Claude Code for VS Code，發佈者 Anthropic](/images/nexusapi/claude-extension-marketplace.png)
 
-<Warning>
-搜尋結果可能有第三方同名擴充套件。只安裝 Anthropic 發佈的版本，且不要把 API Key 貼入第三方設定面板。
-</Warning>
+此圖用來核對官方名稱與發佈者，再到編輯器擴充套件商店找到同一項安裝。
 
-## 2. 共用 NexusAPI 設定
+## 2. 開啟使用者設定
 
-擴充套件會讀取與 CLI 相同的 `~/.claude/settings.json`（Windows 為使用者目錄對應路徑）。不要在 VS Code 或 Cursor 的工作區設定中重複保存 Key。
+按 `Ctrl + Shift + P`（Mac 用 `Command + Shift + P`），選 **Preferences: Open User Settings (JSON)**。必須是使用者設定，不是工作區、預設或專案的 `.vscode/settings.json`。
 
-若仍顯示登入提示：
+## 3. 填入 NexusAPI 設定
 
-1. 確認擴充套件已更新至最新版本。
-2. 若目前版本提供 **Disable Login Prompt**，可在編輯器設定搜尋 `Claude Code login` 後啟用。
-3. 完全重啟編輯器；若沒有此設定，請先在整合終端執行 `claude`，確認使用者層級設定。
+把 `YOUR_API_KEY` 換成自己的完整 Key，`YOUR_MODEL_ID` 換成模型名稱，其他不變。
 
-不要把 NexusAPI Key 寫進專案的 `.vscode/settings.json`，也不要同步、截圖或提交包含 Key 的設定。Key 只應放在使用者目錄中的 `~/.claude/settings.json`。
-
-若目前 Cursor 版本不能安裝此擴充套件，可在 Cursor 的整合終端執行 `claude`，並沿用相同的使用者層級 Claude Code 設定。
-
-## 3. 開啟 Claude Code
-
-可從右上角圖示、活動列、命令面板或狀態列開啟。若右上角沒有圖示，先開啟一個程式碼檔案；該入口可能只在檔案開啟後出現。
-
-## 4. 安全驗證
-
-![Claude Code 官方擴充套件在 VS Code 中的介面示例](/images/nexusapi/claude-code-vscode-official.jpg)
-
-> 介面示例來自 [Claude Code 官方 VS Code 文件](https://code.claude.com/docs/en/vs-code)，按鈕位置可能隨擴充套件版本調整。
-
-送出以下唯讀測試：
-
-```text
-請解釋目前開啟檔案的作用，不要修改程式碼。
+```json
+{
+  "claudeCode.disableLoginPrompt": true,
+  "claudeCode.environmentVariables": [
+    {
+      "name": "ANTHROPIC_BASE_URL",
+      "value": "https://nexusapi.link"
+    },
+    {
+      "name": "ANTHROPIC_AUTH_TOKEN",
+      "value": "YOUR_API_KEY"
+    },
+    {
+      "name": "ANTHROPIC_MODEL",
+      "value": "YOUR_MODEL_ID"
+    }
+  ]
+}
 ```
 
-成功後輸入 `/status`，確認 **Anthropic base URL** 為 `https://nexusapi.link`，再在 NexusAPI 使用紀錄確認對應請求。
+已有設定先備份，只合併上方的 `claudeCode` 設定，不要清空原檔。若只有空的 `{}`，可直接替換。
 
-## 常見問題
+儲存後不必登入官方帳號。設定含個人 Key，不要放入專案、共用或同步給別人。
 
-### 安裝後沒有出現擴充套件
+![使用者設定示例：只需設定兩個 `claudeCode` 項目，下方外觀與示範視窗設定不用複製。請替換佔位符；此圖不表示連線成功。](/images/nexusapi/vscode-user-settings-demo.png)
 
-在命令面板執行 **Developer: Reload Window**，或完全重啟編輯器。
+使用者設定示例：只需設定兩個 `claudeCode` 項目，下方外觀與示範視窗設定不用複製。請替換佔位符；此圖不表示連線成功。
 
-### CLI 能用，但擴充套件不能用
+## 4. 重啟並測試
 
-確認 `~/.claude/settings.json` 位於使用者目錄而非專案目錄，且 Base URL 和 Key 正確；若目前版本提供 **Disable Login Prompt**，可啟用後完全重啟編輯器。
+完全關閉並重新開啟編輯器，點 Claude Code 圖示建立對話，傳送「請只回覆：連線成功，不要修改檔案」。收到完整回覆後，在[使用日誌](https://nexusapi.link/usage-logs/common)確認紀錄。測試會消耗少量額度。
 
-### Cursor 市集找不到擴充套件
+仍出現官方登入？確認設定寫在使用者設定、預留文字已替換，更新擴充套件後重啟。VS Code 可從[官方擴充套件市集](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)安裝；Cursor 找不到時，在編輯器終端機按 [Claude Code 教學](/zh-TW/tools/claude-code)使用。
 
-請從 [Claude Code 官方 VS Code 文件](https://code.claude.com/docs/en/vs-code)使用 Cursor 的安裝入口；若目前版本仍不支援，改在 Cursor 的整合終端使用 `claude`。
-
-持續出錯時，請保留編輯器、擴充套件與 Claude Code 版本、錯誤原文和 Request ID，後依[問題自查](/zh-TW/faq/self-check)處理。請勿傳送完整 Key、工作區密鑰或私密原始碼。
+官方入口：[Claude Code 專案](https://github.com/anthropics/claude-code) · [VS Code 擴充套件市集](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)。

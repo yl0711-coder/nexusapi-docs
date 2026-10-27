@@ -1,9 +1,9 @@
 ---
 title: "API Responses и Codex"
-description: "Выберите правильную интеграцию для Provider Codex или модели, подтверждённой для Responses."
+description: "Выберите правильную интеграцию для провайдера Codex или модели, подтверждённой для Responses."
 ---
 
-В NexusAPI `/v1/responses` предназначен для custom provider из [руководства Codex CLI](/ru/tools/codex-cli) и для моделей, у которых `supported_endpoint_types` в `/v1/models` содержит `openai-response`.
+В NexusAPI `/v1/responses` предназначен для пользовательского провайдера из [руководства Codex CLI](/ru/tools/codex-cli) и для моделей, у которых `supported_endpoint_types` в `/v1/models` содержит `openai-response`.
 
 <Warning>
 **Сначала подтвердите поддерживаемый протокол**
@@ -19,8 +19,8 @@ POST https://nexusapi.link/v1/responses
 
 | Сценарий | Рекомендуемый подход |
 | --- | --- |
-| Codex CLI | Используйте Provider `wire_api = "responses"` из [руководства Codex CLI](/ru/tools/codex-cli) |
-| Другое приложение с моделью, у которой `supported_endpoint_types` содержит `openai-response` | Используйте его Responses client/Schema и сначала проверьте минимальный запрос |
+| Codex CLI | Используйте конфигурацию провайдера `wire_api = "responses"` из [руководства Codex CLI](/ru/tools/codex-cli) |
+| Другое приложение с моделью, у которой `supported_endpoint_types` содержит `openai-response` | Используйте его клиент Responses или схему запросов и сначала проверьте минимальный запрос |
 | Обычное OpenAI-совместимое текстовое приложение | Используйте [Chat Completions](/ru/developer/openai-compatible); не переключайтесь лишь из-за новизны API |
 | Модель без `openai-response` | Используйте протокол Chat Completions или Messages, указанный в `supported_endpoint_types`, а не этот endpoint |
 
@@ -38,7 +38,7 @@ curl 'https://nexusapi.link/v1/responses' \
   }'
 ```
 
-`input` — не то же поле, что `messages` в Chat Completions; ответ нельзя разбирать как `choices[0].message`. Полные поля, streaming-события и структуру результата смотрите в официальной Schema клиента.
+`input` — не то же поле, что `messages` в Chat Completions; ответ нельзя разбирать как `choices[0].message`. Полные поля, события потоковой передачи и структуру результата смотрите в официальной документации клиента.
 
 ## Основные настройки Codex CLI
 
@@ -52,11 +52,11 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-Храните key в переменной окружения `NEXUSAPI_API_KEY`, а не в `config.toml` или `auth.json`. Установка, переменные ОС и проверка приведены в [руководстве Codex CLI](/ru/tools/codex-cli).
+Храните ключ в переменной окружения `NEXUSAPI_API_KEY`, а не в `config.toml` или `auth.json`. Установка, переменные ОС и проверка приведены в [руководстве Codex CLI](/ru/tools/codex-cli).
 
 ## Что проверить сначала
 
-1. Группа key содержит модель, а ID полностью совпадает с каталогом.
+1. Группа ключа содержит модель, а ID полностью совпадает с каталогом.
 2. Клиент действительно обращается к `/v1/responses`, а не `/v1/v1/...`.
 3. `supported_endpoint_types` модели содержит `openai-response`; если нет, используйте указанный совместимый протокол.
 4. Сохраните Request ID, версию клиента и полный текст ошибки, затем выполните [самопроверку](/ru/faq/self-check).

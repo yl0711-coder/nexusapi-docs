@@ -1,52 +1,46 @@
 ---
-title: "Tạo và bảo vệ API Key"
-description: "Tạo API Key NexusAPI có giới hạn, lưu trữ an toàn và thay thế khi có nguy cơ lộ lọt."
+title: "Tạo và sử dụng khóa API"
+description: "Điền theo bảng, tạo khóa rồi dán vào phần mềm."
 ---
 
-API Key nhận diện bên gọi và quyết định nhóm mô hình được truy cập. Nên tạo khóa riêng cho mỗi dự án hoặc môi trường để dễ giới hạn chi phí, đối soát sử dụng và thu hồi quyền khi cần.
+Khóa API là thông tin cần điền để phần mềm kết nối với NexusAPI.
 
-## Tạo key
+## 1. Tạo khóa
 
-1. Đăng nhập [console NexusAPI](https://nexusapi.link).
-2. Mở **Quản lý token** rồi chọn **Thêm token**.
-3. Đặt tên dễ nhận biết, ví dụ `production-api` hoặc `codex-local`.
-4. Chọn nhóm token có mô hình mục tiêu.
-5. Đặt hạn mức và, nếu cần, ngày hết hạn rồi lưu.
+1. Mở [Khóa API](https://nexusapi.link/keys).
+2. Bấm **Tạo Khóa API** ở góc trên bên phải.
+3. Điền theo bảng dưới đây.
+4. Bấm **Lưu thay đổi**.
 
-Sao chép key ngay sau khi tạo; giá trị đầy đủ có thể chỉ hiển thị một lần.
-
-## Những điều cần quyết định
-
-| Mục | Vai trò |
+| Mục | Điền gì |
 | --- | --- |
-| Nhóm token | Quyết định model có thể dùng, khả năng gọi và quy tắc truy cập. |
-| Hạn mức | Giới hạn rủi ro chi phí của dự án hoặc thử nghiệm. |
-| Ngày hết hạn | Phù hợp quyền truy cập tạm thời. |
-| Giới hạn mô hình / danh sách IP | Chỉ bật khi thực sự cần. |
+| Tên | Tên dễ nhận ra, ví dụ `Máy tính của tôi` |
+| Nhóm | Nhóm do hỗ trợ cung cấp; chưa rõ thì hỏi trước |
+| Số lượng | `1` |
+| Hết hạn | Lần đầu có thể giữ mặc định |
+| Hạn mức, cài đặt nâng cao | Giữ mặc định nếu không có yêu cầu riêng |
 
-## Lưu trữ an toàn
+![Tạo khóa API](/images/nexusapi/console-create-token-vi.png)
 
-- Dùng biến môi trường, kho secret hoặc trình quản lý thông tin xác thực của hệ điều hành.
-- Không đưa key vào frontend, kho công khai, ảnh chụp, chat hoặc URL.
-- Không dùng chung một key cho các dịch vụ/nhóm không liên quan.
-- Nếu nghi ngờ lộ key, vô hiệu hóa hoặc xóa key cũ, tạo key mới và cập nhật nơi triển khai.
+Hạn mức không giới hạn không có nghĩa là miễn phí. Lượt gọi vẫn trừ số dư hoặc hạn mức gói.
 
-## Kiểm tra trước khi tích hợp
+## 2. Dán vào phần mềm
 
-```bash
-curl 'https://nexusapi.link/v1/models' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
-```
+1. Quay lại danh sách, tìm khóa mới tạo.
+2. Bấm nút sao chép để lấy đầy đủ khóa. Không chép lại phần chữ có dấu sao.
+3. Dán vào ô **API Key** của phần mềm.
+4. Địa chỉ và tên mô hình điền theo [hướng dẫn phần mềm](/vi/tools).
 
-Lệnh này xác nhận key và cho biết mô hình đang nhìn thấy. Xem [ma trận khả năng](/vi/developer/capability-matrix) để chọn API phù hợp.
+![Danh sách khóa API](/images/nexusapi/console-token-management-vi.png)
 
-Nếu gặp 401, 403 hoặc mô hình không có, hãy kiểm tra trạng thái key, nhóm, số dư, giới hạn IP và định dạng `Bearer`, sau đó lưu Request ID.
+![Sao chép toàn bộ khóa bằng nút được khoanh. Khóa trong ảnh chỉ là giá trị giữ chỗ.](/images/nexusapi/key-copy-vi.png)
 
-## API Key và các thông tin xác thực khác
+Sao chép toàn bộ khóa bằng nút được khoanh. Khóa trong ảnh chỉ là giá trị giữ chỗ.
 
-| Thông tin xác thực | Mục đích |
-| --- | --- |
-| API Key | Gọi các API mô hình như Chat Completions, Responses, Messages, Images và `/v1/models`. |
-| Phiên đăng nhập / cookie console | Chỉ dùng để đăng nhập console bằng trình duyệt; không dùng làm thông tin xác thực cho model API. |
+**Dùng khóa tạo ở đây, không dùng token truy cập trong Hồ sơ.**
 
-Không đưa bất kỳ thông tin xác thực nào vào tham số URL và không gửi toàn bộ giá trị key cho bộ phận hỗ trợ.
+## 3. Nếu khóa bị lộ
+
+Vô hiệu hóa hoặc xóa ngay khóa cũ, tạo khóa mới và thay lại trong phần mềm.
+
+Không đăng khóa đầy đủ trong nhóm chat, ảnh hay mã công khai. Hỗ trợ cũng không cần khóa đầy đủ của bạn.

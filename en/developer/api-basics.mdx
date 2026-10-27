@@ -8,7 +8,7 @@ This page covers the rules shared by every model call and explains **which proto
 <Info>
 **Confirm capability first**
 
-Available models change with your API key group, model restrictions, and live service state. The whole-site Model Marketplace is not a promise that every model is callable by a particular key.
+Available models change with your API key group, model restrictions, and live service state. The whole-site Model Square is not a promise that every model is callable by a particular key.
 </Info>
 
 ## Three required values
@@ -16,8 +16,8 @@ Available models change with your API key group, model restrictions, and live se
 | Value | Where to get it | Purpose |
 | --- | --- | --- |
 | Base URL | This page | Sends SDK or client requests to NexusAPI |
-| API key | Console → Token management | Identifies the caller and accessible groups |
-| Model ID | Model Marketplace or `/v1/models` | Selects the model for a request |
+| API key | Console → API Keys | Identifies the caller and accessible groups |
+| Model ID | Model Square or `/v1/models` | Selects the model for a request |
 
 For a standard OpenAI-style client, use:
 
@@ -40,7 +40,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copy a model ID from `data[].id`. This is the set **currently visible to that key**, not a full platform catalog. `data[].supported_endpoint_types` lists the request protocols currently available for that model. Use only a path whose type is listed: `openai` for Chat Completions, `anthropic` for Messages, `openai-response` for Responses, and `image-generation` for image generation. If more than one type is listed, choose the matching one for your client.
+Copy a model ID from `data[].id`. This is the set **currently visible to that key**, not a full platform catalog. `data[].supported_endpoint_types` lists the request protocols currently available for that model. Use only a path whose type is listed: `openai` for Chat Completions, `anthropic` for Messages, `openai-response` for Responses. If more than one type is listed, choose the matching one for your client.
 
 ## Select the right protocol
 
@@ -49,18 +49,16 @@ Copy a model ID from `data[].id`. This is the set **currently visible to that ke
 | OpenAI-compatible text, chat, and streaming | `POST /v1/chat/completions` | Models whose `supported_endpoint_types` includes `openai`; most custom apps, OpenAI SDKs, and generic clients |
 | Native Anthropic / Claude Code | `POST /v1/messages` | Models whose `supported_endpoint_types` includes `anthropic` |
 | Codex Provider | `POST /v1/responses` | Only with the [Codex CLI guide](/en/tools/codex-cli) and a model whose `supported_endpoint_types` includes `openai-response` |
-| Image generation | `POST /v1/images/generations` | Image models whose `supported_endpoint_types` includes `image-generation` |
 
 The same model name does not mean every request format is accepted. Confirm the protocol in the [API and model capability matrix](/en/developer/capability-matrix), then read:
 
 - [Chat Completions](/en/developer/openai-compatible)
 - [Anthropic Messages](/en/developer/anthropic-messages)
 - [Responses / Codex](/en/developer/responses)
-- [Image model guide](/en/guide/image-generation)
 
 ## Minimal verification and retries
 
-1. List models, then send one short text request or minimum image request.
+1. List models, then send one short text request.
 2. Confirm the model ID, key group, and path before adding optional fields, streaming, or batch work.
 3. Keep the error text, time, and Request ID on failure. Do not replay an unconfirmed request at high frequency.
 

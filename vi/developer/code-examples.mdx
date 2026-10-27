@@ -1,59 +1,145 @@
 ---
-title: "Ví dụ mã"
-description: "Gọi NexusAPI từ Python, JavaScript hoặc cURL qua Chat Completions."
+title: "Sao chép mã và gọi lần đầu"
+description: "Chọn Python, JavaScript hoặc lệnh rồi kiểm tra câu trả lời."
 ---
 
-Các ví dụ dùng OpenAI Chat Completions. Trước tiên xác nhận giao thức trong [ma trận khả năng](/vi/developer/capability-matrix), sau đó sao chép model ID chính xác mà key hiện tại dùng được.
+Dùng Claude Code, Codex hoặc CC Switch thì mở [hướng dẫn phần mềm](/vi/tools), không cần làm trang này.
 
-## Thiết lập cơ bản
+## 1. Chuẩn bị khóa và mô hình
 
-- Base URL: `https://nexusapi.link/v1`
-- API Key: tạo trong [console NexusAPI](https://nexusapi.link)
-- Model ID: giá trị chính xác trong Chợ mô hình hoặc `/v1/models`
+[Tạo khóa API](/vi/guide/api-key). Trong [Quảng trường mô hình](https://nexusapi.link/pricing), chọn cùng nhóm và sao chép mô hình hỗ trợ Chat Completions. Chưa rõ thì hỏi hỗ trợ.
 
-## Python
+Mở terminal, chỉ thay `YOUR_API_KEY` và `YOUR_MODEL_ID`. Các lệnh tiếp theo chạy trong cùng terminal; đóng rồi phải đặt lại hai giá trị.
+
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+$env:NEXUSAPI_API_KEY = "YOUR_API_KEY"
+$env:NEXUSAPI_MODEL = "YOUR_MODEL_ID"
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+export NEXUSAPI_MODEL='YOUR_MODEL_ID'
+```
+</Tab>
+</Tabs>
+
+## 2. Chạy một ví dụ
+
+Chỉ chọn một cách. Lưu file trong thư mục thử riêng, không đặt tên `openai.py` hoặc `openai.mjs`.
+
+<Tabs>
+<Tab title="Python">
+Cài [Python 3](https://www.python.org/downloads/) trước. Mở terminal trong thư mục thử và dùng lệnh đúng hệ điều hành để cài thư viện.
+
+<Tabs>
+<Tab title="Windows">
+```powershell
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install openai
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install openai
+```
+</Tab>
+</Tabs>
+
+Tạo `demo.py`, sao chép toàn bộ mã rồi lưu:
 
 ```python
+import os
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="YOUR_API_KEY",
+    api_key=os.environ["NEXUSAPI_API_KEY"],
     base_url="https://nexusapi.link/v1",
 )
-
 response = client.chat.completions.create(
-    model="YOUR_MODEL_ID",
-    messages=[{"role": "user", "content": "Hãy tự giới thiệu ngắn gọn."}],
+    model=os.environ["NEXUSAPI_MODEL"],
+    messages=[{"role": "user", "content": "Reply only: connection successful"}],
 )
-
 print(response.choices[0].message.content)
 ```
 
-## JavaScript
+Chạy trong cùng terminal:
+
+<Tabs>
+<Tab title="Windows">
+```powershell
+.\.venv\Scripts\python.exe demo.py
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+.venv/bin/python demo.py
+```
+</Tab>
+</Tabs>
+</Tab>
+<Tab title="JavaScript">
+Cài [Node.js LTS](https://nodejs.org/en/download), mở lại terminal và đặt lại hai biến phía trên, rồi chạy:
+
+```bash
+npm install openai
+```
+
+Tạo `demo.mjs` (không phải `.txt`), dán mã rồi lưu:
 
 ```js
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: "YOUR_API_KEY",
+  apiKey: process.env.NEXUSAPI_API_KEY,
   baseURL: "https://nexusapi.link/v1",
 });
-
 const response = await client.chat.completions.create({
-  model: "YOUR_MODEL_ID",
-  messages: [{ role: "user", content: "Hãy tự giới thiệu ngắn gọn." }],
+  model: process.env.NEXUSAPI_MODEL,
+  messages: [{role: "user", content: "Reply only: connection successful"}],
 });
-
 console.log(response.choices[0].message.content);
 ```
 
-## cURL
+Chạy:
 
 ```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{"model":"YOUR_MODEL_ID","messages":[{"role":"user","content":"Kiểm tra kết nối"}]}'
+node demo.mjs
 ```
+</Tab>
+<Tab title="HTTP / cURL">
+Không cần SDK. Chọn lệnh theo hệ điều hành:
 
-Không ghi key thật vào mã nguồn hoặc kho lưu trữ. Các ví dụ Chat Completions này chỉ áp dụng khi `supported_endpoint_types` chứa `openai`. Với Responses, chỉ dùng [hướng dẫn tương ứng](/vi/developer/responses) khi model chứa `openai-response`. Tạo ảnh dùng endpoint khác; xem [hướng dẫn mô hình ảnh](/vi/guide/image-generation).
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+$body = @{
+  model = $env:NEXUSAPI_MODEL
+  messages = @(@{role = "user"; content = "Reply only: connection successful"})
+} | ConvertTo-Json -Depth 5
+$result = Invoke-RestMethod -Method Post -Uri "https://nexusapi.link/v1/chat/completions" -Headers @{Authorization = "Bearer $env:NEXUSAPI_API_KEY"} -ContentType "application/json" -Body $body
+$result.choices[0].message.content
+```
+</Tab>
+<Tab title="macOS / Linux">
+```bash
+curl 'https://nexusapi.link/v1/chat/completions' \
+  -H "Authorization: Bearer $NEXUSAPI_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d "{\"model\":\"$NEXUSAPI_MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply only: connection successful\"}]}"
+```
+</Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+## 3. Kiểm tra kết quả
+
+Nhận đủ câu trả lời như `connection successful` là kết nối cơ bản thành công. Kiểm tra trong [nhật ký](https://nexusapi.link/usage-logs/common). Lượt thử này tiêu thụ một lượng nhỏ số dư.
+
+Nếu lỗi, kiểm tra đã thay giá trị mẫu, khóa không có dấu sao và mô hình đúng nhóm. Vẫn lỗi thì gửi nguyên văn lỗi và thời gian cho hỗ trợ, không gửi khóa.
+
+Tham khảo cài SDK: [OpenAI SDK](https://developers.openai.com/api/docs/libraries).

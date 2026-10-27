@@ -1,95 +1,28 @@
 ---
-title: "Vue d’ensemble des intégrations"
-description: "Choisissez l’URL et le protocole NexusAPI adaptés à votre client et à votre modèle."
+title: "Choisir votre guide de configuration"
+description: "Trouvez votre logiciel et suivez son guide."
 ---
 
-NexusAPI fonctionne avec les clients IA courants et les API de style OpenAI. Chaque outil peut compléter lui-même une partie du chemin : renseignez donc l’adresse correspondant à votre usage et ne recopiez pas la configuration complète d’un outil dans un autre.
+## 1. Trouver votre logiciel
 
-## Préparer l’intégration
-
-Avant toute méthode d’intégration, vérifiez les points suivants :
-
-1. Une clé API a été créée dans la console.
-2. Le groupe de cette clé donne accès au modèle visé.
-3. L’identifiant exact du modèle a été copié depuis le catalogue de modèles.
-4. Le protocole pris en charge par le modèle a été vérifié, puis la requête est envoyée via HTTPS.
-
-## Cas d’utilisation courants
-
-| Votre usage | Documentation à consulter |
+| Votre besoin | Guide |
 | --- | --- |
-| Application, script ou automatisation maison | [Démarrage en 5 minutes](/fr/guide/quick-start) |
-| Claude Code | [Configurer Claude Code](/fr/tools/claude-code) |
-| Codex CLI | [Configurer Codex CLI](/fr/tools/codex-cli) |
-| CC Switch | [Configurer CC Switch](/fr/tools/cc-switch) |
-| VS Code / Cursor | [Guide des extensions d’éditeur](/fr/tools/cursor-vscode) |
-| Génération d’images | [Utiliser les modèles d’image](/fr/guide/image-generation) |
+| Claude Code | [Claude Code](/fr/tools/claude-code) |
+| Codex CLI | [Codex CLI](/fr/tools/codex-cli) |
+| Changer de service avec CC Switch | [CC Switch](/fr/tools/cc-switch) |
+| VS Code / Cursor | [Éditeur](/fr/tools/cursor-vscode) |
+| Votre propre programme | [Exemples de code](/fr/developer/code-examples) |
 
-## URL et protocoles
+## 2. Préparer trois informations
 
-| Cas | Adresse à saisir | Protocole principal | À retenir |
-| --- | --- | --- | --- |
-| SDK OpenAI ou application texte générique | `https://nexusapi.link/v1` | Chat Completions | Le SDK ou l’application complète le chemin de requête. |
-| Codex CLI | `https://nexusapi.link/v1` | Responses | Utilisez le Provider décrit dans le guide Codex. |
-| Claude Code | `https://nexusapi.link` | Anthropic Messages | N’ajoutez pas une seconde fois `/v1`. |
-| CC Switch | Selon le type de Provider | Selon l’outil cible | Les règles d’URL de Claude et de Codex sont différentes. |
-| Modèles d’image | `https://nexusapi.link/v1` | Images | Utilisez uniquement un modèle explicitement indiqué comme compatible avec les images. |
+| À saisir | Où le trouver |
+| --- | --- |
+| Clé API | Créez et copiez-la dans [Clés API](https://nexusapi.link/keys) |
+| Modèle | Dans la [Place des modèles](https://nexusapi.link/pricing), choisissez le groupe de votre clé et copiez le nom |
+| Adresse API | Copiez-la du guide correspondant, sans la reconstruire |
 
-Ce tableau sert à choisir l’intégration. Consultez d’abord la [matrice des capacités API et modèles](/fr/developer/capability-matrix) pour confirmer le modèle et le protocole, puis [Chat Completions](/fr/developer/openai-compatible) pour les paramètres et la structure de réponse. La disponibilité réelle pour une clé et un modèle reste celle affichée dans le catalogue de modèles.
+Claude Code utilise généralement `https://nexusapi.link` ; Codex CLI et le SDK OpenAI utilisent généralement `https://nexusapi.link/v1`. **Suivez le guide de votre logiciel.**
 
-## Choisir d’abord le bon protocole
+## 3. Vérifier le résultat
 
-Un même Base URL ne signifie pas que chaque modèle accepte tous les formats de requête.
-
-| Objectif | Point de terminaison recommandé | Quand l’utiliser |
-| --- | --- | --- |
-| Texte, conversation ou streaming | `/v1/chat/completions` | Le modèle est disponible par la route compatible OpenAI. |
-| Codex CLI et Provider correspondant | `/v1/responses` | Utilisez-le seulement si `supported_endpoint_types` contient `openai-response`. |
-| Claude Code ou client Anthropic natif | `/v1/messages` | Utilisez-le seulement si `supported_endpoint_types` contient `anthropic`. |
-| Génération d’images | `/v1/images/generations` | Le modèle est explicitement compatible avec la génération d’images. |
-
-<Warning>
-**N’utilisez pas Responses comme endpoint de remplacement universel**
-
-Si `supported_endpoint_types` d’un modèle ne contient pas `openai-response` et que `/v1/responses` renvoie `status_code=500, not implemented`, le protocole ne correspond pas. Utilisez un endpoint indiqué pour ce modèle ; conservez la configuration Messages native de Claude Code. Réessayer la même requête ne corrige pas une incompatibilité de protocole.
-</Warning>
-
-## Pourquoi les URL peuvent être différentes
-
-Les requêtes OpenAI génériques utilisent généralement :
-
-```text
-https://nexusapi.link/v1
-```
-
-Certains clients demandent l’URL du site sans `/v1`, ou ajoutent automatiquement `/chat/completions`, `/responses` ou `/messages`. Suivez le guide de l’outil concerné ; pour les images, utilisez le [guide des modèles d’image](/fr/guide/image-generation).
-
-<Warning>
-**Évitez les chemins dupliqués**
-
-Si le client ajoute déjà `/v1`, le saisir vous-même peut former `/v1/v1/...` et provoquer une erreur 404. En cas de 404, vérifiez d’abord l’URL réellement envoyée par le client.
-</Warning>
-
-## Ne mélangez pas la configuration d’un client et l’API générique
-
-Les outils CLI, extensions d’éditeur et applications maison peuvent utiliser des protocoles et fichiers de configuration distincts. Même avec le même nom de modèle, ne copiez pas une configuration complète d’un outil dans un autre.
-
-- **Codex CLI :** suivez le [guide Codex CLI](/fr/tools/codex-cli) et sa configuration Responses.
-- **Claude Code :** suivez le [guide Claude Code](/fr/tools/claude-code) et gardez sa configuration Anthropic Messages native.
-- **Application texte maison :** commencez par Chat Completions, sauf si le SDK exige explicitement un autre protocole.
-- **Images :** utilisez le point de terminaison d’image, sans envoyer ses paramètres à une route de chat texte.
-- **En cas de doute :** identifiez le client exact et inspectez le chemin réellement envoyé avant de modifier les réglages.
-
-## Référence API
-
-Consultez la [matrice des capacités API et modèles](/fr/developer/capability-matrix) pour valider le protocole du modèle ciblé. La requête minimale Chat Completions est décrite dans [Chat Completions](/fr/developer/openai-compatible).
-
-Ce centre d’aide explique comment choisir et configurer une intégration, avec des requêtes minimales vérifiables. Les paramètres optionnels dépendent toujours du protocole du client et des capacités actuellement affichées dans le catalogue de modèles.
-
-## Vérifier que la configuration fonctionne
-
-- Le client renvoie une réponse complète.
-- La requête correspondante apparaît dans le journal d’utilisation de la console.
-- Le modèle, le groupe et le montant facturé correspondent à ce qui est attendu.
-
-En cas d’échec, conservez le message d’erreur et le Request ID, puis suivez le [guide d’auto-diagnostic](/fr/faq/self-check).
+Envoyez « Réponds : connexion réussie. » Une réponse complète confirme la configuration. Sinon, consultez le [dépannage](/fr/faq/self-check) ou envoyez une capture de l'erreur au support. Masquez la clé complète.

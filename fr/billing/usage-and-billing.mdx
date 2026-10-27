@@ -1,50 +1,36 @@
 ---
-title: "Usage et facturation"
-description: "Lisez les journaux NexusAPI, les tokens, les Request ID et le coût des requêtes."
+title: "Voir l'utilisation et les débits"
+description: "Trouvez un appel, vérifiez son coût et contactez le support si nécessaire."
 ---
 
-La console affiche une synthèse et des journaux de consommation pour rapprocher les requêtes, les coûts et les incidents. Une écriture récente peut apparaître avec un court délai : ne relancez pas une tâche métier uniquement pour vérifier le journal.
+## 1. Retrouver un appel
 
-## Champs usuels
+1. Ouvrez les [journaux d'utilisation](https://nexusapi.link/usage-logs/common).
+2. Sélectionnez la date et cliquez sur **Rechercher**.
+3. Filtrez par modèle ou groupe si nécessaire.
+4. Cliquez sur le coût ou les détails de l'appel.
 
-| Champ | Signification |
+![Journaux d'utilisation](/images/nexusapi/console-usage-logs-fr.png)
+
+Un nouvel appel peut apparaître avec un léger retard. Actualisez plus tard sans relancer l'appel.
+
+## 2. Lire les champs utiles
+
+| Champ | À vérifier |
 | --- | --- |
-| Heure | Heure de la requête ou de l'enregistrement ; gardez le fuseau horaire pour le rapprochement. |
-| Modèle / groupe / nom du jeton | Route réellement utilisée. |
-| Tokens d'entrée | Prompt, contexte et certaines informations d'outils. |
-| Tokens de sortie | Contenu généré par le modèle. |
-| Lecture du cache | Usage d'un cache de contexte, parfois facturé différemment. |
-| Premier octet / durée totale | Indicateurs de délai et d'expiration. |
-| Coût | Montant enregistré pour la requête. |
-| Request ID | Identifiant unique permettant de retrouver la même requête. |
+| Heure, modèle, groupe | Est-ce votre appel ? |
+| Tokens | Quantité utilisée ; les détails peuvent séparer entrée, sortie et cache |
+| Coût | Crédit débité |
+| Durée | Temps de traitement |
 
-## Entrée, sortie et cache
+**Un débit de `$0.10` ne signifie pas toujours 0,10 yuan payé.** Voir les [exemples de coût](/fr/billing/multipliers-and-discounts).
 
-- Les **tokens d’entrée** comprennent le prompt, le contexte de conversation et certaines informations d’outils.
-- Les **tokens de sortie** sont générés par le modèle.
-- Les **lectures de cache** correspondent aux tokens lus depuis un cache de contexte ; leur prix peut différer du prix d’entrée normal.
+## 3. Un débit vous semble incorrect
 
-La prise en charge et le prix du cache varient selon le modèle. Consultez les informations en direct du [catalogue de modèles](https://nexusapi.link/pricing).
+Pour une erreur, une réponse incomplète ou un doublon suspect, envoyez au support :
 
-## Pourquoi un journal peut apparaître en retard
+- L'heure, le modèle et le groupe.
+- Le texte d'erreur et si la réponse était complète.
+- Une capture du journal et l’identifiant de requête (Request ID) s'il figure dans les détails.
 
-Un court délai peut exister entre la fin de la requête, la comptabilisation et son affichage dans la console. Si une requête terminée n’apparaît pas immédiatement, actualisez plus tard ; ne renvoyez pas la tâche métier seulement pour créer une autre ligne de journal.
-
-## Une requête en erreur est-elle toujours gratuite ?
-
-Non. Une erreur sans résultat facturable est souvent à zéro, mais une requête déjà traitée en amont, un flux interrompu ou une nouvelle tentative envoyée par le client peuvent laisser une écriture de coût. Rapprochez toujours le **même Request ID**, l'heure et le journal final ; ne vous fiez pas seulement à l'interface du client.
-
-## Méthode de rapprochement
-
-1. Filtrez par jour ou semaine, avec le fuseau horaire.
-2. Faites correspondre le Request ID entre client, support et console.
-3. Comparez modèle, groupe, tokens d'entrée/sortie et coût.
-4. Conservez les données brutes et l'intervalle de requête avant une agrégation.
-
-En cas de coût inattendu, envoyez le Request ID, l'heure et le fuseau, le modèle, l'état final côté client et l'erreur éventuelle. Ne communiquez pas une clé complète ni une conversation confidentielle.
-
-## Consulter ou exporter l’usage
-
-- Utilisez la synthèse et le journal de la console pour le contrôle quotidien.
-- Filtrez les détails par période, modèle et groupe avant un export ou une agrégation.
-- Conservez les Request ID dans les exports afin de pouvoir analyser une ligne inhabituelle plus tard.
+**N'envoyez pas votre clé API complète.** Conservez les traces et évitez les tentatives répétées qui créent de nouveaux appels.

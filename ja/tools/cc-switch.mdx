@@ -1,180 +1,64 @@
 ---
-title: "CC Switch の設定"
-description: "CC Switch に NexusAPI の Claude Code / Codex Provider を追加します。"
+title: "CC SwitchでNexusAPIを設定"
+description: "インストール、カスタム追加、有効化、テストの順です。"
 ---
 
-CC Switch はローカル AI CLI の Provider 設定を管理します。NexusAPI を手動追加し、選択してから、対応 CLI を新しいターミナルで起動してください。
+CC Switchは設定を管理します。**先に [Claude Code](/ja/tools/claude-code) または [Codex CLI](/ja/tools/codex-cli) のインストール手順だけ済ませて戻ってください。** 別途手動で設定ファイルを変える必要はありません。
 
-## 準備
+## 1. CC Switchを入れる
 
-有効な Key、Key のグループで使える正確なモデル ID、次の endpoint を用意します。
+[公式ダウンロード](https://github.com/farion1231/cc-switch/releases/latest)でOS別に選びます：
 
-| 用途 | Endpoint |
-| --- | --- |
-| Claude Code | `https://nexusapi.link` |
-| Codex | `https://nexusapi.link/v1` |
+- Windows：Windows `.msi`。ARM端末は `arm64` 版。
+- macOS：macOS `.dmg` を開いてインストール。
+- Linux：対応する `.deb` または `.AppImage`。
 
-モデルとプロトコルの組み合わせは[対応マトリクス](/ja/developer/capability-matrix)で確認します。
+## 2. カスタム設定を追加
 
-```text
-NexusAPI コンソール
-→ トークン管理
-→ API Key を作成またはコピー
-```
+左側で **Claude Code** または **Codex** を選択し、右上の **+ / Add provider** からカスタム設定を追加。Claude Desktopや他社プリセットは選びません。
 
-## CC Switch をインストールする
+![CC Switch 4.0.21：カスタム設定を選択（中国語UI）](/images/nexusapi/cc-switch-custom-entry-zh.png)
 
-### macOS
+## 3. 表どおりに入力
 
-```bash
-brew install --cask cc-switch
-```
+[キーを作成](/ja/guide/api-key)し、[モデル広場](https://nexusapi.link/pricing)で同じグループから対象ツール用モデル名をコピー。次の表のNexusAPI設定値を入力します。
 
-インストール後、アプリケーションから CC Switch を開きます。
+| 項目 | Claude Code | Codex |
+| --- | --- | --- |
+| 名前 | NexusAPI Claude | NexusAPI Codex |
+| アドレス | `https://nexusapi.link` | `https://nexusapi.link/v1` |
+| APIキー | 自分の完全なNexusAPIキー | 自分の完全なNexusAPIキー |
+| 主モデル | コピーしたClaude Code / Messagesモデル | コピーしたCodex / Responsesモデル |
 
-### Windows
+Claude Code：詳細設定を開き、「默认兜底模型」（デフォルトのフォールバックモデル）にコピーした主モデル名を入力します。Haikuの実リクエストモデルにはサポートが確認した補助モデル名を指定します。画像の仮の値は必ず置き換えてください。
 
-[公式 Releases](https://github.com/farion1231/cc-switch/releases)から `.msi` またはポータブル `.zip` を取得します。
+Codex：表のモデル名を使い、Claude Codeのモデル設定は不要です。使うアプリだけを設定し、Directを選択。ほかは初期値のまま、Add / Saveで保存します。
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+![Claude Codeの入力例。仮の値は置き換えてください。未保存・未接続の画面です。](/images/nexusapi/cc-switch-claude-form-zh.png)
 
-### Linux
+Claude Codeの入力例。仮の値は置き換えてください。未保存・未接続の画面です。
 
-[公式 Releases](https://github.com/farion1231/cc-switch/releases)から `.deb` または `.AppImage` を取得します。Arch Linux ではコミュニティ管理の AUR パッケージを利用できます。
+![Claude Codeのモデル設定例（中国語UI）](/images/nexusapi/cc-switch-claude-models-zh.png)
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+## 4. 有効化して確認
 
-```bash
-paru -S cc-switch-bin
-```
+このNexusAPI設定の **Switch / 有効化** をクリック。保存だけでは切り替わりません。ターミナルを開き直して対象を起動：
 
-<Warning>
-[CC Switch 公式リポジトリ](https://github.com/farion1231/cc-switch)または公式 Releases のみを使用してください。支払いや NexusAPI の資格情報を求める第三者サイトは使用しないでください。
-</Warning>
-
-## Provider を追加する
-
-**Provider 管理 → 追加**でアプリを選び、endpoint、Key、モデルを入力して保存し、Provider を切り替えます。
-
-```text
-CC Switch を開く
-→ Provider を追加
-→ 設定するアプリを選択
-→ NexusAPI endpoint、API Key、モデル ID を入力
-→ Provider を保存
-→ Provider を切り替え
-→ 新しいターミナルで対応 CLI を起動して確認
-```
-
-![公式 CC Switch の Provider 追加画面。NexusAPI ではカスタム設定を選択](/images/nexusapi/cc-switch-add-provider-official.png)
-
-![キーをマスクした公式 CC Switch Provider フォーム例](/images/nexusapi/cc-switch-provider-form-official.png)
-
-> 画像は [CC Switch 公式リポジトリ](https://github.com/farion1231/cc-switch)のものです。フォーム中の URL、モデル、gateway 名は画面例です。NexusAPI の実際の値は下の表を使用してください。
-
-### Claude Code
-
-| 項目 | 値 |
-| --- | --- |
-| App | `Claude Code` |
-| Name | `NexusAPI Claude` |
-| Endpoint | `https://nexusapi.link` |
-| API Key | NexusAPI Key |
-| Primary model | Key のグループで使える Claude 互換モデル ID |
-
-Haiku、Sonnet、Opus の任意欄は空欄にするか、Key で使える対応モデルを入れます。最小設定例：
-
-```text
-App: Claude Code
-Name: NexusAPI Claude
-Endpoint: https://nexusapi.link
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CLAUDE_MODEL_ID
-Sonnet Model: YOUR_CLAUDE_MODEL_ID
-```
-
-新しい CC Switch では `Claude Code` を選択します。旧 UI では `Claude` と表示される場合がありますが、Claude Desktop ではなく Claude Code の Provider を選びます。`/v1` は追加しません。切り替え後、新しいターミナルで実行します。
-
+<Tabs>
+<Tab title="Claude Code">
 ```bash
 claude
 ```
-
-`/status` と短い質問で確認します。
-
-```text
-一文で自己紹介してください。
-```
-
-### Codex
-
-| 項目 | 値 |
-| --- | --- |
-| App | `Codex` |
-| Name | `NexusAPI Codex` |
-| Endpoint | `https://nexusapi.link/v1` |
-| API Key | NexusAPI Key |
-| Primary model | グループで使え、`supported_endpoint_types` に `openai-response` を含むモデル ID |
-
-最小設定例：
-
-```text
-App: Codex
-Name: NexusAPI Codex
-Endpoint: https://nexusapi.link/v1
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CODEX_MODEL_ID
-```
-
-Codex は Responses プロトコルを使うため `/v1` が必要です。選択した Key で使えるモデルを設定してください。切り替え後に実行します。
-
+</Tab>
+<Tab title="Codex">
 ```bash
 codex
 ```
+</Tab>
+</Tabs>
 
-最初は読み取り専用タスクで確認します。
+「接続成功、とだけ返信し、ファイルを変更しないでください」と送り、完全な返信と[利用履歴](https://nexusapi.link/usage-logs/common)のモデル・グループを確認。少量のクレジットを使います。
 
-## 現在の Key で使えるモデルを確認する
+コマンドがなければCLIをインストール。公式サービスに接続するなら有効化と再起動を確認。モデルがなければ同じグループから再コピー。補助モデルのエラーなら利用可能なHaiku / Sonnet / Opus名を確認。問い合わせ画像のキーは隠してください。
 
-現在の Key のモデル一覧：
-
-```bash
-curl 'https://nexusapi.link/v1/models' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
-```
-
-`data[].id` がその Key で使えるモデル ID です。Claude Code には `anthropic` 対応モデル、Codex には `openai-response` 対応モデルを選択してください。
-
-## ツールごとの Endpoint ルール
-
-| ツール | Endpoint |
-| --- | --- |
-| Claude Code | `https://nexusapi.link` |
-| Codex | `https://nexusapi.link/v1` |
-
-## よくある問題
-
-### 切り替え後も公式アドレスに送信される
-
-CC Switch で NexusAPI Provider が選択されているか確認し、端末を開き直します。対象 CLI のローカル設定が CC Switch の設定を上書きしていないかも確認してください。
-
-### API Key が無効
-
-NexusAPI のトークン管理で作成した Key であること、有効期限、残高、モデル制限を確認します。Key はそのままコピーし、接頭辞を手入力や推測で変更しないでください。
-
-### モデルが使えない
-
-グループ、モデル制限、同じ Key の `/v1/models` 応答を確認します。モデルがそこにない場合は、CC Switch を何度も編集せず、表示されるモデルを使用するか、モデル名と Request ID を添えてサポートに連絡してください。
-
-### Claude Code が `/login` を求める
-
-NexusAPI Provider を使う際、Claude 公式アカウントへログインする必要はありません。CC Switch の NexusAPI Provider に戻して、ターミナルを開き直してください。
-
-## 推奨手順
-
-1. CC Switch で Provider を手動追加します。
-2. 選択した Key の `/v1/models` で利用可能なモデルを確認します。
-3. 複雑なタスクの前に短いリクエストで確認します。
+公式プロジェクト：[CC Switch](https://github.com/farion1231/cc-switch)。ボタン名はバージョンによって異なる場合があります。

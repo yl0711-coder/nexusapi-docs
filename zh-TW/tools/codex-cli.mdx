@@ -1,49 +1,55 @@
 ---
 title: "Codex CLI 安裝與設定"
-description: "安裝 Codex CLI，並把 NexusAPI 設為自訂 Responses Provider。"
+description: "安裝 Codex、儲存位址與模型、設定 Key，再驗證呼叫。"
 ---
 
-本頁的安裝命令和 `config.toml` 欄位依據 [OpenAI Codex 官方儲存庫](https://github.com/openai/codex)及[自訂 Provider 參考](https://learn.chatgpt.com/docs/config-file/config-advanced)。NexusAPI 僅提供位址、API Key 和模型 ID。
+本頁設定 Codex CLI。使用 NexusAPI Key，不要將 ChatGPT 密碼當作 Key。
 
-## 1. 安裝
+## 1. 安裝 Codex
 
-選擇一種官方方式即可：
+Windows 開 PowerShell；Mac 開終端機。只執行自己系統的安裝指令，已安裝可跳過。
 
-### Windows PowerShell
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
 ```
-
-### macOS、Linux 或 WSL
-
+</Tab>
+<Tab title="macOS / Linux / WSL">
 ```bash
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
+</Tab>
+</Tabs>
 
-### 已安裝 Node.js 的使用者
-
-```bash
-npm install -g @openai/codex
-codex --version
-```
-
-安裝完成後亦可在新終端單獨確認版本：
+安裝後重開終端機，執行下方指令。看到版本號再繼續；找不到指令先處理安裝問題。
 
 ```bash
 codex --version
 ```
 
-## 2. 建立相容的 Key
+## 2. 儲存位址和模型
 
-在控制台 **令牌管理 → 新增令牌** 選擇包含目標模型的群組，設定名稱和專案額度。建立後請看[能力矩陣](/zh-TW/developer/capability-matrix)，並以 `/v1/models` 確認 `supported_endpoint_types` 包含 `openai-response`。
+先[建立 Key](/zh-TW/guide/api-key)，在[模型廣場](https://nexusapi.link/pricing)選同一分組，複製支援 Codex / Responses 的模型名。再按系統開啟個人設定：
 
-## 3. 設定自訂 Provider
+<Tabs>
+<Tab title="Windows PowerShell">
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex" | Out-Null
+notepad "$env:USERPROFILE\.codex\config.toml"
+```
+</Tab>
+<Tab title="macOS / Linux / WSL">
+```bash
+mkdir -p ~/.codex
+nano ~/.codex/config.toml
+```
+</Tab>
+</Tabs>
 
-| 系統 | 設定檔 |
-| --- | --- |
-| Windows | `%USERPROFILE%\\.codex\\config.toml` |
-| macOS／Linux | `~/.codex/config.toml` |
+nano 用 `Ctrl + O`、Enter 儲存，`Ctrl + X` 離開。Windows 記事本用 `Ctrl + S`，檔名是 `config.toml`，不能加 `.txt`。
+
+空檔案貼下方內容，只替換 `YOUR_MODEL_ID` 為模型名稱：
 
 ```toml
 model_provider = "nexusapi"
@@ -56,57 +62,60 @@ env_key = "NEXUSAPI_API_KEY"
 wire_api = "responses"
 ```
 
-請將 `YOUR_MODEL_ID` 替換成目前 Key 可用的準確模型 ID。不要在設定檔中保存真實 Key。
+已有設定先備份；`model`、`model_provider` 放最上方，再新增或更新 `[model_providers.nexusapi]`，不要重複同名區段。可改用 [CC Switch](/zh-TW/tools/cc-switch)。本檔不填 Key。
 
-<Warning>
-請將 NexusAPI Key 保存在環境變數。上方設定會透過 `env_key` 從 `NEXUSAPI_API_KEY` 讀取 Key；`auth.json` 可能包含 Codex 的憑證狀態，無須把 NexusAPI Key 寫入其中，也不要將包含 Key 的檔案提交或截圖分享。
-</Warning>
+## 3. 設定並儲存 API Key
 
-## 4. 設定環境變數
+只將 `YOUR_API_KEY` 換成自己的完整 Key。Windows 指令同時設定目前終端機和使用者環境變數。
 
-### Windows PowerShell
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
-setx NEXUSAPI_API_KEY "YOUR_NEXUSAPI_KEY"
+$env:NEXUSAPI_API_KEY = "YOUR_API_KEY"
+[Environment]::SetEnvironmentVariable("NEXUSAPI_API_KEY", $env:NEXUSAPI_API_KEY, "User")
+```
+</Tab>
+<Tab title="macOS (Zsh)">
+```bash
+touch ~/.zshrc
+nano ~/.zshrc
 ```
 
-### macOS、Linux 或 WSL
+在檔案末尾加入下一行；已有同名變數就替換，不要重複。儲存後重開終端機。
 
 ```bash
-export NEXUSAPI_API_KEY='YOUR_NEXUSAPI_KEY'
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+```
+</Tab>
+<Tab title="Linux / WSL (Bash)">
+```bash
+nano ~/.bashrc
 ```
 
-Windows 的 `setx` 需要新開終端才生效；臨時 `export` 僅對目前 Shell 生效。請使用系統憑證或受控的環境變數管理方案長期保存，不要提交到儲存庫。
-
-## 5. 驗證與排查
-
-進入專案目錄後啟動：
+在檔案末尾加入下一行；已有同名變數就替換，不要重複。儲存後重開終端機。
 
 ```bash
-cd your-project-folder
+export NEXUSAPI_API_KEY='YOUR_API_KEY'
+```
+</Tab>
+</Tabs>
+
+Mac 以預設 Zsh、Linux 以 Bash 示範。其他 Shell 請放對應啟動檔，不確定問客服。Key 不要放進專案或截圖。
+
+## 4. 啟動驗證
+
+在自己的專案目錄開終端機，執行：
+
+```bash
 codex
 ```
 
-首次請使用不修改檔案的任務：
+輸入 `/status`，確認模型和 NexusAPI Provider。再傳「請只回覆：連線成功，不要修改檔案」。收到完整回覆並在[使用日誌](https://nexusapi.link/usage-logs/common)看到紀錄即完成。測試消耗少量額度。
 
-```text
-請說明目前儲存庫的目錄結構，不要修改檔案。
-```
+## 5. 常見卡點
 
-然後檢查控制台使用紀錄。若失敗，確認新終端已取得 Key、Key／群組／模型 ID 正確，並保留錯誤及 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。
+`Missing environment variable` 回第 3 步；模型不可用就重新複製目前分組支援 Codex 的名稱。其他見[問題自查](/zh-TW/faq/self-check)。
 
-## 問題排查
+Mac 從 Dock 開的編輯器不一定讀到終端機變數。先用 CLI 驗證；需用 Codex 擴充套件時，在已設定終端機用 `code .` 或 `cursor .` 啟動。不要把 Key 放進專案設定。
 
-1. 確認 `NEXUSAPI_API_KEY` 已在新開的終端中生效。
-2. 確認 Key 已啟用、帳戶額度足夠且所屬群組包含選定模型。
-3. 從模型廣場或 `/v1/models` 重新複製完全一致的模型 ID。
-4. 持續錯誤時保存原始錯誤與 Request ID，並依[問題自查](/zh-TW/faq/self-check)處理。
-
-## VS Code / Cursor
-
-可從擴充功能市集安裝由 [OpenAI 發布的 Codex 擴充功能](https://marketplace.visualstudio.com/items?itemName=OpenAI.chatgpt)。它會共用使用者層級的 Codex 設定；不要在 VS Code 寫入舊版的 `chatgpt.apiBase` 或 `chatgpt.config` 欄位。
-
-## 官方來源
-
-- [OpenAI Codex CLI 安裝說明](https://github.com/openai/codex)
-- [OpenAI Codex 自訂 Provider 設定](https://learn.chatgpt.com/docs/config-file/config-advanced)
+官方安裝與設定：[Codex CLI](https://learn.chatgpt.com/docs/cli) · [Custom providers](https://learn.chatgpt.com/docs/config-file/config-advanced#custom-model-providers)。

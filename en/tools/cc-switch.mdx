@@ -1,188 +1,64 @@
 ---
-title: "CC Switch setup"
-description: "Add NexusAPI configurations for Claude Code and Codex in CC Switch."
+title: "Configure NexusAPI with CC Switch"
+description: "Install, add a custom provider, fill in the table, enable and test."
 ---
 
-CC Switch manages local provider configurations for AI command-line tools. Add NexusAPI manually, select that provider in CC Switch, then start the corresponding CLI in a new terminal.
+CC Switch manages settings. **First install [Claude Code](/en/tools/claude-code) or [Codex CLI](/en/tools/codex-cli), completing only that guide's installation step, then return here.** Skip if installed. No separate manual configuration is needed.
 
-## Before you start
+## 1. Install CC Switch
 
-Prepare an enabled NexusAPI key, the exact model ID available to its group, and the correct endpoint. The [API and model capability matrix](/en/developer/capability-matrix) explains why a model visible on the site may still not fit a given protocol.
+Open [official downloads](https://github.com/farion1231/cc-switch/releases/latest) and choose your system:
 
-| Item | Value |
-| --- | --- |
-| Claude endpoint | `https://nexusapi.link` |
-| Codex endpoint | `https://nexusapi.link/v1` |
-| API key | A key created in NexusAPI Token Management |
-| Model ID | Exact ID available to this key's group |
+- Windows: use a Windows `.msi`; ARM computers need the `arm64` `.msi`.
+- macOS: download the macOS `.dmg` and follow the installer.
+- Linux: choose the appropriate `.deb` or `.AppImage`.
 
-```text
-NexusAPI console
-→ Token Management
-→ Create or copy an API key
-```
+## 2. Add a custom provider
 
-## Install CC Switch
+Select **Claude Code** or **Codex** in the sidebar, click **+ / Add provider** at the top right, then choose **Custom configuration**. Do not choose Claude Desktop or another site's preset.
 
-### macOS
+![CC Switch 4.0.21: Custom configuration (Chinese UI)](/images/nexusapi/cc-switch-custom-entry-zh.png)
 
-```bash
-brew install --cask cc-switch
-```
+## 3. Fill in the settings
 
-Open CC Switch from Applications after installation.
+[Create a key](/en/guide/api-key), select its group in [Model Square](https://nexusapi.link/pricing), and copy a model for your target tool. Enter the NexusAPI values in the table below:
 
-### Windows
+| Field | Claude Code | Codex |
+| --- | --- | --- |
+| Name | NexusAPI Claude | NexusAPI Codex |
+| Endpoint | `https://nexusapi.link` | `https://nexusapi.link/v1` |
+| API Key | Your complete NexusAPI key | Your complete NexusAPI key |
+| Primary model | Copied Claude Code / Messages model | Copied Codex / Responses model |
 
-Download the `.msi` package from [official releases](https://github.com/farion1231/cc-switch/releases) and follow its installer. A portable `.zip` is also available: extract it, then run the application.
+Claude Code: open advanced options. Put the copied main model in “默认兜底模型” (default fallback model). For Haiku, use an auxiliary model confirmed by support in the actual request model field. Replace all placeholders shown below.
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+Codex: use the model in the table; the Claude Code model mappings do not apply. Configure only your app, choose Direct, leave other options at defaults, then click Add / Save.
 
-### Linux
+![Claude Code form example. Replace placeholders; this draft was not saved or connected.](/images/nexusapi/cc-switch-claude-form-zh.png)
 
-Download the suitable `.deb` or `.AppImage` file from [official releases](https://github.com/farion1231/cc-switch/releases). Arch Linux users can use the community-maintained AUR package:
+Claude Code form example. Replace placeholders; this draft was not saved or connected.
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+![Claude Code model mapping example (Chinese UI)](/images/nexusapi/cc-switch-claude-models-zh.png)
 
-```bash
-paru -S cc-switch-bin
-```
+## 4. Enable and test
 
-<Warning>
-Only download CC Switch from its [official repository](https://github.com/farion1231/cc-switch) or its release page. Do not use pages that request payment or NexusAPI credentials.
-</Warning>
+Click **Switch / Enable** for this NexusAPI provider. Saving alone does not switch the tool. Reopen the terminal and start the matching tool:
 
-## Add a provider
-
-Open **Provider management → Add provider**, select the target app, enter the fields below, save, switch to the new provider, and restart the CLI. Interface labels can change between CC Switch releases; the endpoint, key, model, and protocol remain the important values.
-
-The complete flow is:
-
-```text
-Open CC Switch
-→ Add provider
-→ Select the app to configure
-→ Enter the NexusAPI endpoint, API key, and model ID
-→ Save the provider
-→ Switch to that provider
-→ Start the matching CLI in a new terminal
-```
-
-![Official CC Switch add-provider screen; choose the custom configuration when connecting NexusAPI](/images/nexusapi/cc-switch-add-provider-official.png)
-
-> Image from the [CC Switch official repository](https://github.com/farion1231/cc-switch), used under its MIT License. The other providers shown are examples only; choose the custom configuration for NexusAPI.
-
-![Official CC Switch provider-form example with the key masked](/images/nexusapi/cc-switch-provider-form-official.png)
-
-> This is an example form from the [CC Switch repository](https://github.com/farion1231/cc-switch/blob/main/docs/images/codex-claude-routing/02-claude-codex-provider-form.png). Its URL, model, and gateway name are interface examples only; use the NexusAPI values in the tables below.
-
-### Claude Code provider
-
-| Field | Value |
-| --- | --- |
-| App | `Claude Code` |
-| Name | `NexusAPI Claude` |
-| Endpoint / Base URL | `https://nexusapi.link` |
-| API key | Your NexusAPI key |
-| Primary model | A Claude-compatible model ID available to the key |
-
-Optional Haiku, Sonnet, and Opus model fields can be left empty, or filled with an available lightweight / Sonnet / Opus model. For a minimal provider, use:
-
-```text
-App: Claude Code
-Name: NexusAPI Claude
-Endpoint: https://nexusapi.link
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CLAUDE_MODEL_ID
-Sonnet Model: YOUR_CLAUDE_MODEL_ID
-```
-
-Newer CC Switch releases label the app **Claude Code**; an older UI can show **Claude**. Choose the Claude Code provider, not Claude Desktop. Do **not** append `/v1` to the Claude endpoint. After switching providers, open a new terminal and run:
-
+<Tabs>
+<Tab title="Claude Code">
 ```bash
 claude
 ```
-
-Use `/status` and then send a short message:
-
-```text
-Introduce yourself in one sentence.
-```
-
-### Codex provider
-
-| Field | Value |
-| --- | --- |
-| App | `Codex` |
-| Name | `NexusAPI Codex` |
-| Endpoint / Base URL | `https://nexusapi.link/v1` |
-| API key | Your NexusAPI key |
-| Primary model | A model ID available to the key whose `supported_endpoint_types` includes `openai-response` |
-
-For a minimal provider, use:
-
-```text
-App: Codex
-Name: NexusAPI Codex
-Endpoint: https://nexusapi.link/v1
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CODEX_MODEL_ID
-```
-
-Codex uses the Responses protocol and therefore requires `/v1`. The model must be available to the selected key. After switching providers, run:
-
+</Tab>
+<Tab title="Codex">
 ```bash
 codex
 ```
+</Tab>
+</Tabs>
 
-Make one read-only test request before real work.
+Send “Reply only: connection successful. Do not modify files.” Check a complete reply and the model and group in [Usage Logs](https://nexusapi.link/usage-logs/common). The test uses a little credit.
 
-## Confirm the current model list
+Command not found: install the CLI first. Still using the official service: check Enable and restart. Unavailable model: recopy one for your group. If the error names an auxiliary model, confirm eligible Haiku / Sonnet / Opus names. Send other errors to support with the key hidden.
 
-Use the selected key to see only models it can access:
-
-```bash
-curl 'https://nexusapi.link/v1/models' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
-```
-
-Copy an ID from `data[].id`. Choose an `anthropic`-capable model for Claude Code, and an `openai-response`-capable model for Codex.
-
-## Endpoint rules by tool
-
-| Tool | Endpoint |
-| --- | --- |
-| Claude Code | `https://nexusapi.link` |
-| Codex | `https://nexusapi.link/v1` |
-
-When in doubt, use this table rather than a value copied from another client.
-
-## If it does not work
-
-### It still calls the official address after switching
-
-1. Confirm that the NexusAPI provider is selected in CC Switch.
-2. Close and reopen the terminal after switching.
-3. Check whether a local configuration of the target CLI overrides the settings written by CC Switch.
-
-### The API key is invalid
-
-Check that the key was created in NexusAPI Token Management, is enabled, has not expired, has sufficient account credit, and is not blocked by a model restriction. Copy the key exactly; do not add or guess a prefix.
-
-### The model is unavailable
-
-Check the token group, any model restriction, and the `/v1/models` output for the same key. If the model is not in that response, do not repeatedly edit CC Switch; use a visible model or contact support with the model name and Request ID.
-
-### Claude Code asks you to run `/login`
-
-Do not sign in to an official Claude account for this NexusAPI provider. Switch back to the NexusAPI provider in CC Switch and restart the terminal. Use the provider configuration, not Claude Code’s official login, for the gateway key.
-
-## Recommended workflow
-
-1. Add the provider manually in CC Switch.
-2. Use `/v1/models` with the selected key to identify usable models.
-3. Verify with a short request before a complex task.
+Official project: [CC Switch](https://github.com/farion1231/cc-switch). Button labels can vary by version.

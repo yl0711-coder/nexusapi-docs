@@ -1,74 +1,41 @@
 ---
-title: "Quick start in 5 minutes"
-description: "Make your first model request with NexusAPI."
+title: "5-minute quick start"
+description: "Sign in, create a key, configure your app, and send a first message."
 ---
 
-This guide walks you through your first request. You only need a NexusAPI account and available credit.
+**Follow these four steps. Skip any step you have already completed.**
 
-<Info>
-**The shortest path**
+## 1. Sign in and check your balance
 
-Purchase credit → Create an API key → Copy a model ID from the Model Marketplace → Send a test request
-</Info>
+[Sign in](https://nexusapi.link/sign-in). Contact support if you do not have an account.
 
-## 1. Purchase credit
+Open [Wallet](https://nexusapi.link/wallet). If you have usable credit or a plan, continue; otherwise [add funds](/en/guide/recharge).
 
-Sign in to the console, then use **Wallet Management** to top up online.
+## 2. Create and copy an API key
 
-![NexusAPI Wallet Management and online top-up page](/images/nexusapi/console-wallet-topup-en.png)
+1. Open [API Keys](https://nexusapi.link/keys) and click **Create API Key**.
+2. Enter a name, choose the group provided by support, and set quantity to `1`. Leave other settings at their defaults unless you need to change them.
+3. Click **Save changes**.
+4. Back in the list, click the copy button for your new key.
 
-## 2. Create an API key
+Need pictures? See [the key guide](/en/guide/api-key). **Do not share your complete key.**
 
-1. Open **Token Management** in the console.
-2. Select **Add token**.
-3. Enter a recognizable name, such as `codex-work`.
-4. Select a group that includes the model you want to use.
-5. Set an appropriate limit for the use case, then submit.
+## 3. Follow the guide for your app
 
-![NexusAPI Token Management page with keys and account data masked](/images/nexusapi/console-token-management-en.png)
-
-![NexusAPI Create Token panel](/images/nexusapi/console-create-token-en.png)
-
-<Warning>
-**Keep your API key private**
-
-An API key is used only for authentication. Do not put it in public repositories, screenshots, or chat logs. Use separate keys for separate projects.
-</Warning>
-
-## 3. Configure the API
-
-Prepare these three values:
-
-| Parameter | Value |
+| What you use | Guide |
 | --- | --- |
-| Base URL | `https://nexusapi.link/v1` |
-| API key | Generated in the console; it usually starts with `sk-` |
-| Model ID | Copy the exact model name from the [Model Marketplace](https://nexusapi.link/pricing) |
+| Claude Code | [Configure Claude Code](/en/tools/claude-code) |
+| Codex CLI | [Configure Codex CLI](/en/tools/codex-cli) |
+| CC Switch | [Configure CC Switch](/en/tools/cc-switch) |
+| VS Code / Cursor | [Editor setup](/en/tools/cursor-vscode) |
+| Your own program | [Copyable code examples](/en/developer/code-examples) |
 
-## 4. Send a test request
+**Copy the address and model name from the matching guide and enter your own API key. Addresses can differ between apps.**
 
-The following example uses the OpenAI Chat Completions format. Replace `YOUR_API_KEY` and `YOUR_MODEL_ID`:
+## 4. Send a test message
 
-```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{
-    "model": "YOUR_MODEL_ID",
-    "messages": [{"role": "user", "content": "Reply: connection successful"}]
-  }'
-```
+Send: **“Reply with: connection successful.”**
 
-If the JSON response includes `choices` and a reply, your basic integration is working.
+A complete reply means you can start using the app. Check the request and charge in [Usage Logs](https://nexusapi.link/usage-logs/common).
 
-<Tip>
-**Client URLs can be different**
-
-Some clients automatically append `/v1` or a request path. Follow the dedicated guide for [Claude Code](/en/tools/claude-code), [Codex CLI](/en/tools/codex-cli), [CC Switch](/en/tools/cc-switch), or [VS Code / Cursor](/en/tools/cursor-vscode) instead of copying this URL mechanically.
-</Tip>
-
-## Next steps
-
-- [Understand integration options](/en/guide/integration-overview)
-- [Review models, groups, and billing](/en/billing/models-pricing)
-- [Start self-checking if something goes wrong](/en/faq/self-check)
+If it fails, send support the **app name, error screenshot, time, model and group**. Hide your complete key in screenshots.

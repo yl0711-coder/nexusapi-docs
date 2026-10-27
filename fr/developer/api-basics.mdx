@@ -8,7 +8,7 @@ Cette page présente les règles communes à tous les appels de modèle et expli
 <Info>
 **Confirmez la capacité d'abord**
 
-Les modèles disponibles dépendent du groupe de votre clé API, des restrictions de modèle et de l'état du service. Le catalogue global ne garantit pas qu'un modèle soit appelable avec une clé donnée.
+Les modèles disponibles dépendent du groupe de votre clé API, des restrictions de modèle et de l'état du service. Le catalogue complet de la Place des modèles ne garantit pas qu'un modèle soit appelable avec une clé donnée.
 </Info>
 
 ## Les trois valeurs nécessaires
@@ -16,8 +16,8 @@ Les modèles disponibles dépendent du groupe de votre clé API, des restriction
 | Valeur | Où l'obtenir | Rôle |
 | --- | --- | --- |
 | URL de base | Cette page | Envoie les requêtes du SDK ou du client à NexusAPI |
-| Clé API | Console → Gestion des tokens | Identifie l'appelant et les groupes accessibles |
-| ID du modèle | Catalogue ou `/v1/models` | Sélectionne le modèle de l'appel |
+| Clé API | Console → Clés API | Identifie l'appelant et les groupes accessibles |
+| ID du modèle | Place des modèles ou `/v1/models` | Sélectionne le modèle de l'appel |
 
 Pour un client de type OpenAI, utilisez :
 
@@ -31,7 +31,7 @@ Pour un appel HTTP manuel, envoyez la clé dans `Authorization` :
 Authorization: Bearer YOUR_API_KEY
 ```
 
-Ne placez jamais une clé complète dans du code frontend, une capture, un chat ou un dépôt Git. Les règles d'URL varient selon le client : Claude Code utilise l'adresse sans `/v1`, tandis que Codex CLI utilise sa configuration Provider. Suivez le [guide de l'outil client](/fr/tools/index) concerné.
+Ne placez jamais une clé complète dans du code frontend, une capture, un chat ou un dépôt Git. Les règles d'URL varient selon le client : Claude Code utilise l'adresse sans `/v1`, tandis que Codex CLI utilise la configuration de son fournisseur. Suivez le [guide de l'outil client](/fr/tools/index) concerné.
 
 ## Lister les modèles visibles par la clé
 
@@ -40,7 +40,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-Copiez un ID depuis `data[].id`. Cette liste indique les modèles **visibles actuellement par cette clé**, pas tout le catalogue. `data[].supported_endpoint_types` énumère les protocoles de requête disponibles pour ce modèle. Utilisez uniquement un chemin dont le type est indiqué : `openai` pour Chat Completions, `anthropic` pour Messages, `openai-response` pour Responses et `image-generation` pour la génération d'images. Si plusieurs types sont présents, choisissez celui qui correspond à votre client.
+Copiez un ID depuis `data[].id`. Cette liste indique les modèles **visibles actuellement par cette clé**, pas tout le catalogue. `data[].supported_endpoint_types` énumère les protocoles de requête disponibles pour ce modèle. Utilisez uniquement un chemin dont le type est indiqué : `openai` pour Chat Completions, `anthropic` pour Messages, `openai-response` pour Responses. Si plusieurs types sont présents, choisissez celui qui correspond à votre client.
 
 ## Choisir le bon protocole
 
@@ -48,20 +48,18 @@ Copiez un ID depuis `data[].id`. Cette liste indique les modèles **visibles act
 | --- | --- | --- |
 | Texte, chat et streaming compatibles OpenAI | `POST /v1/chat/completions` | Modèles dont `supported_endpoint_types` contient `openai` ; la plupart des applications, SDK OpenAI et clients génériques |
 | Anthropic natif / Claude Code | `POST /v1/messages` | Modèles dont `supported_endpoint_types` contient `anthropic` |
-| Provider Codex | `POST /v1/responses` | Seulement avec le [guide Codex CLI](/fr/tools/codex-cli) et un modèle dont `supported_endpoint_types` contient `openai-response` |
-| Génération d'images | `POST /v1/images/generations` | Modèles image dont `supported_endpoint_types` contient `image-generation` |
+| fournisseur Codex | `POST /v1/responses` | Seulement avec le [guide Codex CLI](/fr/tools/codex-cli) et un modèle dont `supported_endpoint_types` contient `openai-response` |
 
 Un même nom de modèle n'accepte pas forcément tous les formats. Vérifiez le protocole dans la [matrice des capacités](/fr/developer/capability-matrix), puis consultez :
 
 - [Chat Completions](/fr/developer/openai-compatible)
 - [Anthropic Messages](/fr/developer/anthropic-messages)
 - [Responses / Codex](/fr/developer/responses)
-- [Guide des modèles d'image](/fr/guide/image-generation)
 
 ## Vérification minimale et nouvelles tentatives
 
-1. Listez les modèles puis envoyez une courte requête texte ou image minimale.
+1. Listez les modèles puis envoyez une courte requête texte.
 2. Vérifiez l'ID, le groupe et le chemin avant d'ajouter des champs facultatifs, le streaming ou des lots.
-3. Conservez l'erreur, l'heure et le Request ID. Ne rejouez pas une requête non confirmée à haute fréquence.
+3. Conservez l'erreur, l'heure et l’identifiant de requête (Request ID). Ne rejouez pas une requête non confirmée à haute fréquence.
 
 Pour `401`, vérifiez d'abord la clé. Pour `404`, vérifiez un `/v1` absent ou répété. Pour `400`, vérifiez modèle, protocole et champs. Consultez l'[auto-vérification](/fr/faq/self-check) pour la suite.

@@ -3,15 +3,13 @@ title: "Erreurs API courantes"
 description: "Diagnostiquer les erreurs fréquentes de client, protocole, requête et facturation NexusAPI."
 ---
 
-Cette page s’applique à Claude Code, Codex CLI, Cursor, extensions VS Code et applications maison. Avant toute nouvelle tentative, conservez **le message d’erreur, le Request ID, l’heure, le modèle et l’endpoint appelé**. Ne communiquez jamais une clé API complète.
-
-<Tip>
-**Diagnostiquez avant de réessayer**
-
-Les problèmes de paramètres, d’endpoint et de compatibilité de session ne disparaissent pas en répétant la requête. Ne réessayez qu’une seule fois, à faible fréquence, lorsqu’une panne transitoire est plausible.
-</Tip>
+Trouvez le même message et suivez les premières étapes. En cas de doute, envoyez au support application, heure, modèle, groupe et capture. **Masquez la clé complète et évitez les essais répétés.**
 
 ## `status_code=500, not implemented`
+
+Ne réessayez pas en boucle. Faites confirmer par le support la compatibilité du modèle avec votre application. Les détails ci-dessous concernent les programmes personnalisés.
+
+<Accordion title="Détails techniques (facultatifs)">
 
 Si le message contient `status_code=500` et `not implemented`, vérifiez d’abord que le modèle sélectionné prend en charge le protocole de l’endpoint appelé. Par exemple, `/v1/responses` requiert `openai-response` dans `supported_endpoint_types`. En l’absence de ce type, il s’agit d’une **incompatibilité de protocole**, pas d’une indisponibilité temporaire.
 
@@ -19,13 +17,19 @@ Si le message contient `status_code=500` et `not implemented`, vérifiez d’abo
 2. Dans Claude Code, suivez le [guide Claude Code](/fr/tools/claude-code) et vérifiez que le modèle prend en charge `anthropic`.
 3. Choisissez l'endpoint correspondant avant un nouvel essai : attendre ou changer de réseau ne corrige pas ce problème.
 
-Pour le support, fournissez un exemple expurgé, le modèle et le Request ID, jamais la clé.
+Pour le support, fournissez un exemple expurgé, le modèle et l’identifiant de requête (Request ID), jamais la clé.
+
+</Accordion>
 
 ## 400 Bad Request / paramètres incompatibles
 
+Sauvegardez le contenu important et testez un message court dans une nouvelle conversation. Si nécessaire, envoyez application, modèle et capture au support.
+
+<Accordion title="Détails techniques (facultatifs)">
+
 Une 400 indique généralement un format de requête, un paramètre ou un état de session non valide pour l’endpoint.
 
-1. Recopiez l’ID exact du modèle depuis le catalogue.
+1. Recopiez l’ID exact du modèle depuis la Place des modèles.
 2. Vérifiez le couple endpoint/modèle/client dans l’[aperçu d’intégration](/fr/guide/integration-overview).
 3. Vérifiez la compatibilité des paramètres image, outils, raisonnement ou reprise de session.
 4. Mettez à jour un client ou SDK ancien.
@@ -33,7 +37,13 @@ Une 400 indique généralement un format de requête, un paramètre ou un état 
 
 Après avoir corrigé la cause probable, faites une requête minimale pour vérifier le résultat.
 
+</Accordion>
+
 ## 401 Unauthorized
+
+Recopiez la clé complète, collez-la puis redémarrez. Vérifiez qu’elle est activée et non expirée. Ne l’envoyez pas au support.
+
+<Accordion title="Détails techniques (facultatifs)">
 
 Les causes habituelles sont une clé absente, incorrecte, désactivée, expirée ou un en-tête d’authentification mal formé.
 
@@ -43,52 +53,89 @@ Authorization: Bearer YOUR_API_KEY
 
 Recopiez la clé depuis la console et vérifiez l’URL. Ne donnez pas sa valeur complète au support. En cas de fuite présumée, désactivez l’ancienne clé, créez-en une nouvelle et mettez à jour l’application.
 
+</Accordion>
+
 ## 403 Forbidden
 
-Une 403 signifie que cette requête est refusée : groupe non autorisé, restriction de modèle, liste d’IP non correspondante, état du compte ou refus du service upstream.
+Faites vérifier les droits du modèle et du groupe par le support, sans changer de clé en boucle.
+
+<Accordion title="Détails techniques (facultatifs)">
+
+Une 403 signifie que cette requête est refusée : groupe non autorisé, restriction de modèle, liste d’IP non correspondante, état du compte ou refus du service en amont.
 
 Vérifiez le groupe, les restrictions de modèle et la liste d’IP, puis testez une courte requête texte. Si l’erreur persiste, fournissez Request ID, modèle, heure et message original. Des essais fréquents ou la création de nouvelles clés ne résolvent pas une restriction d'accès.
 
+</Accordion>
+
 ## 404 Not Found / mauvaise adresse
+
+Recopiez l’adresse du [guide de l’application](/fr/tools), sans ajouter de chemin.
+
+<Accordion title="Détails techniques (facultatifs)">
 
 Vérifiez en priorité :
 
-- que la Base URL n’est pas devenue `/v1/v1/...` ;
+- que l’URL de base n’est pas devenue `/v1/v1/...` ;
 - que le client n’ajoute pas déjà `/v1` ou le chemin ;
-- que vous utilisez `/v1/chat/completions`, `/v1/responses`, `/v1/messages` ou `/v1/images/generations` selon le cas.
 
 Les règles diffèrent par outil : consultez le [guide de l’outil](/fr/tools/).
 
 Un modèle indisponible n’est généralement pas une 404. Un modèle absent du groupe, temporairement indisponible ou sans service disponible produit plus souvent `503` / `no available channel`.
 
+</Accordion>
+
 ## 429 Too Many Requests
 
-Une 429 peut venir d’une limite de débit ou du modèle. `Concurrency limit exceeded for user` signale généralement une limite de concurrence du client ou de l’upstream ; le seul code HTTP ne prouve pas une panne de clé.
+Attendez la fin des requêtes, réduisez les tâches simultanées et essayez une fois. Sinon, contactez le support.
 
-- Réduisez la concurrence ; respectez `Retry-After`, sinon utilisez un backoff exponentiel avec jitter.
+<Accordion title="Détails techniques (facultatifs)">
+
+Une 429 peut venir d’une limite de débit ou du modèle. `Concurrency limit exceeded for user` signale généralement une limite de concurrence du client ou du service en amont ; le seul code HTTP ne prouve pas une panne de clé.
+
+- Réduisez la concurrence ; respectez `Retry-After`, sinon utilisez un délai croissant entre les tentatives, avec une variation aléatoire.
 - Ne faites pas réessayer rapidement plusieurs programmes avec la même clé.
-- Si l’erreur persiste à faible cadence, transmettez le Request ID.
+- Si l’erreur persiste à faible cadence, transmettez l’identifiant de requête (Request ID).
+
+</Accordion>
 
 ## 500, 502, 503, 504 ou 524
+
+Conservez l’erreur, attendez 10–30 secondes et essayez une fois. Si elle persiste, contactez le support. Pour `not implemented`, suivez la première rubrique.
+
+<Accordion title="Détails techniques (facultatifs)">
 
 Hors incompatibilité `not implemented`, ces codes indiquent souvent un échec de traitement, une rupture de connexion, un service occupé ou un délai d’attente. Ils ne signifient pas forcément que la clé ou le prompt est incorrect.
 
 | Statut | Action recommandée |
 | --- | --- |
-| `500` / `502` / `503` | Attendez 10 à 30 secondes, puis réessayez une seule fois. Gardez le Request ID si cela continue. |
+| `500` / `502` / `503` | Attendez 10 à 30 secondes, puis réessayez une seule fois. Gardez l’identifiant de requête (Request ID) si cela continue. |
 | `504` / `524` | Réduisez si possible contexte, appels d’outils ou longueur de sortie, puis réessayez plus tard. |
 
 En cas d'échecs répétés du même modèle, suspendez les longues tâches supplémentaires, conservez les informations et contactez le support.
 
+</Accordion>
+
 ## `no available channel` / aucun service actuel pour ce modèle
+
+Vérifiez que votre groupe propose ce modèle. Si l’erreur persiste, contactez le support, sans recharger ni créer de clé pour cette erreur.
+
+<Accordion title="Détails techniques (facultatifs)">
 
 Le groupe de la clé actuelle n’a temporairement aucun service disponible pour ce modèle. Un ID mal saisi, un modèle non proposé dans ce groupe, une indisponibilité temporaire ou une maintenance peuvent produire ce message.
 
-Réessayez plus tard ou choisissez un autre modèle visible pour ce groupe. Si cela persiste, envoyez le nom du modèle, le Request ID et l’heure ; ce message n'est pas lié à l'ajout de crédit ou à la recréation d'une clé.
+Réessayez plus tard ou choisissez un autre modèle visible pour ce groupe. Si cela persiste, envoyez le nom du modèle, l’identifiant de requête (Request ID) et l’heure ; ce message n'est pas lié à l'ajout de crédit ou à la recréation d'une clé.
+
+</Accordion>
 
 ## `Concurrency limit exceeded for user`
 
+Attendez la fin des requêtes et réduisez les tâches simultanées. Une nouvelle clé n’est généralement pas nécessaire.
+
+<Accordion title="Détails techniques (facultatifs)">
+
 Le compte a atteint son nombre maximal de requêtes actives. Attendez la fin des requêtes en cours, puis réduisez la concurrence. Cette erreur seule ne nécessite pas de désactiver ou recréer la clé.
+
+</Accordion>
 
 ## Erreurs de longues sessions ou d’appels d’outils
 
@@ -102,20 +149,11 @@ Le client tente de reprendre une réponse sur un mode de connexion non pris en c
 
 ### `Content block not found`
 
-Le client n’a pas reçu un fragment de contenu attendu, souvent pendant une longue conversation, un appel d’outil ou un flux interrompu. Ouvrez une nouvelle session, raccourcissez l’entrée et effectuez d’abord un test simple. Si le problème persiste, désactivez temporairement les appels d’outils non indispensables et transmettez au support le Request ID, l’heure, le modèle et l’erreur d’origine. Nous utiliserons ces éléments pour vérifier l’état du service.
-
-## Délai d’image ou capacité non prise en charge
-
-Les modèles d’image doivent utiliser l’endpoint Images ; un modèle texte ne peut pas utiliser un endpoint de génération d’images. La génération est synchrone et peut être plus lente : avant de soumettre à nouveau la même tâche, vérifiez le résultat de la première requête.
-
-- `Image generation is not enabled` / `model not supported` : vérifiez modèle, endpoint et paramètres.
-- `504` / `524` / timeout client : conservez Request ID et heure, puis décidez si une nouvelle génération est nécessaire.
-
-Consultez [l’utilisation des modèles d’image](/fr/guide/image-generation).
+Le client n’a pas reçu un fragment de contenu attendu, souvent pendant une longue conversation, un appel d’outil ou un flux interrompu. Ouvrez une nouvelle session, raccourcissez l’entrée et effectuez d’abord un test simple. Si le problème persiste, désactivez temporairement les appels d’outils non indispensables et transmettez au support l’identifiant de requête (Request ID), l’heure, le modèle et l’erreur d’origine. Nous utiliserons ces éléments pour vérifier l’état du service.
 
 ## Le compte est crédité mais la clé indique une limite insuffisante
 
-Vérifiez le crédit du compte, la limite de la clé, son expiration et le groupe de jetons. Un message isolé peut aussi venir d'une limite de clé, d'une expiration ou d'une règle de groupe : vérifiez-les avant de recharger. En cas de persistance, fournissez le Request ID.
+Vérifiez le crédit du compte, la limite de la clé, son expiration et le groupe de la clé. Un message isolé peut aussi venir d'une limite de clé, d'une expiration ou d'une règle de groupe : vérifiez-les avant de recharger. En cas de persistance, fournissez l’identifiant de requête (Request ID).
 
 ## Une erreur sera-t-elle automatiquement réussie plus tard ?
 
@@ -126,14 +164,11 @@ Décidez à partir du journal final du même Request ID et de la réception comp
 ## Informations à transmettre au support
 
 ```text
-Heure, avec fuseau :
-Request ID :
-Modèle :
-Endpoint appelé :
-Version du client ou SDK :
-Streaming / image / appel d’outil :
-Message d’erreur complet ou capture :
-Intermittent ou persistant :
+Application :
+Heure :
+Modèle et groupe :
+Erreur ou capture :
+Request ID (si disponible) :
 ```
 
-Ne transmettez pas une clé complète, un mot de passe, des données privées ou le contenu complet d’un travail. Pour identifier une clé, fournissez au plus ses six derniers caractères.
+Laissez les champs inconnus vides. N’envoyez ni clé complète, ni mot de passe, ni code de vérification.

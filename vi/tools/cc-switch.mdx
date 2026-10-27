@@ -1,180 +1,64 @@
 ---
-title: "Thiết lập CC Switch"
-description: "Thêm provider NexusAPI cho Claude Code và Codex trong CC Switch."
+title: "Cấu hình NexusAPI bằng CC Switch"
+description: "Cài, thêm nhà cung cấp tùy chỉnh, điền bảng và bật thử."
 ---
 
-CC Switch quản lý cấu hình provider AI CLI trên máy. Hãy thêm NexusAPI thủ công, chọn provider đó, rồi mở CLI tương ứng trong terminal mới.
+CC Switch quản lý cấu hình. **Cài [Claude Code](/vi/tools/claude-code) hoặc [Codex CLI](/vi/tools/codex-cli) trước, chỉ làm bước cài rồi quay lại đây.** Không cần tự sửa thêm file cấu hình của chúng.
 
-## Chuẩn bị
+## 1. Cài CC Switch
 
-Cần có key đang hoạt động, model ID chính xác trong nhóm của key và các endpoint:
+Mở [tải chính thức](https://github.com/farion1231/cc-switch/releases/latest), chọn đúng hệ điều hành:
 
-| Mục đích | Endpoint |
-| --- | --- |
-| Claude Code | `https://nexusapi.link` |
-| Codex | `https://nexusapi.link/v1` |
+- Windows: chọn Windows `.msi`; máy ARM chọn bản `arm64`.
+- macOS: mở macOS `.dmg` và cài theo hướng dẫn.
+- Linux: chọn `.deb` hoặc `.AppImage` phù hợp.
 
-Kiểm tra cặp mô hình/giao thức trong [ma trận khả năng](/vi/developer/capability-matrix).
+## 2. Thêm nhà cung cấp tùy chỉnh
 
-```text
-Console NexusAPI
-→ Quản lý token
-→ Tạo hoặc sao chép API Key
-```
+Chọn **Claude Code** hoặc **Codex** bên trái, bấm **+ / Add provider** góc trên phải, rồi chọn cấu hình tùy chỉnh. Không chọn Claude Desktop hay mẫu của trang khác.
 
-## Cài CC Switch
+![CC Switch 4.0.21: cấu hình tùy chỉnh (giao diện tiếng Trung)](/images/nexusapi/cc-switch-custom-entry-zh.png)
 
-### macOS
+## 3. Điền theo bảng
 
-```bash
-brew install --cask cc-switch
-```
+[Tạo khóa](/vi/guide/api-key), chọn cùng nhóm trong [Quảng trường mô hình](https://nexusapi.link/pricing), sao chép mô hình cho công cụ. Điền thông số NexusAPI theo bảng dưới đây:
 
-Sau khi cài, mở CC Switch từ Applications.
+| Mục | Claude Code | Codex |
+| --- | --- | --- |
+| Tên | NexusAPI Claude | NexusAPI Codex |
+| Địa chỉ | `https://nexusapi.link` | `https://nexusapi.link/v1` |
+| khóa API | Khóa NexusAPI đầy đủ của bạn | Khóa NexusAPI đầy đủ của bạn |
+| Mô hình chính | Tên Claude Code / Messages đã sao chép | Tên Codex / Responses đã sao chép |
 
-### Windows
+Claude Code: mở tùy chọn nâng cao. Điền tên mô hình chính đã sao chép vào “默认兜底模型” (mô hình dự phòng mặc định). Với Haiku, điền mô hình phụ được bộ phận hỗ trợ xác nhận vào trường mô hình yêu cầu thực tế. Thay các giá trị giữ chỗ trong ảnh.
 
-Tải `.msi` hoặc `.zip` portable từ [releases chính thức](https://github.com/farion1231/cc-switch/releases).
+Codex: dùng mô hình trong bảng, không cần ánh xạ mô hình Claude Code. Chỉ cấu hình ứng dụng cần dùng, chọn Direct, giữ mặc định các mục khác rồi bấm Add / Save.
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+![Ví dụ biểu mẫu Claude Code. Thay các giá trị giữ chỗ; bản nháp chưa lưu, chưa kết nối.](/images/nexusapi/cc-switch-claude-form-zh.png)
 
-### Linux
+Ví dụ biểu mẫu Claude Code. Thay các giá trị giữ chỗ; bản nháp chưa lưu, chưa kết nối.
 
-Tải `.deb` hoặc `.AppImage` từ [releases chính thức](https://github.com/farion1231/cc-switch/releases). Người dùng Arch Linux có thể dùng gói AUR do cộng đồng duy trì:
+![Ví dụ ánh xạ mô hình Claude Code (giao diện tiếng Trung)](/images/nexusapi/cc-switch-claude-models-zh.png)
 
-```text
-https://github.com/farion1231/cc-switch/releases
-```
+## 4. Bật và kiểm tra
 
-```bash
-paru -S cc-switch-bin
-```
+Bấm **Switch / Bật** trên cấu hình NexusAPI. Chỉ lưu chưa đổi dịch vụ. Mở lại terminal và chạy công cụ tương ứng:
 
-<Warning>
-Chỉ dùng [kho CC Switch chính thức](https://github.com/farion1231/cc-switch) và releases chính thức. Không dùng trang bên thứ ba yêu cầu thanh toán hoặc thông tin xác thực NexusAPI.
-</Warning>
-
-## Thêm provider
-
-Trong **Quản lý provider → Thêm**, chọn ứng dụng, nhập endpoint, key và model, lưu rồi chuyển sang provider đó.
-
-```text
-Mở CC Switch
-→ Thêm provider
-→ Chọn ứng dụng cần cấu hình
-→ Nhập endpoint NexusAPI, API Key và model ID
-→ Lưu provider
-→ Chuyển sang provider đó
-→ Mở CLI tương ứng trong terminal mới để kiểm tra
-```
-
-![Màn hình thêm provider chính thức của CC Switch; chọn custom configuration cho NexusAPI](/images/nexusapi/cc-switch-add-provider-official.png)
-
-![Ví dụ biểu mẫu Provider CC Switch chính thức, key đã được che](/images/nexusapi/cc-switch-provider-form-official.png)
-
-> Hình lấy từ [kho CC Switch chính thức](https://github.com/farion1231/cc-switch). URL, model và gateway name ở ví dụ thứ hai không phải giá trị của NexusAPI.
-
-### Claude Code
-
-| Trường | Giá trị |
-| --- | --- |
-| App | `Claude Code` |
-| Name | `NexusAPI Claude` |
-| Endpoint | `https://nexusapi.link` |
-| API Key | NexusAPI key của bạn |
-| Primary model | Model Claude tương thích trong nhóm key |
-
-Các trường Haiku, Sonnet và Opus tùy chọn có thể để trống hoặc điền model sẵn có. Cấu hình tối thiểu:
-
-```text
-App: Claude Code
-Name: NexusAPI Claude
-Endpoint: https://nexusapi.link
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CLAUDE_MODEL_ID
-Sonnet Model: YOUR_CLAUDE_MODEL_ID
-```
-
-Trong bản CC Switch mới, chọn `Claude Code`; UI cũ có thể ghi `Claude`. Hãy chọn Provider cho Claude Code, không chọn Claude Desktop, và không thêm `/v1`. Sau khi đổi provider, mở terminal mới:
-
+<Tabs>
+<Tab title="Claude Code">
 ```bash
 claude
 ```
-
-Kiểm tra bằng `/status` và một yêu cầu ngắn.
-
-```text
-Hãy tự giới thiệu bằng một câu.
-```
-
-### Codex
-
-| Trường | Giá trị |
-| --- | --- |
-| App | `Codex` |
-| Name | `NexusAPI Codex` |
-| Endpoint | `https://nexusapi.link/v1` |
-| API Key | NexusAPI key của bạn |
-| Primary model | Model Responses trong nhóm key |
-
-Cấu hình tối thiểu:
-
-```text
-App: Codex
-Name: NexusAPI Codex
-Endpoint: https://nexusapi.link/v1
-API Key: YOUR_NEXUSAPI_KEY
-Primary Model: YOUR_CODEX_MODEL_ID
-```
-
-Codex dùng giao thức Responses nên endpoint phải có `/v1`. Sau khi chuyển provider, chạy:
-
+</Tab>
+<Tab title="Codex">
 ```bash
 codex
 ```
+</Tab>
+</Tabs>
 
-Trước hết hãy thử một tác vụ chỉ đọc.
+Gửi “Chỉ trả lời: kết nối thành công. Không sửa file.” Kiểm tra đủ câu trả lời và mô hình, nhóm trong [nhật ký](https://nexusapi.link/usage-logs/common). Lượt thử này tiêu thụ một lượng nhỏ số dư.
 
-## Xác nhận mô hình của key hiện tại
+Không có lệnh: cài CLI trước. Vẫn dùng dịch vụ chính thức: kiểm tra Enable và mở lại. Mô hình lỗi: chép lại từ nhóm của khóa. Nếu lỗi gọi tên mô hình phụ, xác nhận tên Haiku / Sonnet / Opus khả dụng. Che khóa trong ảnh gửi hỗ trợ.
 
-Kiểm tra danh sách mô hình thực tế:
-
-```bash
-curl 'https://nexusapi.link/v1/models' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
-```
-
-`data[].id` là model ID thực sự dùng được với key này; không đoán theo tên provider hoặc ảnh chụp cũ.
-
-## Quy tắc endpoint theo công cụ
-
-| Công cụ | Endpoint |
-| --- | --- |
-| Claude Code | `https://nexusapi.link` |
-| Codex | `https://nexusapi.link/v1` |
-
-## Khắc phục sự cố
-
-### Đã đổi provider nhưng vẫn gọi địa chỉ chính thức
-
-Xác nhận provider NexusAPI đang được chọn trong CC Switch, mở lại terminal và kiểm tra cấu hình cục bộ của CLI đích có ghi đè thiết lập CC Switch hay không.
-
-### API Key không hợp lệ
-
-Kiểm tra key được tạo trong NexusAPI Token Management, đang bật, chưa hết hạn, đủ credit và không bị giới hạn model chặn. Sao chép nguyên key, không tự thêm hoặc đoán tiền tố.
-
-### Model không khả dụng
-
-Kiểm tra nhóm, giới hạn model và phản hồi `/v1/models` của cùng key. Nếu không thấy model trong phản hồi, đừng sửa CC Switch lặp lại; dùng model hiển thị hoặc liên hệ hỗ trợ với tên model và Request ID.
-
-### Claude Code yêu cầu `/login`
-
-Khi dùng provider NexusAPI, không đăng nhập tài khoản Claude chính thức. Quay lại provider NexusAPI trong CC Switch và mở lại terminal.
-
-## Quy trình khuyến nghị
-
-1. Thêm provider thủ công trong CC Switch.
-2. Dùng `/v1/models` với key đã chọn để xem model khả dụng.
-3. Kiểm tra bằng yêu cầu ngắn trước khi làm tác vụ phức tạp.
+Dự án chính thức: [CC Switch](https://github.com/farion1231/cc-switch). Tên nút có thể thay đổi theo phiên bản.

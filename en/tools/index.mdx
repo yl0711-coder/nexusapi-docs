@@ -1,44 +1,22 @@
 ---
-title: "Choose a client tool"
-description: "Select and configure the right NexusAPI client without mixing protocols or credentials."
+title: "Choose your app"
+description: "Find your app and follow its setup guide."
 ---
 
-Choose the tool for the way you work, then use its dedicated guide. Do not copy Base URLs or configuration files blindly between clients: some clients use OpenAI Chat Completions, while others use native Messages or Responses protocols.
+## 1. Pick your app
 
-## Quick choice
+| You use | Open this guide |
+| --- | --- |
+| Claude Code | [Setup guide](/en/tools/claude-code) |
+| Codex CLI | [Setup guide](/en/tools/codex-cli) |
+| CC Switch | [Setup guide](/en/tools/cc-switch) |
+| VS Code / Cursor | [Setup guide](/en/tools/cursor-vscode) |
+| Your own program | [Setup guide](/en/developer/code-examples) |
 
-| What you want to do | Recommended guide | Best for |
-| --- | --- | --- |
-| Work with an AI coding agent in a terminal | [Claude Code](/en/tools/claude-code) | Claude-style coding workflows |
-| Use OpenAI Codex in a terminal | [Codex CLI](/en/tools/codex-cli) | Responses / Codex workflows |
-| Manage more than one local CLI provider | [CC Switch](/en/tools/cc-switch) | Switching between saved configurations |
-| Use Claude Code in VS Code or Cursor | [VS Code / Cursor](/en/tools/cursor-vscode) | Editor-first workflows |
-| Build your own script or application | [Integration overview](/en/guide/integration-overview) | SDKs and automation |
+## 2. Before you start
 
-## Before changing a local configuration
+1. Have your own [API key](/en/guide/api-key) ready.
+2. Copy the address and model name from the matching guide. Do not mix configurations from different apps.
+3. Back up existing settings first. Do not delete the whole configuration folder.
 
-1. Create an API key and set a suitable project limit.
-2. Confirm that its token group includes the target model.
-3. Copy the exact model ID from the Model Marketplace or `/v1/models`.
-4. Back up an existing configuration file before editing it.
-5. Test with one small, read-only request and check the usage log.
-
-<Warning>
-**Use installation scripts from trusted sources**
-
-Installation or configuration scripts can modify local settings, write credentials, or install third-party code. Run one only after verifying the source, reviewing the script, and backing up existing configuration.
-</Warning>
-
-## Match the tool to the protocol
-
-| Client type | Typical Base URL | Start with |
-| --- | --- | --- |
-| OpenAI-compatible SDK or custom program | `https://nexusapi.link/v1` | `POST /v1/chat/completions` |
-| Claude Code | `https://nexusapi.link` | Native Messages configuration |
-| Codex CLI | `https://nexusapi.link/v1` | Custom Responses provider |
-
-The available protocol depends on the model and token group. Read the [API and model capability matrix](/en/developer/capability-matrix) before deciding that a visible model should work in a specific client.
-
-## A tool is not listed here
-
-If the client supports a custom OpenAI-compatible Base URL, begin with the [quick start](/en/guide/quick-start) and that client's official documentation. Confirm whether it adds `/v1` automatically, which protocol it sends, and whether it permits a custom model ID. For an unlisted client, use those sources to run a minimal test; we can consider adding a formal guide once the setup is verified.
+App not listed? Send support its name and a screenshot of its settings. Hide the key.

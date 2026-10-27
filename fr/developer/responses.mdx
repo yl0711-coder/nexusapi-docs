@@ -1,9 +1,9 @@
 ---
 title: "API Responses et Codex"
-description: "Choisissez la bonne intégration pour un Provider Codex ou un modèle confirmé pour Responses."
+description: "Choisissez la bonne intégration pour un fournisseur Codex ou un modèle confirmé pour Responses."
 ---
 
-Dans NexusAPI, `/v1/responses` sert au Provider personnalisé configuré dans le [guide Codex CLI](/fr/tools/codex-cli), ou à un modèle dont `supported_endpoint_types` dans `/v1/models` contient `openai-response`.
+Dans NexusAPI, `/v1/responses` sert au fournisseur personnalisé configuré dans le [guide Codex CLI](/fr/tools/codex-cli), ou à un modèle dont `supported_endpoint_types` dans `/v1/models` contient `openai-response`.
 
 <Warning>
 **Quand utiliser Responses**
@@ -19,7 +19,7 @@ POST https://nexusapi.link/v1/responses
 
 | Situation | Approche recommandée |
 | --- | --- |
-| Codex CLI | Utilisez la configuration Provider `wire_api = "responses"` du [guide Codex CLI](/fr/tools/codex-cli) |
+| Codex CLI | Utilisez la configuration du fournisseur `wire_api = "responses"` du [guide Codex CLI](/fr/tools/codex-cli) |
 | Autre application avec modèle dont `supported_endpoint_types` contient `openai-response` | Utilisez son client ou schéma Responses et vérifiez d'abord une requête minimale |
 | Application texte OpenAI générique | Préférez [Chat Completions](/fr/developer/openai-compatible) |
 | Modèle sans `openai-response` | Utilisez le protocole Chat Completions ou Messages indiqué dans `supported_endpoint_types`, pas cet endpoint |
@@ -56,7 +56,7 @@ Conservez la clé dans la variable `NEXUSAPI_API_KEY`, jamais dans `config.toml`
 
 ## Premiers contrôles
 
-1. Le groupe de la clé contient le modèle et son ID correspond exactement au catalogue.
+1. Le groupe de la clé contient le modèle et son ID correspond exactement à la Place des modèles.
 2. Le client envoie bien `/v1/responses`, pas `/v1/v1/...`.
 3. `supported_endpoint_types` du modèle contient `openai-response` ; sinon, utilisez le protocole correspondant indiqué.
-4. Conservez le Request ID, la version du client et l'erreur complète, puis suivez l'[auto-vérification](/fr/faq/self-check).
+4. Conservez l’identifiant de requête (Request ID), la version du client et l'erreur complète, puis suivez l'[auto-vérification](/fr/faq/self-check).

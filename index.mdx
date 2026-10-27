@@ -1,59 +1,39 @@
 ---
-title: NexusAPI 文档中心
-description: 从创建 API Key 到完成首次调用，快速接入 NexusAPI。
+title: "NexusAPI 使用帮助"
+description: "按步骤配置软件、充值和查看费用。"
 mode: wide
 ---
 
-<Info>
-NexusAPI 提供统一的模型调用入口。模型可用性、价格和你的令牌分组，以控制台中的**模型广场**为准。
-</Info>
+**第一次使用？从“快速开始”操作。已经有 Key？直接看你用的软件教程。**
 
 <Columns cols={3}>
-  <Card title="5 分钟完成首次调用" icon="rocket" href="/guide/quick-start" arrow>
-    创建 Key、选择模型并发出第一条请求。
+  <Card title="快速开始" icon="rocket" href="/guide/quick-start" arrow>
+    登录、创建 Key、配置软件。
   </Card>
-  <Card title="配置 Claude Code / Codex" icon="terminal" href="/tools" arrow>
-    根据所用客户端选择对应的配置教程。
+  <Card title="配置我的软件" icon="terminal" href="/tools" arrow>
+    Claude Code、Codex、CC Switch 等。
   </Card>
-  <Card title="确认接口与模型能力" icon="braces" href="/developer/capability-matrix" arrow>
-    先确认模型、分组与协议是否匹配。
-  </Card>
-</Columns>
-
-## 接入时需要的三项信息
-
-| 信息 | 从哪里获得 | 作用 |
-| --- | --- | --- |
-| Base URL | 本文档 | 指定请求发送到 NexusAPI 的地址 |
-| API Key | 控制台 → 令牌管理 | 识别调用身份与可用分组 |
-| 模型 ID | 控制台 → 模型广场 | 指定要调用的模型 |
-
-<Warning>
-请勿在聊天记录、截图、前端代码仓库或公开配置中泄露 API Key。怀疑泄露时，请立即在控制台删除或重置该 Key。
-</Warning>
-
-## 按你的目标开始
-
-<Columns cols={2}>
-  <Card title="我在写程序或脚本" icon="code-2" href="/guide/quick-start" arrow>
-    使用 OpenAI 兼容接口完成接入。
-  </Card>
-  <Card title="我在用 Claude Code" icon="bot" href="/tools/claude-code" arrow>
-    按原生 Messages 协议完成配置。
-  </Card>
-  <Card title="我在用 Codex CLI" icon="terminal-square" href="/tools/codex-cli" arrow>
-    配置自定义 Provider 与模型。
-  </Card>
-  <Card title="调用遇到错误" icon="circle-help" href="/faq/self-check" arrow>
-    先按自查流程收集必要信息。
+  <Card title="看倍率和折扣" icon="badge-dollar-sign" href="/billing/multipliers-and-discounts" arrow>
+    看例子，知道用了多少钱。
   </Card>
 </Columns>
 
-## 需要支持时，请一并提供
+## 常用操作
 
-- 发生时间和时区
-- 模型 ID、请求接口和是否使用流式响应
-- 完整错误原文与 Request ID
-- 已完成的最小复现步骤
+| 我想做什么 | 点这里 |
+| --- | --- |
+| 创建、复制 API Key | [密钥教程](/guide/api-key) |
+| 充值、查到账 | [充值教程](/guide/recharge) |
+| 找模型、看价格 | [模型和价格](/billing/models-pricing) |
+| 查调用记录、看扣费 | [用量和扣费](/billing/usage-and-billing) |
+| 修改密码、退出陌生设备 | [账号安全](/guide/account-security) |
 
-这些信息有助于我们更快定位问题，减少来回沟通。
+## 遇到问题
+
+把下面这些发给客服：
+
+- 用的什么软件。
+- 发生时间、模型和分组。
+- 报错原文或截图；有请求编号时一起提供。
+
+**截图请遮盖完整 API Key，不要发送密码或验证码。** 拿不准的信息不用猜，先把看到的报错发过来。

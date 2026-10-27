@@ -1,40 +1,34 @@
 ---
-title: "Mô hình, nhóm và giá"
-description: "Hiểu Chợ mô hình NexusAPI, nhóm token và giá hiện hành."
+title: "Chọn mô hình và xem giá"
+description: "Chọn đúng nhóm, sao chép tên mô hình và xem giá tương ứng."
 ---
 
-NexusAPI tính phí theo mức sử dụng thực tế, không có phí thuê bao cố định. Mô hình, giá, nhóm khả dụng và giao thức có thể thay đổi; hãy coi **Chợ mô hình** trong console và kết quả của khóa hiện tại là nguồn thông tin chuẩn, không dùng bảng giá cũ.
+## 1. Chọn nhóm trước
 
-## Bốn điều cần xác nhận trong Chợ mô hình
+1. Mở [Khóa API](https://nexusapi.link/keys), tìm khóa đang dùng và ghi lại **Nhóm**.
+2. Mở [Quảng trường mô hình](https://nexusapi.link/pricing).
+3. Chọn cùng nhóm ở bên trái.
 
-1. **Model ID** chính xác.
-2. **Nhóm token** được phép dùng mô hình.
-3. **Giá** hiện tại và đơn vị tính.
-4. **Giao thức / endpoint**: `openai`, `anthropic` hoặc tạo ảnh.
+**Không chỉ xem giá của Tất cả các nhóm. Chọn nhóm của bạn để xem đúng giá nhóm đó.**
 
-![Chợ mô hình NexusAPI có thể lọc theo nhà cung cấp và nhóm token](/images/nexusapi/model-marketplace-vi.png)
+![Quảng trường mô hình](/images/nexusapi/model-marketplace-vi.png)
 
-## Vì sao một mô hình có thể có ở nhiều nhóm
+## 2. Sao chép tên mô hình
 
-Nhóm xác định model, khả năng gọi và quy tắc giá mà Key có thể dùng. Cùng một model có thể xuất hiện ở nhiều nhóm. Đừng suy ra chỉ từ tên nhóm; hãy lọc theo nhóm trong Chợ mô hình và kiểm tra thẻ model.
+Tìm mô hình cần dùng, bấm sao chép tên rồi dán vào ô mô hình của phần mềm. Không tự gõ theo trí nhớ.
 
-Nên dùng key riêng cho production, thử nghiệm và từng trung tâm chi phí, đặt tên rõ ràng và giới hạn phù hợp. Trước khi triển khai, gọi `/v1/models` để xem chính xác mô hình key đó truy cập được.
+Không tìm thấy? Gửi hỗ trợ **tên phần mềm, mô hình muốn dùng và nhóm hiện tại** để xác nhận nên chọn nhóm nào.
 
-![Chọn nhóm token khi tạo token NexusAPI](/images/nexusapi/console-create-token-vi.png)
+![Chọn nhóm của bạn rồi bấm nút sao chép ở góc trên bên phải thẻ mô hình. Nhóm và giá trong ảnh chỉ để minh họa; hãy kiểm tra trang hiện tại.](/images/nexusapi/model-selection-vi.png)
 
-## Chi phí được tạo thành như thế nào
+Chọn nhóm của bạn rồi bấm nút sao chép ở góc trên bên phải thẻ mô hình. Nhóm và giá trong ảnh chỉ để minh họa; hãy kiểm tra trang hiện tại.
 
-Tùy mô hình, token đầu vào, token đầu ra, đọc cache hoặc các đơn vị khác được nêu rõ có thể được tính riêng. Giá cuối cùng là giá trị trong nhật ký sử dụng áp dụng theo quy tắc hiện tại của Chợ mô hình.
+## 3. Xem giá
 
-| Không nên chỉ dựa vào | Nên dùng |
-| --- | --- |
-| Ảnh chụp hoặc bảng giá cũ | Thẻ mô hình hiện tại |
-| Danh sách toàn bộ mô hình trên website | Phản hồi `/v1/models` của key đó |
-| Trạng thái “thành công” trong client | Nhật ký có Request ID, token và chi phí |
+- **Tiêu chuẩn:** số dư tài khoản bị trừ khi gọi.
+- **Nạp lại:** chi phí tham khảo theo cài đặt trang; ưu đãi hoặc gói của bạn có thể khác.
+- **`/1M`:** giá mỗi một triệu token. **`/1K`:** giá mỗi một nghìn token. Khi so sánh, chọn cùng đơn vị.
 
-Khả năng dùng còn phụ thuộc giao thức: SDK chung thường dùng Chat Completions, Claude Code dùng Messages, Codex CLI dùng Responses. Hãy xem [ma trận khả năng](/vi/developer/capability-matrix) trước.
+Nội dung gửi đi là đầu vào, câu trả lời là đầu ra. Phí bộ nhớ đệm hoặc phí khác xem trong **Chi tiết**.
 
-## Kiểm tra mức sử dụng
-
-- Có thể xem từng yêu cầu và khoản phí trong nhật ký sử dụng của console.
-- Ý nghĩa các trường token, cache và bản ghi lỗi được giải thích trong [mức sử dụng và thanh toán](/vi/billing/usage-and-billing).
+**Giá đã gồm hệ số nhóm, không nhân thêm lần nữa.** Xem [ví dụ giảm giá](/vi/billing/multipliers-and-discounts) hoặc [phí đã trừ](/vi/billing/usage-and-billing).

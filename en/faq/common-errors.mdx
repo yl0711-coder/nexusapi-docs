@@ -3,15 +3,13 @@ title: "Common API errors"
 description: "Diagnose common NexusAPI client, protocol, request, and billing failures."
 ---
 
-This page applies to Claude Code, Codex CLI, Cursor, VS Code extensions, and custom applications. Before retrying, save the **original error, Request ID, time, model, and request endpoint**. Never send a full API key.
-
-<Tip>
-**Diagnose before retrying**
-
-Parameter, endpoint, and session-compatibility issues do not resolve through repeated requests. Retry a known transient failure only once and at a low frequency; this avoids duplicate work and additional charges.
-</Tip>
+Find the matching error and follow the first steps. If unsure, send support your app, time, model, group and screenshot. **Hide the full key and avoid repeated retries.**
 
 ## `status_code=500, not implemented`
+
+Do not keep retrying. Ask support whether the model works with your app. The technical details below are for custom programs.
+
+<Accordion title="Technical details (optional)">
 
 If the error includes both `status_code=500` and `not implemented`, first check whether the selected model supports the protocol used by the current endpoint. For example, `/v1/responses` requires `openai-response` in `supported_endpoint_types`. If that type is absent, it is a **protocol incompatibility**, not an upstream failure that will recover by waiting.
 
@@ -21,13 +19,19 @@ If the error includes both `status_code=500` and `not implemented`, first check 
 
 When asking for help, provide a redacted request example, model name, and Request ID—never the API key.
 
+</Accordion>
+
 ## 400 Bad Request / incompatible parameters
+
+Save important content and try one short message in a new conversation. If it fails, send support the app, model and screenshot.
+
+<Accordion title="Technical details (optional)">
 
 A 400 usually means that the request shape, a parameter, or session state is not valid for the current endpoint.
 
 Check in this order:
 
-1. Copy the model ID exactly from the Model Marketplace.
+1. Copy the model ID exactly from the Model Square.
 2. Confirm that the endpoint matches the model and client in the [integration overview](/en/guide/integration-overview).
 3. Check whether the model supports the image, tool-calling, reasoning, or session-continuation parameters you are sending.
 4. Update the client or SDK when it is old.
@@ -35,7 +39,13 @@ Check in this order:
 
 After correcting the likely cause, send one minimal request to verify it.
 
+</Accordion>
+
 ## 401 Unauthorized
+
+Copy the full key again, paste it and restart the app. Check that the key is enabled and not expired. Do not send support the key.
+
+<Accordion title="Technical details (optional)">
 
 Typical causes are a missing, mistyped, disabled, expired API key, or an incorrectly formatted authentication header.
 
@@ -45,25 +55,42 @@ Authorization: Bearer YOUR_API_KEY
 
 Copy the key again from the console and confirm the request URL. Do not send the complete key to support. If it may have been exposed, disable it first, create a replacement, and update the affected application.
 
+</Accordion>
+
 ## 403 Forbidden
+
+Ask support to check the model and group permissions. Do not keep replacing keys.
+
+<Accordion title="Technical details (optional)">
 
 A 403 means that this request was denied. Common platform-side reasons include a key without access to the selected group, a model restriction, an IP allowlist mismatch, or an unavailable account state; an upstream model service can also refuse a request.
 
 Check the key’s group, model restriction, and IP allowlist, then test with one short text request. If it continues, provide the Request ID, model, time, and original error. Repeated high-frequency retries or creating new keys will not resolve an access restriction.
 
+</Accordion>
+
 ## 404 Not Found / wrong request address
+
+Copy the address from [your app guide](/en/tools); do not append `/v1` or another path yourself.
+
+<Accordion title="Technical details (optional)">
 
 Check these points first:
 
 - The Base URL was not assembled as `/v1/v1/...`.
 - The client does not already add `/v1` or the endpoint path.
-- The request uses a supported route, such as `/v1/chat/completions`, `/v1/responses`, `/v1/messages`, or `/v1/images/generations`.
 
 URL rules differ by tool; use the relevant [tool guide](/en/tools/).
 
 An unavailable model is not normally a 404. A model outside the key’s group, a currently unavailable model, or no available service is more often reported as `503` / `no available channel`.
 
+</Accordion>
+
 ## 429 Too Many Requests
+
+Wait for current requests to finish, reduce simultaneous tasks and try once. Contact support if it persists.
+
+<Accordion title="Technical details (optional)">
 
 429 can come from a platform model-rate limit or a temporary limit in the model service. An error such as `Concurrency limit exceeded for user` is usually an upstream or client-side concurrency limit; do not treat the status code alone as proof that the API key is broken.
 
@@ -71,7 +98,13 @@ An unavailable model is not normally a 404. A model outside the key’s group, a
 - Do not let several programs retry rapidly with the same key.
 - If it continues even at a low rate, provide the Request ID so service availability can be checked.
 
+</Accordion>
+
 ## 500, 502, 503, 504, or 524
+
+Save the error, wait 10–30 seconds and try once. Contact support if it persists. For `not implemented`, follow the first item on this page.
+
+<Accordion title="Technical details (optional)">
 
 Except for the `not implemented` protocol error above, these statuses usually mean processing failed, a connection broke, a service is busy, or a wait timed out. They do not necessarily mean that the key or prompt is wrong.
 
@@ -82,15 +115,29 @@ Except for the `not implemented` protocol error above, these statuses usually me
 
 When the same model fails repeatedly, pause additional long tasks, preserve the evidence, and contact support.
 
+</Accordion>
+
 ## `no available channel` / no current service for this model
+
+Check that your group lists the model in Model Square. If the error persists, contact support; do not top up or create keys just for this error.
+
+<Accordion title="Technical details (optional)">
 
 This means that the current key's group temporarily has no available service for that model. A mistyped model ID, a model not offered in the group, temporary model unavailability, or service maintenance can all cause it.
 
-Try later or choose another model currently visible for the group in the Model Marketplace. If it persists, submit the model name, Request ID, and time. This message is unrelated to adding credit or creating a new key.
+Try later or choose another model currently visible for the group in the Model Square. If it persists, submit the model name, Request ID, and time. This message is unrelated to adding credit or creating a new key.
+
+</Accordion>
 
 ## `Concurrency limit exceeded for user`
 
+Wait for current requests to finish and reduce simultaneous tasks before trying again. A new key is usually unnecessary.
+
+<Accordion title="Technical details (optional)">
+
 The account already has the maximum number of active requests. Wait for existing requests to finish, then reduce concurrency. The API key does not need to be disabled or recreated for this error alone.
+
+</Accordion>
 
 ## Long conversations or tool-call failures
 
@@ -106,18 +153,9 @@ The client is continuing a prior response over an unsupported connection method.
 
 The client did not receive an expected complete content fragment, often during a long conversation, tool call, or interrupted stream. Start a new session, shorten the input, and send a simple test first. If it persists, temporarily disable nonessential tool calls and send support the Request ID, time, model, and original error. We will use those details to check service status.
 
-## Image-generation timeout or unsupported capability
-
-Image models must use the image endpoint; text models cannot use an image-generation endpoint. Image generation is currently synchronous and can take longer than a text request. Before submitting the same job again, first confirm the result of the initial request.
-
-- `Image generation is not enabled` / `model not supported`: verify that the model, endpoint, and parameters match.
-- `504` / `524` / client timeout: retain the Request ID and time before deciding whether to regenerate.
-
-See [image model usage](/en/guide/image-generation).
-
 ## Credit is available but the key reports an insufficient limit
 
-Check the account credit, API-key limit, expiry, and token group. A single message can also be caused by a key-level limit, an expired key, or a group rule, so confirm those details before topping up. For a persistent issue, provide the Request ID for review.
+Check the account credit, API-key limit, expiry, and key group. A single message can also be caused by a key-level limit, an expired key, or a group rule, so confirm those details before topping up. For a persistent issue, provide the Request ID for review.
 
 ## Will an error complete automatically later?
 
@@ -128,14 +166,11 @@ Use the final log for the matching Request ID and whether the client received co
 ## What to send to support
 
 ```text
-Time, including time zone:
-Request ID:
-Model:
-Request endpoint:
-Client or SDK version:
-Streaming / image / tool call:
-Complete error text or screenshot:
-Intermittent or persistent:
+App name:
+Time:
+Model and group:
+Error text or screenshot:
+Request ID (if available):
 ```
 
-Do not submit a full API key, password, private data, or complete business content. If key identification is needed, provide at most its last six characters.
+Leave unknown fields blank. Never send full keys, passwords or verification codes.

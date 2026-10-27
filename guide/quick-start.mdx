@@ -1,74 +1,41 @@
 ---
 title: "5 分钟快速开始"
-description: "NexusAPI：5 分钟快速开始"
+description: "登录、创建密钥、配置软件，完成第一次使用。"
 ---
 
-本页帮助您完成第一次调用。开始前只需要准备一个 NexusAPI 账号和可用额度。
+**按下面 4 步做。已经完成的步骤直接跳过。**
 
-<Info>
-**最短流程**
+## 1. 登录，确认有可用额度
 
-购买额度 → 创建 API Key → 从模型广场复制模型 ID → 发起测试请求
-</Info>
+打开[控制台](https://nexusapi.link/sign-in)登录，没有账号请联系客服。
 
-## 1. 购买额度
+打开[钱包](https://nexusapi.link/wallet)。已有可用余额或套餐，继续下一步；没有则先[充值](/guide/recharge)。
 
-登录账号进入控制台，在“钱包管理”页面即可在线充值。
+## 2. 创建并复制 API Key
 
-![NexusAPI 钱包管理与在线充值页面](/images/nexusapi/console-wallet-topup.png)
+1. 打开 [API 密钥](https://nexusapi.link/keys)，点击“创建 API 密钥”。
+2. 名称随意填；分组选客服提供的分组；创建数量填 `1`，其他没有特殊要求就保持默认。
+3. 点击“保存更改”。
+4. 回到列表，点击复制按钮，复制刚创建的 Key。
 
-## 2. 创建 API 令牌
+不确定怎么填？打开[带图创建教程](/guide/api-key)。**不要把完整 Key 发给别人。**
 
-1. 进入控制台的“令牌管理”。
-2. 点击“添加令牌”。
-3. 填写便于识别的名称，例如 `codex-work`。
-4. 选择包含目标模型的分组。
-5. 按用途设置合理额度，然后提交。
+## 3. 按你用的软件配置
 
-![NexusAPI 令牌管理页面，密钥与账号数据已经脱敏](/images/nexusapi/console-token-management.png)
-
-![NexusAPI 创建令牌页面](/images/nexusapi/console-create-token.png)
-
-<Warning>
-**请保护 API Key**
-
-API Key 只会用于接口鉴权。不要把它提交到公开代码仓库、截图或聊天记录中。不同项目建议使用不同的 Key。
-</Warning>
-
-## 3. API 接口配置
-
-准备以下三个参数：
-
-| 参数 | 填写内容 |
+| 你在用什么 | 打开对应教程照着填 |
 | --- | --- |
-| Base URL | `https://nexusapi.link/v1` |
-| API Key | 在控制台生成，通常以 `sk-` 开头 |
-| 模型 ID | 在[模型广场](https://nexusapi.link/pricing)复制准确名称 |
+| Claude Code | [Claude Code 配置](/tools/claude-code) |
+| Codex CLI | [Codex CLI 配置](/tools/codex-cli) |
+| CC Switch | [CC Switch 配置](/tools/cc-switch) |
+| VS Code / Cursor | [编辑器配置](/tools/cursor-vscode) |
+| 自己写程序 | [可复制的代码示例](/developer/code-examples) |
 
-## 4. 测试验证
+**地址、API Key、模型名称照对应教程填写。不同软件的地址可能不同，不要混用。**
 
-以下示例使用 OpenAI Chat Completions 格式。请替换 `YOUR_API_KEY` 和 `YOUR_MODEL_ID`：
+## 4. 发一句话试试
 
-```bash
-curl 'https://nexusapi.link/v1/chat/completions' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_API_KEY' \
-  -d '{
-    "model": "YOUR_MODEL_ID",
-    "messages": [{"role": "user", "content": "请回复：连接成功"}]
-  }'
-```
+在软件中发送：**“请回复：连接成功”**。
 
-收到包含 `choices` 和回复内容的 JSON，说明基础接入成功。
+能收到完整回复，就可以开始用了。[使用日志](https://nexusapi.link/usage-logs/common)里可以查看本次调用和费用。
 
-<Tip>
-**客户端里的地址可能不同**
-
-部分客户端会自动补全 `/v1` 或具体请求路径。配置客户端时，请使用对应教程：[Claude Code](/tools/claude-code)、[Codex CLI](/tools/codex-cli)、[CC Switch](/tools/cc-switch) 或 [VS Code / Cursor](/tools/cursor-vscode)。不同工具的路径补全规则不同，请不要机械套用本页地址。
-</Tip>
-
-## 下一步
-
-- [了解不同接入方式](/guide/integration-overview)
-- [查看模型、分组与计费](/billing/models-pricing)
-- [遇到问题时开始自查](/faq/self-check)
+失败了？把**软件名称、报错截图、发生时间、模型和分组**发给客服。截图请遮盖完整 Key。

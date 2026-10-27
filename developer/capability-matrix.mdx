@@ -21,12 +21,9 @@ NexusAPI 的模型、令牌分组和接口协议需要同时匹配；实时可�
 | 文本、聊天、流式输出 | [POST /v1/chat/completions](/developer/openai-compatible) | OpenAI 兼容 SDK、脚本和多数文本模型 | 仅使用 `supported_endpoint_types` 包含 `openai` 的模型 |
 | Claude Code / 原生 Anthropic 客户端 | [POST /v1/messages](/developer/anthropic-messages) | `supported_endpoint_types` 包含 `anthropic` 时 | Claude Code 的地址配置不要重复拼接 `/v1` |
 | Codex CLI | [POST /v1/responses](/developer/responses) | 仅按 [Codex CLI 教程](/tools/codex-cli) 配置的 Provider 使用 | 仅支持 `supported_endpoint_types` 包含 `openai-response` 的模型 |
-| 图片生成 | [POST /v1/images/generations](/guide/image-generation) | `supported_endpoint_types` 包含 `image-generation` 时 | 仅传入该图片模型支持的参数；避免把图片参数发到聊天接口 |
 
 <Warning>
-**以公开能力范围为准**
-
-请以本页、模型广场和正式教程列出的能力为准。图片编辑、图片变体、Embedding、音频、Rerank、原生 Gemini 等能力当前未作为通用公开能力；如需用于生产，请先联系支持确认。
+当前不提供图片生成模型。其他未列出的能力，请先联系客服确认。
 </Warning>
 
 ## 用当前 Key 确认模型
@@ -36,7 +33,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-从返回的 `data[].id` 复制模型 ID。`data[].supported_endpoint_types` 列出该模型可用的请求协议：`openai` 对应 Chat Completions、`anthropic` 对应 Messages、`openai-response` 对应 Responses、`image-generation` 对应图片生成。一个模型可能同时列出多个类型；请按客户端和字段选择，而不是按模型名称猜测。
+从返回的 `data[].id` 复制模型 ID。`data[].supported_endpoint_types` 列出该模型可用的请求协议：`openai` 对应 Chat Completions、`anthropic` 对应 Messages、`openai-response` 对应 Responses。一个模型可能同时列出多个类型；请按客户端和字段选择，而不是按模型名称猜测。
 
 `/v1/models` 只反映这把 Key 在当前时刻可见的模型。模型广场用于查看价格、分组和说明；两者有差异时，以当前 Key 的返回和控制台实时状态为准。
 
@@ -47,7 +44,6 @@ curl 'https://nexusapi.link/v1/models' \
 | Python、JavaScript、cURL 或第三方 OpenAI SDK | `/v1/chat/completions`（先确认字段包含 `openai`） |
 | Claude Code | 按 [Claude Code 教程](/tools/claude-code)使用 Messages 配置（先确认字段包含 `anthropic`） |
 | Codex CLI | 按 [Codex CLI 教程](/tools/codex-cli)使用 Responses Provider（先确认字段包含 `openai-response`） |
-| 图片模型 | [图片模型使用说明](/guide/image-generation)（先确认字段包含 `image-generation`） |
 
 如果模型能在列表中看到、但调用仍失败，请先确认模型 ID、令牌分组和请求路径，再保存 Request ID 进入[问题自查](/faq/self-check)。
 

@@ -52,6 +52,34 @@
     {
       "source": "/vi/faq/content-block-not-found",
       "destination": "/vi/faq/common-errors#content-block-not-found"
+    },
+    {
+      "source": "/guide/image-generation",
+      "destination": "/billing/models-pricing"
+    },
+    {
+      "source": "/zh-TW/guide/image-generation",
+      "destination": "/zh-TW/billing/models-pricing"
+    },
+    {
+      "source": "/en/guide/image-generation",
+      "destination": "/en/billing/models-pricing"
+    },
+    {
+      "source": "/fr/guide/image-generation",
+      "destination": "/fr/billing/models-pricing"
+    },
+    {
+      "source": "/ja/guide/image-generation",
+      "destination": "/ja/billing/models-pricing"
+    },
+    {
+      "source": "/ru/guide/image-generation",
+      "destination": "/ru/billing/models-pricing"
+    },
+    {
+      "source": "/vi/guide/image-generation",
+      "destination": "/vi/billing/models-pricing"
     }
   ],
   "navigation": {
@@ -114,7 +142,8 @@
               "index",
               "guide/quick-start",
               "guide/integration-overview",
-              "guide/api-key"
+              "guide/api-key",
+              "guide/account-security"
             ]
           },
           {
@@ -122,8 +151,8 @@
             "icon": "wallet-cards",
             "pages": [
               "guide/recharge",
-              "guide/image-generation",
               "billing/models-pricing",
+              "billing/multipliers-and-discounts",
               "billing/usage-and-billing"
             ]
           },
@@ -218,7 +247,8 @@
               "zh-TW/index",
               "zh-TW/guide/quick-start",
               "zh-TW/guide/integration-overview",
-              "zh-TW/guide/api-key"
+              "zh-TW/guide/api-key",
+              "zh-TW/guide/account-security"
             ]
           },
           {
@@ -226,13 +256,13 @@
             "icon": "wallet-cards",
             "pages": [
               "zh-TW/guide/recharge",
-              "zh-TW/guide/image-generation",
               "zh-TW/billing/models-pricing",
+              "zh-TW/billing/multipliers-and-discounts",
               "zh-TW/billing/usage-and-billing"
             ]
           },
           {
-            "group": "客戶端工具",
+            "group": "用戶端工具",
             "icon": "wrench",
             "pages": [
               "zh-TW/tools/index",
@@ -270,7 +300,7 @@
         "navbar": {
           "links": [
             {
-              "label": "Model Marketplace",
+              "label": "Model Square",
               "href": "https://nexusapi.link/pricing"
             },
             {
@@ -322,7 +352,8 @@
               "en/index",
               "en/guide/quick-start",
               "en/guide/integration-overview",
-              "en/guide/api-key"
+              "en/guide/api-key",
+              "en/guide/account-security"
             ]
           },
           {
@@ -330,8 +361,8 @@
             "icon": "wallet-cards",
             "pages": [
               "en/guide/recharge",
-              "en/guide/image-generation",
               "en/billing/models-pricing",
+              "en/billing/multipliers-and-discounts",
               "en/billing/usage-and-billing"
             ]
           },
@@ -374,7 +405,7 @@
         "navbar": {
           "links": [
             {
-              "label": "Catalogue de modèles",
+              "label": "Place des modèles",
               "href": "https://nexusapi.link/pricing"
             },
             {
@@ -426,7 +457,8 @@
               "fr/index",
               "fr/guide/quick-start",
               "fr/guide/integration-overview",
-              "fr/guide/api-key"
+              "fr/guide/api-key",
+              "fr/guide/account-security"
             ]
           },
           {
@@ -434,8 +466,8 @@
             "icon": "wallet-cards",
             "pages": [
               "fr/guide/recharge",
-              "fr/guide/image-generation",
               "fr/billing/models-pricing",
+              "fr/billing/multipliers-and-discounts",
               "fr/billing/usage-and-billing"
             ]
           },
@@ -478,7 +510,7 @@
         "navbar": {
           "links": [
             {
-              "label": "モデルマーケットプレイス",
+              "label": "モデル広場",
               "href": "https://nexusapi.link/pricing"
             },
             {
@@ -530,7 +562,8 @@
               "ja/index",
               "ja/guide/quick-start",
               "ja/guide/integration-overview",
-              "ja/guide/api-key"
+              "ja/guide/api-key",
+              "ja/guide/account-security"
             ]
           },
           {
@@ -538,8 +571,8 @@
             "icon": "wallet-cards",
             "pages": [
               "ja/guide/recharge",
-              "ja/guide/image-generation",
               "ja/billing/models-pricing",
+              "ja/billing/multipliers-and-discounts",
               "ja/billing/usage-and-billing"
             ]
           },
@@ -582,7 +615,7 @@
         "navbar": {
           "links": [
             {
-              "label": "Каталог моделей",
+              "label": "Витрина моделей",
               "href": "https://nexusapi.link/pricing"
             },
             {
@@ -634,7 +667,8 @@
               "ru/index",
               "ru/guide/quick-start",
               "ru/guide/integration-overview",
-              "ru/guide/api-key"
+              "ru/guide/api-key",
+              "ru/guide/account-security"
             ]
           },
           {
@@ -642,8 +676,8 @@
             "icon": "wallet-cards",
             "pages": [
               "ru/guide/recharge",
-              "ru/guide/image-generation",
               "ru/billing/models-pricing",
+              "ru/billing/multipliers-and-discounts",
               "ru/billing/usage-and-billing"
             ]
           },
@@ -686,7 +720,7 @@
         "navbar": {
           "links": [
             {
-              "label": "Chợ mô hình",
+              "label": "Quảng trường mô hình",
               "href": "https://nexusapi.link/pricing"
             },
             {
@@ -738,7 +772,8 @@
               "vi/index",
               "vi/guide/quick-start",
               "vi/guide/integration-overview",
-              "vi/guide/api-key"
+              "vi/guide/api-key",
+              "vi/guide/account-security"
             ]
           },
           {
@@ -746,13 +781,13 @@
             "icon": "wallet-cards",
             "pages": [
               "vi/guide/recharge",
-              "vi/guide/image-generation",
               "vi/billing/models-pricing",
+              "vi/billing/multipliers-and-discounts",
               "vi/billing/usage-and-billing"
             ]
           },
           {
-            "group": "Công cụ khách hàng",
+            "group": "Công cụ ứng dụng",
             "icon": "wrench",
             "pages": [
               "vi/tools/index",

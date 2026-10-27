@@ -1,60 +1,58 @@
 ---
-title: "Claude Code dans VS Code ou Cursor"
-description: "Utilisez l'extension officielle Claude Code avec votre configuration utilisateur NexusAPI."
+title: "Claude Code dans VS Code / Cursor"
+description: "Installez l'extension, renseignez la clé dans les réglages utilisateur et testez."
 ---
 
-L'extension officielle Claude Code offre le chat, les aperçus de diff, les références de fichiers et les demandes d'autorisation. VS Code et Cursor partagent la configuration utilisateur de Claude Code.
+**Il s'agit de l'extension Claude Code, pas du chat intégré de Cursor.** [Créez une clé](/fr/guide/api-key), sélectionnez son groupe dans la [Place des modèles](https://nexusapi.link/pricing) et copiez un modèle compatible Claude Code.
 
-## 1. Installer l'extension officielle
+## 1. Installer l'extension
 
-Vérifiez d'abord que vous utilisez VS Code 1.98 ou une version ultérieure, puis terminez la [configuration Claude Code](/fr/tools/claude-code). Dans les extensions de l'éditeur, recherchez **Claude Code** et vérifiez que l'éditeur est **Anthropic**. Consultez aussi le [guide officiel VS Code](https://code.claude.com/docs/en/vs-code).
+Appuyez sur `Ctrl + Shift + X` (Mac : `Command + Shift + X`), recherchez `Claude Code`, vérifiez l'éditeur **Anthropic** puis installez.
 
-Ouvrez les extensions avec <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> sur macOS, ou <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> sous Windows et Linux.
+![Marketplace officiel : Claude Code for VS Code, éditeur Anthropic](/images/nexusapi/claude-extension-marketplace.png)
 
-<Warning>
-Des extensions tierces similaires peuvent exister. Installez uniquement celle publiée par Anthropic et ne placez jamais une clé dans les réglages d'une extension tierce.
-</Warning>
+Cette fiche officielle permet de vérifier le nom et l’éditeur. Installez ensuite la même extension depuis votre éditeur.
 
-## 2. Réutiliser la configuration NexusAPI
+## 2. Ouvrir les réglages utilisateur
 
-L'extension lit le même `~/.claude/settings.json` que le CLI (ou son équivalent Windows). Ne dupliquez pas la clé dans les réglages de projet VS Code ou Cursor.
+Avec `Ctrl + Shift + P` (Mac : `Command + Shift + P`), choisissez **Preferences: Open User Settings (JSON)**. Pas les réglages du projet, de l'espace de travail ou les valeurs par défaut.
 
-Si l'éditeur demande encore une connexion, vérifiez d'abord que l'extension est à jour. Si la version actuelle propose **Disable Login Prompt**, recherchez `Claude Code login` dans les réglages et activez-le. Redémarrez complètement l'éditeur ; si cette option n'est pas présente, vérifiez d'abord la configuration utilisateur en exécutant `claude` dans le terminal intégré.
+## 3. Saisir les réglages NexusAPI
 
-Ne copiez pas la clé NexusAPI dans `.vscode/settings.json` du projet et ne synchronisez, capturez ou versionnez jamais un réglage contenant la clé. Conservez-la uniquement dans `~/.claude/settings.json` au niveau utilisateur.
+Remplacez `YOUR_API_KEY` par votre clé complète et `YOUR_MODEL_ID` par le modèle copié. Ne changez pas le reste.
 
-Si cette version de Cursor ne peut pas installer l’extension, exécutez `claude` dans son terminal intégré avec la même configuration utilisateur.
-
-## 3. Ouvrir Claude Code
-
-Ouvrez Claude Code depuis son icône, la barre d’activité, la palette de commandes ou la barre d’état. Si l’icône en haut à droite n’apparaît pas, ouvrez d’abord un fichier de code.
-
-## 4. Vérifier sans écrire
-
-![Extension officielle Claude Code affichée dans VS Code](/images/nexusapi/claude-code-vscode-official.jpg)
-
-> Cet exemple provient de la [documentation officielle Claude Code pour VS Code](https://code.claude.com/docs/en/vs-code). La position des boutons peut évoluer avec l’extension.
-
-Envoyez une requête sans écriture :
-
-```text
-Explique ce que fait le fichier actuellement ouvert sans modifier le code.
+```json
+{
+  "claudeCode.disableLoginPrompt": true,
+  "claudeCode.environmentVariables": [
+    {
+      "name": "ANTHROPIC_BASE_URL",
+      "value": "https://nexusapi.link"
+    },
+    {
+      "name": "ANTHROPIC_AUTH_TOKEN",
+      "value": "YOUR_API_KEY"
+    },
+    {
+      "name": "ANTHROPIC_MODEL",
+      "value": "YOUR_MODEL_ID"
+    }
+  ]
+}
 ```
 
-Exécutez ensuite `/status`, vérifiez que **Anthropic base URL** vaut `https://nexusapi.link`, puis vérifiez le journal NexusAPI correspondant.
+Sauvegardez d'abord les réglages existants et fusionnez les entrées `claudeCode` sans supprimer les autres. Si le fichier contient seulement `{}`, remplacez-le.
 
-## Résolution des problèmes
+Enregistrez, sans connexion au compte officiel pour ces appels. Ces réglages contiennent votre clé : ne les mettez pas dans un projet et ne les partagez ni ne les synchronisez avec d'autres.
 
-### L’extension n’apparaît pas après l’installation
+![Exemple des paramètres utilisateur : configurez uniquement les deux entrées `claudeCode`. Les réglages d’apparence et de fenêtre de démonstration ne sont pas nécessaires. Remplacez les valeurs fictives ; cette image ne prouve pas la connexion.](/images/nexusapi/vscode-user-settings-demo.png)
 
-Exécutez **Developer: Reload Window** depuis la palette de commandes, ou redémarrez complètement l’éditeur.
+Exemple des paramètres utilisateur : configurez uniquement les deux entrées `claudeCode`. Les réglages d’apparence et de fenêtre de démonstration ne sont pas nécessaires. Remplacez les valeurs fictives ; cette image ne prouve pas la connexion.
 
-### Le CLI fonctionne mais pas l’extension
+## 4. Redémarrer et tester
 
-Vérifiez que `~/.claude/settings.json` est dans le répertoire utilisateur et non dans le projet, puis vérifiez l’URL et la clé. Si la version actuelle propose **Disable Login Prompt**, activez-le puis redémarrez entièrement l’éditeur.
+Quittez complètement l'éditeur et rouvrez-le. Dans Claude Code, créez une conversation et envoyez « Réponds seulement : connexion réussie. Ne modifie aucun fichier. » Vérifiez la réponse complète et les [journaux](https://nexusapi.link/usage-logs/common). Le test consomme un peu de crédit.
 
-### Cursor ne trouve pas l’extension
+Connexion officielle toujours affichée ? Vérifiez les réglages utilisateur, les valeurs remplacées, puis mettez à jour et redémarrez. Dans VS Code, installez depuis le [marché officiel des extensions](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code). Si Cursor ne trouve pas l'extension, utilisez le terminal avec le [guide Claude Code](/fr/tools/claude-code).
 
-Utilisez le point d’entrée Cursor du [guide officiel VS Code](https://code.claude.com/docs/en/vs-code). Si la version actuelle ne la prend pas en charge, utilisez `claude` dans le terminal intégré de Cursor.
-
-Pour un incident persistant, conservez les versions de l’éditeur, de l’extension et de Claude Code, l’erreur d’origine et le Request ID, puis effectuez l’[auto-vérification](/fr/faq/self-check). Ne transmettez jamais une clé complète, un secret d’espace de travail ou du code confidentiel.
+Liens officiels : [projet Claude Code](https://github.com/anthropics/claude-code) · [extension VS Code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code).

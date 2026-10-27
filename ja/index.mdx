@@ -1,59 +1,39 @@
 ---
-title: NexusAPI ドキュメント
-description: API Key の作成から最初の NexusAPI 呼び出しまでをすばやく完了できます。
+title: "NexusAPI 使い方ガイド"
+description: "アプリ設定、チャージ、料金確認を手順で案内します。"
 mode: wide
 ---
 
-<Info>
-NexusAPI はモデル呼び出しの統合入口を提供します。利用可能なモデル、料金、トークンのグループは、コンソールの**モデルマーケットプレイス**を基準にしてください。
-</Info>
+**初めてなら「クイックスタート」へ。キーがあるならアプリ別手順を開いてください。**
 
 <Columns cols={3}>
-  <Card title="5 分で最初のリクエストを送る" icon="rocket" href="/ja/guide/quick-start" arrow>
-    Key を作成し、モデルを選択してテストリクエストを送信します。
+  <Card title="クイックスタート" icon="rocket" href="/ja/guide/quick-start" arrow>
+    ログイン、キー作成、アプリ設定。
   </Card>
-  <Card title="Claude Code / Codex を設定する" icon="terminal" href="/ja/tools" arrow>
-    利用するクライアントに対応する設定ガイドを選択します。
+  <Card title="アプリを設定" icon="terminal" href="/ja/tools" arrow>
+    Claude Code、Codex、CC Switchなど。
   </Card>
-  <Card title="API とモデル対応を確認する" icon="braces" href="/ja/developer/capability-matrix" arrow>
-    呼び出し前にモデル、トークングループ、プロトコルを確認します。
-  </Card>
-</Columns>
-
-## 接続に必要な 3 つの情報
-
-| 情報 | 取得場所 | 用途 |
-| --- | --- | --- |
-| Base URL | このドキュメント | リクエストを NexusAPI に送信する |
-| API Key | コンソール → トークン管理 | 呼び出し元と利用可能なグループを識別する |
-| モデル ID | コンソール → モデルマーケットプレイス | 呼び出すモデルを指定する |
-
-<Warning>
-API Key をチャット、スクリーンショット、フロントエンドのリポジトリ、公開設定に含めないでください。漏えいの可能性がある場合は、ただちにコンソールで Key を削除または再発行してください。
-</Warning>
-
-## 目的から始める
-
-<Columns cols={2}>
-  <Card title="アプリケーションやスクリプトを書く" icon="code-2" href="/ja/guide/quick-start" arrow>
-    OpenAI 互換 API から始めます。
-  </Card>
-  <Card title="Claude Code を使う" icon="bot" href="/ja/tools/claude-code" arrow>
-    ネイティブ Messages プロトコルを設定します。
-  </Card>
-  <Card title="Codex CLI を使う" icon="terminal-square" href="/ja/tools/codex-cli" arrow>
-    カスタム Provider とモデルを設定します。
-  </Card>
-  <Card title="呼び出しでエラーが出た" icon="circle-help" href="/ja/faq/self-check" arrow>
-    セルフチェックの手順で必要な情報を集めます。
+  <Card title="料金と割引" icon="badge-dollar-sign" href="/ja/billing/multipliers-and-discounts" arrow>
+    具体例で費用を確認。
   </Card>
 </Columns>
 
-## サポートへ連絡する際に必要な情報
+## よく使う操作
 
-- 発生時刻とタイムゾーン
-- モデル ID、エンドポイント、ストリーミングの有無
-- 完全なエラー文と Request ID
-- 実施済みの最小再現手順
+| やりたいこと | 開くページ |
+| --- | --- |
+| APIキーを作成・コピー | [キーの手順](/ja/guide/api-key) |
+| チャージ・入金確認 | [支払いの手順](/ja/guide/recharge) |
+| モデルと価格を探す | [モデルと価格](/ja/billing/models-pricing) |
+| 利用記録・料金を見る | [利用量と料金](/ja/billing/usage-and-billing) |
+| パスワード変更・端末のログアウト | [アカウント保護](/ja/guide/account-security) |
 
-これらの情報があれば、確認の往復を減らし、早く原因を特定できます。
+## 困ったときは
+
+次をサポートに送ってください。
+
+- 使っているアプリ名。
+- 発生時刻、モデル、グループ。
+- エラー原文か画像。リクエスト番号があれば一緒に。
+
+**画像ではキーの全文を隠してください。パスワードや認証コードは送らないでください。** 不明な情報は推測せず、まず表示されたエラーを送ってください。

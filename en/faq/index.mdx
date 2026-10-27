@@ -3,31 +3,54 @@ title: "Frequently asked questions"
 description: "Find the right NexusAPI guide for setup, billing, and API errors."
 ---
 
-When a call fails, save the Request ID and the complete error text before changing settings or retrying.
+Find your question and follow the answer. If unsure, send support an error screenshot with the full key hidden.
 
 ## Setup and configuration
 
-- **Where should I start?** Read the [quick start](/en/guide/quick-start).
-- **Which Base URL should I use?** It depends on the client; see the [integration overview](/en/guide/integration-overview).
-- **Why do I see 404?** Check for `/v1/v1/...` and whether the client appends a path automatically.
-- **Why does a new API key fail?** Check its status, credit, token group, model ID, and `Authorization: Bearer` format.
+- **Where should I start?**<br />
+  Open the [quick start](/en/guide/quick-start) and follow step 1.
+
+- **Which Base URL should I use?**<br />
+  Copy the address from [your app guide](/en/tools). Do not add `/v1` yourself.
+
+- **Why do I see 404?**<br />
+  Replace the address with the one from [your app guide](/en/tools). If it still fails, send support a screenshot.
+
+- **Why does `status_code=500, not implemented` appear?**<br />
+  Do not keep retrying. Send support your app, model, group and error to check whether this model works with the app.
+
+- **Why does a new API key fail?**<br />
+  Copy the full key again from [API Keys](https://nexusapi.link/keys), paste it and restart the app. Do not copy the masked text.
 
 ## Models and charges
 
-- **How do I know whether a group can use a model?** Filter the [Model Marketplace](https://nexusapi.link/pricing) by the group and copy the exact ID.
-- **How much did one request cost?** Use the console log and read [usage and billing](/en/billing/usage-and-billing).
-- **Can an error be charged?** It can be, if an upstream request already ran or the client sent a new request. Reconcile by Request ID.
-- **Why is the balance normal but the key says insufficient credit?** Check account credit, key limit, expiry, and group.
+- **How do I know whether a group can use a model?**<br />
+  Select your key’s group in [Model Square](https://nexusapi.link/pricing) and copy the model name. Ask support if it is missing.
+
+- **How much did one request cost?**<br />
+  Find the request in [Usage Logs](https://nexusapi.link/usage-logs/common) and check Cost. For the CNY cost, see [discount examples](/en/billing/multipliers-and-discounts).
+
+- **Can a failed request be charged?**<br />
+  The error alone does not establish the charge. Check Cost in the matching log; ask support to review the screenshot if unsure.
+
+- **Why is the balance normal but the key says insufficient credit?**<br />
+  Check wallet credit, key limit and expiry. If still unclear, contact support before topping up again.
 
 ## API errors
 
-- **What do 400, 401, 429, 500, 502, 503, 504, or 524 mean?** See [API error guide](/en/faq/common-errors).
-- **Why can a long conversation no longer continue?** Save the error, start a new session, and avoid repeatedly submitting the same request.
-- **Why is image generation slow or timed out?** It is synchronous. Keep the Request ID and do not immediately submit the same job again.
-- **Why did an error later appear to succeed?** Do not assume the platform retried it; check client retries and matching Request IDs.
+- **What do 400, 401, 429, 500, 502, 503, 504, or 524 mean?**<br />
+  Find the matching message in the [error guide](/en/faq/common-errors) and follow its steps.
 
-## Get help efficiently
+- **Why can a long conversation no longer continue?**<br />
+  Save important content, start a new conversation and try one short message. Do not retry repeatedly; the test may use credit.
 
-Use the [self-check guide](/en/faq/self-check), then provide the Request ID, time and time zone, client and version, model, endpoint, full error text, and whether the issue is intermittent or persistent.
+- **Why did an error later appear to succeed?**<br />
+  Check whether the app received a complete reply, then compare the usage logs and costs. Ask support if unsure.
 
-Never send a full API key, password, or private content.
+## What to send support
+
+- App name.
+- Time, model and group.
+- Error text or screenshot; include the Request ID if available.
+
+**Leave unknown details blank. You do not need to diagnose the cause. Never send passwords, verification codes or a full key.**

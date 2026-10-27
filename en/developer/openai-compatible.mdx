@@ -8,7 +8,7 @@ This page covers **OpenAI Chat Completions** only. Before calling, read the [API
 <Tip>
 **Use different sources for different questions**
 
-Use the Model Marketplace and the capability matrix for current model availability, token-group access, and protocol selection.
+Use the Model Square and the capability matrix for current model availability, key-group access, and protocol selection.
 </Tip>
 
 ## Endpoint
@@ -48,7 +48,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 For a normal response, text is usually read from `choices[0].message.content`; for a streamed response, read each `choices[0].delta.content`. Verify the model and key with the non-streaming minimum request before enabling `stream` or adding optional fields.
 
-Optional fields such as `temperature`, tool calls, vision input, and structured output are not guaranteed for every model merely because an API is “OpenAI-compatible.” Use the [API and model capability matrix](/en/developer/capability-matrix) plus Model Marketplace for current model availability and supported capabilities.
+Optional fields such as `temperature`, tool calls, vision input, and structured output are not guaranteed for every model merely because an API is “OpenAI-compatible.” Use the [API and model capability matrix](/en/developer/capability-matrix) plus Model Square for current model availability and supported capabilities.
 
 ## Common failures
 
@@ -68,4 +68,3 @@ For any other error, keep the Request ID and use the [self-check guide](/en/faq/
 - List models visible to the current key and select a protocol: [API basics](/en/developer/api-basics)
 - Native Claude / Anthropic client: [Anthropic Messages](/en/developer/anthropic-messages)
 - Codex Provider: [Responses API and Codex](/en/developer/responses)
-- Image generation: [Image model guide](/en/guide/image-generation)

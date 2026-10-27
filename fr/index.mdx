@@ -1,59 +1,39 @@
 ---
-title: Documentation NexusAPI
-description: Passez rapidement de la création d'une clé API à votre premier appel NexusAPI.
+title: "Aide NexusAPI"
+description: "Configurez votre logiciel, ajoutez des fonds et consultez les frais."
 mode: wide
 ---
 
-<Info>
-NexusAPI fournit une passerelle unifiée pour les modèles. La disponibilité des modèles, les tarifs et le groupe associé à votre jeton font foi dans le **Catalogue de modèles** de la console.
-</Info>
+**Première utilisation ? Suivez Démarrer. Vous avez une clé ? Ouvrez le guide de votre logiciel.**
 
 <Columns cols={3}>
-  <Card title="Effectuer un premier appel en 5 minutes" icon="rocket" href="/fr/guide/quick-start" arrow>
-    Créez une clé, choisissez un modèle et envoyez une requête de test.
+  <Card title="Démarrer" icon="rocket" href="/fr/guide/quick-start" arrow>
+    Connexion, clé et configuration.
   </Card>
-  <Card title="Configurer Claude Code / Codex" icon="terminal" href="/fr/tools" arrow>
-    Choisissez le guide correspondant à votre client.
+  <Card title="Configurer mon logiciel" icon="terminal" href="/fr/tools" arrow>
+    Claude Code, Codex, CC Switch et autres.
   </Card>
-  <Card title="Vérifier l'API et le modèle" icon="braces" href="/fr/developer/capability-matrix" arrow>
-    Confirmez le modèle, le groupe de jetons et le protocole avant l'appel.
-  </Card>
-</Columns>
-
-## Les trois informations nécessaires
-
-| Information | Où l'obtenir | Rôle |
-| --- | --- | --- |
-| Base URL | Cette documentation | Envoie les requêtes à NexusAPI |
-| Clé API | Console → Gestion des jetons | Identifie l'appelant et les groupes disponibles |
-| ID de modèle | Console → Catalogue de modèles | Sélectionne le modèle à appeler |
-
-<Warning>
-Ne divulguez jamais une clé API dans une conversation, une capture d'écran, un dépôt frontend ou une configuration publique. En cas de doute, supprimez ou réinitialisez immédiatement la clé dans la console.
-</Warning>
-
-## Commencer selon votre objectif
-
-<Columns cols={2}>
-  <Card title="Je développe une application ou un script" icon="code-2" href="/fr/guide/quick-start" arrow>
-    Commencez avec l'API compatible OpenAI.
-  </Card>
-  <Card title="J'utilise Claude Code" icon="bot" href="/fr/tools/claude-code" arrow>
-    Configurez le protocole Messages natif.
-  </Card>
-  <Card title="J'utilise Codex CLI" icon="terminal-square" href="/fr/tools/codex-cli" arrow>
-    Configurez un fournisseur et un modèle personnalisés.
-  </Card>
-  <Card title="Un appel échoue" icon="circle-help" href="/fr/faq/self-check" arrow>
-    Suivez l'auto-diagnostic et relevez les informations utiles.
+  <Card title="Prix et remises" icon="badge-dollar-sign" href="/fr/billing/multipliers-and-discounts" arrow>
+    Des exemples pour voir le coût.
   </Card>
 </Columns>
 
-## Pour demander de l'aide, joignez aussi
+## Actions courantes
 
-- L'heure de l'incident et le fuseau horaire
-- L'ID du modèle, l'endpoint et l'utilisation ou non du streaming
-- Le message d'erreur complet et le Request ID
-- La plus petite reproduction déjà tentée
+| Je souhaite | Ouvrir |
+| --- | --- |
+| Créer ou copier une clé API | [Guide des clés](/fr/guide/api-key) |
+| Recharger ou vérifier un paiement | [Paiement](/fr/guide/recharge) |
+| Trouver un modèle et son prix | [Modèles et prix](/fr/billing/models-pricing) |
+| Consulter les appels et débits | [Utilisation et débits](/fr/billing/usage-and-billing) |
+| Modifier le mot de passe ou retirer un appareil | [Sécurité du compte](/fr/guide/account-security) |
 
-Ces éléments évitent les allers-retours et accélèrent le diagnostic.
+## Besoin d'aide ?
+
+Envoyez au support :
+
+- Le logiciel utilisé.
+- L'heure, le modèle et le groupe.
+- Le texte d'erreur ou une capture, et l’identifiant de requête (Request ID) s'il est disponible.
+
+**Masquez les clés API complètes. N'envoyez jamais de mot de passe ni de code de vérification.** Inutile de deviner : commencez par l'erreur affichée.

@@ -3,13 +3,13 @@ title: "Chat Completions API"
 description: "OpenAI Chat Completions 形式で NexusAPI のテキストモデルを呼び出します。"
 ---
 
-このページは **OpenAI Chat Completions** のみを扱います。呼び出す前に、[API とモデル対応マトリクス](/ja/developer/capability-matrix)でモデル、トークングループ、プロトコルが合うことを確認してください。
+このページは **OpenAI Chat Completions** のみを扱います。呼び出す前に、[API とモデル対応マトリクス](/ja/developer/capability-matrix)でモデル、キーのグループ、プロトコルが合うことを確認してください。
 
 <Tip>
-現在のモデル可用性はモデルマーケットプレイスと対応マトリクスで確認します。
+現在のモデル可用性はモデル広場と対応マトリクスで確認します。
 </Tip>
 
-## Endpoint
+## エンドポイント
 
 ```text
 POST https://nexusapi.link/v1/chat/completions
@@ -27,7 +27,7 @@ curl 'https://nexusapi.link/v1/chat/completions' \
   }'
 ```
 
-| Header | 必須 | 値 |
+| ヘッダー | 必須 | 値 |
 | --- | --- | --- |
 | `Content-Type` | はい | `application/json` |
 | `Authorization` | はい | `Bearer YOUR_API_KEY` |
@@ -36,28 +36,27 @@ curl 'https://nexusapi.link/v1/chat/completions' \
 
 | フィールド | 必須 | 用途 |
 | --- | --- | --- |
-| `model` | はい | 現在の Key に見え、`supported_endpoint_types` に `openai` を含む正確なモデル ID |
+| `model` | はい | 現在のキーで見え、`supported_endpoint_types` に `openai` を含む正確なモデル ID |
 | `messages` | はい | Chat Completions 形式の会話メッセージ |
-| `stream` | いいえ | モデルとクライアントが対応する場合のみ `true` でストリーミングイベントを消費 |
+| `stream` | いいえ | モデルとクライアントが対応する場合のみ `true` でストリーミングイベントを受信 |
 
-通常の応答では `choices[0].message.content` から、ストリーミングでは各 `choices[0].delta.content` からテキストを読みます。`stream` やオプションを追加する前に、非ストリーミングの最小リクエストでモデルと Key を確認してください。
+通常の応答では `choices[0].message.content` から、ストリーミングでは各 `choices[0].delta.content` からテキストを読みます。`stream` やオプションを追加する前に、非ストリーミングの最小リクエストでモデルとキーを確認してください。
 
-`temperature`、ツール呼び出し、画像入力、構造化出力などのオプションは、「OpenAI 互換」だけで全モデルに保証されるものではありません。モデルの現在の可用性と対応能力は[API とモデル対応マトリクス](/ja/developer/capability-matrix)とモデルマーケットプレイスで確認してください。
+`temperature`、ツール呼び出し、画像入力、構造化出力などのオプションは、「OpenAI 互換」だけで全モデルに保証されるものではありません。モデルの現在の可用性と対応機能は[API とモデル対応マトリクス](/ja/developer/capability-matrix)とモデル広場で確認してください。
 
 ## よくある結果
 
 | 結果 | 最初の確認 |
 | --- | --- |
-| 401 | Key の欠落、無効、期限切れ、無効化。 |
+| 401 | キーの欠落、無効、期限切れ、無効化。 |
 | 429 | リクエスト頻度、同時実行数、上流の一時制限。 |
 | 500 / 502 / 503 | 一時的な処理または上流障害。待機して一度だけ再試行。 |
 | 524 | 待機時間の上限超過。 |
 
-`status_code=500, not implemented` が出た場合は、通常の 500 として高頻度に再試行しないでください。通常はモデルとリクエストプロトコルの不一致を示します。`supported_endpoint_types` に `openai` が含まれるか確認して、対応するガイドを使用してください。Request ID を保存して[自己確認](/ja/faq/self-check)を行います。
+`status_code=500, not implemented` が出た場合は、通常の 500 として高頻度に再試行しないでください。通常はモデルとリクエストプロトコルの不一致を示します。`supported_endpoint_types` に `openai` が含まれるか確認して、対応するガイドを使用してください。Request ID を保存して[セルフチェック](/ja/faq/self-check)を行います。
 
 ## 関連 API
 
-- 現在の Key に見えるモデルとプロトコル選択：[API 基本](/ja/developer/api-basics)
+- 現在のキーで見えるモデルとプロトコル選択：[API 基本](/ja/developer/api-basics)
 - ネイティブ Claude / Anthropic クライアント：[Anthropic Messages](/ja/developer/anthropic-messages)
-- Codex Provider：[Responses API と Codex](/ja/developer/responses)
-- 画像生成：[画像モデルの利用方法](/ja/guide/image-generation)
+- Codex プロバイダー：[Responses API と Codex](/ja/developer/responses)

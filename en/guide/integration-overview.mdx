@@ -1,95 +1,28 @@
 ---
-title: "Integration overview"
-description: "Choose the correct NexusAPI URL and protocol for your client or application."
+title: "Choose your setup guide"
+description: "Find your app and follow its setup guide."
 ---
 
-NexusAPI supports common AI clients and OpenAI-style API calls. Different clients append different paths automatically, so choose the address from the guide for the tool you are using.
+## 1. Find your app
 
-## Before you start
-
-Whichever method you use, make sure that you have:
-
-1. Created an API key in the console.
-2. Chosen a token group that includes the target model.
-3. Copied the exact model ID from the Model Marketplace.
-4. Confirmed the model's supported protocol before sending a request.
-
-## Choose your entry point
-
-| What you are doing | Read this |
+| What you want to do | Follow this guide |
 | --- | --- |
-| Building a script or application | [Quick start](/en/guide/quick-start) |
-| Configuring Claude Code | [Claude Code guide](/en/tools/claude-code) |
-| Configuring Codex CLI | [Codex CLI guide](/en/tools/codex-cli) |
-| Managing several CLI providers | [CC Switch guide](/en/tools/cc-switch) |
-| Using VS Code or Cursor | [VS Code / Cursor guide](/en/tools/cursor-vscode) |
-| Generating images | [Image model guide](/en/guide/image-generation) |
+| Use Claude Code | [Claude Code](/en/tools/claude-code) |
+| Use Codex CLI | [Codex CLI](/en/tools/codex-cli) |
+| Switch providers with CC Switch | [CC Switch](/en/tools/cc-switch) |
+| Use VS Code / Cursor | [Editor setup](/en/tools/cursor-vscode) |
+| Write your own program | [Code examples](/en/developer/code-examples) |
 
-## URL and protocol reference
+## 2. Have these three details ready
 
-| Scenario | Base URL to enter | Main protocol | Important note |
-| --- | --- | --- |
-| OpenAI SDK or a general text application | `https://nexusapi.link/v1` | Chat Completions | Your SDK normally appends the request path. |
-| Codex CLI | `https://nexusapi.link/v1` | Responses | Use the provider settings from the Codex guide. |
-| Claude Code | `https://nexusapi.link` | Anthropic Messages | Do not append `/v1` again in the Claude Code setting. |
-| CC Switch | Depends on the selected app | Depends on the app | Claude and Codex use different URL rules. |
-| Image models | `https://nexusapi.link/v1` | Images | Use only a model explicitly marked for image generation. |
+| What to enter | Where to find it |
+| --- | --- |
+| API key | Create and copy it in [API Keys](https://nexusapi.link/keys) |
+| Model name | Select your key's group in [Model Square](https://nexusapi.link/pricing), then copy the name |
+| API address | Copy it from the matching guide above; do not assemble it yourself |
 
-Before relying on an endpoint, check the [API and model capability matrix](/en/developer/capability-matrix). It explains what NexusAPI currently documents as an external capability; the Model Marketplace remains the source of truth for a specific key and model.
+Claude Code usually uses `https://nexusapi.link`; Codex CLI and OpenAI SDK usually use `https://nexusapi.link/v1`. **Follow the guide for your app.**
 
-## Pick the protocol first
+## 3. Check that it works
 
-The same domain does not mean that every model accepts every request format.
-
-| Your goal | Recommended endpoint | Use it when |
-| --- | --- | --- |
-| General text, chat, or streaming | `/v1/chat/completions` | The model is available through the OpenAI-compatible route. |
-| Codex CLI and a matching provider | `/v1/responses` | Use only when `supported_endpoint_types` includes `openai-response`. |
-| Claude Code or a native Anthropic client | `/v1/messages` | Use only when `supported_endpoint_types` includes `anthropic`. |
-| Image generation | `/v1/images/generations` | The model is explicitly marked as image-capable. |
-
-<Warning>
-**Do not use Responses as a universal replacement endpoint**
-
-If a model's `supported_endpoint_types` does not include `openai-response` and `/v1/responses` returns `status_code=500, not implemented`, the protocol does not match. Switch to an endpoint listed for that model; keep Claude Code on its native Messages configuration. Repeating the same request will not make this protocol mismatch recover.
-</Warning>
-
-## Why URLs can look different
-
-Most OpenAI-style applications use:
-
-```text
-https://nexusapi.link/v1
-```
-
-Some clients require the site URL without `/v1`, or add `/chat/completions`, `/responses`, or `/messages` themselves. Follow the tool-specific guide rather than copying an address from another client.
-
-<Warning>
-**Avoid duplicate paths**
-
-If a client already appends `/v1`, entering a URL that includes it can produce `/v1/v1/...` and a 404 error. Check the actual request URL first when you see a 404.
-</Warning>
-
-## Do not mix client configuration with a generic API
-
-CLI tools, editor extensions, and your own application can use different protocols and configuration files. Even when the model name is the same, do not copy an entire configuration from one tool into another.
-
-- **Codex CLI:** follow the [Codex CLI guide](/en/tools/codex-cli) and use its Responses provider settings.
-- **Claude Code:** follow the [Claude Code guide](/en/tools/claude-code) and keep its native Anthropic Messages configuration.
-- **Your own text application:** start with Chat Completions unless its SDK explicitly requires another protocol.
-- **Image generation:** use the image endpoint; do not send image-generation parameters to a text chat endpoint.
-- **Not sure:** identify the exact client and inspect the request path it sends before changing settings.
-
-## API reference
-
-Use the [API and model capability matrix](/en/developer/capability-matrix) to confirm the protocol for the model you want to use. The smallest Chat Completions request is documented in [Chat Completions](/en/developer/openai-compatible).
-
-This help center explains how to choose and configure an integration, and provides minimal requests you can verify. Optional parameters still depend on the client protocol and the model currently shown in the Model Marketplace.
-
-## Confirm that the setup works
-
-- The client returns a complete response.
-- The matching request appears in the console usage log.
-- The model, token group, and charge match your expectation.
-
-If it fails, keep the error text and Request ID, then use the [self-check guide](/en/faq/self-check).
+Send “Reply with: connection successful.” A complete reply means the setup works. Otherwise, see [troubleshooting](/en/faq/self-check) or send support an error screenshot. Hide your complete API key.

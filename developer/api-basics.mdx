@@ -16,7 +16,7 @@ NexusAPI 的可用模型会随 API Key 的分组、模型限制和实时状态�
 | 信息 | 获取位置 | 用途 |
 | --- | --- | --- |
 | Base URL | 本页 | 让 SDK 或客户端把请求发送到 NexusAPI |
-| API Key | 控制台 → 令牌管理 | 识别调用身份和可用分组 |
+| API Key | 控制台 → API 密钥 | 识别调用身份和可用分组 |
 | 模型 ID | 模型广场或 `/v1/models` | 指定本次实际调用的模型 |
 
 通用 OpenAI 风格客户端使用：
@@ -42,7 +42,7 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-从响应的 `data[].id` 复制模型 ID。模型列表只表示**这把 Key 当前可见**的模型，不代表全部平台模型；`data[].supported_endpoint_types` 列出该模型当前可用的请求协议。只调用包含目标类型的路径：`openai` 对应 Chat Completions、`anthropic` 对应 Messages、`openai-response` 对应 Responses、`image-generation` 对应图片生成。若出现多个类型，可按所用客户端选择其中匹配的一种。
+从响应的 `data[].id` 复制模型 ID。模型列表只表示**这把 Key 当前可见**的模型，不代表全部平台模型；`data[].supported_endpoint_types` 列出该模型当前可用的请求协议。只调用包含目标类型的路径：`openai` 对应 Chat Completions、`anthropic` 对应 Messages、`openai-response` 对应 Responses。若出现多个类型，可按所用客户端选择其中匹配的一种。
 
 ## 选择正确的协议
 
@@ -51,18 +51,16 @@ curl 'https://nexusapi.link/v1/models' \
 | OpenAI 兼容文本、聊天、流式输出 | `POST /v1/chat/completions` | `supported_endpoint_types` 包含 `openai` 的模型；适用于多数自建程序、OpenAI SDK 和通用客户端 |
 | 原生 Anthropic / Claude Code | `POST /v1/messages` | `supported_endpoint_types` 包含 `anthropic` 的模型 |
 | Codex Provider | `POST /v1/responses` | 仅按 [Codex CLI 教程](/tools/codex-cli)配置，且 `supported_endpoint_types` 包含 `openai-response` 的模型 |
-| 图片生成 | `POST /v1/images/generations` | `supported_endpoint_types` 包含 `image-generation` 的图片模型 |
 
 模型名称相同，不等于它可以接受任意一种请求格式。先在[接口与模型能力矩阵](/developer/capability-matrix)确认协议，再选下面的详细说明：
 
 - [Chat Completions](/developer/openai-compatible)
 - [Anthropic Messages](/developer/anthropic-messages)
 - [Responses / Codex](/developer/responses)
-- [图片模型使用说明](/guide/image-generation)
 
 ## 最小验证和重试原则
 
-1. 先列模型，再发送一条短文本或最小图片请求。
+1. 先列模型，再发送一条短文本请求。
 2. 确认模型 ID、Key 分组和路径正确后，才加入可选参数、流式输出或批量任务。
 3. 出错时保留错误原文、发生时间和 Request ID；在未确认结果前，请避免高频重复发送同一请求。
 

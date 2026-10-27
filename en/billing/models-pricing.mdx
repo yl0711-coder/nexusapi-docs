@@ -1,39 +1,34 @@
 ---
-title: "Models, token groups, and billing"
-description: "Understand NexusAPI model availability, token groups, and usage-based pricing."
+title: "Choose a model and check its price"
+description: "Select your group, copy the model name, and check the matching price."
 ---
 
-NexusAPI is usage-based: text models can charge for input, output, and cached tokens; image, audio, video, or task models can charge per image, duration, task, or another upstream unit. The live details in the Model Marketplace take precedence over this guide.
+## 1. Select your group first
 
-## Model Marketplace
+1. Open [API Keys](https://nexusapi.link/keys), find the key you use, and note its **Group**.
+2. Open [Model Square](https://nexusapi.link/pricing).
+3. Select that same group on the left.
 
-Use the **Model Marketplace** in the console to see current models, prices, and token-group availability:
+**Do not rely on All Groups prices. Select your own group to see its prices.**
 
-1. Sign in to the [NexusAPI console](https://nexusapi.link), then open the [Model Marketplace](https://nexusapi.link/pricing).
-2. Filter by model provider and available token group.
-3. Review the model ID, price, description, and supported endpoint types for that group.
+![Model Square](/images/nexusapi/model-marketplace-en.png)
 
-![NexusAPI Model Marketplace, filterable by provider and token group](/images/nexusapi/model-marketplace-en.png)
+## 2. Copy the model name
 
-## Choose the right token group
+Search for your model, click to copy its name, and paste it into the app's **Model** field. Do not type the name from memory.
 
-The token group selected when you create a key determines which models and prices the key can use.
+Cannot find it? Send support your **app name, desired model and current group** to confirm which group to use.
 
-- A model can appear in more than one group; choose by the target model, not only by the group name.
-- Filter the Model Marketplace by the group and confirm the exact model ID.
-- If one project needs different classes of models, separate API keys make limits and reconciliation easier.
+![Select your own group, then use the copy button at the top right of a model card. The group and prices shown are examples; check the live page.](/images/nexusapi/model-selection-en.png)
 
-![Selecting a token group when creating a NexusAPI token](/images/nexusapi/console-create-token-en.png)
+Select your own group, then use the copy button at the top right of a model card. The group and prices shown are examples; check the live page.
 
-## What makes up a charge
+## 3. Check the price
 
-- **Text models:** input tokens, output tokens, and cache-related usage can be priced separately.
-- **Image models:** size, quality, quantity, and model-specific options can affect the charge.
-- **Audio, video, and task models:** a charge can depend on duration, task type, or an upstream billing unit.
+- **Standard:** account credits charged for usage.
+- **Recharge:** a cost reference based on site settings; personal discounts and plans may differ.
+- **`/1M`:** per million tokens. **`/1K`:** per thousand tokens. Use the same unit when comparing.
 
-Use the individual charge in the console usage log and the live Model Marketplace price to reconcile a request. Do not apply token-price rules to image or task models.
+Content sent to the model is input; the reply is output. For cache or other charges, open **Details**.
 
-## Check usage
-
-- View each request in the console usage log.
-- Read [usage and billing](/en/billing/usage-and-billing) for field meanings, cache usage, and error records.
+**The displayed price already includes the selected group's multiplier. Do not multiply it again.** See [discount examples](/en/billing/multipliers-and-discounts) or [actual usage charges](/en/billing/usage-and-billing).

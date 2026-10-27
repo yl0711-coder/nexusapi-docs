@@ -1,44 +1,31 @@
 ---
-title: "Acheter du crédit"
-description: "Achetez du crédit NexusAPI, vérifiez son attribution et traitez un incident de paiement sans divulguer de secrets."
+title: "Ajouter des fonds et vérifier le paiement"
+description: "Choisissez un montant, payez et vérifiez votre solde."
 ---
 
-NexusAPI déduit le crédit du compte selon l'usage réel. Avant un achat, définissez le budget et le modèle nécessaires.
+## 1. Ajouter des fonds
 
-![Page NexusAPI de gestion du portefeuille et d’achat de crédit, données de compte masquées](/images/nexusapi/console-wallet-topup-fr.png)
+1. Ouvrez le [Portefeuille](https://nexusapi.link/wallet).
+2. Dans **Ajouter des fonds**, choisissez un montant ou saisissez-le.
+3. Vérifiez le montant à payer et le crédit reçu, puis choisissez le moyen de paiement.
+4. Suivez les instructions de paiement.
+5. Revenez au portefeuille et actualisez pour vérifier le solde.
 
-## Achat en ligne
+![Page de recharge](/images/nexusapi/console-wallet-topup-fr.png)
 
-1. Connectez-vous à la [console NexusAPI](https://nexusapi.link).
-2. Ouvrez **Gestion du portefeuille** ou la page de crédit.
-3. Choisissez le montant et un moyen de paiement disponible.
-4. Terminez le paiement sur la page prévue.
-5. Revenez à la console et vérifiez le solde et l'état de la commande.
+Le solde en `$` est du crédit, pas le montant payé en yuans. Voir les [exemples de remises](/fr/billing/multipliers-and-discounts).
 
-<Tip>
-Conservez le numéro de commande, l'heure, le fuseau horaire, le montant et le moyen de paiement. Ces informations permettent un rapprochement plus fiable qu'une simple capture d'écran.
-</Tip>
+## 2. Codes et abonnements
 
-## Le crédit est présent mais l'appel échoue
+- **Code d’échange :** collez-le dans le champ prévu dans le Portefeuille, puis cliquez sur **Utiliser**.
+- **Abonnement :** si des forfaits sont proposés, vérifiez la durée, le crédit inclus et les groupes autorisés. Un forfait n'est pas le solde du portefeuille. Demandez au support avant d'acheter si vous hésitez.
 
-Le crédit n'est qu'une condition parmi d'autres. Vérifiez aussi : le statut et la limite de la clé, sa date d'expiration, son groupe, l'ID du modèle et le protocole de la requête.
+## 3. Paiement effectué, crédit absent
 
-Ne confondez pas le solde du compte, la limite d'une clé, l'accès du groupe et une erreur temporaire d'un fournisseur. Consultez les [erreurs API courantes](/fr/faq/common-errors) pour le diagnostic.
+Actualisez le portefeuille, puis consultez **Historique des commandes**. Si le crédit manque toujours, envoyez au support :
 
-## Vérifier le paiement et l'attribution
+- Votre compte de connexion.
+- L'heure, le montant et le moyen de paiement.
+- Le numéro de commande et une capture du paiement.
 
-Après le paiement, actualisez le solde dans la console et vérifiez la variation de crédit. Le traitement peut prendre un court moment. Si le crédit n'est toujours pas attribué, contactez l'équipe support NexusAPI et fournissez en un seul message :
-
-- l'identifiant de compte NexusAPI ou l'ID utilisateur (jamais le mot de passe) ;
-- l'heure du paiement et le fuseau horaire ;
-- le moyen de paiement et le montant ;
-- le numéro de commande ou la référence de paiement ;
-- un justificatif ou une capture masquant les données sensibles.
-
-<Warning>
-**Protégez vos informations de paiement et de compte**
-
-Le support ne demandera jamais votre mot de passe, un code de vérification de paiement, le numéro complet de votre carte ou votre clé API complète. Ne les incluez pas dans une capture.
-</Warning>
-
-Pour suivre les dépenses, lisez [modèles, groupes et tarification](/fr/billing/models-pricing) et [usage et facturation](/fr/billing/usage-and-billing).
+Masquez les données sensibles. **N'envoyez ni mot de passe, ni code de vérification, ni clé API complète.**

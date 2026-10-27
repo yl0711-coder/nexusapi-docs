@@ -1,170 +1,84 @@
 ---
-title: "Claude Code setup"
-description: "Install Claude Code and connect it to NexusAPI using its native Anthropic configuration."
+title: "Install and configure Claude Code"
+description: "Install for your system, enter a key and model, and test one message."
 ---
 
-Claude Code is a terminal coding agent. It uses the native Anthropic Messages configuration, so its NexusAPI Base URL is `https://nexusapi.link` — **do not append `/v1`**.
+This setup uses your NexusAPI key. You do not need to sign in to an official Claude account for these requests.
 
-## System requirements
+## 1. Prepare and install
 
-- macOS 13+, Ubuntu 20.04+, Debian 10+, Alpine Linux 3.19+, or Windows 10 version 1809+.
-- At least 4 GB of memory and an x64 or ARM64 CPU.
-- A network that can reach NexusAPI.
-- On Windows, [Git for Windows](https://git-scm.com/install/windows) is optional when you prefer Git Bash.
+[Create an API key](/en/guide/api-key). In [Model Square](https://nexusapi.link/pricing), select its group and copy a Claude Code / Messages-compatible model name. On Windows, search Start for `PowerShell`. On Mac, use `Command + Space` to open Terminal.
 
-## 1. Install Claude Code
+Run only the installer for your system. Skip installation if Claude Code is already installed.
 
-Use an official installer. A native installation does not require Node.js.
-
-### macOS, Linux, or WSL
-
-```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
-### Windows PowerShell
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
-
-You may also use WinGet on Windows or Homebrew on macOS:
-
-```powershell
-winget install Anthropic.ClaudeCode
-```
-
+</Tab>
+<Tab title="macOS / Linux / WSL">
 ```bash
-brew install --cask claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+</Tab>
+</Tabs>
 
-Verify the installed client before editing configuration:
+Reopen the terminal after installation and run this. Continue when you see a version number. If the command is not found, reopen the terminal; send the installation error to support if it still fails.
 
 ```bash
 claude --version
-claude doctor
 ```
 
-## 2. Create a NexusAPI key
+## 2. Open the configuration file
 
-In the [NexusAPI console](https://nexusapi.link), open **Token Management → Add token**. Give the key a recognizable name, choose a group that contains the model you need for Claude Code, and set an appropriate limit.
+Use your system's command to open the user configuration:
 
-Do not assume every Claude-branded model is available to every group; verify it in the Model Marketplace or with `/v1/models`.
-
-### Choose safe key settings
-
-Use a project-specific name and a sensible limit. Enable a model restriction or IP allowlist only when you understand the operational impact, and give short-lived test keys an expiry date.
-
-## 3. Set user-level configuration
-
-### Locate the configuration folder
-
-Claude Code reads user settings from:
-
-| System | File |
-| --- | --- |
-| macOS / Linux / WSL | `~/.claude/settings.json` |
-| Windows | `%USERPROFILE%\.claude\settings.json` |
-
-Create it on macOS, Linux, WSL, or Git Bash:
-
-```bash
-mkdir -p ~/.claude
-touch ~/.claude/settings.json
-```
-
-On Windows PowerShell:
-
+<Tabs>
+<Tab title="Windows PowerShell">
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude"
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude" | Out-Null
 notepad "$env:USERPROFILE\.claude\settings.json"
 ```
+</Tab>
+<Tab title="macOS / Linux / WSL">
+```bash
+mkdir -p ~/.claude
+nano ~/.claude/settings.json
+```
+</Tab>
+</Tabs>
 
-### Set the environment values
+On macOS / Linux, nano saves with `Ctrl + O`, Enter, then exits with `Ctrl + X`. In Windows Notepad, use `Ctrl + S`. Keep the name `settings.json`, not `.json.txt`.
 
-Merge the following `env` values into an existing file; do not overwrite your MCP, permissions, or other settings.
+## 3. Enter your key and model
+
+For an empty file, paste the following. Replace `YOUR_API_KEY` with your complete key and `YOUR_MODEL_ID` with the copied model name. Keep the quotes and commas.
 
 ```json
 {
+  "model": "YOUR_MODEL_ID",
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "YOUR_NEXUSAPI_KEY",
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
     "ANTHROPIC_BASE_URL": "https://nexusapi.link"
   }
 }
 ```
 
-Keep this in your user directory, not in a project repository. Never commit or screenshot a real key.
-
-<Tip>
-**Only disable experimental fields when the error asks for it**
-
-If an error explicitly mentions unsupported `context_management` or experimental inputs, add `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` to `env` and test again. It disables some preview fields; use it only for this kind of compatibility error.
-</Tip>
+Back up an existing file and merge only `model` and `env`; do not erase other settings. You can use [CC Switch](/en/tools/cc-switch) instead. Keep keys out of project settings and screenshots.
 
 ## 4. Start and verify
 
-Open a new terminal, enter a project directory, and run:
-
-```bash
-cd your-project-folder
-```
+Save, reopen the terminal in your own project folder, and run:
 
 ```bash
 claude
 ```
 
-Run `/status` inside Claude Code. Confirm that **Anthropic base URL** is `https://nexusapi.link` and authentication comes from `ANTHROPIC_AUTH_TOKEN`, then send a short text message.
+Enter `/status`. Check `Anthropic base URL` is `https://nexusapi.link`, the credential source is `ANTHROPIC_AUTH_TOKEN`, and the model matches your setting.
 
-## Troubleshooting
+Send “Reply only: connection successful. Do not modify files.” A complete reply and a matching [Usage Logs](https://nexusapi.link/usage-logs/common) record confirm setup. The test uses a little credit.
 
-### `Invalid API Key · Please run /login`
+For `/login` or key errors, check the user-level file and replaced values, then restart. See [troubleshooting](/en/faq/self-check) for other errors. Do not delete the entire `.claude` folder.
 
-Confirm that both environment values are saved, the key itself is enabled, and the terminal was restarted. Do not solve this by editing Claude's internal login state files.
-
-### `Unable to connect to Anthropic services`
-
-Run `claude doctor`, check the JSON syntax in `settings.json`, then reopen the terminal. If it persists, save the original error, `claude --version`, and `claude doctor` output.
-
-```text
-Unable to connect to Anthropic services
-Failed to connect to api.anthropic.com: ERR BAD REQUEST
-```
-
-Do not use a script to overwrite internal fields in `.claude.json`. They can change between releases and overwriting the file can remove existing settings.
-
-### PowerShell blocks the installer
-
-Use WinGet or the official installer from Windows CMD first. If you have verified that the issue is only your local execution policy, change the policy for the current user only:
-
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
-
-Only change the current-user policy after confirming that it is the local cause.
-
-### `fetch failed`
-
-First distinguish a model call from Claude Code's WebFetch feature.
-
-1. Send a one-line normal prompt. If it succeeds, NexusAPI model calls are working; troubleshoot WebFetch under its own network and safety rules.
-2. If all model calls fail, run `claude doctor` and use `/status` to confirm the Base URL is still `https://nexusapi.link`.
-3. Check local DNS, firewall, corporate network, or an existing trusted proxy for access to `nexusapi.link`.
-4. Open a fresh terminal and test once. For persistent failures, retain the version, doctor output, full error, and Request ID, then use the [self-check guide](/en/faq/self-check).
-
-### The status says `offline`
-
-Some auxiliary features check official or third-party services separately. Verify the actual gateway URL with `/status` and send a small text request first; `offline` alone does not necessarily mean an API outage.
-
-### WebFetch fails but normal chat works
-
-WebFetch can have separate domain-safety checks and external network access. If a short normal chat request succeeds, the NexusAPI Base URL does not need to be changed; troubleshoot WebFetch under Claude Code’s own network guidance.
-
-### An API request fails
-
-Exit the session, start a fresh `claude` session, and test one short request. If the problem remains, preserve the Request ID and use the [self-check guide](/en/faq/self-check).
-
-## Official references
-
-- [Claude Code installation](https://code.claude.com/docs/en/installation)
-- [Claude Code environment variables](https://code.claude.com/docs/en/env-vars)
-- [Claude Code gateway configuration](https://code.claude.com/docs/en/llm-gateway)
+Official project: [Claude Code](https://github.com/anthropics/claude-code).

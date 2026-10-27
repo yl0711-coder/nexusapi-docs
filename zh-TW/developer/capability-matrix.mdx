@@ -1,14 +1,14 @@
 ---
 title: "介面與模型能力矩陣"
-description: "在呼叫 NexusAPI 前，確認模型、令牌群組與協定是否相符。"
+description: "在呼叫 NexusAPI 前，確認模型、金鑰分組與協定是否相符。"
 ---
 
-NexusAPI 的模型、令牌群組與協定需要同時相符。請以控制台的模型廣場，以及目前 Key 實際回傳的結果為準。
+NexusAPI 的模型、金鑰分組與協定需要同時相符。請以控制台的模型廣場，以及目前 Key 實際回傳的結果為準。
 
 <Info>
 **呼叫前請確認**
 
-1. 目標模型已在目前令牌群組中上架。
+1. 目標模型已在目前金鑰分組中上架。
 2. `/v1/models` 回傳的 `supported_endpoint_types` 包含你需要的協定。
 3. 先用 `/v1/models` 查看此 Key 實際可見的模型，再做最小測試請求。
 </Info>
@@ -17,16 +17,13 @@ NexusAPI 的模型、令牌群組與協定需要同時相符。請以控制台�
 
 | 目的 | 介面／協定 | 適用情境 | 重要限制 |
 | --- | --- | --- | --- |
-| 列出目前 Key 可用模型 | [GET /v1/models](/zh-TW/developer/api-basics) | 建立 Key 後、選模型前 | 僅反映此 Key 的群組和限制。 |
+| 列出目前 Key 可用模型 | [GET /v1/models](/zh-TW/developer/api-basics) | 建立 Key 後、選模型前 | 僅反映此 Key 的分組和限制。 |
 | 文字、對話與串流 | [POST /v1/chat/completions](/zh-TW/developer/openai-compatible) | OpenAI 相容 SDK、程式與多數文字模型 | 僅使用 `supported_endpoint_types` 包含 `openai` 的模型。 |
 | Claude Code／Anthropic 原生用戶端 | [POST /v1/messages](/zh-TW/developer/anthropic-messages) | `supported_endpoint_types` 包含 `anthropic` 時 | Claude Code 的 Base URL 不要再重複加上 `/v1`。 |
 | Codex CLI | [POST /v1/responses](/zh-TW/developer/responses) | 依 [Codex CLI 教學](/zh-TW/tools/codex-cli)設定 Provider 時 | 僅支援 `supported_endpoint_types` 包含 `openai-response` 的模型。 |
-| 圖片生成 | [POST /v1/images/generations](/zh-TW/guide/image-generation) | `supported_endpoint_types` 包含 `image-generation` 時 | 只傳送所選圖片模型支援的參數。 |
 
 <Warning>
-**請以公開能力範圍為準**
-
-請以本頁、模型廣場或正式教學明確列出的能力為準。圖片編輯／變體、embeddings、音訊、rerank 和原生 Gemini 目前不是通用的公開 NexusAPI 能力；如需用於正式工作負載，請先聯絡支援確認。
+目前不提供圖片生成模型。其他未列出的能力，請先聯絡客服確認。
 </Warning>
 
 ## 用目前 Key 確認模型
@@ -36,9 +33,9 @@ curl 'https://nexusapi.link/v1/models' \
   -H 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-從 `data[].id` 複製模型 ID。`data[].supported_endpoint_types` 列出模型可用的請求協定：`openai` 對應 Chat Completions、`anthropic` 對應 Messages、`openai-response` 對應 Responses、`image-generation` 對應圖片生成。一個模型可能同時列出多個類型；請依用戶端和欄位選擇，不要依模型名稱猜測。
+從 `data[].id` 複製模型 ID。`data[].supported_endpoint_types` 列出模型可用的請求協定：`openai` 對應 Chat Completions、`anthropic` 對應 Messages、`openai-response` 對應 Responses。一個模型可能同時列出多個類型；請依用戶端和欄位選擇，不要依模型名稱猜測。
 
-`/v1/models` 是單一 Key 的即時快照；模型廣場提供價格、群組與說明。若兩者不同，請以目前 Key 的回傳結果和控制台狀態為準。
+`/v1/models` 是單一 Key 的即時快照；模型廣場提供價格、分組與說明。若兩者不同，請以目前 Key 的回傳結果和控制台狀態為準。
 
 ## 協定選擇速查
 
@@ -47,9 +44,8 @@ curl 'https://nexusapi.link/v1/models' \
 | Python、JavaScript、cURL 或 OpenAI 相容 SDK | `/v1/chat/completions`（先確認欄位包含 `openai`） |
 | Claude Code | [Claude Code 教學](/zh-TW/tools/claude-code)中的 Messages 設定（先確認欄位包含 `anthropic`） |
 | Codex CLI | [Codex CLI 教學](/zh-TW/tools/codex-cli)中的 Responses Provider（先確認欄位包含 `openai-response`） |
-| 圖片模型 | [圖片模型說明](/zh-TW/guide/image-generation)（先確認欄位包含 `image-generation`） |
 
-如果模型可見但請求仍失敗，先檢查模型 ID、令牌群組和請求路徑，並保留 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。
+如果模型可見但請求仍失敗，先檢查模型 ID、金鑰分組和請求路徑，並保留 Request ID 後依[問題自查](/zh-TW/faq/self-check)處理。
 
 ## 進一步閱讀
 
