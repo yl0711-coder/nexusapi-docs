@@ -1,0 +1,110 @@
+---
+title: "模型建議協定"
+description: "依模型名稱查找建議協定，選擇對應介面完成串接。"
+---
+
+先在下方找到模型名稱，再選擇對應協定。請保留模型名稱的大小寫、日期和後綴，不要自行改寫。
+
+下表列出目前可選模型與建議協定。實際可用範圍以你的 API Key 分組為準。
+
+## 如何選擇協定
+
+| 使用的模型 | 先選協定 | 請求路徑 |
+| --- | --- | --- |
+| Claude | Anthropic Messages | `/v1/messages` |
+| GPT 且分組支援 Responses | Responses | `/v1/responses` |
+| GPT 僅確認 Chat Completions 的分組；DeepSeek、GLM、Kimi、Qwen、Grok | Chat Completions | `/v1/chat/completions` |
+
+<Warning>
+請先確認模型在你的 API Key 分組中可用。若軟體只支援一種協定，請選擇同時支援該協定的模型與分組。
+</Warning>
+
+使用 `gpt-5.6x` 分組時，先選擇 Chat Completions；如需 Responses，請先聯絡客服確認。
+
+## 依模型查協定
+
+### Claude
+
+| 模型名稱 | 建議協定 | 注意事項 |
+| --- | --- | --- |
+| `claude-fable-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-fable-5-1` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-haiku-4-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-haiku-4-5-20251001` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-haiku-5-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-opus-4-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-opus-4-5-20251101` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-opus-4-6` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-opus-4-7` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-opus-4-8` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-opus-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-opus-5-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-sonnet-4-5-20250929` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-sonnet-4-6` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-sonnet-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+| `claude-sonnet-5-5` | Anthropic Messages | 確認目前 Key 分組可用 |
+
+### GPT
+
+| 模型名稱 | 建議協定 | 注意事項 |
+| --- | --- | --- |
+| `gpt-5.4` | Chat Completions | 目前設定先選 Chat Completions；Responses 需另行確認 |
+| `gpt-5.5` | Responses | Codex / 支援 Responses 的分組選 Responses；`gpt-5.6x` 先選 Chat Completions |
+| `gpt-5.6-luna` | Chat Completions | 目前設定先選 Chat Completions；Responses 需另行確認 |
+| `gpt-5.6-sol` | Responses | Codex / 支援 Responses 的分組選 Responses；`gpt-5.6x` 先選 Chat Completions |
+| `gpt-5.6-terra` | Responses | Codex / 支援 Responses 的分組選 Responses；`gpt-5.6x` 先選 Chat Completions |
+| `gpt-6-astra` | Responses | Codex / 支援 Responses 的分組選 Responses；`gpt-5.6x` 先選 Chat Completions |
+| `gpt-6-luna` | Chat Completions | 目前設定先選 Chat Completions；Responses 需另行確認 |
+| `gpt-6-sol` | Responses | Codex / 支援 Responses 的分組選 Responses；`gpt-5.6x` 先選 Chat Completions |
+| `gpt-6.1-sol` | Responses | Codex / 支援 Responses 的分組選 Responses；`gpt-5.6x` 先選 Chat Completions |
+| `gpt-6.1-terra` | Responses | 確認目前 Key 分組可用 |
+
+### DeepSeek
+
+| 模型名稱 | 建議協定 | 注意事項 |
+| --- | --- | --- |
+| `deepseek-v4-flash` | Chat Completions | 確認目前 Key 分組可用 |
+| `deepseek-v4-pro` | Chat Completions | 確認目前 Key 分組可用 |
+
+### GLM
+
+| 模型名稱 | 建議協定 | 注意事項 |
+| --- | --- | --- |
+| `GLM-5.2` | Chat Completions | 確認目前 Key 分組可用 |
+| `glm-5.3` | Chat Completions | 確認目前 Key 分組可用 |
+| `glm-5.3-flash` | Chat Completions | 確認目前 Key 分組可用 |
+
+### Kimi
+
+| 模型名稱 | 建議協定 | 注意事項 |
+| --- | --- | --- |
+| `Kimi-K2.7-Code` | Chat Completions | 確認目前 Key 分組可用 |
+| `Kimi-K3` | Chat Completions | 確認目前 Key 分組可用 |
+| `kimi-k3` | Chat Completions | 確認目前 Key 分組可用 |
+| `kimi-k3.1-pro` | Chat Completions | 確認目前 Key 分組可用 |
+| `kimi-k3.1-pro-highspeed` | Chat Completions | 確認目前 Key 分組可用 |
+
+### Qwen
+
+| 模型名稱 | 建議協定 | 注意事項 |
+| --- | --- | --- |
+| `qwen3.7-flash` | Chat Completions | 確認目前 Key 分組可用 |
+| `qwen3.7-max` | Chat Completions | 確認目前 Key 分組可用 |
+| `qwen3.7-plus` | Chat Completions | 確認目前 Key 分組可用 |
+| `qwen3.8-flash` | Chat Completions | 確認目前 Key 分組可用 |
+| `qwen3.8-max` | Chat Completions | 確認目前 Key 分組可用 |
+
+### Grok
+
+| 模型名稱 | 建議協定 | 注意事項 |
+| --- | --- | --- |
+| `grok-4.5` | Chat Completions | 確認目前 Key 分組可用 |
+| `grok-4.6` | Chat Completions | 確認目前 Key 分組可用 |
+
+## 軟體設定與核對
+
+1. 使用 Claude Code，依[設定教學](/zh-TW/tools/claude-code)填寫，Base URL 使用 `https://nexusapi.link`。
+2. 使用 Codex CLI，依[設定教學](/zh-TW/tools/codex-cli)選 Responses；模型與分組均須支援此協定。
+3. 使用 Chat Completions 程式，依[程式碼範例](/zh-TW/developer/code-examples)填寫，OpenAI SDK 的 Base URL 使用 `https://nexusapi.link/v1`。
+
+找不到模型或所需協定時，先查看[模型與介面能力](/zh-TW/developer/capability-matrix)，再將模型名、Key 分組、軟體和 Request ID 提供給客服。請勿提供完整 Key。

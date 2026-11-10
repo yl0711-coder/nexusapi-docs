@@ -65,6 +65,8 @@ function checkFormatting(relativeFile, content) {
   let inCodeFence = false;
   let previousHeadingLevel = 0;
   let firstHeadingLevel = 0;
+  const frontmatter = content.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n/);
+  const frontmatterLines = frontmatter ? frontmatter[0].split(/\r?\n/).length - 1 : 0;
 
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
@@ -75,6 +77,21 @@ function checkFormatting(relativeFile, content) {
       continue;
     }
     if (inCodeFence) continue;
+
+    if (index >= frontmatterLines) {
+      if (/^(?:title|description):\s/.test(line)) {
+        addFailure(`${relativeFile}:${lineNumber}: unexpected frontmatter field in page body; check for duplicated content.`);
+      }
+      const ticks = line.replace(/\\`/g, '').match(/`+/g) || [];
+      const openTicks = [];
+      for (const tick of ticks) {
+        if (openTicks.at(-1) === tick) openTicks.pop();
+        else if (!openTicks.length) openTicks.push(tick);
+      }
+      if (openTicks.length) {
+        addFailure(`${relativeFile}:${lineNumber}: unclosed inline code span; keep prose code spans on one line.`);
+      }
+    }
 
     for (const match of line.matchAll(/!?\[[^\]\n]*\]\(\s*(\/[^)\n]*)\)/g)) {
       if (!/^\/\S+(?:\s+["'][^"']*["'])?\s*$/.test(match[1])) {

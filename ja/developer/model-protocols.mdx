@@ -1,0 +1,110 @@
+---
+title: "モデル別の推奨プロトコル"
+description: "モデル名から推奨プロトコルを調べ、対応する API を選択します。"
+---
+
+下の一覧で正確なモデル名を探し、推奨プロトコルを選んでください。大文字小文字、日付、接尾辞は変更しないでください。
+
+以下は現在選択できるモデルと推奨プロトコルです。利用可能な範囲は API キーのグループによって異なります。
+
+## プロトコルの選び方
+
+| 使用するモデル | 最初に選ぶプロトコル | リクエストパス |
+| --- | --- | --- |
+| Claude | Anthropic Messages | `/v1/messages` |
+| Responses 対応グループの GPT | Responses | `/v1/responses` |
+| Chat Completions のみ確認済みの GPT グループ、DeepSeek、GLM、Kimi、Qwen、Grok | Chat Completions | `/v1/chat/completions` |
+
+<Warning>
+モデルが API キーのグループで利用できることを確認してください。クライアントが一つのプロトコルにしか対応していない場合は、そのプロトコルに対応するモデルとグループを選んでください。
+</Warning>
+
+`gpt-5.6x` グループでは、まず Chat Completions を選択してください。Responses が必要な場合は、事前にサポートへ確認してください。
+
+## モデル名から探す
+
+### Claude
+
+| モデル名 | 推奨プロトコル | 注意点 |
+| --- | --- | --- |
+| `claude-fable-5` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-fable-5-1` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-haiku-4-5` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-haiku-4-5-20251001` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-haiku-5-5` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-opus-4-5` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-opus-4-5-20251101` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-opus-4-6` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-opus-4-7` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-opus-4-8` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-opus-5` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-opus-5-5` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-sonnet-4-5-20250929` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-sonnet-4-6` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-sonnet-5` | Anthropic Messages | 使用するキーのグループで確認 |
+| `claude-sonnet-5-5` | Anthropic Messages | 使用するキーのグループで確認 |
+
+### GPT
+
+| モデル名 | 推奨プロトコル | 注意点 |
+| --- | --- | --- |
+| `gpt-5.4` | Chat Completions | 現在の設定では Chat Completions を選択。Responses は別途確認 |
+| `gpt-5.5` | Responses | Responses 対応の Codex グループでは Responses。`gpt-5.6x` では Chat Completions を選択 |
+| `gpt-5.6-luna` | Chat Completions | 現在の設定では Chat Completions を選択。Responses は別途確認 |
+| `gpt-5.6-sol` | Responses | Responses 対応の Codex グループでは Responses。`gpt-5.6x` では Chat Completions を選択 |
+| `gpt-5.6-terra` | Responses | Responses 対応の Codex グループでは Responses。`gpt-5.6x` では Chat Completions を選択 |
+| `gpt-6-astra` | Responses | Responses 対応の Codex グループでは Responses。`gpt-5.6x` では Chat Completions を選択 |
+| `gpt-6-luna` | Chat Completions | 現在の設定では Chat Completions を選択。Responses は別途確認 |
+| `gpt-6-sol` | Responses | Responses 対応の Codex グループでは Responses。`gpt-5.6x` では Chat Completions を選択 |
+| `gpt-6.1-sol` | Responses | Responses 対応の Codex グループでは Responses。`gpt-5.6x` では Chat Completions を選択 |
+| `gpt-6.1-terra` | Responses | 使用するキーのグループで確認 |
+
+### DeepSeek
+
+| モデル名 | 推奨プロトコル | 注意点 |
+| --- | --- | --- |
+| `deepseek-v4-flash` | Chat Completions | 使用するキーのグループで確認 |
+| `deepseek-v4-pro` | Chat Completions | 使用するキーのグループで確認 |
+
+### GLM
+
+| モデル名 | 推奨プロトコル | 注意点 |
+| --- | --- | --- |
+| `GLM-5.2` | Chat Completions | 使用するキーのグループで確認 |
+| `glm-5.3` | Chat Completions | 使用するキーのグループで確認 |
+| `glm-5.3-flash` | Chat Completions | 使用するキーのグループで確認 |
+
+### Kimi
+
+| モデル名 | 推奨プロトコル | 注意点 |
+| --- | --- | --- |
+| `Kimi-K2.7-Code` | Chat Completions | 使用するキーのグループで確認 |
+| `Kimi-K3` | Chat Completions | 使用するキーのグループで確認 |
+| `kimi-k3` | Chat Completions | 使用するキーのグループで確認 |
+| `kimi-k3.1-pro` | Chat Completions | 使用するキーのグループで確認 |
+| `kimi-k3.1-pro-highspeed` | Chat Completions | 使用するキーのグループで確認 |
+
+### Qwen
+
+| モデル名 | 推奨プロトコル | 注意点 |
+| --- | --- | --- |
+| `qwen3.7-flash` | Chat Completions | 使用するキーのグループで確認 |
+| `qwen3.7-max` | Chat Completions | 使用するキーのグループで確認 |
+| `qwen3.7-plus` | Chat Completions | 使用するキーのグループで確認 |
+| `qwen3.8-flash` | Chat Completions | 使用するキーのグループで確認 |
+| `qwen3.8-max` | Chat Completions | 使用するキーのグループで確認 |
+
+### Grok
+
+| モデル名 | 推奨プロトコル | 注意点 |
+| --- | --- | --- |
+| `grok-4.5` | Chat Completions | 使用するキーのグループで確認 |
+| `grok-4.6` | Chat Completions | 使用するキーのグループで確認 |
+
+## クライアント設定と確認
+
+1. Claude Code は[設定ガイド](/ja/tools/claude-code)に従い、Base URL に `https://nexusapi.link` を指定します。
+2. Codex CLI は[設定ガイド](/ja/tools/codex-cli)に従って Responses を使用します。モデルとグループの両方が対応している必要があります。
+3. Chat Completions のプログラムは[コード例](/ja/developer/code-examples)を参照し、OpenAI SDK の Base URL を `https://nexusapi.link/v1` にします。
+
+モデルやプロトコルが見つからない場合は[機能一覧](/ja/developer/capability-matrix)を確認し、モデル名、キーのグループ、クライアント、Request ID をサポートへ送ってください。キー全体は送らないでください。

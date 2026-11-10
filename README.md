@@ -11,10 +11,21 @@
 
 ## 当前维护基线
 
-- 本轮核对日期：2026-10-27；控制台与功能口径基于 New API `v1.0.0-rc.26`，以 NexusAPI 实际开放的普通用户界面为准。
-- 控制台截图覆盖 API 密钥列表、创建密钥、钱包、模型广场、使用日志、个人资料，共七种语言；更新时应重新检查账号、余额、密钥、用户日志及内部渠道信息的脱敏。
+- 模型推荐协议页位于 `developer/model-protocols.mdx`，七种语言使用同一份 `data/model-protocols.json` 清单。客户页面和公开数据只包含当前启用模型，不展示停用模型、历史清单或内部盘点数字。完整核对记录保存在文档仓库之外。
+- 当前推荐规则：Claude 用 Messages；GPT 按分组区分 Responses 与 Chat Completions；DeepSeek、GLM、Kimi、Qwen、Grok 当前启用项用 Chat Completions。模型、分组或渠道协议变更后需重新核对，不把配置声明写成逐项实测通过。
+- 本轮内容核对日期：2026-11-10；依据 New API `v1.0.0-rc.48` 源码及线上公开状态核对。七种语言已同步密钥额度查询、API 地址入口、日志导出、扣费来源、模型性能统计和余额提醒说明；密码、登录会话及访问令牌入口改为 `/security`，通知设置仍在 `/profile`。
+- 线上公开状态核对：日志导出已开启，单次查询/导出最大时间跨度为 365 天，余额提醒已开启。时间跨度不是日志保留承诺；站点设置变化后须同步说明。
+- 2026-11-10 已在指定的 9225 独立浏览器以普通用户身份核对 rc48 页面，更新七种语言共 77 张平台截图：密钥列表、创建表单、钱包充值区域、模型广场、日志、安全页、通知设置、复制 Key、模型选择、登录会话和导出窗口。先在 DOM 中隐藏个人数据，再保存 PNG；创建与导出只打开窗口，未提交。Key 复制示意中的 `YOUR_API_KEY` 为占位符，橙色框为操作提示。
+- 77 张图完成文件哈希核对与 11 组七语言对照图审看，并回填相应页面；旧图备份和验收记录位于文档仓库外的 `Log/nexusapi-docs-rc48-review/`。不再引用旧个人资料整页安全图；其他未涉及版本变化的客户端配图保留。
+- 上线前终检将 7 张无引用的旧 `console-profile-security` 图片移出发布仓库，备份于上述审校目录的 `obsolete-profile-images/`，可按哈希清单恢复；自动检查同时禁止重新混入这组旧入口图片。
+- 本轮是普通用户页面、控件与图片验收，不是付费业务全链路测试：未创建或修改密钥、未修改分组、未修改账户通知设置、未付款、未导出真实日志、未发起模型调用。最终批量取图使用站内导航与语言菜单；语言设置的后台保存被拦截，结束后恢复原语言。
+- 截图更新时应检查账号、余额、密钥、用户日志及内部渠道信息的脱敏，不发布真实客户记录。
 - 倍率与折扣说明位于 `billing/multipliers-and-discounts.mdx`；示例不是实时价格承诺，维护时必须保留充值实付成本、参考汇率和同模型同计费项目的比较前提。
 - 站点配置或计费规则变更时，同时核对快速开始、API 密钥、充值、模型计费、日志和账户安全页面及其六份译文。
+- 客户使用路径已补齐到现有页面：主页直达操作、快速开始四项核对、按软件选模型、更换模型/分组/Key、切回原供应商、配置未生效自查。七种语言使用固定锚点 `choose-model`、`change-model`、`change-key`、`switch-back` 和 `setup-not-applied`，改标题时不要删除锚点。沿用原软件安装命令和配置块，不新增未经验证的客户端。
+- 修改密钥分组不重新生成 Key，但影响共用这把 Key 的应用；依据 rc48 `UpdateToken` 与 `Token.Update` 核对，并确认普通用户页面有编辑入口，未执行实际修改。正常换 Key 与泄露后立即停用分开写。
+- OpenAI Docs 核对来源：[Connect to a gateway](https://learn.chatgpt.com/docs/enterprise/connect-to-a-gateway)。保留 Codex 的 Provider、`model` 和环境变量配置方式；验证使用新对话、`/status` 与网关日志，不靠 AI 自报身份判断路由。官方支持与本站实际能力分别核对，不把通用官方功能当作本站承诺。
+- 未提供统一客服联系方式前，只引导已有客户回原服务群或联系开通账号的对接人；不得编造客服二维码、邀请链接、联系方式或响应时效。新客户独立咨询入口仍待运营提供。
 
 ## 客户文档写法
 
@@ -54,7 +65,7 @@ Mintlify CLI 固定为已验证的 `4.2.1141`。升级 CLI 前重新运行本地
 完整链接验收（先启动本地预览；会访问外部官网，但不会执行安装脚本或调用模型）：
 
 ~~~bash
-node --test scripts/check-docs.test.mjs scripts/check-links.test.mjs
+node --test scripts/check-docs.test.mjs scripts/check-links.test.mjs scripts/model-protocols.test.mjs scripts/rc48-customer-guides.test.mjs scripts/customer-journeys.test.mjs scripts/screenshots.test.mjs
 node scripts/check-links.mjs --preview http://localhost:3000 --external --report /tmp/nexusapi-doc-links.json
 ~~~
 

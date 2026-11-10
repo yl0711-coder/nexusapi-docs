@@ -37,3 +37,17 @@ Request ID (si disponible) :
 ```
 
 Laissez les champs inconnus vides. N’envoyez ni clé complète, ni mot de passe, ni code de vérification.
+
+<span id="setup-not-applied"></span>
+
+## La configuration reste sans effet
+
+| Symptôme | Première vérification |
+| --- | --- |
+| Connexion au service officiel toujours demandée | Vérifier le guide, les réglages utilisateur et les valeurs d'exemple remplacées, puis redémarrer complètement. Ne pas utiliser la clé NexusAPI comme mot de passe officiel |
+| CC Switch enregistré, ancien fournisseur utilisé | Activer NexusAPI pour la bonne application, puis redémarrer ; enregistré ne signifie pas actif |
+| Le modèle ne change pas | Vérifier la configuration active, redémarrer, ouvrir une nouvelle conversation et consulter les journaux NexusAPI ; sans trace, vérifier d'abord le passage par la plateforme |
+| Terminal fonctionnel, éditeur en échec | Distinguer extension Claude Code et IA intégrée. Suivre le [guide extension](/fr/tools/cursor-vscode) ou vérifier l'environnement de lancement du [guide Codex](/fr/tools/codex-cli). Ne pas mettre la clé dans le projet |
+| Solde disponible, crédit insuffisant | Vérifier quota, expiration et groupe de la clé ; pour un forfait, vérifier validité, reste et groupes autorisés avant de recharger |
+
+Faites un seul test court. En cas d'échec, envoyez les informations ci-dessus au groupe d'assistance ou à la personne qui a ouvert le compte. N'envoyez pas de fichier de configuration contenant une clé.

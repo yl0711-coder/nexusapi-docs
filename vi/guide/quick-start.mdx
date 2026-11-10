@@ -22,6 +22,15 @@ Cần xem hình? Mở [hướng dẫn tạo khóa](/vi/guide/api-key). **Không 
 
 ## 3. Cấu hình phần mềm đang dùng
 
+Kiểm tra bốn mục trước khi mở hướng dẫn:
+
+| Mục | Cách xác nhận |
+| --- | --- |
+| Phần mềm | Công cụ dòng lệnh, tiện ích trình soạn thảo hay chương trình tự viết |
+| Nhóm | Nhóm của khóa mới; lần đầu dùng nhóm hỗ trợ cung cấp |
+| Tên mô hình | Chọn cùng nhóm trong Quảng trường mô hình rồi sao chép tên tương thích |
+| Địa chỉ API | Sao chép từ đúng hướng dẫn, không tự thêm đường dẫn |
+
 | Bạn dùng gì | Hướng dẫn |
 | --- | --- |
 | Claude Code | [Cấu hình Claude Code](/vi/tools/claude-code) |
@@ -30,12 +39,14 @@ Cần xem hình? Mở [hướng dẫn tạo khóa](/vi/guide/api-key). **Không 
 | VS Code / Cursor | [Cấu hình trình soạn thảo](/vi/tools/cursor-vscode) |
 | Chương trình tự viết | [Mã mẫu có thể sao chép](/vi/developer/code-examples) |
 
+Không tiện sửa tệp? Dùng [CC Switch](/vi/tools/cc-switch) sau khi cài Claude Code hoặc Codex CLI cần dùng. Cùng khóa hoặc nhóm không có nghĩa mọi mô hình đều dùng được với mọi phần mềm. Xem [giao thức đề xuất](/vi/developer/model-protocols), hoặc gửi phần mềm, mô hình và nhóm cho hỗ trợ.
+
 **Lấy địa chỉ và tên mô hình từ đúng hướng dẫn, rồi điền khóa của bạn. Mỗi phần mềm có thể cần địa chỉ khác nhau.**
 
 ## 4. Gửi một câu thử
 
-Gửi: **“Hãy trả lời: kết nối thành công.”**
+Trong hội thoại mới, gửi: **“Chỉ trả lời: kết nối thành công. Không sửa tệp.”**
 
-Nhận được câu trả lời đầy đủ là có thể dùng. Xem lượt gọi và chi phí trong [Nhật ký sử dụng](https://nexusapi.link/usage-logs/common).
+Sau khi nhận đủ câu trả lời, kiểm tra bản ghi, mô hình và nhóm trong [Nhật ký sử dụng](https://nexusapi.link/usage-logs/common). Chỉ có câu trả lời chưa chứng minh yêu cầu đi qua NexusAPI. Lượt thử dùng một ít hạn mức.
 
-Nếu lỗi, gửi hỗ trợ **tên phần mềm, ảnh lỗi, thời gian, mô hình và nhóm**. Che khóa đầy đủ trong ảnh.
+Nếu lỗi, gửi tên phần mềm, ảnh lỗi, thời gian, mô hình và nhóm cho hỗ trợ. Che toàn bộ khóa.

@@ -1,0 +1,110 @@
+---
+title: "Protocoles recommandés par modèle"
+description: "Trouver le protocole recommandé pour un modèle et choisir l’API correspondante."
+---
+
+Recherchez le nom exact du modèle, puis choisissez le protocole indiqué. Conservez les majuscules, les dates et les suffixes.
+
+Le tableau présente les modèles actuellement proposés et leurs protocoles recommandés. L’accès dépend du groupe de votre clé API.
+
+## Choisir un protocole
+
+| Modèles utilisés | Premier choix | Chemin de requête |
+| --- | --- | --- |
+| Claude | Anthropic Messages | `/v1/messages` |
+| GPT dans un groupe compatible Responses | Responses | `/v1/responses` |
+| Groupes GPT confirmés uniquement pour Chat Completions ; DeepSeek, GLM, Kimi, Qwen, Grok | Chat Completions | `/v1/chat/completions` |
+
+<Warning>
+Vérifiez que le modèle est disponible dans le groupe de votre clé API. Si votre client ne prend en charge qu’un protocole, choisissez un modèle et un groupe compatibles.
+</Warning>
+
+Pour le groupe `gpt-5.6x`, commencez par Chat Completions. Si vous avez besoin de Responses, demandez d’abord confirmation au support.
+
+## Trouver votre modèle
+
+### Claude
+
+| Nom du modèle | Protocole recommandé | Remarque |
+| --- | --- | --- |
+| `claude-fable-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-fable-5-1` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-haiku-4-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-haiku-4-5-20251001` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-haiku-5-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-opus-4-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-opus-4-5-20251101` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-opus-4-6` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-opus-4-7` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-opus-4-8` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-opus-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-opus-5-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-sonnet-4-5-20250929` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-sonnet-4-6` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-sonnet-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+| `claude-sonnet-5-5` | Anthropic Messages | Vérifiez l’accès dans le groupe de votre clé |
+
+### GPT
+
+| Nom du modèle | Protocole recommandé | Remarque |
+| --- | --- | --- |
+| `gpt-5.4` | Chat Completions | Commencez par Chat Completions ; vérifiez Responses séparément |
+| `gpt-5.5` | Responses | Responses pour les groupes Codex / compatibles Responses ; Chat Completions dans `gpt-5.6x` |
+| `gpt-5.6-luna` | Chat Completions | Commencez par Chat Completions ; vérifiez Responses séparément |
+| `gpt-5.6-sol` | Responses | Responses pour les groupes Codex / compatibles Responses ; Chat Completions dans `gpt-5.6x` |
+| `gpt-5.6-terra` | Responses | Responses pour les groupes Codex / compatibles Responses ; Chat Completions dans `gpt-5.6x` |
+| `gpt-6-astra` | Responses | Responses pour les groupes Codex / compatibles Responses ; Chat Completions dans `gpt-5.6x` |
+| `gpt-6-luna` | Chat Completions | Commencez par Chat Completions ; vérifiez Responses séparément |
+| `gpt-6-sol` | Responses | Responses pour les groupes Codex / compatibles Responses ; Chat Completions dans `gpt-5.6x` |
+| `gpt-6.1-sol` | Responses | Responses pour les groupes Codex / compatibles Responses ; Chat Completions dans `gpt-5.6x` |
+| `gpt-6.1-terra` | Responses | Vérifiez l’accès dans le groupe de votre clé |
+
+### DeepSeek
+
+| Nom du modèle | Protocole recommandé | Remarque |
+| --- | --- | --- |
+| `deepseek-v4-flash` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `deepseek-v4-pro` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+
+### GLM
+
+| Nom du modèle | Protocole recommandé | Remarque |
+| --- | --- | --- |
+| `GLM-5.2` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `glm-5.3` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `glm-5.3-flash` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+
+### Kimi
+
+| Nom du modèle | Protocole recommandé | Remarque |
+| --- | --- | --- |
+| `Kimi-K2.7-Code` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `Kimi-K3` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `kimi-k3` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `kimi-k3.1-pro` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `kimi-k3.1-pro-highspeed` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+
+### Qwen
+
+| Nom du modèle | Protocole recommandé | Remarque |
+| --- | --- | --- |
+| `qwen3.7-flash` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `qwen3.7-max` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `qwen3.7-plus` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `qwen3.8-flash` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `qwen3.8-max` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+
+### Grok
+
+| Nom du modèle | Protocole recommandé | Remarque |
+| --- | --- | --- |
+| `grok-4.5` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+| `grok-4.6` | Chat Completions | Vérifiez l’accès dans le groupe de votre clé |
+
+## Configuration du client et vérifications
+
+1. Pour Claude Code, suivez le [guide](/fr/tools/claude-code) avec la base URL `https://nexusapi.link`.
+2. Pour Codex CLI, suivez le [guide](/fr/tools/codex-cli) avec Responses. Le modèle et son groupe doivent le prendre en charge.
+3. Pour Chat Completions, suivez les [exemples](/fr/developer/code-examples). Base URL du SDK OpenAI : `https://nexusapi.link/v1`.
+
+Si le modèle ou le protocole manque, consultez la [matrice des capacités](/fr/developer/capability-matrix), puis envoyez au support le nom du modèle, le groupe, le client et le Request ID. Ne partagez jamais la clé complète.

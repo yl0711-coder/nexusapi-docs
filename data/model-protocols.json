@@ -1,0 +1,354 @@
+{
+  "schema_version": 2,
+  "snapshot_date": "2026-11-10",
+  "captured_utc": "2026-11-10 03:43:02.995131",
+  "model_count": 43,
+  "enabled_count": 43,
+  "basis": "Customer catalog of enabled models. Recommendations are based on configuration, not per-model inference tests.",
+  "models": [
+    {
+      "model_id": "GLM-5.2",
+      "family": "glm",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "Kimi-K2.7-Code",
+      "family": "kimi",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "Kimi-K3",
+      "family": "kimi",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-fable-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-fable-5-1",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-haiku-4-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-haiku-4-5-20251001",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-haiku-5-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-opus-4-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-opus-4-5-20251101",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-opus-4-6",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-opus-4-7",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-opus-4-8",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-opus-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-opus-5-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-sonnet-4-5-20250929",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-sonnet-4-6",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-sonnet-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "claude-sonnet-5-5",
+      "family": "claude",
+      "availability": "enabled",
+      "recommended_protocol": "anthropic",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "deepseek-v4-flash",
+      "family": "deepseek",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "deepseek-v4-pro",
+      "family": "deepseek",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "glm-5.3",
+      "family": "glm",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "glm-5.3-flash",
+      "family": "glm",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-5.4",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "chat-current",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-5.5",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai-response",
+      "note": "group-check",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-5.6-luna",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "chat-current",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-5.6-sol",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai-response",
+      "note": "group-check",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-5.6-terra",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai-response",
+      "note": "group-check",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-6-astra",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai-response",
+      "note": "group-check",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-6-luna",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "chat-current",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-6-sol",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai-response",
+      "note": "group-check",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-6.1-sol",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai-response",
+      "note": "group-check",
+      "literal_id": true
+    },
+    {
+      "model_id": "gpt-6.1-terra",
+      "family": "gpt",
+      "availability": "enabled",
+      "recommended_protocol": "openai-response",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "grok-4.5",
+      "family": "grok",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "grok-4.6",
+      "family": "grok",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "kimi-k3",
+      "family": "kimi",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "kimi-k3.1-pro",
+      "family": "kimi",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "kimi-k3.1-pro-highspeed",
+      "family": "kimi",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "qwen3.7-flash",
+      "family": "qwen",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "qwen3.7-max",
+      "family": "qwen",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "qwen3.7-plus",
+      "family": "qwen",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "qwen3.8-flash",
+      "family": "qwen",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    },
+    {
+      "model_id": "qwen3.8-max",
+      "family": "qwen",
+      "availability": "enabled",
+      "recommended_protocol": "openai",
+      "note": "standard",
+      "literal_id": true
+    }
+  ]
+}

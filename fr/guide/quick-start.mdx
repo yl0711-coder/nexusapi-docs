@@ -22,6 +22,15 @@ Besoin d'images ? Voir le [guide des clés](/fr/guide/api-key). **Ne partagez pa
 
 ## 3. Configurer votre logiciel
 
+Vérifiez ces quatre éléments avant d'ouvrir un guide :
+
+| Élément | Comment vérifier |
+| --- | --- |
+| Logiciel | Identifiez le terminal, l'extension ou votre propre programme |
+| Groupe | Celui de la nouvelle clé ; utilisez d'abord le groupe fourni par le support |
+| Modèle | Sélectionnez ce groupe dans la Place des modèles et copiez un modèle compatible |
+| Adresse API | Copiez celle du guide du logiciel, sans ajouter de chemin |
+
 | Votre logiciel | Guide à suivre |
 | --- | --- |
 | Claude Code | [Configuration Claude Code](/fr/tools/claude-code) |
@@ -30,12 +39,14 @@ Besoin d'images ? Voir le [guide des clés](/fr/guide/api-key). **Ne partagez pa
 | VS Code / Cursor | [Configuration de l'éditeur](/fr/tools/cursor-vscode) |
 | Votre propre programme | [Exemples à copier](/fr/developer/code-examples) |
 
+Pour éviter de modifier les fichiers, utilisez [CC Switch](/fr/tools/cc-switch), après avoir installé Claude Code ou Codex CLI. Une même clé ou un même groupe ne rend pas tous les modèles compatibles avec tous les logiciels. Consultez les [protocoles](/fr/developer/model-protocols), ou demandez au support avec logiciel, modèle et groupe.
+
 **Recopiez l'adresse et le modèle du guide correspondant, puis votre propre clé API. L'adresse peut varier selon le logiciel.**
 
 ## 4. Envoyer un message de test
 
-Envoyez : **« Réponds : connexion réussie. »**
+Dans une nouvelle conversation, envoyez : **« Réponds uniquement : connexion réussie. Ne modifie aucun fichier. »**
 
-Une réponse complète indique que vous pouvez commencer. Consultez l'appel et son coût dans les [journaux d'utilisation](https://nexusapi.link/usage-logs/common).
+Après une réponse complète, vérifiez la présence de l'appel, son modèle et son groupe dans les [journaux](https://nexusapi.link/usage-logs/common). La réponse seule ne prouve pas le passage par NexusAPI. Le test consomme un peu de crédit.
 
-En cas d'échec, envoyez au support le **nom du logiciel, une capture de l'erreur, l'heure, le modèle et le groupe**. Masquez la clé complète.
+En cas d'échec, transmettez logiciel, capture, heure, modèle et groupe. Masquez la clé complète.

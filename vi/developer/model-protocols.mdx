@@ -1,0 +1,110 @@
+---
+title: "Giao thức đề xuất theo mô hình"
+description: "Tìm giao thức đề xuất theo tên mô hình và chọn API tương ứng."
+---
+
+Tìm đúng tên mô hình bên dưới rồi chọn giao thức đề xuất. Giữ nguyên chữ hoa, chữ thường, ngày và hậu tố.
+
+Bảng liệt kê các mô hình hiện có thể chọn và giao thức đề xuất. Quyền truy cập tùy thuộc vào nhóm của khóa API.
+
+## Cách chọn giao thức
+
+| Mô hình sử dụng | Lựa chọn đầu tiên | Đường dẫn yêu cầu |
+| --- | --- | --- |
+| Claude | Anthropic Messages | `/v1/messages` |
+| GPT trong nhóm hỗ trợ Responses | Responses | `/v1/responses` |
+| Nhóm GPT chỉ xác nhận Chat Completions; DeepSeek, GLM, Kimi, Qwen, Grok | Chat Completions | `/v1/chat/completions` |
+
+<Warning>
+Hãy xác nhận mô hình có sẵn trong nhóm của khóa API. Nếu ứng dụng chỉ hỗ trợ một giao thức, hãy chọn mô hình và nhóm cùng hỗ trợ giao thức đó.
+</Warning>
+
+Với nhóm `gpt-5.6x`, hãy bắt đầu bằng Chat Completions. Nếu cần Responses, hãy xác nhận với bộ phận hỗ trợ trước.
+
+## Tìm theo tên mô hình
+
+### Claude
+
+| Tên mô hình | Giao thức đề xuất | Lưu ý |
+| --- | --- | --- |
+| `claude-fable-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-fable-5-1` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-haiku-4-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-haiku-4-5-20251001` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-haiku-5-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-opus-4-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-opus-4-5-20251101` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-opus-4-6` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-opus-4-7` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-opus-4-8` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-opus-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-opus-5-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-sonnet-4-5-20250929` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-sonnet-4-6` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-sonnet-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `claude-sonnet-5-5` | Anthropic Messages | Kiểm tra quyền truy cập trong nhóm của khóa |
+
+### GPT
+
+| Tên mô hình | Giao thức đề xuất | Lưu ý |
+| --- | --- | --- |
+| `gpt-5.4` | Chat Completions | Dùng Chat Completions theo cấu hình hiện tại; xác nhận Responses riêng |
+| `gpt-5.5` | Responses | Chọn Responses với nhóm Codex hỗ trợ Responses; dùng Chat Completions trong `gpt-5.6x` |
+| `gpt-5.6-luna` | Chat Completions | Dùng Chat Completions theo cấu hình hiện tại; xác nhận Responses riêng |
+| `gpt-5.6-sol` | Responses | Chọn Responses với nhóm Codex hỗ trợ Responses; dùng Chat Completions trong `gpt-5.6x` |
+| `gpt-5.6-terra` | Responses | Chọn Responses với nhóm Codex hỗ trợ Responses; dùng Chat Completions trong `gpt-5.6x` |
+| `gpt-6-astra` | Responses | Chọn Responses với nhóm Codex hỗ trợ Responses; dùng Chat Completions trong `gpt-5.6x` |
+| `gpt-6-luna` | Chat Completions | Dùng Chat Completions theo cấu hình hiện tại; xác nhận Responses riêng |
+| `gpt-6-sol` | Responses | Chọn Responses với nhóm Codex hỗ trợ Responses; dùng Chat Completions trong `gpt-5.6x` |
+| `gpt-6.1-sol` | Responses | Chọn Responses với nhóm Codex hỗ trợ Responses; dùng Chat Completions trong `gpt-5.6x` |
+| `gpt-6.1-terra` | Responses | Kiểm tra quyền truy cập trong nhóm của khóa |
+
+### DeepSeek
+
+| Tên mô hình | Giao thức đề xuất | Lưu ý |
+| --- | --- | --- |
+| `deepseek-v4-flash` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `deepseek-v4-pro` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+
+### GLM
+
+| Tên mô hình | Giao thức đề xuất | Lưu ý |
+| --- | --- | --- |
+| `GLM-5.2` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `glm-5.3` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `glm-5.3-flash` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+
+### Kimi
+
+| Tên mô hình | Giao thức đề xuất | Lưu ý |
+| --- | --- | --- |
+| `Kimi-K2.7-Code` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `Kimi-K3` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `kimi-k3` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `kimi-k3.1-pro` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `kimi-k3.1-pro-highspeed` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+
+### Qwen
+
+| Tên mô hình | Giao thức đề xuất | Lưu ý |
+| --- | --- | --- |
+| `qwen3.7-flash` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `qwen3.7-max` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `qwen3.7-plus` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `qwen3.8-flash` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `qwen3.8-max` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+
+### Grok
+
+| Tên mô hình | Giao thức đề xuất | Lưu ý |
+| --- | --- | --- |
+| `grok-4.5` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+| `grok-4.6` | Chat Completions | Kiểm tra quyền truy cập trong nhóm của khóa |
+
+## Cấu hình ứng dụng và kiểm tra
+
+1. Với Claude Code, làm theo [hướng dẫn](/vi/tools/claude-code), dùng Base URL `https://nexusapi.link`.
+2. Với Codex CLI, làm theo [hướng dẫn](/vi/tools/codex-cli) với Responses. Cả mô hình và nhóm phải hỗ trợ giao thức này.
+3. Với Chat Completions, xem [ví dụ mã](/vi/developer/code-examples), đặt Base URL của SDK OpenAI là `https://nexusapi.link/v1`.
+
+Nếu thiếu mô hình hoặc giao thức, xem [ma trận khả năng](/vi/developer/capability-matrix), rồi gửi tên mô hình, nhóm khóa, ứng dụng và Request ID cho bộ phận hỗ trợ. Không gửi toàn bộ khóa.

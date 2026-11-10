@@ -1,0 +1,110 @@
+---
+title: "Recommended protocols by model"
+description: "Find a model's recommended protocol and choose the matching API."
+---
+
+Find the exact model name below and select its recommended protocol. Preserve capitalization, dates, and suffixes.
+
+The table lists currently selectable models and their recommended protocols. Access depends on your API key group.
+
+## Choose a protocol
+
+| Models you use | Start with | Request path |
+| --- | --- | --- |
+| Claude | Anthropic Messages | `/v1/messages` |
+| GPT in a group supporting Responses | Responses | `/v1/responses` |
+| GPT groups confirmed only for Chat Completions; DeepSeek, GLM, Kimi, Qwen, Grok | Chat Completions | `/v1/chat/completions` |
+
+<Warning>
+Confirm that your model is available in your API key group. If your client supports only one protocol, choose a model and group that both support it.
+</Warning>
+
+For the `gpt-5.6x` group, start with Chat Completions. If you need Responses, ask support to confirm it first.
+
+## Find your model
+
+### Claude
+
+| Model name | Recommended protocol | Important note |
+| --- | --- | --- |
+| `claude-fable-5` | Anthropic Messages | Confirm access in your key group |
+| `claude-fable-5-1` | Anthropic Messages | Confirm access in your key group |
+| `claude-haiku-4-5` | Anthropic Messages | Confirm access in your key group |
+| `claude-haiku-4-5-20251001` | Anthropic Messages | Confirm access in your key group |
+| `claude-haiku-5-5` | Anthropic Messages | Confirm access in your key group |
+| `claude-opus-4-5` | Anthropic Messages | Confirm access in your key group |
+| `claude-opus-4-5-20251101` | Anthropic Messages | Confirm access in your key group |
+| `claude-opus-4-6` | Anthropic Messages | Confirm access in your key group |
+| `claude-opus-4-7` | Anthropic Messages | Confirm access in your key group |
+| `claude-opus-4-8` | Anthropic Messages | Confirm access in your key group |
+| `claude-opus-5` | Anthropic Messages | Confirm access in your key group |
+| `claude-opus-5-5` | Anthropic Messages | Confirm access in your key group |
+| `claude-sonnet-4-5-20250929` | Anthropic Messages | Confirm access in your key group |
+| `claude-sonnet-4-6` | Anthropic Messages | Confirm access in your key group |
+| `claude-sonnet-5` | Anthropic Messages | Confirm access in your key group |
+| `claude-sonnet-5-5` | Anthropic Messages | Confirm access in your key group |
+
+### GPT
+
+| Model name | Recommended protocol | Important note |
+| --- | --- | --- |
+| `gpt-5.4` | Chat Completions | Start with Chat Completions for this configuration; confirm Responses separately |
+| `gpt-5.5` | Responses | Responses for Codex / Responses-enabled groups; start with Chat Completions in `gpt-5.6x` |
+| `gpt-5.6-luna` | Chat Completions | Start with Chat Completions for this configuration; confirm Responses separately |
+| `gpt-5.6-sol` | Responses | Responses for Codex / Responses-enabled groups; start with Chat Completions in `gpt-5.6x` |
+| `gpt-5.6-terra` | Responses | Responses for Codex / Responses-enabled groups; start with Chat Completions in `gpt-5.6x` |
+| `gpt-6-astra` | Responses | Responses for Codex / Responses-enabled groups; start with Chat Completions in `gpt-5.6x` |
+| `gpt-6-luna` | Chat Completions | Start with Chat Completions for this configuration; confirm Responses separately |
+| `gpt-6-sol` | Responses | Responses for Codex / Responses-enabled groups; start with Chat Completions in `gpt-5.6x` |
+| `gpt-6.1-sol` | Responses | Responses for Codex / Responses-enabled groups; start with Chat Completions in `gpt-5.6x` |
+| `gpt-6.1-terra` | Responses | Confirm access in your key group |
+
+### DeepSeek
+
+| Model name | Recommended protocol | Important note |
+| --- | --- | --- |
+| `deepseek-v4-flash` | Chat Completions | Confirm access in your key group |
+| `deepseek-v4-pro` | Chat Completions | Confirm access in your key group |
+
+### GLM
+
+| Model name | Recommended protocol | Important note |
+| --- | --- | --- |
+| `GLM-5.2` | Chat Completions | Confirm access in your key group |
+| `glm-5.3` | Chat Completions | Confirm access in your key group |
+| `glm-5.3-flash` | Chat Completions | Confirm access in your key group |
+
+### Kimi
+
+| Model name | Recommended protocol | Important note |
+| --- | --- | --- |
+| `Kimi-K2.7-Code` | Chat Completions | Confirm access in your key group |
+| `Kimi-K3` | Chat Completions | Confirm access in your key group |
+| `kimi-k3` | Chat Completions | Confirm access in your key group |
+| `kimi-k3.1-pro` | Chat Completions | Confirm access in your key group |
+| `kimi-k3.1-pro-highspeed` | Chat Completions | Confirm access in your key group |
+
+### Qwen
+
+| Model name | Recommended protocol | Important note |
+| --- | --- | --- |
+| `qwen3.7-flash` | Chat Completions | Confirm access in your key group |
+| `qwen3.7-max` | Chat Completions | Confirm access in your key group |
+| `qwen3.7-plus` | Chat Completions | Confirm access in your key group |
+| `qwen3.8-flash` | Chat Completions | Confirm access in your key group |
+| `qwen3.8-max` | Chat Completions | Confirm access in your key group |
+
+### Grok
+
+| Model name | Recommended protocol | Important note |
+| --- | --- | --- |
+| `grok-4.5` | Chat Completions | Confirm access in your key group |
+| `grok-4.6` | Chat Completions | Confirm access in your key group |
+
+## Client setup and checks
+
+1. For Claude Code, follow the [setup guide](/en/tools/claude-code) and use `https://nexusapi.link` as the base URL.
+2. For Codex CLI, follow the [setup guide](/en/tools/codex-cli) with Responses. Both the model and its group must support it.
+3. For Chat Completions programs, follow the [code examples](/en/developer/code-examples). Set the OpenAI SDK base URL to `https://nexusapi.link/v1`.
+
+If the model or protocol is missing, check the [capability matrix](/en/developer/capability-matrix), then send support the model name, key group, client, and Request ID. Never send the full key.

@@ -9,17 +9,17 @@ Mở [trang đăng nhập](https://nexusapi.link/sign-in), nhập tài khoản v
 
 ## 2. Đổi mật khẩu và xem thiết bị
 
-1. Mở [Hồ sơ](https://nexusapi.link/profile).
+1. Mở [Bảo mật và truy cập](https://nexusapi.link/security).
 2. Bấm đổi mật khẩu, điền theo hướng dẫn và lưu.
 3. Kéo xuống phần phiên đăng nhập. Thu hồi phiên lạ, hoặc chọn đăng xuất các phiên khác để thoát khỏi thiết bị khác.
 
-![Hồ sơ và bảo mật](/images/nexusapi/console-profile-security-vi.png)
+![Bảo mật và truy cập: đổi mật khẩu và xem phiên đăng nhập. Dữ liệu cá nhân đã được che.](/images/nexusapi/console-security-access-vi.png)
 
 ![Phiên đăng nhập: kiểm tra thiết bị và đăng xuất phiên lạ nếu cần. Thông tin thiết bị đã được che.](/images/nexusapi/account-sessions-vi.png)
 
 Phiên đăng nhập: kiểm tra thiết bị và đăng xuất phiên lạ nếu cần. Thông tin thiết bị đã được che.
 
-**Phần mềm AI dùng khóa tạo tại [Khóa API](/vi/guide/api-key). Không cần tạo hoặc nhập token truy cập trong Hồ sơ.**
+**Phần mềm AI dùng khóa tạo tại [Khóa API](/vi/guide/api-key). Token trong Bảo mật và truy cập dành cho API quản lý, không cần tạo hay nhập để kết nối mô hình.**
 
 ## 3. Nghi lộ tài khoản hoặc khóa
 
@@ -29,3 +29,14 @@ Phiên đăng nhập: kiểm tra thiết bị và đăng xuất phiên lạ nế
 | Lộ khóa API | Vô hiệu hóa hoặc xóa khóa cũ, tạo khóa mới và thay trong phần mềm |
 
 **Chỉ đăng xuất trang web không vô hiệu hóa khóa API.** Không gửi mật khẩu, mã xác minh hoặc khóa đầy đủ cho ai.
+
+## 4. Đặt nhắc nhở số dư thấp
+
+1. Mở [Hồ sơ](https://nexusapi.link/profile) và tìm cài đặt thông báo.
+2. Chọn **Email**, điền địa chỉ nhận được thư. Để trống sẽ dùng email tài khoản; nếu tài khoản chưa có email thì điền một địa chỉ.
+3. Bật **Nhắc nhở khi số dư thấp** và điền ngưỡng, hoặc để trống để dùng mặc định của trang.
+4. Bấm **Lưu Cài đặt**.
+
+![Vị trí đặt nhắc nhở số dư thấp. Ảnh không có nghĩa là thay đổi đã được lưu.](/images/nexusapi/console-notification-settings-vi.png)
+
+Ngưỡng dùng đơn vị hạn mức hiển thị trên trang, không phải số tiền nạp bằng nhân dân tệ. Chỉ nhắc một lần khi số dư giảm xuống dưới ngưỡng, không nhắc sau mỗi lượt gọi. Đừng chỉ dựa vào email; trước khi dùng vẫn có thể kiểm tra [ví](https://nexusapi.link/wallet).

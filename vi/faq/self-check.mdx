@@ -37,3 +37,17 @@ Request ID (nếu có):
 ```
 
 Không biết thì để trống. Không gửi khóa đầy đủ, mật khẩu hoặc mã xác minh.
+
+<span id="setup-not-applied"></span>
+
+## Cấu hình chưa có hiệu lực
+
+| Hiện tượng | Kiểm tra trước |
+| --- | --- |
+| Vẫn yêu cầu đăng nhập dịch vụ chính thức | Theo đúng hướng dẫn, kiểm tra cài đặt người dùng và thay giá trị mẫu, rồi thoát hẳn và mở lại. Không dùng khóa NexusAPI làm mật khẩu tài khoản chính thức |
+| CC Switch đã lưu nhưng vẫn dùng nhà cung cấp cũ | Xác nhận cấu hình NexusAPI đã chuyển/bật cho đúng ứng dụng, rồi mở lại; lưu không có nghĩa đã bật |
+| Đổi mô hình nhưng không thay đổi | Kiểm tra cấu hình đang bật, mở lại và tạo hội thoại mới, rồi xem nhật ký NexusAPI. Không có bản ghi thì xác nhận yêu cầu có đi qua nền tảng không |
+| Dòng lệnh dùng được, trình soạn thảo không được | Phân biệt tiện ích Claude Code với AI tích hợp. Theo [hướng dẫn tiện ích](/vi/tools/cursor-vscode) hoặc kiểm tra môi trường khởi chạy trong [hướng dẫn Codex](/vi/tools/codex-cli). Không lưu khóa vào dự án |
+| Ví có tiền nhưng báo thiếu hạn mức | Kiểm tra hạn mức, ngày hết hạn và nhóm của khóa; nếu dùng gói, kiểm tra thời hạn, phần còn lại và nhóm áp dụng trước khi nạp thêm |
+
+Chỉ thử một tin ngắn. Vẫn lỗi thì gửi thông tin trên vào nhóm hỗ trợ cũ hoặc người mở tài khoản. Không gửi tệp cấu hình chứa khóa.

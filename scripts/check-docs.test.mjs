@@ -19,6 +19,14 @@ function validate(file,transform){
  return {exitCode:process.exitCode,errors:errors.join('\n')};
 }
 test('current documentation passes',()=>assert.equal(validate().exitCode,0));
+test('rejects frontmatter accidentally duplicated into page body',()=>{
+ const r=validate('vi/guide/recharge.mdx',s=>s+'\n---\ntitle: "Duplicated title"\ndescription: "Duplicated description"\n---\n');
+ assert.equal(r.exitCode,1);assert.match(r.errors,/unexpected frontmatter field in page body/);
+});
+test('rejects an unclosed inline code span',()=>{
+ const r=validate('vi/guide/recharge.mdx',s=>s+'\nSố dư `---\n');
+ assert.equal(r.exitCode,1);assert.match(r.errors,/unclosed inline code span/);
+});
 test('rejects an empty translated section',()=>{
  const r=validate('fr/index.mdx',s=>s+'\n## Empty section\n\n');
  assert.equal(r.exitCode,1);assert.match(r.errors,/empty section/);

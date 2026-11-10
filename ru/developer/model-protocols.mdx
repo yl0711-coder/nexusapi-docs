@@ -1,0 +1,110 @@
+---
+title: "Рекомендуемые протоколы моделей"
+description: "Найдите рекомендуемый протокол модели и выберите соответствующий API."
+---
+
+Найдите точное имя модели и выберите указанный протокол. Сохраняйте регистр, даты и суффиксы.
+
+В таблице перечислены доступные для выбора модели и рекомендуемые протоколы. Доступ зависит от группы вашего API-ключа.
+
+## Выбор протокола
+
+| Используемые модели | Первый выбор | Путь запроса |
+| --- | --- | --- |
+| Claude | Anthropic Messages | `/v1/messages` |
+| GPT в группе с поддержкой Responses | Responses | `/v1/responses` |
+| Группы GPT только с подтверждённым Chat Completions; DeepSeek, GLM, Kimi, Qwen, Grok | Chat Completions | `/v1/chat/completions` |
+
+<Warning>
+Убедитесь, что модель доступна в группе вашего API-ключа. Если клиент поддерживает только один протокол, выберите совместимые с ним модель и группу.
+</Warning>
+
+Для группы `gpt-5.6x` начните с Chat Completions. Если нужен Responses, сначала уточните его поддержку.
+
+## Поиск по имени модели
+
+### Claude
+
+| Имя модели | Рекомендуемый протокол | Примечание |
+| --- | --- | --- |
+| `claude-fable-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-fable-5-1` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-haiku-4-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-haiku-4-5-20251001` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-haiku-5-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-opus-4-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-opus-4-5-20251101` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-opus-4-6` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-opus-4-7` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-opus-4-8` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-opus-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-opus-5-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-sonnet-4-5-20250929` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-sonnet-4-6` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-sonnet-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+| `claude-sonnet-5-5` | Anthropic Messages | Проверьте доступ в группе ключа |
+
+### GPT
+
+| Имя модели | Рекомендуемый протокол | Примечание |
+| --- | --- | --- |
+| `gpt-5.4` | Chat Completions | Для текущей конфигурации выберите Chat Completions; Responses требует проверки |
+| `gpt-5.5` | Responses | Responses для групп Codex с поддержкой Responses; Chat Completions для `gpt-5.6x` |
+| `gpt-5.6-luna` | Chat Completions | Для текущей конфигурации выберите Chat Completions; Responses требует проверки |
+| `gpt-5.6-sol` | Responses | Responses для групп Codex с поддержкой Responses; Chat Completions для `gpt-5.6x` |
+| `gpt-5.6-terra` | Responses | Responses для групп Codex с поддержкой Responses; Chat Completions для `gpt-5.6x` |
+| `gpt-6-astra` | Responses | Responses для групп Codex с поддержкой Responses; Chat Completions для `gpt-5.6x` |
+| `gpt-6-luna` | Chat Completions | Для текущей конфигурации выберите Chat Completions; Responses требует проверки |
+| `gpt-6-sol` | Responses | Responses для групп Codex с поддержкой Responses; Chat Completions для `gpt-5.6x` |
+| `gpt-6.1-sol` | Responses | Responses для групп Codex с поддержкой Responses; Chat Completions для `gpt-5.6x` |
+| `gpt-6.1-terra` | Responses | Проверьте доступ в группе ключа |
+
+### DeepSeek
+
+| Имя модели | Рекомендуемый протокол | Примечание |
+| --- | --- | --- |
+| `deepseek-v4-flash` | Chat Completions | Проверьте доступ в группе ключа |
+| `deepseek-v4-pro` | Chat Completions | Проверьте доступ в группе ключа |
+
+### GLM
+
+| Имя модели | Рекомендуемый протокол | Примечание |
+| --- | --- | --- |
+| `GLM-5.2` | Chat Completions | Проверьте доступ в группе ключа |
+| `glm-5.3` | Chat Completions | Проверьте доступ в группе ключа |
+| `glm-5.3-flash` | Chat Completions | Проверьте доступ в группе ключа |
+
+### Kimi
+
+| Имя модели | Рекомендуемый протокол | Примечание |
+| --- | --- | --- |
+| `Kimi-K2.7-Code` | Chat Completions | Проверьте доступ в группе ключа |
+| `Kimi-K3` | Chat Completions | Проверьте доступ в группе ключа |
+| `kimi-k3` | Chat Completions | Проверьте доступ в группе ключа |
+| `kimi-k3.1-pro` | Chat Completions | Проверьте доступ в группе ключа |
+| `kimi-k3.1-pro-highspeed` | Chat Completions | Проверьте доступ в группе ключа |
+
+### Qwen
+
+| Имя модели | Рекомендуемый протокол | Примечание |
+| --- | --- | --- |
+| `qwen3.7-flash` | Chat Completions | Проверьте доступ в группе ключа |
+| `qwen3.7-max` | Chat Completions | Проверьте доступ в группе ключа |
+| `qwen3.7-plus` | Chat Completions | Проверьте доступ в группе ключа |
+| `qwen3.8-flash` | Chat Completions | Проверьте доступ в группе ключа |
+| `qwen3.8-max` | Chat Completions | Проверьте доступ в группе ключа |
+
+### Grok
+
+| Имя модели | Рекомендуемый протокол | Примечание |
+| --- | --- | --- |
+| `grok-4.5` | Chat Completions | Проверьте доступ в группе ключа |
+| `grok-4.6` | Chat Completions | Проверьте доступ в группе ключа |
+
+## Настройка клиента и проверка
+
+1. Для Claude Code следуйте [инструкции](/ru/tools/claude-code), Base URL: `https://nexusapi.link`.
+2. Для Codex CLI следуйте [инструкции](/ru/tools/codex-cli) с Responses. Модель и группа должны поддерживать этот протокол.
+3. Для Chat Completions используйте [примеры кода](/ru/developer/code-examples), Base URL SDK OpenAI: `https://nexusapi.link/v1`.
+
+Если модели или протокола нет, проверьте [матрицу возможностей](/ru/developer/capability-matrix), затем отправьте поддержке имя модели, группу ключа, клиент и Request ID. Полный ключ не отправляйте.

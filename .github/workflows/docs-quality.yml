@@ -6,6 +6,7 @@ on:
       - "**/*.mdx"
       - "images/**"
       - "docs.json"
+      - "data/model-protocols.json"
       - "scripts/**"
       - "brand-link.js"
       - "brand.css"
@@ -17,6 +18,7 @@ on:
       - "**/*.mdx"
       - "images/**"
       - "docs.json"
+      - "data/model-protocols.json"
       - "scripts/**"
       - "brand-link.js"
       - "brand.css"
@@ -41,7 +43,7 @@ jobs:
       - name: Validate routes, locales, frontmatter, and internal links
         run: |
           node scripts/check-docs.mjs
-          node --test scripts/check-docs.test.mjs scripts/check-links.test.mjs
+          node --test scripts/check-docs.test.mjs scripts/check-links.test.mjs scripts/model-protocols.test.mjs scripts/rc48-customer-guides.test.mjs scripts/customer-journeys.test.mjs scripts/screenshots.test.mjs
           node scripts/check-links.mjs
           node --check brand-link.js
 

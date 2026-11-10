@@ -1,0 +1,110 @@
+---
+title: "模型推荐协议"
+description: "按模型名称查找推荐协议，选择对应接口完成接入。"
+---
+
+先在下面找到模型名称，再选择对应协议。模型名称保留大小写、日期和后缀，不要自行改写。
+
+下表列出当前可选模型及推荐协议。实际可用范围以你的 API Key 分组为准。
+
+## 协议怎么选
+
+| 你使用的模型 | 先选协议 | 请求路径 |
+| --- | --- | --- |
+| Claude | Anthropic Messages | `/v1/messages` |
+| GPT 且所在分组支持 Responses | Responses | `/v1/responses` |
+| GPT 仅确认 Chat Completions 的分组；DeepSeek、GLM、Kimi、Qwen、Grok | Chat Completions | `/v1/chat/completions` |
+
+<Warning>
+先确认模型在你的 API Key 分组中可用。软件只支持一种协议时，请选择同时支持该协议的模型和分组。
+</Warning>
+
+使用 `gpt-5.6x` 分组时，先选择 Chat Completions；如需 Responses，请先联系客服确认。
+
+## 按模型查协议
+
+### Claude
+
+| 模型名称 | 推荐协议 | 注意事项 |
+| --- | --- | --- |
+| `claude-fable-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-fable-5-1` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-haiku-4-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-haiku-4-5-20251001` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-haiku-5-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-opus-4-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-opus-4-5-20251101` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-opus-4-6` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-opus-4-7` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-opus-4-8` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-opus-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-opus-5-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-sonnet-4-5-20250929` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-sonnet-4-6` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-sonnet-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+| `claude-sonnet-5-5` | Anthropic Messages | 按当前 Key 分组确认可用 |
+
+### GPT
+
+| 模型名称 | 推荐协议 | 注意事项 |
+| --- | --- | --- |
+| `gpt-5.4` | Chat Completions | 当前配置先选 Chat Completions；Responses 需另行确认 |
+| `gpt-5.5` | Responses | Codex / 支持 Responses 的分组选 Responses；`gpt-5.6x` 先选 Chat Completions |
+| `gpt-5.6-luna` | Chat Completions | 当前配置先选 Chat Completions；Responses 需另行确认 |
+| `gpt-5.6-sol` | Responses | Codex / 支持 Responses 的分组选 Responses；`gpt-5.6x` 先选 Chat Completions |
+| `gpt-5.6-terra` | Responses | Codex / 支持 Responses 的分组选 Responses；`gpt-5.6x` 先选 Chat Completions |
+| `gpt-6-astra` | Responses | Codex / 支持 Responses 的分组选 Responses；`gpt-5.6x` 先选 Chat Completions |
+| `gpt-6-luna` | Chat Completions | 当前配置先选 Chat Completions；Responses 需另行确认 |
+| `gpt-6-sol` | Responses | Codex / 支持 Responses 的分组选 Responses；`gpt-5.6x` 先选 Chat Completions |
+| `gpt-6.1-sol` | Responses | Codex / 支持 Responses 的分组选 Responses；`gpt-5.6x` 先选 Chat Completions |
+| `gpt-6.1-terra` | Responses | 按当前 Key 分组确认可用 |
+
+### DeepSeek
+
+| 模型名称 | 推荐协议 | 注意事项 |
+| --- | --- | --- |
+| `deepseek-v4-flash` | Chat Completions | 按当前 Key 分组确认可用 |
+| `deepseek-v4-pro` | Chat Completions | 按当前 Key 分组确认可用 |
+
+### GLM
+
+| 模型名称 | 推荐协议 | 注意事项 |
+| --- | --- | --- |
+| `GLM-5.2` | Chat Completions | 按当前 Key 分组确认可用 |
+| `glm-5.3` | Chat Completions | 按当前 Key 分组确认可用 |
+| `glm-5.3-flash` | Chat Completions | 按当前 Key 分组确认可用 |
+
+### Kimi
+
+| 模型名称 | 推荐协议 | 注意事项 |
+| --- | --- | --- |
+| `Kimi-K2.7-Code` | Chat Completions | 按当前 Key 分组确认可用 |
+| `Kimi-K3` | Chat Completions | 按当前 Key 分组确认可用 |
+| `kimi-k3` | Chat Completions | 按当前 Key 分组确认可用 |
+| `kimi-k3.1-pro` | Chat Completions | 按当前 Key 分组确认可用 |
+| `kimi-k3.1-pro-highspeed` | Chat Completions | 按当前 Key 分组确认可用 |
+
+### Qwen
+
+| 模型名称 | 推荐协议 | 注意事项 |
+| --- | --- | --- |
+| `qwen3.7-flash` | Chat Completions | 按当前 Key 分组确认可用 |
+| `qwen3.7-max` | Chat Completions | 按当前 Key 分组确认可用 |
+| `qwen3.7-plus` | Chat Completions | 按当前 Key 分组确认可用 |
+| `qwen3.8-flash` | Chat Completions | 按当前 Key 分组确认可用 |
+| `qwen3.8-max` | Chat Completions | 按当前 Key 分组确认可用 |
+
+### Grok
+
+| 模型名称 | 推荐协议 | 注意事项 |
+| --- | --- | --- |
+| `grok-4.5` | Chat Completions | 按当前 Key 分组确认可用 |
+| `grok-4.6` | Chat Completions | 按当前 Key 分组确认可用 |
+
+## 软件配置和核对
+
+1. 使用 Claude Code，按[配置教程](/tools/claude-code)填写，Base URL 用 `https://nexusapi.link`。
+2. 使用 Codex CLI，按[配置教程](/tools/codex-cli)选择 Responses；仅使用支持该协议的模型和分组。
+3. 使用 Chat Completions 程序，按[代码示例](/developer/code-examples)填写，OpenAI SDK 的 Base URL 用 `https://nexusapi.link/v1`。
+
+找不到模型或所需协议时，先查看[模型与接口能力](/developer/capability-matrix)，再把模型名、Key 分组、所用软件及 Request ID 发给客服。不要发送完整 Key。

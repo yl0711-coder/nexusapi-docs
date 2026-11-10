@@ -37,3 +37,17 @@ Request ID (if available):
 ```
 
 Leave unknown fields blank. Never send full keys, passwords or verification codes.
+
+<span id="setup-not-applied"></span>
+
+## Setup changes do not apply
+
+| Symptom | Check first |
+| --- | --- |
+| Still asked to sign in to the official service | Check the app guide, user settings and replaced placeholders, then fully restart. Do not enter a NexusAPI key as an official account password |
+| CC Switch saved, but the old provider is used | Confirm NexusAPI is switched on for the correct app, then restart; saved does not mean active |
+| Model change has no effect | Check the active configuration, restart and open a new conversation, then inspect NexusAPI logs. No record means you should first check whether this request used the platform |
+| CLI works but editor does not | Distinguish the Claude Code extension from built-in editor AI. Use the [extension guide](/en/tools/cursor-vscode), or check the launch environment in the [Codex guide](/en/tools/codex-cli). Keep keys out of projects |
+| Wallet has credit but usage is refused | Check key limit, expiry and group; for a plan, check validity, remaining allowance and permitted groups before adding funds again |
+
+Try only one short test. If it fails, send the details above to your service group or account contact. Do not send configuration files containing keys.

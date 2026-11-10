@@ -22,6 +22,15 @@ Need pictures? See [the key guide](/en/guide/api-key). **Do not share your compl
 
 ## 3. Follow the guide for your app
 
+Check these four items before opening an app guide:
+
+| Item | How to confirm |
+| --- | --- |
+| App | Identify the CLI, editor extension or program you use |
+| Group | Check your new key's group; use the group supplied by support for first setup |
+| Model name | Select that group in Model Square and copy a model compatible with your app |
+| API address | Copy it from the matching app guide; do not add paths yourself |
+
 | What you use | Guide |
 | --- | --- |
 | Claude Code | [Configure Claude Code](/en/tools/claude-code) |
@@ -30,12 +39,14 @@ Need pictures? See [the key guide](/en/guide/api-key). **Do not share your compl
 | VS Code / Cursor | [Editor setup](/en/tools/cursor-vscode) |
 | Your own program | [Copyable code examples](/en/developer/code-examples) |
 
+Prefer not to edit files? Use [CC Switch](/en/tools/cc-switch), after installing the Claude Code or Codex CLI you intend to use. A shared group or key does not make every model compatible with every app. Check [model protocols](/en/developer/model-protocols), or ask support with your app, model and group.
+
 **Copy the address and model name from the matching guide and enter your own API key. Addresses can differ between apps.**
 
 ## 4. Send a test message
 
-Send: **“Reply with: connection successful.”**
+In a new conversation, send: **"Reply only: connection successful. Do not modify files."**
 
-A complete reply means you can start using the app. Check the request and charge in [Usage Logs](https://nexusapi.link/usage-logs/common).
+After a complete reply, check [Usage Logs](https://nexusapi.link/usage-logs/common) for this request, the model and the group. That confirms the setup; the reply alone does not prove it used NexusAPI. The test uses a small amount of credit.
 
-If it fails, send support the **app name, error screenshot, time, model and group**. Hide your complete key in screenshots.
+If it fails, send support the app name, error screenshot, time, model and group. Hide the complete key.
