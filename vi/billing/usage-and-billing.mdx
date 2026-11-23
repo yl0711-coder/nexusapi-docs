@@ -14,6 +14,23 @@ description: "Tìm bản ghi, kiểm tra chi phí và gửi hỗ trợ khi cần
 
 Bản ghi mới có thể xuất hiện chậm một chút. Chờ rồi tải lại, không gọi lặp chỉ để xem nhật ký.
 
+<span id="find-key-usage"></span>
+
+### Tìm nhật ký của một khóa
+
+1. Trong [Khóa API](https://nexusapi.link/keys), ghi lại **tên**, như `Máy tính văn phòng`, không sao chép khóa bí mật.
+2. Trong nhật ký chọn thời gian, bấm **Mở rộng**, tìm **Tên mã thông báo**. Trên điện thoại mở bộ lọc.
+3. Nhập tên rồi tìm kiếm để xem mô hình, thời gian và phí của bản ghi khớp.
+4. Muốn lưu hoặc tổng hợp thì xuất theo phần 3. Xong hãy đặt lại bộ lọc.
+
+Nên đặt tên khác nhau cho mỗi khóa. Khóa trùng tên có thể không phân biệt được chỉ bằng tên. Không nhập toàn bộ bí mật `sk-...` vào ô tên mã thông báo.
+
+### Tìm theo ID yêu cầu
+
+Nếu lỗi có Request ID, nhập vào **ID yêu cầu** trong bộ lọc mở rộng. Chọn khoảng thời gian gồm thời điểm lỗi rồi tìm. Không có kết quả thì gửi ID và lỗi nguyên văn cho hỗ trợ, không gọi lại chỉ để tạo nhật ký.
+
+Nếu mã được ghi rõ là **ID yêu cầu thượng nguồn**, điền vào ô đó, không dùng ô ID yêu cầu của website. Muốn tìm lỗi, chọn loại **Lỗi**, tìm rồi khôi phục **All types**. Không thấy bản ghi không chứng minh rằng chưa gọi hoặc chưa bị trừ phí; hãy nhờ hỗ trợ kiểm tra.
+
 ## 2. Xem các mục chính
 
 | Mục | Kiểm tra gì |
@@ -44,6 +61,8 @@ Hiện khoảng thời gian tối đa cho một lần tìm hoặc xuất là **3
 Tệp có thể chứa IP và mã yêu cầu. Kiểm tra và che thông tin riêng tư trước khi chia sẻ.
 
 ## 4. Có thắc mắc về phí
+
+Nếu tiêu thụ đáng ngờ, tắt khóa liên quan trong [Khóa API](https://nexusapi.link/keys) trước rồi kiểm tra bản ghi. Nếu bị lộ, tạo khóa mới và thay trong phần mềm, không tiếp tục dùng khóa cũ.
 
 Nếu lỗi, không nhận đủ câu trả lời hoặc nghi bị trừ lặp, gửi hỗ trợ:
 

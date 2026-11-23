@@ -1,0 +1,128 @@
+---
+title: "Configurer la liste blanche IP d’une clé API"
+description: "Limitez une clé à certaines adresses IP : trouvez l’IP publique, saisissez une adresse par ligne et testez."
+---
+
+**Avec une liste blanche, seules les IP indiquées peuvent utiliser cette clé. Un champ vide signifie aucune restriction IP. Une clé valide reste nécessaire.**
+
+Le contrôle utilise l’IP source identifiée par la plateforme. Un proxy ou un changement réseau peut modifier ce résultat ; la liste blanche ne remplace pas la protection de la clé.
+
+Cette option convient surtout aux ordinateurs et serveurs disposant d’une IP publique fixe. Si vous changez souvent de réseau ou utilisez une IP dynamique, vérifiez d’abord la stabilité de votre IP de sortie.
+
+## 1. Trouver la bonne IP
+
+Saisissez **l’IP publique de sortie du système qui appelle NexusAPI**, pas l’IP du site NexusAPI ni l’IP locale de votre ordinateur.
+
+| Où la clé est utilisée | IP à saisir |
+| --- | --- |
+| Claude Code, Codex ou un autre logiciel sur votre ordinateur | L’IP publique utilisée par cet ordinateur pour accéder à Internet |
+| Serveur d’entreprise, application auto-hébergée ou conteneur | L’IP de sortie réelle du serveur ; demandez à l’administrateur |
+| Proxy, VPN ou outil cloud tiers | L’IP qui transmet les requêtes, pas forcément celle de votre ordinateur ; confirmez avec le fournisseur |
+
+Ne saisissez pas `192.168.x.x`, `10.x.x.x`, `127.0.0.1`, un domaine, une URL ou un port.
+
+**Vous ne connaissez pas votre IP publique ?** Faites la recherche sur l’ordinateur ou le serveur exécutant le logiciel, avec les mêmes réglages réseau et proxy :
+
+Windows : ouvrez PowerShell et exécutez :
+
+```powershell
+curl.exe -4 https://api.ipify.org
+```
+
+macOS / Linux : ouvrez un terminal et exécutez :
+
+```bash
+curl -4 https://api.ipify.org
+```
+
+L’adresse renvoyée est l’IPv4 publique utilisée par cette requête de recherche. [ipify](https://www.ipify.org/) est un service tiers de recherche d’IP publique. Il n’a pas besoin de votre clé API : ne la lui envoyez jamais. En cas d’échec, demandez à l’administrateur ou au fournisseur réseau.
+
+Si le logiciel utilise son propre proxy, fonctionne dans le cloud ou se connecte en IPv6, cette recherche IPv4 peut ne pas montrer sa véritable IP de sortie. Confirmez la source réelle avant de la saisir.
+
+## 2. Ouvrir la liste et enregistrer
+
+1. Ouvrez [Clés API](https://nexusapi.link/keys) et trouvez la clé utilisée par le logiciel.
+2. Cliquez sur **Modifier** sur cette ligne.
+3. Développez **Paramètres avancés**, puis trouvez **Liste blanche IP (supporte CIDR)**.
+4. Saisissez les IP publiques réelles, **une par ligne**.
+5. Cliquez sur **Enregistrer les modifications**.
+
+Le même champ existe à la création d’une clé. Inutile de recopier ou de remplacer la clé. Le changement touche tous les logiciels et collègues qui la partagent : vérifiez avant d’enregistrer.
+
+## 3. Saisir une ou plusieurs IP
+
+**Autoriser une seule IP :**
+
+```text
+203.0.113.10
+```
+
+**Pour plusieurs IP, passez à la ligne après chaque adresse. Ne les séparez pas par des virgules, points-virgules ou espaces.**
+
+```text
+203.0.113.10
+198.51.100.20
+```
+
+Ce sont des adresses d’exemple, à remplacer par vos IP publiques réelles. Ne les recopiez pas telles quelles. N’ajoutez ni `https://`, ni `:443`, ni `*`.
+
+<span id="cidr"></span>
+
+## 4. Configurer des entrées CIDR
+
+### Que signifie CIDR ?
+
+**CIDR permet d’indiquer une IP ou une plage entière sur une ligne : `adresse IP/longueur du préfixe`.** Exemple : `203.0.113.0/24`.
+
+Le nombre après la barre détermine la taille de la plage. **Ce n’est ni un port ni le nombre d’IP autorisées.** `/24` ne signifie pas 24 IP. Pour une même famille d’adresses, un préfixe plus court autorise une plage plus large.
+
+Pour un ordinateur ou serveur avec une IP de sortie fixe, saisissez simplement son IP publique. Utilisez CIDR uniquement pour une plage explicitement fournie par votre entreprise.
+
+### Exemples et plages réelles
+
+| Exemple | Plage autorisée |
+| --- | --- |
+| `203.0.113.10` ou `203.0.113.10/32` | Seulement `203.0.113.10`, soit 1 adresse IPv4 |
+| `203.0.113.0/28` | De `203.0.113.0` à `203.0.113.15`, soit 16 adresses IPv4 |
+| `203.0.113.0/24` | De `203.0.113.0` à `203.0.113.255`, soit 256 adresses IPv4 |
+| `2001:db8::10` ou `2001:db8::10/128` | Cette seule adresse IPv6 |
+
+Ces adresses sont fictives et doivent être remplacées. N’ajoutez pas simplement `/24` à votre propre IP : cela étend l’autorisation d’une adresse à tout un sous-réseau.
+
+### Quoi saisir dans le champ
+
+Si l’entreprise approuve un sous-réseau entier et un serveur distinct, saisissez deux lignes dans la liste blanche IP :
+
+```text
+203.0.113.0/24
+198.51.100.20/32
+```
+
+Remplacez-les par le sous-réseau et l’IP confirmés par l’administrateur, puis enregistrez. IP simples et CIDR peuvent être mélangés, **une entrée par ligne. Une correspondance avec l’une des entrées suffit pour le contrôle IP.** Les autres restrictions de clé, de modèle et de quota restent applicables.
+
+Pour quelques IP non consécutives, utilisez des lignes séparées. Ne saisissez pas `203.0.113.*`, `203.0.113.10-203.0.113.20` ou `/24` seul : ces écritures ne sont pas prises en charge. Demandez à l’administrateur les CIDR exacts d’une plage, sans l’élargir vous-même.
+
+IPv4 et IPv6 peuvent être mélangées. Autoriser IPv4 n’autorise pas aussi IPv6. Pour rechercher une IPv6 sur un réseau compatible, utilisez `curl -6 https://api6.ipify.org`, ou `curl.exe` sous Windows. Un échec ne prouve pas que le logiciel utilise IPv4.
+
+**Ne saisissez pas `0.0.0.0/0` ou `::/0` pour faire disparaître une erreur.** Ces plages autorisent respectivement toutes les sources IPv4 ou IPv6 et suppriment l’intérêt de la restriction. En cas de doute, demandez à l’administrateur.
+
+## 5. Tester et résoudre un refus
+
+Envoyez une courte requête depuis le logiciel habituel. Une réponse normale montre que cette requête a passé le contrôle IP, pas que les autres sources ont été vérifiées. Les tests de modèle sont facturés normalement.
+
+Si l’erreur indique une IP non autorisée, ou si un refus `403` mentionne explicitement une restriction IP, vérifiez :
+
+1. La clé modifiée est bien celle du logiciel et les modifications ont été enregistrées.
+2. Chaque IP occupe une ligne, sans URL, port ni caractère indésirable.
+3. Un changement de Wi-Fi, de partage mobile, de proxy ou de sortie serveur n’a pas modifié l’IP publique.
+4. Le logiciel n’utilise pas IPv6 ou un serveur tiers comme source des requêtes.
+
+Si le refus persiste, transmettez au support le logiciel, l’heure, le nom de la clé et l’erreur exacte. Demandez la vérification de l’IP source identifiée pour cette requête, sans envoyer la clé complète. Tous les `403` ne viennent pas de la liste blanche ; voir les [erreurs courantes](/fr/faq/common-errors).
+
+## 6. Modifier ou désactiver la restriction
+
+Modifiez à nouveau la même clé. Ajoutez une adresse sur une nouvelle ligne ou remplacez l’ancienne, puis enregistrez.
+
+Pour désactiver la restriction, effacez **tout le contenu** du champ et enregistrez. L’IP source n’est alors plus limitée, mais une clé valide reste nécessaire. Si votre entreprise impose cette protection, obtenez l’accord de l’administrateur avant de la retirer.
+
+La liste blanche ne remplace pas la protection de la clé. En cas de fuite, [désactivez immédiatement l’ancienne clé](/fr/guide/api-key), au lieu de modifier seulement sa liste blanche.

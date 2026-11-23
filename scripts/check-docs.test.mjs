@@ -31,6 +31,10 @@ test('rejects an empty translated section',()=>{
  const r=validate('fr/index.mdx',s=>s+'\n## Empty section\n\n');
  assert.equal(r.exitCode,1);assert.match(r.errors,/empty section/);
 });
+test('rejects punctuation-ending bold text joined to the next word',()=>{
+ const r=validate('guide/api-key.mdx',s=>s+'\n**换 Key：**正常更换。\n');
+ assert.equal(r.exitCode,1);assert.match(r.errors,/add a space after punctuation-ending bold text/);
+});
 test('rejects a translated Markdown image path with spaces',()=>{
  const r=validate('vi/billing/models-pricing.mdx',s=>s.replace('/model-marketplace-vi.png','/mô hình-marketplace-vi.png'));
  assert.equal(r.exitCode,1);assert.match(r.errors,/malformed local Markdown URL/);

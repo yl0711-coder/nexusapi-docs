@@ -1,0 +1,52 @@
+---
+title: "Làm quen website và thao tác thường dùng"
+description: "Sau khi đăng nhập, xem số dư, quản lý khóa, tra cứu tiêu thụ và cài đặt tài khoản ở đâu."
+---
+
+**Website dùng để quản lý tài khoản và mức sử dụng. Cấu hình Claude Code, Codex và phần mềm khác xem tại [hướng dẫn phần mềm](/vi/tools).**
+
+## 1. Muốn làm gì, mở trang nào
+
+| Việc cần làm | Mở trang | Thao tác |
+| --- | --- | --- |
+| Xem tổng quan tài khoản | [Tổng quan](https://nexusapi.link/dashboard/overview) | Xem số liệu chung; muốn kiểm tra một lượt gọi thì xem nhật ký |
+| Xem thống kê theo thời gian | [Bảng điều khiển](https://nexusapi.link/dashboard/models) | Chọn khoảng thời gian xem thống kê của mình, không nhầm với chi tiết một yêu cầu |
+| Tạo, sao chép, giới hạn hoặc tắt khóa | [Khóa API](https://nexusapi.link/keys) | Theo [hướng dẫn khóa](/vi/guide/api-key) |
+| Tìm lượt gọi và phí | [Nhật ký sử dụng](https://nexusapi.link/usage-logs/common) | Lọc theo thời gian, mô hình, nhóm hoặc tên mã thông báo; xem [mức sử dụng](/vi/billing/usage-and-billing) |
+| Xem số dư, nạp tiền, tìm đơn thanh toán | [Ví](https://nexusapi.link/wallet) | Theo [hướng dẫn nạp tiền](/vi/guide/recharge) |
+| Tìm mô hình và giá theo nhóm | [Quảng trường mô hình](https://nexusapi.link/pricing) | Chọn đúng nhóm của khóa trước khi sao chép tên; xem [mô hình và giá](/vi/billing/models-pricing) |
+| Đổi ngôn ngữ hoặc nhắc số dư | [Hồ sơ](https://nexusapi.link/profile) | [Hiển thị và menu](/vi/guide/account-security#personal-settings) · [Nhắc số dư](/vi/guide/account-security#balance-reminders) |
+| Đổi mật khẩu, xem thiết bị đăng nhập | [Bảo mật và truy cập](https://nexusapi.link/security) | Xem [bảo mật tài khoản](/vi/guide/account-security) |
+
+Menu có thể khác theo quyền tài khoản, cài đặt website và lựa chọn hiển thị cá nhân. Nếu thiếu mục, xem phần 3, không tự đoán địa chỉ trang quản trị khác.
+
+### Xem thống kê sử dụng trong một khoảng thời gian
+
+1. Mở [bảng điều khiển](https://nexusapi.link/dashboard/models), bấm **Lọc**.
+2. Chọn **Phạm vi nhanh** hoặc thời gian bắt đầu và kết thúc. Đổi **Độ chi tiết thời gian** để tổng hợp theo giờ, ngày hoặc khoảng có sẵn khác.
+3. Bấm **Áp dụng bộ lọc** để xem số lượt gọi, tiêu thụ và xu hướng theo mô hình. Muốn về khoảng mặc định, mở lại bộ lọc và đặt lại.
+
+Tài khoản thông thường xem thống kê của mình. Biểu đồ là số liệu tổng hợp, không phải hóa đơn từng lượt gọi. Nếu có thắc mắc về phí, xem [nhật ký](/vi/billing/usage-and-billing) trong cùng khoảng thời gian.
+
+## 2. Số dư, hạn mức khóa và tiêu thụ khác nhau
+
+- **Số dư ví**: khoản có thể dùng trong tài khoản. Kiểm tra tiền nạp tại đây.
+- **Hạn mức còn lại của khóa**: lượng khóa đó còn được dùng, không phải một số dư nạp tiền riêng.
+- **Phí trong nhật ký**: tiêu thụ ghi nhận cho một lượt gọi.
+- **Tổng quan và bảng điều khiển**: số liệu tổng hợp; kiểm tra lỗi hoặc phí của một lượt gọi bằng nhật ký tương ứng.
+
+Ví có tiền không bảo đảm mọi khóa dùng được: khóa có thể hết hạn, bị tắt hoặc hết hạn mức. Kiểm tra [cài đặt khóa](/vi/guide/api-key#key-limits) trước khi nạp lại.
+
+## 3. Không thấy mục menu
+
+1. Mở [Hồ sơ](https://nexusapi.link/profile). Nếu có **Cài đặt cá nhân thanh bên**, kiểm tra có tự ẩn tính năng không.
+2. Bật lại mục đó rồi bấm **Lưu Thay đổi**. Nếu không nhớ đã đổi gì, dùng **Đặt lại mặc định** trong khu vực này rồi lưu.
+3. Nếu không có khu vực hoặc mục tương ứng, hay vẫn không thấy, liên hệ nhóm hỗ trợ cũ hoặc người mở tài khoản cho bạn.
+
+Cài đặt cá nhân chỉ hiển thị chức năng tài khoản đã được mở, không cấp thêm quyền. Gói trong ví và chức năng khác tùy nội dung thực tế được hiển thị.
+
+## 4. Gửi gì khi cần hỗ trợ
+
+Nêu trang đang dùng, việc muốn làm, thời gian, kèm lỗi hoặc ảnh. Có ID yêu cầu thì gửi cùng; thông tin chưa biết để trống.
+
+**Không gửi khóa đầy đủ, mật khẩu, mã xác minh hoặc mã khôi phục. Che thông tin cá nhân, thanh toán và nghiệp vụ trong ảnh.**

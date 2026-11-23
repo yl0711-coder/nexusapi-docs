@@ -16,7 +16,8 @@ Keep the app name, time, model, group and error screenshot. Copy a Request ID if
 | Key error / 401 | Copy the full key again, paste it and restart the app |
 | 403 | Ask support to check the model and group |
 | 404 | Copy the address from [your app guide](/en/tools) |
-| 400 / not implemented | Ask support whether this model works with your app |
+| 400 / invalid parameters | Save your content and try one short message in a new conversation; contact support if it still fails |
+| `status_code=500, not implemented` | Ask support whether this model works with your app; do not keep retrying it as an ordinary 500 error |
 | 429 / concurrency limit | Wait for current requests to finish, reduce simultaneous tasks and try once |
 | 500 / 502 / 503 / timeout | Wait 10–30 seconds and try once; then contact support if needed |
 | no available channel | Check the model in your group; contact support rather than topping up again |

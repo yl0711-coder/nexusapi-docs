@@ -16,7 +16,8 @@ Gardez le nom de l’application, l’heure, le modèle, le groupe et une captur
 | Clé / 401 | Recopier la clé complète, puis redémarrer l’application |
 | 403 | Faire vérifier le modèle et le groupe par le support |
 | 404 | Recopier l’adresse du [guide de l’application](/fr/tools) |
-| 400 / not implemented | Faire confirmer la compatibilité du modèle avec l’application |
+| 400 / paramètres invalides | Sauvegarder le contenu et tester un message court dans une nouvelle conversation ; contacter le support si l’erreur persiste |
+| `status_code=500, not implemented` | Faire confirmer la compatibilité du modèle avec l’application, sans réessayer en boucle comme pour une erreur 500 ordinaire |
 | 429 / limite simultanée | Attendre la fin des requêtes, réduire les tâches simultanées et essayer une fois |
 | 500 / 502 / 503 / délai dépassé | Attendre 10–30 secondes, essayer une fois, puis contacter le support |
 | no available channel | Vérifier le modèle du groupe ; contacter le support, sans recharger pour cette erreur |

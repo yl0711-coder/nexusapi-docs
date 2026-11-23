@@ -1,0 +1,52 @@
+---
+title: "認識網站與常用操作"
+description: "登入後去哪裡看餘額、管理金鑰、查詢消耗與設定帳號。"
+---
+
+**網站用來管理帳號與用量；Claude Code、Codex 等軟體的設定另看[軟體教學](/zh-TW/tools)。**
+
+## 1. 想做什麼，去哪裡
+
+| 我想做什麼 | 開啟哪裡 | 怎麼操作 |
+| --- | --- | --- |
+| 看帳號概況 | [概覽](https://nexusapi.link/dashboard/overview) | 查看用量概況；核對單次呼叫時再查使用日誌 |
+| 看一段時間的呼叫統計 | [資料看板](https://nexusapi.link/dashboard/models) | 選擇時間範圍查看自己的統計，不要當成單次呼叫明細 |
+| 建立、複製、限制或停用 Key | [API 金鑰](https://nexusapi.link/keys) | 按[金鑰教學](/zh-TW/guide/api-key)操作 |
+| 找呼叫紀錄、看扣費 | [使用日誌](https://nexusapi.link/usage-logs/common) | 按時間、模型、分組或令牌名稱查詢，見[用量教學](/zh-TW/billing/usage-and-billing) |
+| 看餘額、儲值、查付款訂單 | [錢包](https://nexusapi.link/wallet) | 按[儲值教學](/zh-TW/guide/recharge)操作 |
+| 找模型、看分組價格 | [模型廣場](https://nexusapi.link/pricing) | 先選 Key 的分組再複製模型名稱，見[模型與價格](/zh-TW/billing/models-pricing) |
+| 改語言、設定餘額提醒 | [個人資料](https://nexusapi.link/profile) | [介面與選單設定](/zh-TW/guide/account-security#personal-settings) · [餘額提醒](/zh-TW/guide/account-security#balance-reminders) |
+| 改密碼、查看登入裝置 | [安全與存取](https://nexusapi.link/security) | 見[帳號安全](/zh-TW/guide/account-security) |
+
+選單會因帳號開放範圍、站點及個人顯示設定而不同。找不到入口，先看本頁第 3 節，不要猜其他後台位址。
+
+### 查看一段時間的用量統計
+
+1. 開啟[資料看板](https://nexusapi.link/dashboard/models)，點「篩選」。
+2. 選「快速範圍」，或填開始、結束時間；需要按小時、天等彙總時，調整「時間粒度」。
+3. 點「套用篩選器」，查看該時段的呼叫次數、消耗與模型用量趨勢。要回預設範圍，重新開啟篩選視窗並點「重置」。
+
+一般帳號查看自己的統計。圖表是彙總，不是單次帳單；金額有疑問時，按相同時段查[使用日誌](/zh-TW/billing/usage-and-billing)。
+
+## 2. 餘額、Key 額度與消耗不同
+
+- **錢包餘額**：帳號可用額度。儲值後先在錢包確認。
+- **Key 剩餘額度**：這把 Key 還能使用的額度，不是另一份儲值餘額。
+- **日誌費用**：單次呼叫記錄的消耗。
+- **概覽、資料看板**：彙總統計；核對單次錯誤或扣費請查對應日誌。
+
+錢包有餘額，不代表每把 Key 都能呼叫：Key 可能過期、被停用或額度耗盡。先按[金鑰管理](/zh-TW/guide/api-key#key-limits)檢查，不要急著重複儲值。
+
+## 3. 看不到選單怎麼辦
+
+1. 開啟[個人資料](https://nexusapi.link/profile)。若有「左側邊欄個人設定」，檢查是否自行隱藏了功能。
+2. 開啟該項並點「儲存變更」；不確定改過哪些，可用「重置為預設」再儲存。
+3. 沒有設定、沒有目標選項，或仍找不到，聯絡原服務群組或開通帳號的對接人。
+
+個人設定只能顯示帳號已開放的入口，不能解鎖其他功能。錢包中的方案等功能，以實際顯示為準。
+
+## 4. 尋求協助時提供什麼
+
+說明頁面、想做的事、時間，再附錯誤或截圖。有請求 ID 就一起提供，不知道的留空。
+
+**不要提供完整 Key、密碼、驗證碼或復原碼。截圖先遮蓋個人、付款與業務隱私。**

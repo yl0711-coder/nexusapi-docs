@@ -14,6 +14,23 @@ description: "Trouvez un appel, vérifiez son coût et contactez le support si n
 
 Un nouvel appel peut apparaître avec un léger retard. Actualisez plus tard sans relancer l'appel.
 
+<span id="find-key-usage"></span>
+
+### Retrouver la consommation d’une clé
+
+1. Notez le **nom** dans [Clés API](https://nexusapi.link/keys), par exemple `Ordinateur bureau`, sans copier le secret.
+2. Dans les journaux, choisissez la période, cliquez sur **Développer** et trouvez **Nom du jeton**. Sur mobile, ouvrez les filtres.
+3. Saisissez le nom et recherchez les modèles, heures et coûts correspondants.
+4. Pour conserver ou regrouper les données, exportez selon la section 3. Réinitialisez ensuite les filtres.
+
+Donnez un nom distinct à chaque clé. Des clés homonymes peuvent être impossibles à distinguer par le nom seul. Ne saisissez pas le secret complet `sk-...` dans le nom du jeton.
+
+### Retrouver une requête par son ID
+
+Si l’erreur contient un Request ID, saisissez-le dans **ID de requête**, parmi les filtres développés. Choisissez une période incluant l’erreur et recherchez. Sans résultat, envoyez l’ID et l’erreur exacte au support, sans refaire l’appel pour créer un journal.
+
+Un identifiant explicitement marqué **ID de requête en amont** va dans ce champ, pas dans celui de l’ID du site. Pour les échecs, choisissez **Erreur** dans le type, recherchez, puis rétablissez **Tous les types**. L’absence de résultat ne prouve ni l’absence d’appel ni l’absence de débit ; demandez une vérification au support.
+
 ## 2. Lire les champs utiles
 
 | Champ | À vérifier |
@@ -44,6 +61,8 @@ La période maximale actuelle d'une recherche ou d'un export est de **365 jours*
 Le fichier peut contenir des adresses IP et des identifiants de requête. Vérifiez-le et masquez les informations privées avant de le partager.
 
 ## 4. Un débit vous semble incorrect
+
+En cas de consommation suspecte, désactivez d’abord la clé dans [Clés API](https://nexusapi.link/keys), puis vérifiez les traces. Si elle est divulguée, créez une nouvelle clé et remplacez-la dans les logiciels ; ne réutilisez pas l’ancienne.
 
 Pour une erreur, une réponse incomplète ou un doublon suspect, envoyez au support :
 

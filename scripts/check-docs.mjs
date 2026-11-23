@@ -78,6 +78,10 @@ function checkFormatting(relativeFile, content) {
     }
     if (inCodeFence) continue;
 
+    if (/\*\*[^*\n]+[\p{P}\p{S}]\*\*(?=[\p{L}\p{N}])/u.test(line)) {
+      addFailure(`${relativeFile}:${lineNumber}: add a space after punctuation-ending bold text; otherwise Markdown can display literal ** markers.`);
+    }
+
     if (index >= frontmatterLines) {
       if (/^(?:title|description):\s/.test(line)) {
         addFailure(`${relativeFile}:${lineNumber}: unexpected frontmatter field in page body; check for duplicated content.`);

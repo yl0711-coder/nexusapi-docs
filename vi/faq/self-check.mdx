@@ -16,7 +16,8 @@ Ghi ứng dụng, thời gian, mô hình, nhóm và giữ ảnh lỗi. Có Reque
 | Lỗi khóa / 401 | Sao chép lại khóa đầy đủ rồi mở lại ứng dụng |
 | 403 | Nhờ hỗ trợ kiểm tra mô hình và nhóm |
 | 404 | Sao chép địa chỉ từ [hướng dẫn ứng dụng](/vi/tools) |
-| 400 / not implemented | Hỏi hỗ trợ mô hình có dùng được với ứng dụng không |
+| 400 / tham số không hợp lệ | Lưu nội dung, thử một tin nhắn ngắn trong hội thoại mới; vẫn lỗi thì hỏi hỗ trợ |
+| `status_code=500, not implemented` | Hỏi hỗ trợ mô hình có dùng được với ứng dụng không, không thử lặp như lỗi 500 thông thường |
 | 429 / quá số yêu cầu đồng thời | Chờ yêu cầu hiện tại xong, giảm tác vụ đồng thời rồi thử một lần |
 | 500 / 502 / 503 / hết thời gian | Chờ 10–30 giây, thử một lần rồi hỏi hỗ trợ nếu vẫn lỗi |
 | no available channel | Kiểm tra mô hình trong nhóm; không nạp thêm chỉ vì lỗi này |

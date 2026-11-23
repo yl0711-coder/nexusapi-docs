@@ -1,0 +1,128 @@
+---
+title: "Set an API key IP whitelist"
+description: "Restrict a key to specific source IPs: find the public IP, enter one per line, save and test."
+---
+
+**With a whitelist, only listed IPs can use this key. An empty field means no IP restriction. A valid key is still required.**
+
+Matching uses the source IP identified by the platform. Proxies or network changes can affect that result; a whitelist does not replace keeping your key secure.
+
+This works best with a fixed public IP. If you change networks often or have a dynamic IP, confirm whether your outgoing IP is stable before enabling the restriction.
+
+## 1. Find the right IP
+
+Enter the **public outgoing IP of the system making requests to NexusAPI**, not the NexusAPI website's IP or your computer's local IP.
+
+| Where the key is used | IP to enter |
+| --- | --- |
+| Claude Code, Codex or another app on your computer | The public IP used by that computer to reach the internet |
+| A company server, self-hosted app or container | The server's actual outgoing IP; ask your administrator |
+| A proxy, VPN or third-party cloud tool | The IP forwarding the requests, which may differ from your computer's IP; confirm with the provider |
+
+Do not enter `192.168.x.x`, `10.x.x.x`, `127.0.0.1`, a domain, a URL or a port number.
+
+**Not sure of your public IP?** Check on the computer or server actually running the app, using the same network and proxy settings:
+
+Windows: open PowerShell and run:
+
+```powershell
+curl.exe -4 https://api.ipify.org
+```
+
+macOS / Linux: open a terminal and run:
+
+```bash
+curl -4 https://api.ipify.org
+```
+
+The returned address is the public IPv4 used by this lookup request. [ipify](https://www.ipify.org/) is a third-party public IP lookup service. It does not need your API key; never send it one. If the lookup fails, ask your administrator or network provider.
+
+If the app uses its own proxy, runs in the cloud or connects over IPv6, this IPv4 lookup may not show the app's outgoing IP. Confirm the actual source before entering it.
+
+## 2. Open the whitelist and save
+
+1. Open [API Keys](https://nexusapi.link/keys) and find the key your app uses.
+2. Click **Edit** in that row.
+3. Expand **Advanced Settings** and find **IP Whitelist (supports CIDR)**.
+4. Enter the actual public IPs, **one per line**.
+5. Click **Save changes**.
+
+The same field is available when creating a key. You do not need to copy or replace the key. The change affects every app and colleague sharing it, so check before saving.
+
+## 3. Enter one or several IPs
+
+**Allow one IP:**
+
+```text
+203.0.113.10
+```
+
+**Allow several IPs: put each on a new line, not separated by commas, semicolons or spaces.**
+
+```text
+203.0.113.10
+198.51.100.20
+```
+
+These are documentation examples, not real settings to copy. Replace them with your actual public IPs. Do not add `https://`, `:443` or `*`.
+
+<span id="cidr"></span>
+
+## 4. Configure CIDR entries
+
+### What CIDR means
+
+**CIDR represents one IP or an entire range in one entry: `IP address/prefix length`.** For example, `203.0.113.0/24`.
+
+The number after the slash determines the range size. **It is not a port or the number of allowed IPs.** `/24` does not mean 24 IPs. Within the same address family, a smaller prefix length allows a larger range.
+
+For one computer or server with a fixed outgoing IP, enter that public IP directly. Use a CIDR subnet only when your company has explicitly provided the range.
+
+### Common entries and their actual ranges
+
+| Example | Allowed range |
+| --- | --- |
+| `203.0.113.10` or `203.0.113.10/32` | Only `203.0.113.10`: 1 IPv4 address |
+| `203.0.113.0/28` | `203.0.113.0` through `203.0.113.15`: 16 IPv4 addresses |
+| `203.0.113.0/24` | `203.0.113.0` through `203.0.113.255`: 256 IPv4 addresses |
+| `2001:db8::10` or `2001:db8::10/128` | This single IPv6 address |
+
+These are example addresses, not settings to copy. Do not casually append `/24` to your own IP: that expands permission from one address to an entire subnet.
+
+### What to enter in the field
+
+For example, if your company approves an entire subnet plus a separate server, enter two lines in **IP Whitelist**:
+
+```text
+203.0.113.0/24
+198.51.100.20/32
+```
+
+Replace these with the actual subnet and server IP confirmed by your administrator, then save. Plain IPs and CIDR entries can be mixed, **one per line. Matching any entry passes the IP check.** Other key, model and quota restrictions still apply.
+
+For a few nonconsecutive IPs, simply list them on separate lines. Do not enter `203.0.113.*`, `203.0.113.10-203.0.113.20` or `/24` on its own: these are not supported entries. If you need a range converted to CIDR, ask your administrator for the exact entries rather than widening it yourself.
+
+IPv4 and IPv6 entries can be mixed. Allowing IPv4 does not also allow IPv6. To check IPv6 on an IPv6-capable network, use `curl -6 https://api6.ipify.org`, or `curl.exe` on Windows. A failed lookup does not prove the app uses IPv4.
+
+**Do not enter `0.0.0.0/0` or `::/0` just to remove an error.** They allow all IPv4 or all IPv6 sources respectively, defeating the source restriction. Ask your administrator if you are unsure of a subnet.
+
+## 5. Test and troubleshoot
+
+Send one short request from the original app. A normal response shows that this request passed the IP check, not that other sources have been verified. Model tests incur normal usage charges.
+
+If the error says the IP is not allowed, or a `403` error explicitly mentions an IP restriction, check:
+
+1. You edited the key actually used by the app and clicked **Save changes**.
+2. Each IP is on its own line, without a URL, port or unwanted characters.
+3. Switching Wi-Fi, mobile hotspot, proxy node or server exit has not changed your public IP.
+4. The app is not using IPv6 or sending requests from a third-party server instead.
+
+If it still fails, send support the app name, time, key name and exact error. Ask them to check the source IP identified for that request. Never send the complete key. Not every `403` is an IP whitelist issue; see [common errors](/en/faq/common-errors) for other cases.
+
+## 6. Change or disable the restriction
+
+Edit the same key again. Add addresses on new lines or replace the existing address, then save.
+
+To disable the restriction, clear **all content** from the whitelist and save. This removes the source IP restriction, but a valid key is still required. If your company requires source restrictions, get administrator approval before removing them.
+
+A whitelist does not replace key security. If a key is exposed, [disable the old key immediately](/en/guide/api-key), rather than only changing its whitelist.

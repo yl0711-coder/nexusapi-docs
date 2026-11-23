@@ -136,13 +136,13 @@
         },
         "groups": [
           {
-            "group": "开始接入",
+            "group": "网站使用",
             "icon": "rocket",
             "pages": [
               "index",
-              "guide/quick-start",
-              "guide/integration-overview",
+              "guide/console-overview",
               "guide/api-key",
+              "guide/ip-whitelist",
               "guide/account-security"
             ]
           },
@@ -161,6 +161,8 @@
             "icon": "wrench",
             "pages": [
               "tools/index",
+              "guide/quick-start",
+              "guide/integration-overview",
               "tools/claude-code",
               "tools/codex-cli",
               "tools/cc-switch",
@@ -242,13 +244,13 @@
         },
         "groups": [
           {
-            "group": "開始串接",
+            "group": "網站使用",
             "icon": "rocket",
             "pages": [
               "zh-TW/index",
-              "zh-TW/guide/quick-start",
-              "zh-TW/guide/integration-overview",
+              "zh-TW/guide/console-overview",
               "zh-TW/guide/api-key",
+              "zh-TW/guide/ip-whitelist",
               "zh-TW/guide/account-security"
             ]
           },
@@ -267,6 +269,8 @@
             "icon": "wrench",
             "pages": [
               "zh-TW/tools/index",
+              "zh-TW/guide/quick-start",
+              "zh-TW/guide/integration-overview",
               "zh-TW/tools/claude-code",
               "zh-TW/tools/codex-cli",
               "zh-TW/tools/cc-switch",
@@ -348,13 +352,13 @@
         },
         "groups": [
           {
-            "group": "Get started",
+            "group": "Using the website",
             "icon": "rocket",
             "pages": [
               "en/index",
-              "en/guide/quick-start",
-              "en/guide/integration-overview",
+              "en/guide/console-overview",
               "en/guide/api-key",
+              "en/guide/ip-whitelist",
               "en/guide/account-security"
             ]
           },
@@ -373,6 +377,8 @@
             "icon": "wrench",
             "pages": [
               "en/tools/index",
+              "en/guide/quick-start",
+              "en/guide/integration-overview",
               "en/tools/claude-code",
               "en/tools/codex-cli",
               "en/tools/cc-switch",
@@ -454,13 +460,13 @@
         },
         "groups": [
           {
-            "group": "Premiers pas",
+            "group": "Utiliser le site",
             "icon": "rocket",
             "pages": [
               "fr/index",
-              "fr/guide/quick-start",
-              "fr/guide/integration-overview",
+              "fr/guide/console-overview",
               "fr/guide/api-key",
+              "fr/guide/ip-whitelist",
               "fr/guide/account-security"
             ]
           },
@@ -479,6 +485,8 @@
             "icon": "wrench",
             "pages": [
               "fr/tools/index",
+              "fr/guide/quick-start",
+              "fr/guide/integration-overview",
               "fr/tools/claude-code",
               "fr/tools/codex-cli",
               "fr/tools/cc-switch",
@@ -560,13 +568,13 @@
         },
         "groups": [
           {
-            "group": "はじめに",
+            "group": "サイトの使い方",
             "icon": "rocket",
             "pages": [
               "ja/index",
-              "ja/guide/quick-start",
-              "ja/guide/integration-overview",
+              "ja/guide/console-overview",
               "ja/guide/api-key",
+              "ja/guide/ip-whitelist",
               "ja/guide/account-security"
             ]
           },
@@ -585,6 +593,8 @@
             "icon": "wrench",
             "pages": [
               "ja/tools/index",
+              "ja/guide/quick-start",
+              "ja/guide/integration-overview",
               "ja/tools/claude-code",
               "ja/tools/codex-cli",
               "ja/tools/cc-switch",
@@ -666,13 +676,13 @@
         },
         "groups": [
           {
-            "group": "Начало работы",
+            "group": "Работа с сайтом",
             "icon": "rocket",
             "pages": [
               "ru/index",
-              "ru/guide/quick-start",
-              "ru/guide/integration-overview",
+              "ru/guide/console-overview",
               "ru/guide/api-key",
+              "ru/guide/ip-whitelist",
               "ru/guide/account-security"
             ]
           },
@@ -691,6 +701,8 @@
             "icon": "wrench",
             "pages": [
               "ru/tools/index",
+              "ru/guide/quick-start",
+              "ru/guide/integration-overview",
               "ru/tools/claude-code",
               "ru/tools/codex-cli",
               "ru/tools/cc-switch",
@@ -772,13 +784,13 @@
         },
         "groups": [
           {
-            "group": "Bắt đầu",
+            "group": "Sử dụng website",
             "icon": "rocket",
             "pages": [
               "vi/index",
-              "vi/guide/quick-start",
-              "vi/guide/integration-overview",
+              "vi/guide/console-overview",
               "vi/guide/api-key",
+              "vi/guide/ip-whitelist",
               "vi/guide/account-security"
             ]
           },
@@ -797,6 +809,8 @@
             "icon": "wrench",
             "pages": [
               "vi/tools/index",
+              "vi/guide/quick-start",
+              "vi/guide/integration-overview",
               "vi/tools/claude-code",
               "vi/tools/codex-cli",
               "vi/tools/cc-switch",

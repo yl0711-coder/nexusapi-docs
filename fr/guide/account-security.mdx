@@ -30,6 +30,8 @@ Sessions de connexion : vérifiez les appareils et déconnectez les sessions inc
 
 **Se déconnecter du site ne désactive pas les clés API.** Ne partagez jamais vos mots de passe, codes de vérification ou clés complètes.
 
+<span id="balance-reminders"></span>
+
 ## 4. Configurer une alerte de solde faible
 
 1. Ouvrez [Profil](https://nexusapi.link/profile) et cherchez les réglages de notification.
@@ -40,3 +42,43 @@ Sessions de connexion : vérifiez les appareils et déconnectez les sessions inc
 ![Emplacement des rappels de solde faible. La capture ne signifie pas que les modifications ont été enregistrées.](/images/nexusapi/console-notification-settings-fr.png)
 
 Le seuil utilise l'unité de crédit affichée, pas le montant payé en yuans. L'alerte est envoyée une fois lorsque le solde passe sous le seuil, pas après chaque appel. Ne vous fiez pas uniquement aux e-mails ; vérifiez aussi votre [portefeuille](https://nexusapi.link/wallet) avant utilisation.
+<span id="personal-settings"></span>
+
+## Préférences d’affichage et journalisation IP
+
+### Changer la langue
+
+Dans [Profil](https://nexusapi.link/profile), choisissez **Langue de l'interface** et attendez la confirmation. Le choix se synchronise entre vos appareils connectés et peut changer la langue des erreurs API.
+
+### Restaurer un menu masqué
+
+Si **Paramètres personnels de la barre latérale** est disponible, activez les éléments voulus et cliquez sur **Enregistrer les modifications**. Pour rétablir les valeurs par défaut, cliquez sur **Réinitialiser par défaut**, puis enregistrez. Seuls les menus déjà autorisés peuvent être rétablis ; aucun droit supplémentaire n’est accordé. Contactez le support si l’option manque.
+
+### Enregistrer les IP sources
+
+Dans [Sécurité et accès](https://nexusapi.link/security), réglez **Enregistrer l'adresse IP**, puis enregistrez les paramètres. Cela concerne les prochains journaux de consommation et d’erreurs, sans compléter les anciennes IP absentes.
+
+**Journaliser une IP n’est pas la mettre sur liste blanche.** La journalisation conserve la source ; la [liste blanche](/fr/guide/ip-whitelist) limite séparément les sources d’une clé. Activer l’enregistrement n’empêche pas autrui d’utiliser la clé.
+
+<span id="audit-records"></span>
+
+### Vérifier vos propres opérations
+
+Si **Journaux d’audit** est disponible dans le menu :
+
+1. Ouvrez les [journaux d’audit](https://nexusapi.link/usage-logs/audit) et choisissez la période.
+2. Pour affiner, choisissez **Catégorie** ou **Résultat**, puis **Rechercher**.
+3. Vérifiez l’heure, l’opération et le résultat. Réinitialisez ensuite les filtres.
+
+Cette page concerne votre propre compte. Les appels de modèles et leurs coûts sont dans les [journaux d’utilisation](/fr/billing/usage-and-billing), pas dans l’audit.
+
+## Activer l’authentification à deux facteurs
+
+Si [Sécurité et accès](https://nexusapi.link/security) affiche **Authentification à deux facteurs** :
+
+1. Cliquez sur **Activer** et effectuez la vérification de sécurité demandée.
+2. Scannez le QR code avec une application d’authentification et suivez les étapes.
+3. **Conservez d’abord les codes de secours en lieu sûr**, puis saisissez le code actuel de l’application et terminez **Activer 2FA**.
+4. Vérifiez l’état activé. À la connexion, suivez les demandes de code ; sans téléphone, chaque code de secours s’utilise une seule fois.
+
+Pour remplacer les codes, utilisez **Régénérer les codes de secours**, vérifiez votre identité et conservez les nouveaux. **Tous les anciens deviennent invalides.** Ne transmettez ni QR code, ni secret de configuration, ni codes au support ou dans une capture. En cas d’échec, contactez le support sans multiplier les essais ni supprimer le compte.

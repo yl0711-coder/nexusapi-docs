@@ -1,0 +1,128 @@
+---
+title: "Thiết lập danh sách trắng IP cho khóa API"
+description: "Chỉ cho phép IP đã chỉ định dùng khóa: tìm IP công khai, nhập mỗi dòng một IP, lưu và kiểm tra."
+---
+
+**Khi có danh sách trắng, chỉ IP trong danh sách mới được dùng khóa này. Để trống nghĩa là không giới hạn IP. Vẫn cần khóa hợp lệ để gọi API.**
+
+Việc đối chiếu dùng IP nguồn do nền tảng nhận diện. Proxy hoặc thay đổi mạng có thể ảnh hưởng kết quả; danh sách trắng không thay thế việc bảo vệ khóa.
+
+Phù hợp với máy tính hoặc máy chủ có IP công khai cố định. Nếu thường đổi mạng hoặc dùng IP động, hãy xác nhận IP đầu ra có ổn định không trước khi bật.
+
+## 1. Xác định đúng IP cần nhập
+
+Nhập **IP công khai đầu ra của hệ thống thực sự gửi yêu cầu đến NexusAPI**, không phải IP trang NexusAPI hay IP nội bộ của máy tính.
+
+| Nơi sử dụng khóa | IP cần nhập |
+| --- | --- |
+| Claude Code, Codex hoặc phần mềm trên máy tính của bạn | IP công khai mà máy tính dùng để truy cập Internet |
+| Máy chủ công ty, ứng dụng tự triển khai hoặc container | IP đầu ra thực tế của máy chủ; hỏi quản trị viên |
+| Proxy, VPN hoặc công cụ đám mây bên thứ ba | IP chuyển tiếp yêu cầu; có thể khác IP máy tính, cần xác nhận với nhà cung cấp |
+
+Không nhập `192.168.x.x`, `10.x.x.x`, `127.0.0.1`, tên miền, URL hoặc số cổng.
+
+**Chưa biết IP công khai?** Kiểm tra trên đúng máy tính hoặc máy chủ chạy phần mềm, với cùng cấu hình mạng và proxy:
+
+Windows: mở PowerShell và chạy:
+
+```powershell
+curl.exe -4 https://api.ipify.org
+```
+
+macOS / Linux: mở terminal và chạy:
+
+```bash
+curl -4 https://api.ipify.org
+```
+
+Địa chỉ trả về là IPv4 công khai của chính yêu cầu tra cứu này. [ipify](https://www.ipify.org/) là dịch vụ tra cứu IP công khai bên thứ ba. Dịch vụ không cần khóa API; tuyệt đối không gửi khóa cho dịch vụ. Nếu tra cứu thất bại, hãy hỏi quản trị viên hoặc nhà cung cấp mạng.
+
+Nếu phần mềm có proxy riêng, chạy trên đám mây hoặc dùng IPv6, kết quả IPv4 này có thể không phải IP đầu ra của phần mềm. Hãy xác nhận nguồn thực tế trước khi nhập.
+
+## 2. Mở danh sách trắng và lưu
+
+1. Mở [Khóa API](https://nexusapi.link/keys), tìm đúng khóa phần mềm đang dùng.
+2. Bấm **Sửa** ở dòng đó.
+3. Mở **Cài đặt nâng cao**, tìm **Danh sách trắng IP (hỗ trợ CIDR)**.
+4. Nhập IP công khai thực tế, **mỗi dòng một IP**.
+5. Bấm **Lưu thay đổi**.
+
+Khi tạo khóa cũng điền ở cùng vị trí. Không cần sao chép lại hoặc đổi khóa. Thay đổi ảnh hưởng mọi phần mềm và đồng nghiệp dùng chung khóa, nên kiểm tra trước khi lưu.
+
+## 3. Nhập một hoặc nhiều IP
+
+**Chỉ cho phép một IP:**
+
+```text
+203.0.113.10
+```
+
+**Cho phép nhiều IP: xuống dòng sau mỗi địa chỉ, không phân cách bằng dấu phẩy, chấm phẩy hoặc khoảng trắng.**
+
+```text
+203.0.113.10
+198.51.100.20
+```
+
+Đây là địa chỉ minh họa, không phải cấu hình để sao chép nguyên trạng. Thay bằng IP công khai thực tế của bạn. Không thêm `https://`, `:443` hoặc `*`.
+
+<span id="cidr"></span>
+
+## 4. Thiết lập biểu thức CIDR
+
+### CIDR là gì
+
+**CIDR biểu diễn một IP hoặc cả dải IP trên một dòng: `địa chỉ IP/độ dài tiền tố`.** Ví dụ: `203.0.113.0/24`.
+
+Số sau dấu gạch chéo quyết định kích thước dải. **Đó không phải cổng hay số IP được phép.** `/24` không có nghĩa là 24 IP. Trong cùng họ địa chỉ, số càng nhỏ thì phạm vi cho phép càng rộng.
+
+Với một máy tính hoặc máy chủ có IP đầu ra cố định, chỉ cần nhập IP công khai. Chỉ dùng CIDR cho dải mà công ty đã cung cấp rõ ràng.
+
+### Ví dụ và phạm vi thực tế
+
+| Ví dụ | Phạm vi được phép |
+| --- | --- |
+| `203.0.113.10` hoặc `203.0.113.10/32` | Chỉ `203.0.113.10`: 1 địa chỉ IPv4 |
+| `203.0.113.0/28` | Từ `203.0.113.0` đến `203.0.113.15`: 16 địa chỉ IPv4 |
+| `203.0.113.0/24` | Từ `203.0.113.0` đến `203.0.113.255`: 256 địa chỉ IPv4 |
+| `2001:db8::10` hoặc `2001:db8::10/128` | Chỉ một địa chỉ IPv6 này |
+
+Đây là địa chỉ minh họa, không sao chép nguyên trạng. Đừng tùy tiện thêm `/24` vào IP của bạn: thao tác đó mở quyền từ một địa chỉ thành cả dải mạng.
+
+### Cách điền trong ô cấu hình
+
+Nếu công ty xác nhận cho phép cả dải mạng và thêm một máy chủ riêng, nhập hai dòng vào danh sách trắng IP:
+
+```text
+203.0.113.0/24
+198.51.100.20/32
+```
+
+Thay bằng dải và IP thực tế do quản trị viên xác nhận rồi lưu. Có thể nhập chung IP thường và CIDR, **mỗi dòng một mục. Khớp bất kỳ mục nào là qua kiểm tra IP.** Các giới hạn khác về khóa, mô hình và hạn mức vẫn áp dụng.
+
+Với vài IP không liên tiếp, chỉ cần điền riêng từng dòng. Không nhập `203.0.113.*`, `203.0.113.10-203.0.113.20` hoặc chỉ `/24`: các dạng này không được hỗ trợ. Nếu chưa biết đổi một khoảng địa chỉ sang CIDR, hãy nhờ quản trị viên cung cấp chính xác, không tự mở rộng phạm vi.
+
+Có thể nhập chung IPv4 và IPv6. Cho phép IPv4 không đồng thời cho phép IPv6. Để tra cứu IPv6 trên mạng hỗ trợ, dùng `curl -6 https://api6.ipify.org`; Windows dùng `curl.exe`. Tra cứu thất bại không chứng minh phần mềm chắc chắn dùng IPv4.
+
+**Không nhập `0.0.0.0/0` hoặc `::/0` chỉ để hết lỗi.** Chúng lần lượt cho phép mọi nguồn IPv4 hoặc IPv6, làm mất tác dụng giới hạn nguồn. Chưa rõ dải mạng thì hỏi quản trị viên.
+
+## 5. Kiểm tra sau khi lưu và xử lý lỗi
+
+Gửi một yêu cầu ngắn từ phần mềm đang dùng. Trả lời bình thường cho thấy yêu cầu này đã qua kiểm tra IP, không có nghĩa các nguồn khác đã được xác minh. Thử mô hình vẫn tính phí như lượt gọi thông thường.
+
+Nếu lỗi báo IP không được phép, hoặc nội dung lỗi `403` nêu rõ giới hạn IP, hãy kiểm tra:
+
+1. Đã sửa đúng khóa phần mềm đang dùng và bấm lưu chưa.
+2. Mỗi IP đã ở một dòng, không có URL, cổng hoặc ký tự thừa chưa.
+3. Việc đổi Wi-Fi, điểm phát sóng, proxy hoặc đầu ra máy chủ có làm đổi IP công khai không.
+4. Phần mềm có dùng IPv6 hoặc gửi yêu cầu từ máy chủ bên thứ ba không.
+
+Nếu vẫn lỗi, gửi cho hỗ trợ tên phần mềm, thời gian, tên khóa và lỗi nguyên văn. Nhờ kiểm tra IP nguồn được hệ thống nhận diện cho yêu cầu đó. Không gửi khóa đầy đủ. Không phải mọi `403` đều do danh sách trắng; xem [lỗi thường gặp](/vi/faq/common-errors) cho trường hợp khác.
+
+## 6. Sửa hoặc tắt giới hạn
+
+Mở lại trang sửa cùng khóa. Thêm địa chỉ ở dòng mới hoặc thay địa chỉ cũ rồi lưu.
+
+Muốn tắt giới hạn, xóa **toàn bộ nội dung** danh sách rồi lưu. Sau đó không còn giới hạn IP nguồn nhưng vẫn cần khóa hợp lệ. Nếu công ty yêu cầu giới hạn nguồn, hãy được quản trị viên chấp thuận trước khi bỏ.
+
+Danh sách trắng không thay thế việc bảo vệ khóa. Nếu khóa bị lộ, [vô hiệu hóa khóa cũ ngay](/vi/guide/api-key), không chỉ sửa danh sách IP.
